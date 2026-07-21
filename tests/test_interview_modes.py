@@ -21,12 +21,33 @@ from ai_council.orchestrator import (
     _comparison_presentation_order,
     _load_preauthored_answers,
     _load_preauthored_probes,
+    _preauthored_round_candidates,
 )
 from ai_council.storage import RunStore, load_jsonl
 from ai_council.validation import revalidate_run
 
 
 class InterviewModeTests(unittest.TestCase):
+    def test_crossed_replay_preserves_source_adaptive_targets(self) -> None:
+        config = _parallel_judge_config(max_parallel_calls=2, probe_schedule=[1])
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store = RunStore.create(tmpdir, config)
+            runner = CouncilRunner(config, build_clients(config), store)
+            probes = {
+                ("J1", 2, 1): {"metadata": {"respondents": ["P3", "P1"]}},
+                ("J1", 2, 2): {"metadata": {"respondents": ["P3", "P1"]}},
+            }
+
+            selected = _preauthored_round_candidates(
+                probes,
+                "J1",
+                2,
+                2,
+                runner.agents,
+            )
+
+        self.assertEqual([agent.spec.id for agent in selected], ["P3", "P1"])
+
     def test_preauthored_answer_directory_merges_transcript_and_pending_journal(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             run_dir = Path(tmpdir)
@@ -1261,6 +1282,80 @@ class InterviewModeTests(unittest.TestCase):
             )
         )
 
+    def test_adaptive_probe_replay_survives_fresh_later_stage_outputs(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            source_config = _parallel_judge_config(
+                max_parallel_calls=2,
+                probe_schedule=[2, 1],
+            )
+            source_store = RunStore.create(tmpdir, source_config)
+            CouncilRunner(
+                source_config,
+                build_clients(source_config),
+                source_store,
+            ).run()
+            source_entries = load_jsonl(source_store.transcript_path)
+            round_one_outputs = Path(tmpdir) / "round_one_outputs.jsonl"
+            round_one_outputs.write_text(
+                "".join(
+                    json.dumps(entry) + "\n"
+                    for entry in source_entries
+                    if entry["round_index"] == 1
+                    and entry["metadata"].get("interaction_role")
+                    in {"probe_comparison", "wave_judgment"}
+                ),
+                encoding="utf-8",
+            )
+
+            replay_config = _parallel_judge_config(
+                max_parallel_calls=2,
+                probe_schedule=[2, 1],
+                preauthored_probe_file=str(source_store.transcript_path),
+                preauthored_answer_file=str(source_store.transcript_path),
+                preauthored_evidence_file=str(round_one_outputs),
+                preauthored_ranking_file=str(round_one_outputs),
+                replay_source_targets=True,
+            )
+            replay_store = RunStore.create(tmpdir, replay_config)
+            CouncilRunner(
+                replay_config,
+                build_clients(replay_config),
+                replay_store,
+            ).run()
+            replay_entries = load_jsonl(replay_store.transcript_path)
+            replay_summary = json.loads(
+                (replay_store.run_dir / "run_summary.json").read_text(encoding="utf-8")
+            )
+
+        self.assertEqual(replay_summary["model_calls"], 2)
+        self.assertTrue(
+            all(
+                entry["metadata"].get("preauthored_probe")
+                for entry in replay_entries
+                if entry["metadata"].get("interaction_role") == "question"
+            )
+        )
+        self.assertTrue(
+            all(
+                entry["metadata"].get("preauthored_answer")
+                for entry in replay_entries
+                if entry["metadata"].get("interaction_role") == "answer"
+            )
+        )
+        round_two_roles = {
+            entry["metadata"].get("interaction_role"):
+            entry["metadata"].get("preauthored_evidence")
+            or entry["metadata"].get("preauthored_ranking")
+            for entry in replay_entries
+            if entry["round_index"] == 2
+            and entry["metadata"].get("interaction_role")
+            in {"probe_comparison", "wave_judgment"}
+        }
+        self.assertEqual(
+            round_two_roles,
+            {"probe_comparison": None, "wave_judgment": None},
+        )
+
     def test_adaptive_comparisons_can_replay_a_sparse_probe_set(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             source_config = _parallel_judge_config(
@@ -2089,6 +2184,8 @@ def _parallel_judge_config(
     preauthored_probe_file: str | None = None,
     preauthored_answer_file: str | None = None,
     preauthored_evidence_file: str | None = None,
+    preauthored_ranking_file: str | None = None,
+    replay_source_targets: bool = False,
 ) -> ExperimentConfig:
     run = {
         "max_parallel_calls": max_parallel_calls,
@@ -2128,7 +2225,7 @@ def _parallel_judge_config(
                         "name": "judge_ranking",
                         "kind": "independent_judge_ranking",
                         "prompt": "independent_judge_probe",
-                        "rounds": 1,
+                        "rounds": len(probe_schedule) if probe_schedule else 1,
                         **(
                             {"probes_per_round": probes_per_round}
                             if probe_schedule is None
@@ -2156,6 +2253,16 @@ def _parallel_judge_config(
                         **(
                             {"preauthored_evidence_file": preauthored_evidence_file}
                             if preauthored_evidence_file is not None
+                            else {}
+                        ),
+                        **(
+                            {"preauthored_ranking_file": preauthored_ranking_file}
+                            if preauthored_ranking_file is not None
+                            else {}
+                        ),
+                        **(
+                            {"replay_source_targets": True}
+                            if replay_source_targets
                             else {}
                         ),
                         "visibility": "private",

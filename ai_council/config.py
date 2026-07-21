@@ -147,6 +147,7 @@ class PhaseSpec:
     incomplete_answer_policy: str = "fail"
     reuse_unavailable_answers: bool = False
     retry_unavailable_rounds: list[int] = field(default_factory=list)
+    replay_source_targets: bool = False
     preauthored_probe_file: str | None = None
     preauthored_answer_file: str | None = None
     preauthored_answer_participants: list[str] = field(default_factory=list)
@@ -194,6 +195,10 @@ class PhaseSpec:
             retry_unavailable_rounds=[
                 int(value) for value in data.get("retry_unavailable_rounds", [])
             ],
+            replay_source_targets=_as_bool(
+                data.get("replay_source_targets", False),
+                "phase.replay_source_targets",
+            ),
             preauthored_probe_file=data.get("preauthored_probe_file"),
             preauthored_answer_file=data.get("preauthored_answer_file"),
             preauthored_answer_participants=list(
@@ -463,6 +468,11 @@ class ExperimentConfig:
                 raise ConfigError(
                     f"phase {phase.name!r} retry_unavailable_rounds requires "
                     "reuse_unavailable_answers"
+                )
+            if phase.replay_source_targets and not phase.preauthored_probe_file:
+                raise ConfigError(
+                    f"phase {phase.name!r} replay_source_targets requires "
+                    "preauthored_probe_file"
                 )
             if phase.kind in PRIVATE_PHASE_KINDS and phase.visibility != "private":
                 raise ConfigError(f"private phase {phase.name!r} must use private visibility")

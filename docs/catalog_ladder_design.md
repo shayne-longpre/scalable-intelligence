@@ -130,6 +130,11 @@ same anonymous answers as the original judge. This separates two capabilities:
 - **Probe design:** whether one judge creates more diagnostic tests.
 - **Evidence interpretation:** whether one judge ranks the same answers better.
 
+Crossed configs set `replay_source_targets: true`. This preserves the original
+adaptive comparison sets even when the crossed judge's interim ranking would
+have selected different candidates. Explicitly unavailable source answers are
+also replayed as missing evidence, so no candidate is called again.
+
 ## Scale And Cost Shape
 
 With 50 candidates, four opening probes, and two adaptive rounds targeting at
@@ -181,10 +186,13 @@ ordering is less defensible.
 
 ## Pilot Status
 
-Both independent 50-model runs are complete. Global comparison fit in context
-and produced complete structured judgments, so panels remain a diagnostic
-fallback rather than part of the primary method. Sol's direct-score pairwise
-accuracy rose from 0.811 after four probes to 0.839 after six; Fable's moved
-from 0.804 to 0.798. Final inter-judge Kendall agreement was 0.605. The full
-analysis, operational caveats, and local report-card paths are in
-[`pilot_analysis_catalog_ladder50_20260721.md`](pilot_analysis_catalog_ladder50_20260721.md).
+Both independent 50-model runs and the shared-evidence cross-over are complete.
+Global comparison fit in context and produced complete structured judgments,
+so panels remain a diagnostic fallback rather than part of the primary method.
+Sol's direct-score pairwise accuracy rose from 0.811 after four probes to 0.839
+after six; Fable's moved from 0.804 to 0.798. In the crossed control, Fable
+judging Sol evidence reached 0.867 after four probes, while Sol judging Fable
+evidence reached 0.809. The primary-run analysis is in
+[`pilot_analysis_catalog_ladder50_20260721.md`](pilot_analysis_catalog_ladder50_20260721.md),
+and the crossed analysis is in
+[`pilot_analysis_catalog_ladder50_crossed_20260721.md`](pilot_analysis_catalog_ladder50_crossed_20260721.md).

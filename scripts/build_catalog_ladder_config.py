@@ -10,6 +10,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Build one anonymous catalog-ladder run config.")
     parser.add_argument("--selection", default="data/catalog_ladder_50.selection.json")
     parser.add_argument("--catalog")
+    parser.add_argument("--name")
     parser.add_argument("--judge-model", required=True)
     parser.add_argument("--judge-effort", default="xhigh")
     parser.add_argument("--probe-schedule", default="4,1,1")
@@ -23,6 +24,7 @@ def main() -> int:
         default="record_unavailable",
     )
     parser.add_argument("--reuse-unavailable-answers", action="store_true")
+    parser.add_argument("--replay-source-targets", action="store_true")
     parser.add_argument(
         "--retry-unavailable-rounds",
         help="Comma-separated replay rounds whose unavailable answers should be called again.",
@@ -101,6 +103,8 @@ def main() -> int:
         "reuse_unavailable_answers": args.reuse_unavailable_answers,
         "visibility": "private",
     }
+    if args.replay_source_targets:
+        phase["replay_source_targets"] = True
     if args.retry_unavailable_rounds:
         phase["retry_unavailable_rounds"] = [
             int(value)
@@ -116,7 +120,7 @@ def main() -> int:
     if args.preauthored_ranking_file:
         phase["preauthored_ranking_file"] = args.preauthored_ranking_file
     config = {
-        "name": f"catalog_ladder{len(selected_ids)}_{_safe_name(args.judge_model)}",
+        "name": args.name or f"catalog_ladder{len(selected_ids)}_{_safe_name(args.judge_model)}",
         "run": {
             "output_dir": "runs",
             "max_context_turns": 40,

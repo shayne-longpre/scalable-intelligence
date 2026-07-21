@@ -73,6 +73,8 @@ models, external scores, release dates, and score status are in
 [`docs/catalog_ladder_roster.md`](docs/catalog_ladder_roster.md).
 Results from the first two independent 50-model runs are summarized in
 [`docs/pilot_analysis_catalog_ladder50_20260721.md`](docs/pilot_analysis_catalog_ladder50_20260721.md).
+The matched shared-evidence cross-over is summarized in
+[`docs/pilot_analysis_catalog_ladder50_crossed_20260721.md`](docs/pilot_analysis_catalog_ladder50_crossed_20260721.md).
 
 ## Core Methodology
 

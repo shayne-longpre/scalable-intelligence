@@ -745,11 +745,20 @@ class CouncilRunner:
             previous_judgment: TranscriptEntry | None = None
             active_candidates = list(self.agents)
             cumulative_probe_count = 0
-            replay_prefix_open = True
+            probe_replay_prefix_open = True
+            ranking_replay_prefix_open = True
             replayed_probe_ids: set[str] = set()
             for round_index, probe_count in enumerate(phase.probe_schedule, start=1):
                 if round_index == 1 or phase.adaptive_targeting == "all":
                     active_candidates = list(self.agents)
+                if phase.replay_source_targets:
+                    active_candidates = _preauthored_round_candidates(
+                        preauthored_probes,
+                        judge.spec.id,
+                        round_index,
+                        probe_count,
+                        self.agents,
+                    )
                 candidate_ids = [candidate.spec.id for candidate in active_candidates]
                 generation_stage = (
                     "baseline_battery" if round_index == 1 else "adaptive_followup"
@@ -788,7 +797,7 @@ class CouncilRunner:
                     replay = preauthored_probes.get(
                         (judge.spec.id, round_index, probe_number)
                     )
-                    if replay_prefix_open and replay is not None:
+                    if probe_replay_prefix_open and replay is not None:
                         probe_entry = self._append_preauthored_probe(
                             judge,
                             probe_phase,
@@ -799,7 +808,7 @@ class CouncilRunner:
                         )
                         replayed_probe_ids.add(probe_id)
                     else:
-                        replay_prefix_open = False
+                        probe_replay_prefix_open = False
                         probe_entry = self._run_agent_turn(
                             judge,
                             probe_phase,
@@ -888,7 +897,6 @@ class CouncilRunner:
                             )
                             replayed_destinations.append(destination)
                             continue
-                        replay_prefix_open = False
                         answer_requests.append(request)
                         answer_destinations.append(destination)
 
@@ -1049,7 +1057,7 @@ class CouncilRunner:
                     metadata=judgment_metadata,
                 )
                 judgment_replay = preauthored_judgments.get(judgment_stream_id)
-                if replay_prefix_open and judgment_replay is not None:
+                if ranking_replay_prefix_open and judgment_replay is not None:
                     _validate_preauthored_ranking_source(
                         judgment_request,
                         judgment_replay,
@@ -1059,7 +1067,7 @@ class CouncilRunner:
                         judgment_replay,
                     )
                 else:
-                    replay_prefix_open = False
+                    ranking_replay_prefix_open = False
                     previous_judgment = self._run_turn_request(judgment_request)
                 active_candidates = _adaptive_wave_candidates(
                     previous_judgment,
@@ -2628,6 +2636,7 @@ def _load_preauthored_probes(
                     "round_index": entry.get("round_index", 1),
                     "probe_number": entry.get("metadata", {}).get("probe_number"),
                     "content": entry.get("content"),
+                    "metadata": entry.get("metadata", {}),
                     "source_run": str(source.parent),
                     "source_turn_id": entry.get("turn_id"),
                 }
@@ -2676,6 +2685,38 @@ def _load_preauthored_probes(
             )
         probes[key] = {**record, "content": content}
     return probes
+
+
+def _preauthored_round_candidates(
+    probes: dict[tuple[str, int, int], dict[str, object]],
+    judge_id: str,
+    round_index: int,
+    probe_count: int,
+    agents: list[ParticipantAgent],
+) -> list[ParticipantAgent]:
+    source_sets = []
+    for probe_number in range(1, probe_count + 1):
+        probe = probes.get((judge_id, round_index, probe_number))
+        metadata = probe.get("metadata") if isinstance(probe, dict) else None
+        respondents = metadata.get("respondents") if isinstance(metadata, dict) else None
+        if not isinstance(respondents, list) or not all(
+            isinstance(value, str) for value in respondents
+        ):
+            raise ExperimentViolationError(
+                f"preauthored probe round {round_index} is missing its source respondents"
+            )
+        source_sets.append(respondents)
+    if any(respondents != source_sets[0] for respondents in source_sets[1:]):
+        raise ExperimentViolationError(
+            f"preauthored probes in round {round_index} use different respondent sets"
+        )
+    agents_by_id = {agent.spec.id: agent for agent in agents}
+    unknown = [value for value in source_sets[0] if value not in agents_by_id]
+    if unknown:
+        raise ExperimentViolationError(
+            f"preauthored probe round {round_index} names unknown respondents {unknown}"
+        )
+    return [agents_by_id[value] for value in source_sets[0]]
 
 
 def _load_preauthored_answers(

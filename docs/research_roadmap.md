@@ -17,12 +17,12 @@ invent their own criteria and probes.
 | 1. Measurement validity | Complete | Role-scoped taxonomy counts, source-turn provenance, and ranking metrics validated against hand-labeled transcripts | Are reported patterns real properties of the interaction rather than extraction artifacts? |
 | 2. Conversation dynamics | Complete | Separate preplanned battery progression from evidence-conditioned follow-up and topical change | Do evaluators deepen, broaden, or adapt as evidence accumulates? |
 | 3. Baseline freeze | Complete | Versioned adaptive-wave prompts, taxonomy, config, analysis schema, and three accepted replications | Can later experiments be compared without silent protocol drift? |
-| 4. Independent-judge ladder | 50-model primary runs complete; crossed control pending | Sol and Fable independently rank the same 50 anonymous candidates using a four-probe opening and bounded adaptive rounds | Can capable models recover a broad external capability ordering? |
+| 4. Independent-judge ladder | Complete; order audit next | Sol and Fable independently rank the same 50 anonymous candidates, followed by a shared-evidence cross-over | Can capable models recover a broad external capability ordering? |
 | 5. Selective adaptivity | Three stress pilots complete | Four opening probes, direct per-probe comparison, cumulative evidence dossiers, bounded common follow-ups, and adaptive-decision traces | Can extra evidence resolve the difficult part of a ranking efficiently? |
 | 5b. Probe-budget ablation | Initial pilot complete | Fresh evidence cards and rankings using only the first 2, 4, or 6 probes from one shared run | How much does additional probe evidence improve ranking accuracy? |
 | 6. Close capability ladder | Initial four-model replication complete | Repeated ladders concentrated near the discrimination boundary | How small can capability gaps become before judgments approach chance? |
 | 7. Free vs. structured | Pending | Paired runs with the same roster, budgets, and external prior | What does round-robin structure improve or suppress? |
-| 8. Publication figures | Pending | Auditable plots linked back to source turns and model spend | Which findings are robust, interpretable, and worth communicating? |
+| 8. Publication figures | Initial catalog figures complete | Auditable plots linked back to source turns and model spend | Which findings are robust, interpretable, and worth communicating? |
 | 9. Scale-out | Global 50-answer pilot complete; order audit pending | Direct global comparison first; saved-answer replay through overlapping panels if attention audits justify it | Can the method rank a large catalog without one unmanageably large context? |
 
 ## First Ladder Design
@@ -229,9 +229,16 @@ final rankings agreed at Kendall tau 0.605.
 Accuracy depended strongly on capability gap. Both judges exceeded 0.91 on
 pairs separated by more than ten external-score points, while pairs separated
 by less than two points remained near chance. Sol improved across the two
-adaptive checkpoints; Fable did not. This makes the shared-evidence cross-over,
-presentation-order audit, and oversight frontier more informative next steps
-than immediately adding more candidates.
+adaptive checkpoints; Fable did not.
+
+The shared-evidence cross-over is also complete. Fable judging Sol-authored
+evidence produced the strongest externally aligned ranking, reaching 0.867
+pairwise accuracy after the four-probe opening. Sol improved Fable-authored
+evidence from 0.804 to 0.809 at that checkpoint. Same-evidence judge agreement
+was substantially higher than same-judge agreement across batteries, indicating
+that probe choice materially shaped the resulting order. Full results are in
+`docs/pilot_analysis_catalog_ladder50_crossed_20260721.md`; the crossed report is
+`runs/report_cards/catalog_ladder50_crossed_20260721_v1/report_card.html`.
 
 All exact answers were archived, so alternative answer orders and overlapping
 panels require judge calls but no new candidate calls. Full results and caveats
@@ -241,12 +248,11 @@ card is
 
 ## Immediate Next Steps
 
-1. Run the shared-evidence cross-over so each judge interprets the other
-   judge's probes and answers, separating probe design from interpretation.
-2. Replay the frozen evidence through a second seeded presentation order. Use
+1. Replay the frozen evidence through at least two additional seeded
+   presentation orders. Use
    overlapping panels with common anchors only if the global ranking is
    materially order-sensitive.
-3. Audit a sample of post-hoc labels and decisive answer summaries by hand,
+2. Audit a sample of post-hoc labels and decisive answer summaries by hand,
    then freeze the analysis version for the first confirmatory study.
-4. Return to the oversight frontier with small close rosters above and below
+3. Return to the oversight frontier with small close rosters above and below
    each judge, then run the matched structured-versus-free study.

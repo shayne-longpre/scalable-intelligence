@@ -36,19 +36,24 @@ def main() -> int:
         for item in catalog["models"]
     }
     runs = [_run_data(run, catalog_names) for run in report["runs"]]
-    if len(runs) != 2:
-        raise ValueError("catalog ladder figures require exactly two judge runs")
-
-    outputs = {
-        "predicted_vs_external": output_dir / "predicted-vs-external.svg",
-        "discrimination_by_gap": output_dir / "discrimination-by-gap.svg",
-        "evidence_scaling": output_dir / "evidence-scaling.svg",
-    }
-    _write_svg(outputs["predicted_vs_external"], _predicted_vs_external(runs))
-    _write_svg(outputs["discrimination_by_gap"], _discrimination_by_gap(runs))
-    _write_svg(outputs["evidence_scaling"], _evidence_scaling(runs))
-    if args.inline_html:
-        _write_inline_html(Path(args.inline_html), outputs)
+    if len(runs) == 2:
+        outputs = {
+            "predicted_vs_external": output_dir / "predicted-vs-external.svg",
+            "discrimination_by_gap": output_dir / "discrimination-by-gap.svg",
+            "evidence_scaling": output_dir / "evidence-scaling.svg",
+        }
+        _write_svg(outputs["predicted_vs_external"], _predicted_vs_external(runs))
+        _write_svg(outputs["discrimination_by_gap"], _discrimination_by_gap(runs))
+        _write_svg(outputs["evidence_scaling"], _evidence_scaling(runs))
+        if args.inline_html:
+            _write_inline_html(Path(args.inline_html), outputs)
+    elif len(runs) == 4:
+        if args.inline_html:
+            raise ValueError("inline HTML is only available for the two-run figure set")
+        outputs = {"crossed_judges": output_dir / "crossed-judge-accuracy.svg"}
+        _write_svg(outputs["crossed_judges"], _crossed_judge_accuracy(runs))
+    else:
+        raise ValueError("catalog ladder figures require two primary or four crossed runs")
     print(json.dumps({name: str(path) for name, path in outputs.items()}, indent=2))
     return 0
 
@@ -81,10 +86,21 @@ def _run_data(run: dict, catalog_names: dict[str, str]) -> dict:
         )
     judge_model = run["judges"][0]["provider_model_id"]
     return {
+        "name": run["name"],
         "judge": "Sol" if "sol" in judge_model.lower() else "Fable",
+        "evidence": _evidence_author(run["name"], judge_model),
         "points": points,
         "checkpoints": run["probe_budget_results"],
     }
+
+
+def _evidence_author(run_name: str, judge_model: str) -> str:
+    normalized = run_name.lower()
+    if "sol_evidence" in normalized:
+        return "Sol"
+    if "fable_evidence" in normalized:
+        return "Fable"
+    return "Sol" if "sol" in judge_model.lower() else "Fable"
 
 
 def _predicted_vs_external(runs: list[dict]) -> ET.Element:
@@ -312,6 +328,77 @@ def _evidence_scaling(runs: list[dict]) -> ET.Element:
             f"{run['judge']}  {delta:+.1f} points",
             css_class="series-label",
         )
+    return root
+
+
+def _crossed_judge_accuracy(runs: list[dict]) -> ET.Element:
+    height = 590
+    root = _svg_root(height)
+    _heading(
+        root,
+        "The questions mattered as much as the judge",
+        "Two judges, identical frozen answers. Accuracy uses 47 models with reported external scores.",
+    )
+    panel_width = 440
+    panel_height = 330
+    panel_y = 135
+    panel_xs = [105, 655]
+    for evidence, panel_x in zip(("Sol", "Fable"), panel_xs, strict=True):
+        panel_runs = [run for run in runs if run["evidence"] == evidence]
+        if {run["judge"] for run in panel_runs} != {"Sol", "Fable"}:
+            raise ValueError(f"crossed figure is missing one judge for {evidence} evidence")
+        _text(root, panel_x, 108, f"{evidence}-authored evidence", css_class="panel-title")
+        probe_counts = [item["probe_count"] for item in panel_runs[0]["checkpoints"]]
+        xs = [
+            panel_x + index * panel_width / (len(probe_counts) - 1)
+            for index in range(len(probe_counts))
+        ]
+        _axes(
+            root,
+            panel_x,
+            panel_y,
+            panel_width,
+            panel_height,
+            x_ticks=[],
+            y_ticks=[78, 80, 82, 84, 86, 88],
+            x_domain=(0, 1),
+            y_domain=(78, 88.5),
+            x_label="",
+            y_label="Correctly ordered pairs" if evidence == "Sol" else None,
+            y_percent=True,
+        )
+        for x, count in zip(xs, probe_counts, strict=True):
+            _text(root, x, panel_y + panel_height + 28, str(count), css_class="tick", anchor="middle")
+        for run in sorted(panel_runs, key=lambda item: item["judge"], reverse=True):
+            color = SOL if run["judge"] == "Sol" else FABLE
+            values = [item["pairwise_accuracy"] * 100 for item in run["checkpoints"]]
+            points = [
+                (x, _scale(value, 78, 88.5, panel_y + panel_height, panel_y))
+                for x, value in zip(xs, values, strict=True)
+            ]
+            _polyline(root, points, stroke=color, css_class="series-line")
+            for index, (x, y, value) in enumerate(
+                zip(xs, [point[1] for point in points], values, strict=True)
+            ):
+                if run["judge"] == "Sol":
+                    _circle(root, x, y, 6, fill=color, stroke=color)
+                    label_y = y + 23 if index == len(points) - 1 else y - 13
+                else:
+                    _square(root, x, y, 11, fill=color, stroke=color)
+                    label_y = y - 13 if index == len(points) - 1 else y + 23
+                _text(root, x, label_y, f"{value:.1f}%", css_class="value-label", anchor="middle")
+            _text(
+                root,
+                points[-1][0] + 15,
+                points[-1][1] + (20 if run["judge"] == "Sol" else -8),
+                run["judge"],
+                css_class="series-label",
+            )
+    _text(root, 600, 525, "Cumulative probes", css_class="axis-label", anchor="middle")
+    _circle(root, 445, 563, 6, fill=SOL, stroke=SOL)
+    _text(root, 458, 567, "Sol judge", css_class="legend")
+    _square(root, 575, 563, 11, fill=FABLE, stroke=FABLE)
+    _text(root, 589, 567, "Fable judge", css_class="legend")
     return root
 
 

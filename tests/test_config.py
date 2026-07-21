@@ -198,6 +198,28 @@ class ConfigTests(unittest.TestCase):
         with self.assertRaisesRegex(ConfigError, "requires reuse_unavailable_answers"):
             ExperimentConfig.from_dict(data)
 
+    def test_replay_source_targets_requires_boolean(self) -> None:
+        data = json.loads(
+            (ROOT / "examples" / "catalog_ladder50_sol.openrouter.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        phase = data["protocol"]["phases"][0]
+        phase["replay_source_targets"] = True
+        phase["preauthored_probe_file"] = "source.jsonl"
+        self.assertTrue(
+            ExperimentConfig.from_dict(data).protocol.phases[0].replay_source_targets
+        )
+
+        phase["replay_source_targets"] = "yes"
+        with self.assertRaisesRegex(ConfigError, "replay_source_targets"):
+            ExperimentConfig.from_dict(data)
+
+        phase["replay_source_targets"] = True
+        phase.pop("preauthored_probe_file")
+        with self.assertRaisesRegex(ConfigError, "requires preauthored_probe_file"):
+            ExperimentConfig.from_dict(data)
+
     def test_loads_and_validates_provider_request_retries(self) -> None:
         data = _minimal_config_dict()
         data["providers"][0]["request_retries"] = 0
