@@ -95,3 +95,9 @@ bound. Direct judge calls account for $10.6104 for Fable and $6.0854 for Sol.
 - Sol report: `runs/report_cards/20260721T092518Z/report_card.html`
 - Fable report: `runs/report_cards/20260721T103008Z/report_card.html`
 - Combined report: `runs/report_cards/catalog_ladder50_sol_fable_20260721_v5/report_card.html`
+- Predicted versus external capability: `docs/figures/catalog-ladder50/predicted-vs-external.svg`
+- Accuracy by capability gap: `docs/figures/catalog-ladder50/discrimination-by-gap.svg`
+- Accuracy by cumulative evidence: `docs/figures/catalog-ladder50/evidence-scaling.svg`
+
+The figures can be regenerated with `scripts/plot_catalog_ladder.py` from a
+combined report-card summary and model catalog.

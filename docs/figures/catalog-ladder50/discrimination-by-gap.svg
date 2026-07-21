@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="570" viewBox="0 0 1200 570" role="img">
+  <style>
+        text { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #182026; letter-spacing: 0; }
+        .title { font-size: 27px; font-weight: 500; }
+        .subtitle { font-size: 15px; fill: #5E6A71; }
+        .panel-title { font-size: 19px; font-weight: 500; }
+        .panel-metric, .series-label { font-size: 14px; font-weight: 500; }
+        .tick, .point-label, .value-label { font-size: 12px; }
+        .tick-muted, .legend { font-size: 12px; fill: #5E6A71; }
+        .axis-label { font-size: 14px; fill: #38454B; }
+        .grid { stroke: #DCE2E5; stroke-width: 1; }
+        .axis { stroke: #879399; stroke-width: 1.2; }
+        .ideal-line { fill: none; stroke-dasharray: 5 5; stroke-width: 1.5; }
+        .chance-line { fill: none; stroke-dasharray: 4 5; stroke-width: 1.2; }
+        .series-line { fill: none; stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+    </style>
+  <title>Large capability differences are easy; close calls are not</title>
+  <desc>Final pairwise accuracy after six probes, using the 47 models with reported external scores.</desc>
+  <text x="60.0" y="43.0" class="title" text-anchor="start">Large capability differences are easy; close calls are not</text>
+  <text x="60.0" y="71.0" class="subtitle" text-anchor="start">Final pairwise accuracy after six probes, using the 47 models with reported external scores.</text>
+  <line x1="120.0" y1="447.3" x2="1040.0" y2="447.3" class="grid" />
+  <text x="108.0" y="451.3" class="tick" text-anchor="end">50%</text>
+  <line x1="120.0" y1="381.8" x2="1040.0" y2="381.8" class="grid" />
+  <text x="108.0" y="385.8" class="tick" text-anchor="end">60%</text>
+  <line x1="120.0" y1="316.4" x2="1040.0" y2="316.4" class="grid" />
+  <text x="108.0" y="320.4" class="tick" text-anchor="end">70%</text>
+  <line x1="120.0" y1="250.9" x2="1040.0" y2="250.9" class="grid" />
+  <text x="108.0" y="254.9" class="tick" text-anchor="end">80%</text>
+  <line x1="120.0" y1="185.5" x2="1040.0" y2="185.5" class="grid" />
+  <text x="108.0" y="189.5" class="tick" text-anchor="end">90%</text>
+  <line x1="120.0" y1="120.0" x2="1040.0" y2="120.0" class="grid" />
+  <text x="108.0" y="124.0" class="tick" text-anchor="end">100%</text>
+  <line x1="120.0" y1="480.0" x2="1040.0" y2="480.0" class="axis" />
+  <line x1="120.0" y1="120.0" x2="120.0" y2="480.0" class="axis" />
+  <text x="580.0" y="550.0" class="axis-label" text-anchor="middle">Difference in external Intelligence Index</text>
+  <text x="54.0" y="300.0" class="axis-label" text-anchor="middle" transform="rotate(-90 54.0 300.0)">Correctly ordered pairs</text>
+  <line x1="120.0" y1="447.3" x2="1040.0" y2="447.3" class="chance-line" stroke="#88949A" />
+  <text x="1040.0" y="439.3" class="legend" text-anchor="end">chance</text>
+  <text x="120.0" y="510.0" class="tick" text-anchor="middle">&lt;2</text>
+  <text x="120.0" y="529.0" class="tick-muted" text-anchor="middle">n=81</text>
+  <text x="426.7" y="510.0" class="tick" text-anchor="middle">2-5</text>
+  <text x="426.7" y="529.0" class="tick-muted" text-anchor="middle">n=143</text>
+  <text x="733.3" y="510.0" class="tick" text-anchor="middle">5-10</text>
+  <text x="733.3" y="529.0" class="tick-muted" text-anchor="middle">n=205</text>
+  <text x="1040.0" y="510.0" class="tick" text-anchor="middle">10+</text>
+  <text x="1040.0" y="529.0" class="tick-muted" text-anchor="middle">n=652</text>
+  <polyline points="120.0,378.6 426.7,344.3 733.3,270.1 1040.0,166.2" stroke="#2364AA" class="series-line" />
+  <circle cx="120.0" cy="378.6" r="6.0" fill="#2364AA" stroke="#2364AA" stroke-width="1.5" />
+  <text x="120.0" y="365.6" class="value-label" text-anchor="middle">60%</text>
+  <circle cx="426.7" cy="344.3" r="6.0" fill="#2364AA" stroke="#2364AA" stroke-width="1.5" />
+  <text x="426.7" y="331.3" class="value-label" text-anchor="middle">66%</text>
+  <circle cx="733.3" cy="270.1" r="6.0" fill="#2364AA" stroke="#2364AA" stroke-width="1.5" />
+  <text x="733.3" y="257.1" class="value-label" text-anchor="middle">77%</text>
+  <circle cx="1040.0" cy="166.2" r="6.0" fill="#2364AA" stroke="#2364AA" stroke-width="1.5" />
+  <text x="1040.0" y="153.2" class="value-label" text-anchor="middle">93%</text>
+  <text x="1058.0" y="158.2" class="series-label" text-anchor="start">Sol</text>
+  <polyline points="120.0,451.3 426.7,362.6 733.3,337.1 1040.0,176.2" stroke="#C44536" class="series-line" />
+  <rect x="114.5" y="445.8" width="11.0" height="11.0" fill="#C44536" stroke="#C44536" stroke-width="1.5" />
+  <text x="120.0" y="475.3" class="value-label" text-anchor="middle">49%</text>
+  <rect x="421.2" y="357.1" width="11.0" height="11.0" fill="#C44536" stroke="#C44536" stroke-width="1.5" />
+  <text x="426.7" y="386.6" class="value-label" text-anchor="middle">63%</text>
+  <rect x="727.8" y="331.6" width="11.0" height="11.0" fill="#C44536" stroke="#C44536" stroke-width="1.5" />
+  <text x="733.3" y="361.1" class="value-label" text-anchor="middle">67%</text>
+  <rect x="1034.5" y="170.7" width="11.0" height="11.0" fill="#C44536" stroke="#C44536" stroke-width="1.5" />
+  <text x="1040.0" y="200.2" class="value-label" text-anchor="middle">91%</text>
+  <text x="1058.0" y="196.2" class="series-label" text-anchor="start">Fable</text>
+</svg>
