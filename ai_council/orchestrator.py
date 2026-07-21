@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import random
 from collections.abc import Callable
 from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
 from dataclasses import dataclass, replace
@@ -342,6 +344,8 @@ class CouncilRunner:
         preauthored_answers = _load_preauthored_answers(
             phase.preauthored_answer_file,
             set(phase.preauthored_answer_participants),
+            include_unavailable=phase.reuse_unavailable_answers,
+            retry_unavailable_rounds=set(phase.retry_unavailable_rounds),
         )
         preauthored_evidence = _load_preauthored_evidence(
             phase.preauthored_evidence_file
@@ -726,6 +730,8 @@ class CouncilRunner:
         preauthored_answers = _load_preauthored_answers(
             phase.preauthored_answer_file,
             set(phase.preauthored_answer_participants),
+            include_unavailable=phase.reuse_unavailable_answers,
+            retry_unavailable_rounds=set(phase.retry_unavailable_rounds),
         )
         preauthored_comparisons = _load_preauthored_evidence(
             phase.preauthored_evidence_file
@@ -906,9 +912,15 @@ class CouncilRunner:
                 replayed_comparison_positions: list[int] = []
                 for probe_entry in probe_entries:
                     probe_id = str(probe_entry.metadata["probe_id"])
+                    presentation_order = _comparison_presentation_order(
+                        candidate_ids,
+                        phase.comparison_order,
+                        phase.comparison_seed,
+                        int(probe_entry.metadata.get("probe_sequence_number", 0)),
+                    )
                     ordered_answers = [
                         answers_by_probe[probe_id][candidate_id]
-                        for candidate_id in candidate_ids
+                        for candidate_id in presentation_order
                     ]
                     stream_id = _adaptive_probe_comparison_stream_id(probe_id)
                     request = _TurnRequest(
@@ -937,6 +949,9 @@ class CouncilRunner:
                             "judge": judge.spec.id,
                             "probe_id": probe_id,
                             "respondents": candidate_ids,
+                            "answer_presentation_order": presentation_order,
+                            "comparison_order": phase.comparison_order,
+                            "comparison_seed": phase.comparison_seed,
                             "question_turn_id": probe_entry.turn_id,
                             "answer_turn_ids": [
                                 answer.turn_id for answer in ordered_answers
@@ -955,14 +970,13 @@ class CouncilRunner:
                     )
                     replay = preauthored_comparisons.get(stream_id)
                     position = int(probe_entry.metadata.get("probe_number", 0))
-                    if replay_prefix_open and replay is not None:
+                    if replay is not None:
                         _validate_preauthored_evidence_source(request, replay)
                         replayed_comparisons.append(
                             self._append_preauthored_evidence(request, replay)
                         )
                         replayed_comparison_positions.append(position)
                         continue
-                    replay_prefix_open = False
                     comparison_requests.append(request)
                     fresh_comparison_positions.append(position)
                 generated_comparisons = self._run_agent_turn_batch(comparison_requests)
@@ -1654,10 +1668,25 @@ class CouncilRunner:
         ):
             entries = []
             for index, request in enumerate(requests):
-                entry = self._run_turn_request(
-                    request,
-                    reserved_model_calls=len(requests) - index - 1,
-                )
+                try:
+                    entry = self._run_turn_request(
+                        request,
+                        reserved_model_calls=len(requests) - index - 1,
+                    )
+                except ModelClientError as error:
+                    self._record_batch_failure(index, request, error)
+                    if not self._can_record_unavailable(request):
+                        raise
+                    staged = self._unavailable_answer_entry(
+                        request,
+                        request.agent.request_params_for_phase(request.phase),
+                        error,
+                    )
+                    entry = replace(staged, turn_id=self.next_turn_id)
+                    self.next_turn_id += 1
+                    self.transcript.append(entry)
+                    self.store.append_entry(entry)
+                    self._run_monitor_checks(entry, request.phase, entry.parsed)
                 if validator is not None:
                     validator(request, entry)
                 entries.append(entry)
@@ -1665,41 +1694,133 @@ class CouncilRunner:
 
         workers = min(self.config.run.max_parallel_calls, len(requests))
         prepared_calls = [self._prepare_turn_request(request) for request in requests]
-        try:
-            responses = self._run_prepared_calls(prepared_calls, workers)
-        except _PartialBatchError as exc:
-            materialization_error: Exception | None = None
-            for request, response in zip(requests, exc.responses, strict=True):
-                if response is None:
-                    continue
-                try:
-                    entry = self._run_turn_request(
-                        request,
-                        initial_response=response,
-                        initial_response_recorded=True,
-                    )
-                    if validator is not None:
-                        validator(request, entry)
-                except Exception as error:
-                    materialization_error = materialization_error or error
-            raise materialization_error or exc.failures[0][1]
-        entries = []
-        materialization_error: Exception | None = None
-        for request, response in zip(requests, responses, strict=True):
+        staged_entries: list[TranscriptEntry | None] = [None] * len(requests)
+        self.store.reset_pending_batch()
+
+        def stage_response(index: int, response: ModelResponse) -> None:
+            entry = self._run_turn_request(
+                requests[index],
+                initial_response=response,
+                initial_response_recorded=True,
+                persist=False,
+            )
+            staged_entries[index] = entry
             try:
-                entry = self._run_turn_request(
-                    request,
-                    initial_response=response,
-                    initial_response_recorded=True,
-                )
                 if validator is not None:
-                    validator(request, entry)
-                entries.append(entry)
-            except Exception as error:
-                materialization_error = materialization_error or error
-        if materialization_error is not None:
-            raise materialization_error
+                    validator(requests[index], entry)
+            finally:
+                self.store.append_pending_entry(entry, index)
+
+        try:
+            self._run_prepared_calls(prepared_calls, workers, on_response=stage_response)
+        except _PartialBatchError as exc:
+            for index, error in exc.failures:
+                self._record_batch_failure(index, requests[index], error)
+            unrecovered_failures = []
+            for index, error in exc.failures:
+                request = requests[index]
+                can_record_unavailable = (
+                    self._can_record_unavailable(request)
+                    and isinstance(error, ModelClientError)
+                    and staged_entries[index] is None
+                )
+                if not can_record_unavailable:
+                    unrecovered_failures.append((index, error))
+                    continue
+                entry = self._unavailable_answer_entry(
+                    request,
+                    prepared_calls[index].request.params,
+                    error,
+                )
+                staged_entries[index] = entry
+                self.store.append_pending_entry(entry, index)
+            entries = self._commit_staged_entries(requests, staged_entries)
+            if unrecovered_failures:
+                raise unrecovered_failures[0][1]
+            if len(entries) != len(requests):
+                raise RuntimeError("parallel call batch ended without every answer recorded")
+            return entries
+        entries = self._commit_staged_entries(requests, staged_entries)
+        if len(entries) != len(requests):
+            raise RuntimeError("parallel call batch completed without every staged entry")
         return entries
+
+    def _commit_staged_entries(
+        self,
+        requests: list[_TurnRequest],
+        staged_entries: list[TranscriptEntry | None],
+    ) -> list[TranscriptEntry]:
+        committed = []
+        for request, staged in zip(requests, staged_entries, strict=True):
+            if staged is None:
+                continue
+            entry = replace(staged, turn_id=self.next_turn_id)
+            self.next_turn_id += 1
+            self.transcript.append(entry)
+            self.store.append_entry(entry)
+            self._run_monitor_checks(entry, request.phase, entry.parsed)
+            committed.append(entry)
+        self.store.reset_pending_batch()
+        return committed
+
+    def _can_record_unavailable(self, request: _TurnRequest) -> bool:
+        return (
+            self.config.run.continue_batch_on_call_error
+            and request.phase.incomplete_answer_policy == "record_unavailable"
+            and (request.metadata or {}).get("interaction_role") == "answer"
+        )
+
+    def _record_batch_failure(
+        self,
+        index: int,
+        request: _TurnRequest,
+        error: Exception,
+    ) -> None:
+        self.store.append_batch_failure(
+            {
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "batch_position": index,
+                "model_ref": request.agent.model.name,
+                "provider": request.agent.model.provider,
+                "model": request.agent.model.model,
+                "speaker": request.agent.spec.id,
+                "stream_id": (request.metadata or {}).get("stream_id"),
+                "error_type": type(error).__name__,
+                "error": str(error),
+            }
+        )
+
+    @staticmethod
+    def _unavailable_answer_entry(
+        request: _TurnRequest,
+        request_params: dict[str, object],
+        error: Exception,
+    ) -> TranscriptEntry:
+        return TranscriptEntry(
+            turn_id=0,
+            phase=request.phase.name,
+            round_index=request.round_index,
+            speaker=request.agent.spec.id,
+            visibility=request.visibility,
+            content="",
+            created_at=datetime.now(timezone.utc).isoformat(),
+            parsed=None,
+            metadata={
+                "model_ref": request.agent.model.name,
+                "provider": request.agent.model.provider,
+                "model": request.agent.model.model,
+                "request_params": request_params,
+                "usage": {},
+                "finish_reason": "provider_error",
+                "response_message_keys": [],
+                "parse_error": None,
+                "structured_error": None,
+                **(request.metadata or {}),
+                "answer_unavailable": True,
+                "provider_error_type": type(error).__name__,
+                "provider_error": str(error),
+            },
+        )
 
     def _prepare_turn_request(self, request: _TurnRequest) -> _PreparedCall:
         model_request = request.agent.build_turn_request(
@@ -1719,12 +1840,15 @@ class CouncilRunner:
         self,
         calls: list[_PreparedCall],
         workers: int,
+        on_response: Callable[[int, ModelResponse], None] | None = None,
     ) -> list[ModelResponse]:
         if workers == 1:
             responses = []
-            for call in calls:
+            for index, call in enumerate(calls):
                 response = call.client.generate(call.request)
                 self._record_model_call(response, call.model_ref)
+                if on_response is not None:
+                    on_response(index, response)
                 responses.append(response)
             return responses
 
@@ -1778,8 +1902,20 @@ class CouncilRunner:
                         self._record_model_call(response, calls[index].model_ref)
                     except BudgetExceededError as exc:
                         failures.append((index, exc))
+                    if on_response is not None:
+                        try:
+                            on_response(index, response)
+                        except Exception as exc:
+                            failures.append((index, exc))
 
-                if not failures:
+                if all(
+                    isinstance(error, ExperimentViolationError)
+                    or (
+                        self.config.run.continue_batch_on_call_error
+                        and isinstance(error, ModelClientError)
+                    )
+                    for _, error in failures
+                ):
                     submit_available()
 
         if failures:
@@ -1796,6 +1932,7 @@ class CouncilRunner:
         initial_response: ModelResponse | None = None,
         initial_response_recorded: bool = False,
         reserved_model_calls: int = 0,
+        persist: bool = True,
     ) -> TranscriptEntry:
         return self._run_agent_turn(
             request.agent,
@@ -1809,6 +1946,7 @@ class CouncilRunner:
             initial_response=initial_response,
             initial_response_recorded=initial_response_recorded,
             reserved_model_calls=reserved_model_calls,
+            persist=persist,
         )
 
     def _run_agent_turn(
@@ -1824,6 +1962,7 @@ class CouncilRunner:
         initial_response: ModelResponse | None = None,
         initial_response_recorded: bool = False,
         reserved_model_calls: int = 0,
+        persist: bool = True,
     ) -> TranscriptEntry:
         if initial_response is None:
             self._check_call_budget()
@@ -1901,7 +2040,7 @@ class CouncilRunner:
             )
 
         entry = TranscriptEntry(
-            turn_id=self.next_turn_id,
+            turn_id=self.next_turn_id if persist else 0,
             phase=phase.name,
             round_index=round_index,
             speaker=agent.spec.id,
@@ -1924,10 +2063,11 @@ class CouncilRunner:
                 **(metadata or {}),
             },
         )
-        self.next_turn_id += 1
-        self.transcript.append(entry)
-        self.store.append_entry(entry)
-        self._run_monitor_checks(entry, phase, parsed)
+        if persist:
+            self.next_turn_id += 1
+            self.transcript.append(entry)
+            self.store.append_entry(entry)
+            self._run_monitor_checks(entry, phase, parsed)
         return entry
 
     def _retry_empty_visible_output(
@@ -2224,6 +2364,9 @@ def _validate_independent_answer(
     entry: TranscriptEntry,
 ) -> None:
     if entry.content.strip() and entry.metadata.get("finish_reason") != "length":
+        return
+    if request.phase.incomplete_answer_policy == "record_unavailable":
+        entry.metadata["answer_unavailable"] = True
         return
     metadata = request.metadata or {}
     raise ExperimentViolationError(
@@ -2538,14 +2681,30 @@ def _load_preauthored_probes(
 def _load_preauthored_answers(
     path: str | None,
     allowed_participants: set[str],
+    *,
+    include_unavailable: bool = False,
+    retry_unavailable_rounds: set[int] | None = None,
 ) -> dict[str, dict[str, object]]:
     if path is None:
         return {}
     source = Path(path)
     try:
+        source_files = (
+            [
+                candidate
+                for candidate in (
+                    source / "transcript.jsonl",
+                    source / "pending_batch_entries.jsonl",
+                )
+                if candidate.exists()
+            ]
+            if source.is_dir()
+            else [source]
+        )
         entries = [
-            json.loads(line)
-            for line in source.read_text(encoding="utf-8").splitlines()
+            (json.loads(line), source_file)
+            for source_file in source_files
+            for line in source_file.read_text(encoding="utf-8").splitlines()
             if line.strip()
         ]
     except (OSError, json.JSONDecodeError) as exc:
@@ -2553,7 +2712,7 @@ def _load_preauthored_answers(
             f"could not load preauthored answer file {source}: {exc}"
         ) from exc
     answers: dict[str, dict[str, object]] = {}
-    for entry in entries:
+    for entry, source_file in entries:
         metadata = entry.get("metadata", {}) if isinstance(entry, dict) else {}
         if metadata.get("interaction_role") != "answer":
             continue
@@ -2561,23 +2720,50 @@ def _load_preauthored_answers(
             continue
         content = entry.get("content")
         stream_id = metadata.get("stream_id")
+        answer_unavailable = metadata.get("answer_unavailable") is True
+        if answer_unavailable:
+            round_index = entry.get("round_index", metadata.get("round_index", 1))
+            if not include_unavailable or round_index in (retry_unavailable_rounds or set()):
+                continue
         if (
             not isinstance(content, str)
-            or not content.strip()
+            or (not content.strip() and not answer_unavailable)
             or not isinstance(stream_id, str)
-            or metadata.get("finish_reason") == "length"
+            or (metadata.get("finish_reason") == "length" and not answer_unavailable)
         ):
             continue
         if stream_id in answers:
+            if _same_preauthored_answer(answers[stream_id], entry):
+                continue
             raise ExperimentViolationError(
-                f"preauthored answer file {source} contains duplicate stream {stream_id}"
+                f"preauthored answer file {source} contains conflicting entries "
+                f"for stream {stream_id}"
             )
         answers[stream_id] = {
             **entry,
-            "source_run": str(source.parent),
+            "source_run": str(source if source.is_dir() else source.parent),
+            "source_file": str(source_file),
             "source_turn_id": entry.get("turn_id"),
         }
     return answers
+
+
+def _same_preauthored_answer(
+    left: dict[str, object],
+    right: dict[str, object],
+) -> bool:
+    left_metadata = left.get("metadata", {})
+    right_metadata = right.get("metadata", {})
+    if not isinstance(left_metadata, dict) or not isinstance(right_metadata, dict):
+        return False
+    return (
+        left.get("speaker") == right.get("speaker")
+        and left.get("content") == right.get("content")
+        and left_metadata.get("model_ref") == right_metadata.get("model_ref")
+        and left_metadata.get("answer_unavailable")
+        == right_metadata.get("answer_unavailable")
+        and left_metadata.get("finish_reason") == right_metadata.get("finish_reason")
+    )
 
 
 def _validate_preauthored_answer_source(
@@ -3015,12 +3201,33 @@ def _format_probe_comparison_context(
     answers: list[TranscriptEntry],
 ) -> str:
     blocks = [f"Probe {probe.metadata.get('probe_id')} (turn {probe.turn_id}):\n{probe.content}"]
-    blocks.extend(
-        f"Candidate {answer.metadata.get('respondent')} answer "
-        f"(turn {answer.turn_id}):\n{answer.content}"
-        for answer in answers
-    )
+    for answer in answers:
+        content = answer.content
+        if answer.metadata.get("answer_unavailable"):
+            content = (
+                "[Response unavailable because the provider returned no complete visible "
+                "answer. Treat this as missing evidence, not evidence of low capability.]"
+            )
+        blocks.append(
+            f"Candidate {answer.metadata.get('respondent')} answer "
+            f"(turn {answer.turn_id}):\n{content}"
+        )
     return "\n\n---\n\n".join(blocks)
+
+
+def _comparison_presentation_order(
+    candidate_ids: list[str],
+    order: str,
+    seed: int,
+    probe_sequence_number: int,
+) -> list[str]:
+    presented = list(candidate_ids)
+    if order == "fixed":
+        return presented
+    seed_material = f"{seed}:{probe_sequence_number}".encode("utf-8")
+    stable_seed = int.from_bytes(hashlib.sha256(seed_material).digest()[:8], "big")
+    random.Random(stable_seed).shuffle(presented)
+    return presented
 
 
 def _format_wave_judgment_context(

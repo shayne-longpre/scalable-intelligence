@@ -131,8 +131,10 @@ class MockRunTests(unittest.TestCase):
             prior_path = Path(tmpdir) / "priors.json"
             prior_path.write_text(
                 '{"name":"test","version":"1","models":['
-                '{"provider_model_id":"provider/strong","estimated_rank":1},'
-                '{"provider_model_id":"provider/weak","estimated_rank":2}'
+                '{"provider_model_id":"provider/strong","estimated_rank":1,'
+                '"intelligence_score":20,"intelligence_score_is_estimated":false},'
+                '{"provider_model_id":"provider/weak","estimated_rank":2,'
+                '"intelligence_score":10,"intelligence_score_is_estimated":false}'
                 "]}",
                 encoding="utf-8",
             )
@@ -153,6 +155,13 @@ class MockRunTests(unittest.TestCase):
             self.assertEqual(agreement["expected_order"], ["P1", "P2"])
             self.assertEqual(agreement["judgments"][0]["kendall_tau"], 1.0)
             self.assertTrue(agreement["judgments"][0]["top1_matches_prior"])
+            reported = agreement["judgments"][0]["reported_score_subset"]
+            self.assertEqual(reported["candidate_count"], 2)
+            self.assertEqual(reported["pairwise_accuracy"], 1.0)
+            self.assertAlmostEqual(reported["rank_score_r_squared"], 1.0)
+            gap_bins = reported["pairwise_accuracy_by_score_gap"]
+            self.assertEqual(sum(item["pair_count"] for item in gap_bins), 1)
+            self.assertEqual(next(item for item in gap_bins if item["label"] == "10+")["accuracy"], 1.0)
 
     def test_analysis_can_compare_rank_map_to_prior(self) -> None:
         config = ExperimentConfig.from_dict(

@@ -1,0 +1,1131 @@
+{
+  "name": "catalog_ladder50_gpt_5_6_sol",
+  "run": {
+    "output_dir": "runs",
+    "max_context_turns": 40,
+    "max_parallel_calls": 16,
+    "max_model_calls": 282,
+    "max_reported_cost_usd": 100.0,
+    "structured_json_retries": 2,
+    "visible_text_retries": 0,
+    "continue_batch_on_call_error": true
+  },
+  "context": {
+    "mode": "private_memory",
+    "max_public_turns": 0,
+    "max_private_turns": 12,
+    "max_stream_turns": 8
+  },
+  "providers": [
+    {
+      "name": "openrouter_candidates",
+      "kind": "openrouter",
+      "api_key_env": "OPENROUTER_API_KEY",
+      "headers": {
+        "HTTP-Referer": "https://github.com/shayne-longpre/scalable-intelligence",
+        "X-Title": "Scalable Intelligence Catalog Ladder"
+      },
+      "timeout_seconds": 300,
+      "request_retries": 0
+    },
+    {
+      "name": "openrouter_judge",
+      "kind": "openrouter",
+      "api_key_env": "OPENROUTER_API_KEY",
+      "headers": {
+        "HTTP-Referer": "https://github.com/shayne-longpre/scalable-intelligence",
+        "X-Title": "Scalable Intelligence Catalog Ladder"
+      },
+      "timeout_seconds": 900,
+      "request_retries": 1
+    }
+  ],
+  "models": [
+    {
+      "name": "candidate_p44",
+      "provider": "openrouter_candidates",
+      "model": "anthropic/claude-fable-5",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p47",
+      "provider": "openrouter_candidates",
+      "model": "openai/gpt-5.6-sol",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p48",
+      "provider": "openrouter_candidates",
+      "model": "moonshotai/kimi-k3",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p18",
+      "provider": "openrouter_candidates",
+      "model": "anthropic/claude-opus-4.8",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p36",
+      "provider": "openrouter_candidates",
+      "model": "openai/gpt-5.6-terra",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p39",
+      "provider": "openrouter_candidates",
+      "model": "openai/gpt-5.5",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p29",
+      "provider": "openrouter_candidates",
+      "model": "x-ai/grok-4.5",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p03",
+      "provider": "openrouter_candidates",
+      "model": "anthropic/claude-opus-4.7",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p33",
+      "provider": "openrouter_candidates",
+      "model": "anthropic/claude-sonnet-5",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p15",
+      "provider": "openrouter_candidates",
+      "model": "openai/gpt-5.4",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p30",
+      "provider": "openrouter_candidates",
+      "model": "openai/gpt-5.6-luna",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p11",
+      "provider": "openrouter_candidates",
+      "model": "z-ai/glm-5.2",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p28",
+      "provider": "openrouter_candidates",
+      "model": "meta/muse-spark-1.1",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p41",
+      "provider": "openrouter_candidates",
+      "model": "google/gemini-3.5-flash",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p42",
+      "provider": "openrouter_candidates",
+      "model": "anthropic/claude-sonnet-4.6",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p45",
+      "provider": "openrouter_candidates",
+      "model": "google/gemini-3.1-pro-preview",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p35",
+      "provider": "openrouter_candidates",
+      "model": "qwen/qwen3.7-max",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p08",
+      "provider": "openrouter_candidates",
+      "model": "minimax/minimax-m3",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p16",
+      "provider": "openrouter_candidates",
+      "model": "deepseek/deepseek-v4-pro",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p40",
+      "provider": "openrouter_candidates",
+      "model": "moonshotai/kimi-k2.6",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p04",
+      "provider": "openrouter_candidates",
+      "model": "xiaomi/mimo-v2.5-pro",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p32",
+      "provider": "openrouter_candidates",
+      "model": "moonshotai/kimi-k2.7-code",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p43",
+      "provider": "openrouter_candidates",
+      "model": "tencent/hy3",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p02",
+      "provider": "openrouter_candidates",
+      "model": "thinkingmachines/inkling",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p34",
+      "provider": "openrouter_candidates",
+      "model": "deepseek/deepseek-v4-flash",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p25",
+      "provider": "openrouter_candidates",
+      "model": "openai/gpt-5.4-mini",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p12",
+      "provider": "openrouter_candidates",
+      "model": "qwen/qwen3.7-plus",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p13",
+      "provider": "openrouter_candidates",
+      "model": "minimax/minimax-m2.7",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p27",
+      "provider": "openrouter_candidates",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p09",
+      "provider": "openrouter_candidates",
+      "model": "x-ai/grok-4.3",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p37",
+      "provider": "openrouter_candidates",
+      "model": "qwen/qwen3.6-27b",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p17",
+      "provider": "openrouter_candidates",
+      "model": "anthropic/claude-sonnet-4.5",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p24",
+      "provider": "openrouter_candidates",
+      "model": "openai/gpt-5",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p01",
+      "provider": "openrouter_candidates",
+      "model": "qwen/qwen3.5-397b-a17b",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p46",
+      "provider": "openrouter_candidates",
+      "model": "deepseek/deepseek-v3.2",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p22",
+      "provider": "openrouter_candidates",
+      "model": "inclusionai/ring-2.6-1t",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p05",
+      "provider": "openrouter_candidates",
+      "model": "mistralai/mistral-medium-3-5",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p50",
+      "provider": "openrouter_candidates",
+      "model": "anthropic/claude-haiku-4.5",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p07",
+      "provider": "openrouter_candidates",
+      "model": "google/gemini-2.5-pro",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p14",
+      "provider": "openrouter_candidates",
+      "model": "openai/gpt-oss-120b",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p31",
+      "provider": "openrouter_candidates",
+      "model": "qwen/qwen3.5-9b",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p06",
+      "provider": "openrouter_candidates",
+      "model": "mistralai/mistral-small-2603",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p21",
+      "provider": "openrouter_candidates",
+      "model": "mistralai/mistral-large-2512",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p38",
+      "provider": "openrouter_candidates",
+      "model": "openai/gpt-oss-20b",
+      "params": {
+        "max_tokens": 40000,
+        "reasoning": {
+          "effort": "high"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "name": "candidate_p26",
+      "provider": "openrouter_candidates",
+      "model": "meta-llama/llama-4-maverick",
+      "params": {
+        "max_tokens": 16384,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p19",
+      "provider": "openrouter_candidates",
+      "model": "mistralai/ministral-14b-2512",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p20",
+      "provider": "openrouter_candidates",
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p49",
+      "provider": "openrouter_candidates",
+      "model": "openai/gpt-3.5-turbo",
+      "params": {
+        "max_tokens": 4096,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p23",
+      "provider": "openrouter_candidates",
+      "model": "google/gemma-3-4b-it",
+      "params": {
+        "max_tokens": 16384,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "candidate_p10",
+      "provider": "openrouter_candidates",
+      "model": "meta-llama/llama-3.2-1b-instruct",
+      "params": {
+        "max_tokens": 40000,
+        "temperature": 0.2
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "temperature": 0
+      }
+    },
+    {
+      "name": "judge_primary",
+      "provider": "openrouter_judge",
+      "model": "openai/gpt-5.6-sol",
+      "params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    }
+  ],
+  "participants": [
+    {
+      "id": "P44",
+      "model": "candidate_p44",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P47",
+      "model": "candidate_p47",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P48",
+      "model": "candidate_p48",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P18",
+      "model": "candidate_p18",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P36",
+      "model": "candidate_p36",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P39",
+      "model": "candidate_p39",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P29",
+      "model": "candidate_p29",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P03",
+      "model": "candidate_p03",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P33",
+      "model": "candidate_p33",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P15",
+      "model": "candidate_p15",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P30",
+      "model": "candidate_p30",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P11",
+      "model": "candidate_p11",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P28",
+      "model": "candidate_p28",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P41",
+      "model": "candidate_p41",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P42",
+      "model": "candidate_p42",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P45",
+      "model": "candidate_p45",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P35",
+      "model": "candidate_p35",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P08",
+      "model": "candidate_p08",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P16",
+      "model": "candidate_p16",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P40",
+      "model": "candidate_p40",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P04",
+      "model": "candidate_p04",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P32",
+      "model": "candidate_p32",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P43",
+      "model": "candidate_p43",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P02",
+      "model": "candidate_p02",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P34",
+      "model": "candidate_p34",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P25",
+      "model": "candidate_p25",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P12",
+      "model": "candidate_p12",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P13",
+      "model": "candidate_p13",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P27",
+      "model": "candidate_p27",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P09",
+      "model": "candidate_p09",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P37",
+      "model": "candidate_p37",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P17",
+      "model": "candidate_p17",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P24",
+      "model": "candidate_p24",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P01",
+      "model": "candidate_p01",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P46",
+      "model": "candidate_p46",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P22",
+      "model": "candidate_p22",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P05",
+      "model": "candidate_p05",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P50",
+      "model": "candidate_p50",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P07",
+      "model": "candidate_p07",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P14",
+      "model": "candidate_p14",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P31",
+      "model": "candidate_p31",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P06",
+      "model": "candidate_p06",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P21",
+      "model": "candidate_p21",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P38",
+      "model": "candidate_p38",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P26",
+      "model": "candidate_p26",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P19",
+      "model": "candidate_p19",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P20",
+      "model": "candidate_p20",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P49",
+      "model": "candidate_p49",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P23",
+      "model": "candidate_p23",
+      "system_prompt": "blind_evaluation_candidate"
+    },
+    {
+      "id": "P10",
+      "model": "candidate_p10",
+      "system_prompt": "blind_evaluation_candidate"
+    }
+  ],
+  "judges": [
+    {
+      "id": "J1",
+      "model": "judge_primary",
+      "system_prompt": "independent_intelligence_judge"
+    }
+  ],
+  "monitor": {
+    "enabled": true,
+    "strict": false
+  },
+  "protocol": {
+    "name": "catalog_ladder_adaptive_waves",
+    "turn_order": "fixed",
+    "phases": [
+      {
+        "name": "judge_ranking",
+        "kind": "independent_judge_ranking",
+        "prompt": "adaptive_judge_probe",
+        "question_prompt": "adaptive_judge_probe",
+        "answer_prompt": "independent_judge_answer",
+        "assessment_prompt": "independent_judge_probe_comparison",
+        "ranking_prompt": "independent_judge_wave_judgment",
+        "probe_schedule": [
+          4,
+          1,
+          1
+        ],
+        "adaptive_targeting": "judge_selected",
+        "max_adaptive_candidates": 10,
+        "comparison_order": "seeded_shuffle",
+        "comparison_seed": 20260720,
+        "incomplete_answer_policy": "record_unavailable",
+        "reuse_unavailable_answers": false,
+        "visibility": "private"
+      }
+    ]
+  },
+  "metadata": {
+    "design": "Opening probe portfolio followed by selective adaptive tie-breaking.",
+    "selection_file": "data/catalog_ladder_50.selection.json",
+    "catalog_file": "data/model_catalog.openrouter.json",
+    "catalog_generated_at": "2026-07-21T05:40:42.434753+00:00",
+    "participant_seed": 20260720,
+    "comparison_seed": 20260720,
+    "gold_prior": "data/model_catalog.openrouter.json"
+  }
+}

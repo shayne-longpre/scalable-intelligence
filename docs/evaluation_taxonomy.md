@@ -104,6 +104,12 @@ Source relation labels:
 
 - **Verbal Abstraction** - Analogies, definitions, and conceptual comparisons.
   Source: close match to Wechsler Similarities/Vocabulary-style tasks.
+- **Language Induction** - Infers grammar, morphology, syntax, or meaning from
+  examples in an unfamiliar language. Source: close match to
+  [MLAT](https://lltf.net/aptitude-tests/language-aptitude-tests/modern-language-aptitude-test-2/)
+  grammatical sensitivity and inductive language learning; derived from
+  few-shot rule-induction tasks in [BIG-bench](https://arxiv.org/abs/2206.04615)
+  and the 50-model catalog pilot.
 - **Knowledge Recall** - Factual, cultural, scientific, or domain knowledge.
   Source: close match to crystallized-knowledge tasks; AI analogue in MMLU.
 - **Fluid Reasoning** - Novel patterns, hidden rules, and unfamiliar structure.

@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from ai_council.analysis import analyze_run
+from ai_council.rankings import kendall_tau_between
 from ai_council.report_summary import generate_report_summary
 from ai_council.taxonomy import load_taxonomy
 
@@ -193,6 +194,7 @@ def _html_model_priors(runs: list[dict[str, Any]]) -> str:
     for card in runs:
         prior_ranks = card.get("prior_participant_ranks", {})
         prior_scores = card.get("prior_participant_scores", {})
+        reported_participants = set(card.get("prior_reported_score_participants", []))
         prior_ranks = prior_ranks if isinstance(prior_ranks, dict) else {}
         prior_scores = prior_scores if isinstance(prior_scores, dict) else {}
         for participant in card.get("participants", []):
@@ -209,6 +211,11 @@ def _html_model_priors(runs: list[dict[str, Any]]) -> str:
                     "provider_model_id": provider_model_id,
                     "rank": prior_ranks.get(participant_id),
                     "score": prior_scores.get(participant_id),
+                    "basis": (
+                        "reported"
+                        if participant_id in reported_participants
+                        else "estimated" if reported_participants else "unspecified"
+                    ),
                 },
             )
     rows = []
@@ -221,6 +228,7 @@ def _html_model_priors(runs: list[dict[str, Any]]) -> str:
             f"<td><code>{_h(model.get('provider_model_id'))}</code></td>"
             f"<td>{_h(_format_rank(rank))}</td>"
             f"<td>{_h(_format_number(score))}</td>"
+            f"<td>{_h(model.get('basis'))}</td>"
             f"<td>{_h(_rank_bucket(rank))}</td>"
             "</tr>"
         )
@@ -233,7 +241,7 @@ def _html_model_priors(runs: list[dict[str, Any]]) -> str:
         "<section><h2>Model Priors</h2>"
         f"<p class=\"note\">Lower prior rank means stronger expected general capability. Expected order: <strong>{_h(order_text)}</strong>.{judge_note}</p>"
         "<div class=\"table-wrap\"><table><thead><tr>"
-        "<th>Model</th><th>Provider model ID</th><th>Prior rank</th><th>Prior score</th><th>Prior band</th>"
+        "<th>Model</th><th>Provider model ID</th><th>Prior rank</th><th>Prior score</th><th>Basis</th><th>Prior band</th>"
         "</tr></thead><tbody>"
         + "".join(rows)
         + "</tbody></table></div></section>"
@@ -355,6 +363,7 @@ def _html_run_sections(runs: list[dict[str, Any]]) -> str:
             "<div class=\"two-col\">"
             + _html_ranking_block(card)
             + _html_probe_budget_block(card)
+            + _html_gap_accuracy_block(card)
             + _html_probe_comparisons_block(card)
             + _html_adaptive_trace_block(card)
             + _html_quality_gate_block(card)
@@ -396,7 +405,8 @@ def _html_ranking_block(card: dict[str, Any]) -> str:
     return (
         "<article class=\"panel\"><h3>Final Rankings</h3>"
         f"<p class=\"note\">{agreement_label} tau: <strong>{_h(_format_number(agreement.get('mean_pairwise_tau')))}</strong>; "
-        f"prior agreement tau: <strong>{_h(_format_number(prior.get('mean_tau')))}</strong>.</p>"
+        f"prior agreement tau: <strong>{_h(_format_number(prior.get('mean_tau')))}</strong> "
+        f"({_h(prior.get('basis', 'all scored candidates'))}).</p>"
         "<table><thead><tr><th>Judge</th><th>Ranking</th><th>Conf.</th></tr></thead><tbody>"
         + "".join(rows)
         + "</tbody></table>"
@@ -425,7 +435,7 @@ def _html_probe_budget_block(card: dict[str, Any]) -> str:
             f"<td>{_h(_format_number(item.get('pairwise_accuracy')))}</td>"
             f"<td>{_h(_format_number(item.get('confidence')))}</td>"
             f"<td>{_h(' > '.join(str(value) for value in item.get('ranking', [])))}</td>"
-            f"<td>{_h(_format_number(item.get('score_r_squared')))}</td>"
+            f"<td>{_h(_format_number(item.get('rank_score_r_squared')))}</td>"
             "</tr>"
         )
     title = "Round-by-Round Ranking" if adaptive else "Probe Budget Ablation"
@@ -441,13 +451,59 @@ def _html_probe_budget_block(card: dict[str, Any]) -> str:
         "<div class=\"table-wrap\"><table><thead><tr>"
         "<th>Judge</th>"
         + ("<th>Round</th>" if adaptive else "")
-        + "<th>Cumulative probes</th><th>Kendall</th><th>Spearman</th><th>Pairwise</th><th>Conf.</th><th>Ranking</th><th>Score R2</th>"
+        + "<th>Cumulative probes</th><th>Kendall</th><th>Spearman</th><th>Pairwise</th><th>Conf.</th><th>Ranking</th><th>Rank-score R2</th>"
         "</tr></thead><tbody>"
         + "".join(rows)
         + "</tbody></table></div></article>"
     )
 
 
+def _html_gap_accuracy_block(card: dict[str, Any]) -> str:
+    results = [
+        item
+        for item in card.get("probe_budget_results", [])
+        if isinstance(item, dict)
+        and isinstance(item.get("pairwise_accuracy_by_score_gap"), list)
+    ]
+    if not results:
+        return ""
+    labels = [
+        str(item.get("label"))
+        for item in results[0]["pairwise_accuracy_by_score_gap"]
+        if isinstance(item, dict)
+    ]
+    rows = []
+    for result in results:
+        by_label = {
+            str(item.get("label")): item
+            for item in result["pairwise_accuracy_by_score_gap"]
+            if isinstance(item, dict)
+        }
+        cells = []
+        for label in labels:
+            item = by_label.get(label, {})
+            cells.append(
+                f"<td>{_h(_format_number(item.get('accuracy')))} "
+                f"<span class=\"note\">(n={_h(item.get('pair_count', 0))})</span></td>"
+            )
+        rows.append(
+            "<tr>"
+            f"<td>{_h(result.get('round_index'))}</td>"
+            f"<td>{_h(result.get('probe_count'))}</td>"
+            + "".join(cells)
+            + "</tr>"
+        )
+    return (
+        "<article class=\"panel full\"><h3>Discrimination By Capability Gap</h3>"
+        "<p class=\"note\">Pairwise accuracy on the reported-score subset. "
+        "Larger score gaps should be easier to order.</p>"
+        "<div class=\"table-wrap\"><table><thead><tr><th>Round</th>"
+        "<th>Probes</th>"
+        + "".join(f"<th>{_h(label)} points</th>" for label in labels)
+        + "</tr></thead><tbody>"
+        + "".join(rows)
+        + "</tbody></table></div></article>"
+    )
 def _html_probe_comparisons_block(card: dict[str, Any]) -> str:
     comparisons = card.get("probe_comparisons", [])
     if not isinstance(comparisons, list) or not comparisons:
@@ -878,6 +934,10 @@ def _card_for_run(run_dir: Path, *, prior_ranking_file: str | Path | None) -> di
         "churn_by_speaker": metrics.get("rankings", {}).get("churn_by_speaker", {}),
         "prior_participant_ranks": prior.get("participant_prior_ranks", {}) if isinstance(prior, dict) else {},
         "prior_participant_scores": prior.get("participant_prior_scores", {}) if isinstance(prior, dict) else {},
+        "prior_reported_score_participants": prior.get(
+            "reported_score_participants",
+            [],
+        ) if isinstance(prior, dict) else [],
         "prior_expected_order": prior.get("expected_order", []) if isinstance(prior, dict) else [],
         "final_prior_agreement": _final_prior_agreement(prior),
         "probe_budget_results": _probe_budget_results(prior, extraction),
@@ -1122,19 +1182,37 @@ def _final_prior_agreement(prior: Any) -> dict[str, Any]:
         for judgment in all_judgments:
             latest_by_speaker[judgment.get("speaker")] = judgment
         judgments = list(latest_by_speaker.values())
+    primary = [
+        judgment.get("reported_score_subset")
+        if isinstance(judgment.get("reported_score_subset"), dict)
+        and judgment["reported_score_subset"].get("candidate_count", 0) >= 2
+        else judgment
+        for judgment in judgments
+    ]
     taus = [
+        judgment.get("kendall_tau")
+        for judgment in primary
+        if isinstance(judgment.get("kendall_tau"), (int, float))
+    ]
+    all_candidate_taus = [
         judgment.get("kendall_tau")
         for judgment in judgments
         if isinstance(judgment.get("kendall_tau"), (int, float))
     ]
     top1 = [
         judgment.get("top1_matches_prior")
-        for judgment in judgments
+        for judgment in primary
         if judgment.get("top1_matches_prior") is not None
     ]
+    uses_reported_subset = any(
+        primary_item is not judgment
+        for primary_item, judgment in zip(primary, judgments, strict=True)
+    )
     return {
         "judgment_count": len(judgments),
         "mean_tau": _mean(taus),
+        "all_candidate_mean_tau": _mean(all_candidate_taus),
+        "basis": "reported-score subset" if uses_reported_subset else "all scored candidates",
         "top1_matches": sum(1 for value in top1 if value),
         "top1_total": len(top1),
     }
@@ -1158,7 +1236,7 @@ def _probe_budget_results(prior: Any, extraction: Any = None) -> list[dict[str, 
                 "spearman_rho": None,
                 "pairwise_accuracy": None,
                 "confidence": parsed.get("confidence"),
-                "score_r_squared": None,
+                "rank_score_r_squared": None,
                 "top1_matches_prior": None,
                 "ranking": parsed.get("ranking"),
             }
@@ -1171,17 +1249,33 @@ def _probe_budget_results(prior: Any, extraction: Any = None) -> list[dict[str, 
         probe_count = judgment.get("judgment_probe_count")
         if not isinstance(probe_count, int):
             continue
+        reported = judgment.get("reported_score_subset")
+        primary = (
+            reported
+            if isinstance(reported, dict) and reported.get("candidate_count", 0) >= 2
+            else judgment
+        )
         item = {
             "speaker": judgment.get("speaker"),
             "round_index": judgment.get("round_index"),
             "probe_count": probe_count,
-            "kendall_tau": judgment.get("kendall_tau"),
-            "spearman_rho": judgment.get("spearman_rho"),
-            "pairwise_accuracy": judgment.get("pairwise_accuracy"),
+            "kendall_tau": primary.get("kendall_tau"),
+            "spearman_rho": primary.get("spearman_rho"),
+            "pairwise_accuracy": primary.get("pairwise_accuracy"),
             "confidence": judgment.get("confidence"),
-            "score_r_squared": judgment.get("score_r_squared"),
-            "top1_matches_prior": judgment.get("top1_matches_prior"),
+            "rank_score_r_squared": primary.get("rank_score_r_squared"),
+            "top1_matches_prior": primary.get("top1_matches_prior"),
+            "pairwise_accuracy_by_score_gap": primary.get(
+                "pairwise_accuracy_by_score_gap"
+            ),
             "ranking": judgment.get("ranking"),
+            "all_candidate_kendall_tau": judgment.get("kendall_tau"),
+            "all_candidate_spearman_rho": judgment.get("spearman_rho"),
+            "all_candidate_pairwise_accuracy": judgment.get("pairwise_accuracy"),
+            "all_candidate_rank_score_r_squared": judgment.get("rank_score_r_squared"),
+            "metric_basis": (
+                "reported-score subset" if primary is not judgment else "all scored candidates"
+            ),
         }
         key = (str(item["speaker"]), item["round_index"], probe_count)
         results_by_key[key] = item
@@ -1204,14 +1298,14 @@ def _probe_budget_markdown(card: dict[str, Any]) -> list[str]:
     if adaptive:
         lines.extend(
             [
-                "| Judge | Round | Cumulative probes | Kendall | Spearman | Pairwise | Conf. | Ranking | Score R2 |",
+                "| Judge | Round | Cumulative probes | Kendall | Spearman | Pairwise | Conf. | Ranking | Rank-score R2 |",
                 "| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |",
             ]
         )
     else:
         lines.extend(
             [
-                "| Judge | Probes | Kendall | Spearman | Pairwise | Conf. | Ranking | Score R2 |",
+                "| Judge | Probes | Kendall | Spearman | Pairwise | Conf. | Ranking | Rank-score R2 |",
                 "| --- | ---: | ---: | ---: | ---: | ---: | --- | ---: |",
             ]
         )
@@ -1229,7 +1323,7 @@ def _probe_budget_markdown(card: dict[str, Any]) -> list[str]:
             f"{_format_number(item.get('pairwise_accuracy'))} | "
             f"{_format_number(item.get('confidence'))} | "
             f"{' > '.join(str(value) for value in item.get('ranking', []))} | "
-            f"{_format_number(item.get('score_r_squared'))} |"
+            f"{_format_number(item.get('rank_score_r_squared'))} |"
         )
     return lines
 
@@ -1264,6 +1358,7 @@ def _judge_condition_summary(cards: list[dict[str, Any]]) -> dict[str, Any]:
     accuracy: dict[tuple[str, int], dict[str, Any]] = {}
     behavior: dict[str, dict[str, Any]] = {}
     final_interjudge_taus = []
+    final_rankings_across_runs: list[dict[str, Any]] = []
     for card in cards:
         judges = {
             str(judge.get("id")): judge
@@ -1275,6 +1370,23 @@ def _judge_condition_summary(cards: list[dict[str, Any]]) -> dict[str, Any]:
         final_tau = card.get("final_agreement", {}).get("mean_pairwise_tau")
         if isinstance(final_tau, (int, float)):
             final_interjudge_taus.append(float(final_tau))
+        for final_ranking in card.get("final_rankings", []):
+            if not isinstance(final_ranking, dict):
+                continue
+            judge = judges.get(str(final_ranking.get("speaker")))
+            ranking = final_ranking.get("ranking")
+            if judge is None or not isinstance(ranking, list):
+                continue
+            final_rankings_across_runs.append(
+                {
+                    "provider_model_id": str(
+                        judge.get("provider_model_id") or judge.get("model_ref")
+                    ),
+                    "ranking": [str(value) for value in ranking],
+                    "run": card.get("name"),
+                    "roster_signature": _roster_signature(card),
+                }
+            )
         for judge_id, judge in judges.items():
             provider_model_id = str(judge.get("provider_model_id") or judge.get("model_ref"))
             item = behavior.setdefault(
@@ -1354,6 +1466,35 @@ def _judge_condition_summary(cards: list[dict[str, Any]]) -> dict[str, Any]:
             if decision.get("ranking_changed") is True:
                 item["rank_changes"] += 1
 
+    cross_run_pairs = []
+    for index, left in enumerate(final_rankings_across_runs):
+        for right in final_rankings_across_runs[index + 1 :]:
+            if left["provider_model_id"] == right["provider_model_id"]:
+                continue
+            if (
+                left["roster_signature"] is None
+                or left["roster_signature"] != right["roster_signature"]
+            ):
+                continue
+            tau = kendall_tau_between(left["ranking"], right["ranking"])
+            if tau is None:
+                continue
+            final_interjudge_taus.append(tau)
+            cross_run_pairs.append(
+                {
+                    "left_judge": left["provider_model_id"],
+                    "right_judge": right["provider_model_id"],
+                    "left_run": left["run"],
+                    "right_run": right["run"],
+                    "kendall_tau": tau,
+                    "same_top1": bool(
+                        left["ranking"]
+                        and right["ranking"]
+                        and left["ranking"][0] == right["ranking"][0]
+                    ),
+                }
+            )
+
     accuracy_rows = []
     for group in accuracy.values():
         pairwise = group.pop("pairwise")
@@ -1386,12 +1527,29 @@ def _judge_condition_summary(cards: list[dict[str, Any]]) -> dict[str, Any]:
     return {
         "run_count": len(cards),
         "mean_final_interjudge_tau": _mean(final_interjudge_taus),
+        "final_interjudge_pairs": cross_run_pairs,
         "accuracy_by_probe_count": sorted(
             accuracy_rows,
             key=lambda item: (str(item.get("model_ref")), int(item.get("probe_count") or 0)),
         ),
         "judge_behavior": sorted(behavior_rows, key=lambda item: str(item.get("model_ref"))),
     }
+
+
+def _roster_signature(card: dict[str, Any]) -> tuple[tuple[str, str], ...] | None:
+    participants = card.get("participants")
+    if not isinstance(participants, list) or not participants:
+        return None
+    rows = []
+    for participant in participants:
+        if not isinstance(participant, dict):
+            return None
+        participant_id = participant.get("id")
+        model_id = participant.get("provider_model_id") or participant.get("model_ref")
+        if not isinstance(participant_id, str) or not isinstance(model_id, str):
+            return None
+        rows.append((participant_id, model_id))
+    return tuple(sorted(rows))
 
 
 def _judge_condition_markdown(summary: Any) -> list[str]:

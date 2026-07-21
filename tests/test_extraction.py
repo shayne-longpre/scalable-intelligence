@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from ai_council.extraction import extract_posthoc_interactions
+from ai_council.extraction import build_probe_answer_archive, extract_posthoc_interactions
 
 
 class ExtractionTests(unittest.TestCase):
@@ -177,6 +177,52 @@ class ExtractionTests(unittest.TestCase):
         self.assertEqual(decision["probe_validity"], "informative")
         self.assertTrue(decision["ranking_changed"])
         self.assertAlmostEqual(decision["confidence_delta"], 0.15)
+
+    def test_probe_answer_archive_preserves_exact_replayable_evidence(self) -> None:
+        entries = [
+            {
+                "turn_id": 1,
+                "phase": "judge_ranking",
+                "round_index": 1,
+                "speaker": "J1",
+                "content": "Solve exactly.",
+                "metadata": {
+                    "interaction_mode": "independent_judge_ranking",
+                    "interaction_role": "question",
+                    "interviewer": "J1",
+                    "probe_id": "J1:r1:p1",
+                    "probe_sequence_number": 1,
+                    "stream_id": "J1:r1:p1",
+                },
+            },
+            {
+                "turn_id": 2,
+                "phase": "judge_ranking",
+                "round_index": 1,
+                "speaker": "P1",
+                "content": "Exact answer.",
+                "metadata": {
+                    "interaction_mode": "independent_judge_ranking",
+                    "interaction_role": "answer",
+                    "interviewer": "J1",
+                    "respondent": "P1",
+                    "probe_id": "J1:r1:p1",
+                    "question_turn_id": 1,
+                    "stream_id": "J1:r1:p1:P1",
+                    "model_ref": "candidate_model",
+                    "finish_reason": "stop",
+                    "usage": {"cost": 0.01},
+                },
+            },
+        ]
+
+        archive = build_probe_answer_archive(entries)
+
+        self.assertEqual(archive["probe_count"], 1)
+        self.assertEqual(archive["answer_count"], 1)
+        self.assertEqual(archive["probes"][0]["question_text"], "Solve exactly.")
+        self.assertEqual(archive["probes"][0]["answers"][0]["content"], "Exact answer.")
+        self.assertEqual(archive["probes"][0]["answers"][0]["model_ref"], "candidate_model")
 
 
 if __name__ == "__main__":

@@ -10,6 +10,14 @@ separate reasoning tokens, leaving little or no visible `message.content`.
 
 Observed in pilot replays:
 
+The table records historical low-budget failures and should not be read as a
+permanent exclusion list. The 50-model catalog pilot requalified routes on the
+exact four probes, raised the completion ceiling to 40,000 tokens subject to
+each route's published maximum, and used low-effort sensitivity retries only
+for missing cells. It obtained 197 substantive answers out of 200; the three
+remaining cells were recorded as unavailable evidence rather than scored as
+incorrect. Exact request parameters remain attached to every answer.
+
 | Model | Symptom | Effective adjustment |
 | --- | --- | --- |
 | `minimax/minimax-m3` | Empty visible answers after more than 6,000 hidden reasoning tokens on a fixed-output probe. | Exclude from fixed-budget comparisons until a specific route and visible-token budget pass the exact probe protocol. |
@@ -79,9 +87,11 @@ without storing full raw API responses.
 
 The shared HTTP transport enforces a true total deadline around each request.
 Provider retries are explicit (`request_retries`) and are disabled in the large
-ladder config so a single slow route cannot silently multiply a five-minute
-budget. Candidate answer and evidence-card batches remain concurrent, but
-transcript commits preserve deterministic protocol order.
+ladder config so a single slow route cannot silently multiply its deadline.
+Candidate routes use a five-minute provider profile; global judge comparisons
+use a separate fifteen-minute profile. Candidate answer and evidence-card
+batches remain concurrent, but transcript commits preserve deterministic
+protocol order.
 
 Some routes reject a recovery override such as `reasoning: {"effort":"none"}`
 even when the primary request is valid. The runner now treats a provider HTTP

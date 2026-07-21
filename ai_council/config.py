@@ -27,6 +27,8 @@ VALID_VISIBILITIES = {"public", "private"}
 VALID_TURN_ORDERS = {"fixed", "rotate"}
 VALID_CONTEXT_MODES = {"transcript", "private_memory"}
 VALID_ADAPTIVE_TARGETING = {"judge_selected", "all"}
+VALID_COMPARISON_ORDERS = {"fixed", "seeded_shuffle"}
+VALID_INCOMPLETE_ANSWER_POLICIES = {"fail", "record_unavailable"}
 
 
 @dataclass(frozen=True)
@@ -140,6 +142,11 @@ class PhaseSpec:
     adaptive_probes_per_round: int = 1
     max_adaptive_candidates: int = 4
     adaptive_targeting: str = "judge_selected"
+    comparison_order: str = "fixed"
+    comparison_seed: int = 0
+    incomplete_answer_policy: str = "fail"
+    reuse_unavailable_answers: bool = False
+    retry_unavailable_rounds: list[int] = field(default_factory=list)
     preauthored_probe_file: str | None = None
     preauthored_answer_file: str | None = None
     preauthored_answer_participants: list[str] = field(default_factory=list)
@@ -177,6 +184,16 @@ class PhaseSpec:
             adaptive_probes_per_round=int(data.get("adaptive_probes_per_round", 1)),
             max_adaptive_candidates=int(data.get("max_adaptive_candidates", 4)),
             adaptive_targeting=str(data.get("adaptive_targeting", "judge_selected")),
+            comparison_order=str(data.get("comparison_order", "fixed")),
+            comparison_seed=int(data.get("comparison_seed", 0)),
+            incomplete_answer_policy=str(data.get("incomplete_answer_policy", "fail")),
+            reuse_unavailable_answers=_as_bool(
+                data.get("reuse_unavailable_answers", False),
+                "phase.reuse_unavailable_answers",
+            ),
+            retry_unavailable_rounds=[
+                int(value) for value in data.get("retry_unavailable_rounds", [])
+            ],
             preauthored_probe_file=data.get("preauthored_probe_file"),
             preauthored_answer_file=data.get("preauthored_answer_file"),
             preauthored_answer_participants=list(
@@ -216,6 +233,7 @@ class RunSpec:
     max_reported_cost_usd: float | None = None
     structured_json_retries: int = 1
     visible_text_retries: int = 1
+    continue_batch_on_call_error: bool = False
 
     @classmethod
     def from_dict(cls, data: dict[str, Any] | None) -> "RunSpec":
@@ -235,6 +253,10 @@ class RunSpec:
             ),
             structured_json_retries=int(data.get("structured_json_retries", 1)),
             visible_text_retries=int(data.get("visible_text_retries", 1)),
+            continue_batch_on_call_error=_as_bool(
+                data.get("continue_batch_on_call_error", False),
+                "run.continue_batch_on_call_error",
+            ),
         )
 
 
@@ -414,6 +436,33 @@ class ExperimentConfig:
                 raise ConfigError(
                     f"phase {phase.name!r} adaptive_targeting must be one of "
                     f"{sorted(VALID_ADAPTIVE_TARGETING)}"
+                )
+            if phase.comparison_order not in VALID_COMPARISON_ORDERS:
+                raise ConfigError(
+                    f"phase {phase.name!r} comparison_order must be one of "
+                    f"{sorted(VALID_COMPARISON_ORDERS)}"
+                )
+            if phase.incomplete_answer_policy not in VALID_INCOMPLETE_ANSWER_POLICIES:
+                raise ConfigError(
+                    f"phase {phase.name!r} incomplete_answer_policy must be one of "
+                    f"{sorted(VALID_INCOMPLETE_ANSWER_POLICIES)}"
+                )
+            if any(value < 1 for value in phase.retry_unavailable_rounds):
+                raise ConfigError(
+                    f"phase {phase.name!r} retry_unavailable_rounds must contain "
+                    "positive integers"
+                )
+            if len(phase.retry_unavailable_rounds) != len(
+                set(phase.retry_unavailable_rounds)
+            ):
+                raise ConfigError(
+                    f"phase {phase.name!r} retry_unavailable_rounds must not contain "
+                    "duplicates"
+                )
+            if phase.retry_unavailable_rounds and not phase.reuse_unavailable_answers:
+                raise ConfigError(
+                    f"phase {phase.name!r} retry_unavailable_rounds requires "
+                    "reuse_unavailable_answers"
                 )
             if phase.kind in PRIVATE_PHASE_KINDS and phase.visibility != "private":
                 raise ConfigError(f"private phase {phase.name!r} must use private visibility")

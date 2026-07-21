@@ -210,6 +210,22 @@ class TaxonomyTests(unittest.TestCase):
         question_types = {hit["tag"] for hit in hits if hit["dimension"] == "question_type"}
         self.assertIn("philosophical_conceptual_analysis", question_types)
 
+    def test_taxonomy_distinguishes_language_induction_from_multilinguality(self) -> None:
+        taxonomy = load_taxonomy()
+        entry = {
+            "content": (
+                "Study these examples in an invented language, infer the grammar, "
+                "and explain the word order and unattested forms."
+            )
+        }
+        hits = taxonomy_hits_for_entry(entry, taxonomy)
+        question_types = {
+            hit["tag"] for hit in hits if hit["dimension"] == "question_type"
+        }
+
+        self.assertIn("linguistic_rule_induction", question_types)
+        self.assertNotIn("multilingual_translation_culture", question_types)
+
     def test_taxonomy_hits_include_source_and_unit_verification(self) -> None:
         taxonomy = load_taxonomy()
         entry = {

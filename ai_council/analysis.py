@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from ai_council.audit import audit_experiment_behavior
-from ai_council.extraction import extract_posthoc_interactions
+from ai_council.extraction import build_probe_answer_archive, extract_posthoc_interactions
 from ai_council.metrics import compute_evolution_metrics, compute_ranking_metrics
 from ai_council.rankings import (
     kendall_tau_against_prior,
@@ -29,6 +29,7 @@ def analyze_run(run_dir: str | Path, prior_ranking_file: str | Path | None = Non
     run_summary = _load_optional_json(run_path / "run_summary.json")
     experiment_spend = compute_spend_lineage(run_path)
     extraction = extract_posthoc_interactions(entries)
+    probe_answer_archive = build_probe_answer_archive(entries)
     behavior_audit = audit_experiment_behavior(entries, extraction, config)
 
     public_entries = [entry for entry in entries if entry.get("visibility") == "public"]
@@ -186,6 +187,7 @@ def analyze_run(run_dir: str | Path, prior_ranking_file: str | Path | None = Non
         summary["prior_agreement"] = compute_prior_agreement(run_path, rankings_by_phase, prior_ranking_file)
     store = RunStore(run_path)
     store.write_json("posthoc_extraction.json", extraction)
+    store.write_json("probe_answer_archive.json", probe_answer_archive)
     store.write_json("behavior_audit.json", behavior_audit)
     store.write_json("run_metrics.json", run_metrics)
     store.write_json("analysis_summary.json", summary)
@@ -301,7 +303,27 @@ def compute_prior_agreement(
         if model_id in model_priors
         and isinstance(model_priors[model_id].get("intelligence_score"), (int, float))
     }
+    reported_score_participants = {
+        participant_id
+        for participant_id, model_id in participant_models.items()
+        if model_id in model_priors
+        and model_priors[model_id].get("intelligence_score_is_estimated") is False
+    }
+    reported_prior_ranks = {
+        participant_id: rank
+        for participant_id, rank in participant_prior_ranks.items()
+        if participant_id in reported_score_participants
+    }
+    reported_prior_scores = {
+        participant_id: score
+        for participant_id, score in participant_prior_scores.items()
+        if participant_id in reported_score_participants
+    }
     expected_order = sorted(participant_prior_ranks, key=lambda item: participant_prior_ranks[item])
+    reported_expected_order = sorted(
+        reported_prior_ranks,
+        key=lambda item: reported_prior_ranks[item],
+    )
 
     judgments = []
     for phase, phase_rankings in rankings_by_phase.items():
@@ -310,6 +332,15 @@ def compute_prior_agreement(
             comparable = [participant_id for participant_id in ranking if participant_id in participant_prior_ranks]
             if len(comparable) < 2:
                 continue
+            reported_comparable = [
+                participant_id
+                for participant_id in comparable
+                if participant_id in reported_prior_ranks
+            ]
+            reported_tau = kendall_tau_against_prior(
+                reported_comparable,
+                reported_prior_ranks,
+            )
             judgments.append(
                 {
                     "phase": phase,
@@ -325,11 +356,51 @@ def compute_prior_agreement(
                     "pairwise_accuracy": _pairwise_accuracy(
                         kendall_tau_against_prior(comparable, participant_prior_ranks)
                     ),
+                    "pairwise_accuracy_by_score_gap": _pairwise_accuracy_by_score_gap(
+                        comparable,
+                        participant_prior_scores,
+                    ),
                     "score_r_squared": score_r_squared_against_prior(
                         item.get("scores"),
                         participant_prior_scores,
                     ),
+                    "rank_score_r_squared": score_r_squared_against_prior(
+                        {
+                            participant_id: index
+                            for index, participant_id in enumerate(comparable, start=1)
+                        },
+                        participant_prior_scores,
+                    ),
                     "top1_matches_prior": comparable[0] == expected_order[0] if expected_order else None,
+                    "reported_score_subset": {
+                        "candidate_count": len(reported_comparable),
+                        "ranking": reported_comparable,
+                        "kendall_tau": reported_tau,
+                        "spearman_rho": spearman_rho_against_prior(
+                            reported_comparable,
+                            reported_prior_ranks,
+                        ),
+                        "pairwise_accuracy": _pairwise_accuracy(reported_tau),
+                        "pairwise_accuracy_by_score_gap": _pairwise_accuracy_by_score_gap(
+                            reported_comparable,
+                            reported_prior_scores,
+                        ),
+                        "rank_score_r_squared": score_r_squared_against_prior(
+                            {
+                                participant_id: index
+                                for index, participant_id in enumerate(
+                                    reported_comparable,
+                                    start=1,
+                                )
+                            },
+                            reported_prior_scores,
+                        ),
+                        "top1_matches_prior": (
+                            reported_comparable[0] == reported_expected_order[0]
+                            if reported_comparable and reported_expected_order
+                            else None
+                        ),
+                    },
                     "judgment_probe_count": item.get("judgment_probe_count"),
                     "judgment_probe_total": item.get("judgment_probe_total"),
                     "is_primary_judgment": item.get("is_primary_judgment"),
@@ -341,6 +412,8 @@ def compute_prior_agreement(
         "prior_version": prior_data.get("version"),
         "participant_prior_ranks": participant_prior_ranks,
         "participant_prior_scores": participant_prior_scores,
+        "reported_score_participants": sorted(reported_score_participants),
+        "reported_expected_order": reported_expected_order,
         "participant_model_ids": participant_models,
         "expected_order": expected_order,
         "judgments": judgments,
@@ -369,6 +442,50 @@ def _is_evaluator_strategy_entry(entry: dict[str, Any]) -> bool:
 
 def _pairwise_accuracy(tau: float | None) -> float | None:
     return (tau + 1) / 2 if tau is not None else None
+
+
+def _pairwise_accuracy_by_score_gap(
+    ranking: list[str],
+    prior_scores: dict[str, int | float],
+) -> list[dict[str, Any]]:
+    bins = [
+        ("<2", 0.0, 2.0),
+        ("2-5", 2.0, 5.0),
+        ("5-10", 5.0, 10.0),
+        ("10+", 10.0, None),
+    ]
+    counts = {label: [0, 0] for label, _, _ in bins}
+    comparable = [value for value in ranking if value in prior_scores]
+    for index, left in enumerate(comparable):
+        for right in comparable[index + 1 :]:
+            left_score = float(prior_scores[left])
+            right_score = float(prior_scores[right])
+            gap = abs(left_score - right_score)
+            if gap == 0:
+                continue
+            label = next(
+                label
+                for label, lower, upper in bins
+                if gap >= lower and (upper is None or gap < upper)
+            )
+            counts[label][1] += 1
+            if left_score > right_score:
+                counts[label][0] += 1
+    return [
+        {
+            "label": label,
+            "min_score_gap": lower,
+            "max_score_gap": upper,
+            "correct_pairs": counts[label][0],
+            "pair_count": counts[label][1],
+            "accuracy": (
+                counts[label][0] / counts[label][1]
+                if counts[label][1]
+                else None
+            ),
+        }
+        for label, lower, upper in bins
+    ]
 
 
 def _named_map(items: list[dict[str, Any]] | dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:

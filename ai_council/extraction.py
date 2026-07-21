@@ -98,6 +98,80 @@ def extract_posthoc_interactions(entries: list[dict[str, Any]]) -> dict[str, Any
     }
 
 
+def build_probe_answer_archive(entries: list[dict[str, Any]]) -> dict[str, Any]:
+    """Preserve exact independent-judge probes and answers for later reanalysis."""
+    questions = {
+        entry.get("turn_id"): entry
+        for entry in entries
+        if (entry.get("metadata") or {}).get("interaction_role") == "question"
+        and (entry.get("metadata") or {}).get("interaction_mode")
+        == "independent_judge_ranking"
+    }
+    comparisons_by_probe = {
+        (entry.get("metadata") or {}).get("probe_id"): entry.get("metadata") or {}
+        for entry in entries
+        if (entry.get("metadata") or {}).get("interaction_role") == "probe_comparison"
+    }
+    grouped: dict[int, list[dict[str, Any]]] = {}
+    for entry in entries:
+        metadata = entry.get("metadata") or {}
+        question_turn_id = metadata.get("question_turn_id")
+        if (
+            metadata.get("interaction_role") != "answer"
+            or metadata.get("interaction_mode") != "independent_judge_ranking"
+            or question_turn_id not in questions
+        ):
+            continue
+        grouped.setdefault(question_turn_id, []).append(entry)
+
+    probes = []
+    for question_turn_id, question in sorted(questions.items()):
+        question_metadata = question.get("metadata") or {}
+        comparison_metadata = comparisons_by_probe.get(question_metadata.get("probe_id"), {})
+        answers = []
+        for answer in sorted(
+            grouped.get(question_turn_id, []),
+            key=lambda item: str((item.get("metadata") or {}).get("respondent", "")),
+        ):
+            metadata = answer.get("metadata") or {}
+            answers.append(
+                {
+                    "candidate_id": metadata.get("respondent") or answer.get("speaker"),
+                    "answer_turn_id": answer.get("turn_id"),
+                    "answer_stream_id": metadata.get("stream_id"),
+                    "model_ref": metadata.get("model_ref"),
+                    "content": answer.get("content", ""),
+                    "finish_reason": metadata.get("finish_reason"),
+                    "answer_unavailable": bool(metadata.get("answer_unavailable")),
+                    "usage": metadata.get("usage", {}),
+                }
+            )
+        probes.append(
+            {
+                "judge_id": question_metadata.get("interviewer") or question.get("speaker"),
+                "probe_id": question_metadata.get("probe_id"),
+                "round_index": question.get("round_index"),
+                "probe_sequence_number": question_metadata.get("probe_sequence_number"),
+                "question_turn_id": question_turn_id,
+                "question_stream_id": question_metadata.get("stream_id"),
+                "question_text": question.get("content", ""),
+                "answer_presentation_order": comparison_metadata.get(
+                    "answer_presentation_order",
+                    [],
+                ),
+                "comparison_order": comparison_metadata.get("comparison_order"),
+                "comparison_seed": comparison_metadata.get("comparison_seed"),
+                "answers": answers,
+            }
+        )
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "probe_count": len(probes),
+        "answer_count": sum(len(probe["answers"]) for probe in probes),
+        "probes": probes,
+    }
+
+
 def _structured_records(
     entries: list[dict[str, Any]],
     interaction_role: str,

@@ -66,6 +66,14 @@ remain auditable.
 Implementation and study progress are tracked in
 [`docs/research_roadmap.md`](docs/research_roadmap.md).
 
+The first broad benchmark uses two independent judges and a frozen 50-model
+ladder. Its plain-language protocol is in
+[`docs/catalog_ladder_design.md`](docs/catalog_ladder_design.md), and the exact
+models, external scores, release dates, and score status are in
+[`docs/catalog_ladder_roster.md`](docs/catalog_ladder_roster.md).
+Results from the first two independent 50-model runs are summarized in
+[`docs/pilot_analysis_catalog_ladder50_20260721.md`](docs/pilot_analysis_catalog_ladder50_20260721.md).
+
 ## Core Methodology
 
 The experiment has two first-class modes. Both use anonymous participant IDs
@@ -134,7 +142,8 @@ The default study uses **adaptive probe rounds**:
    two rounds have one probe each.
 2. Each probe is sent unchanged, in a fresh context, to every candidate in its
    comparison set.
-3. The judge compares all answers to one probe in a single call. It records a
+3. The judge compares all answers to one probe in a single call. Answer order
+   is seeded and shuffled. The judge records a
    within-probe ordering and short evidence-rich summaries of each answer. It
    does not have to assign isolated ability scores.
 4. After all probes in the round have been compared, the judge merges those
@@ -145,7 +154,10 @@ The default study uses **adaptive probe rounds**:
    dossiers, and uncertainties. It may choose a common follow-up for the small
    subset that is hardest to separate. `adaptive_targeting: "all"` instead
    sends every later probe to the full roster.
-6. The judgment after every round is a valid stopping point. A long run can be
+6. Every exact probe and candidate answer is archived before comparison. The
+   same evidence can therefore be replayed through smaller overlapping panels
+   if a global comparison appears unreliable, without calling candidates again.
+7. The judgment after every round is a valid stopping point. A long run can be
    analyzed as if it had ended after Round 1, 2, 3, and so on, without
    regenerating candidate answers.
 
@@ -272,9 +284,20 @@ checkpoint requirements all live in config.
 `run.max_parallel_calls` optionally bounds concurrent provider requests
 (default: `1`). Independent candidate answers and same-round per-probe
 comparisons use this setting because their contexts are isolated; responses are
-still committed in deterministic protocol order. Probe design, cumulative
+staged as they finish and then committed in deterministic protocol order. A
+pending journal preserves completed calls if a long batch is interrupted, and
+a run directory can be supplied as the answer replay source to reuse both its
+committed and pending responses. Probe design, cumulative
 judgments, adaptive dependencies, and free discussion remain sequential. Call
 budgets are preflighted per batch.
+Large heterogeneous batches may set `run.continue_batch_on_call_error: true`
+to finish other queued calls after one route fails; the default is fail-fast.
+Cost-budget failures always stop new submissions. Provider exceptions are
+recorded in `batch_failures.jsonl` with their route and stream identity.
+After explicit route qualification, a terminal replay may set a phase's
+`incomplete_answer_policy` to `record_unavailable`. Empty or failed responses
+then remain empty in the archive and are shown to the judge as missing evidence,
+not low-capability evidence. The default is `fail`.
 Because provider cost is only known after a response arrives, a reported-cost
 ceiling may have up to `max_parallel_calls` requests already in flight when it
 is crossed. Client implementations are serialized by default and must
@@ -557,7 +580,7 @@ Primary measurements should focus on the emergent evaluation process:
 The current exploratory coding frame is in `docs/evaluation_taxonomy.md`, with
 machine-readable tags in `data/evaluation_taxonomy.json`. The analysis pipeline
 reports candidate behavioral signals and question-type families for review, not
-as definitive labels. Current post-hoc version `2026-07-21.5` includes
+as definitive labels. Current post-hoc version `2026-07-21.6` includes
 precision and coverage regressions derived from real pilot probes.
 
 The taxonomy has two dimensions:
@@ -567,7 +590,8 @@ The taxonomy has two dimensions:
   transfer testing, self-assessment, strategic signaling, or evaluator
   evaluation.
 - **Question type**: what capability a probe appears to test, such as verbal
-  abstraction, knowledge recall, fluid reasoning, logic, math, science, coding,
+  abstraction, language induction, knowledge recall, fluid reasoning, logic,
+  math, science, coding,
   software repair, working memory, spatial reasoning, reading comprehension,
   creativity, planning, social judgment, philosophical analysis, calibration,
   recursive self-critique, long-context synthesis, instruction following,
@@ -648,6 +672,11 @@ Current question-type labels:
 - **Verbal Abstraction** - Analogies, definitions, and conceptual comparisons.
   Source: close match to Wechsler Similarities/Vocabulary-style tasks; AI
   analogue in language and analogy benchmarks.
+- **Language Induction** - Infers grammar, morphology, syntax, or meaning from
+  examples in an unfamiliar language. Source: close match to
+  [MLAT](https://lltf.net/aptitude-tests/language-aptitude-tests/modern-language-aptitude-test-2/)
+  grammatical sensitivity and inductive language learning; derived from
+  few-shot rule induction and the 50-model catalog pilot.
 - **Knowledge Recall** - Factual, cultural, scientific, or domain knowledge.
   Source: close match to crystallized-knowledge tasks; AI analogue in
   MMLU-style knowledge QA.

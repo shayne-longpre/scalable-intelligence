@@ -1,16 +1,110 @@
 from __future__ import annotations
 
 import copy
+import json
 import unittest
 from pathlib import Path
 
 from ai_council.config import ConfigError, ExperimentConfig, load_experiment_config
+from scripts.build_catalog_ladder_config import _candidate_model, _expected_model_calls
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class ConfigTests(unittest.TestCase):
+    def test_catalog_ladder_call_budget_scales_with_roster_and_schedule(self) -> None:
+        self.assertEqual(
+            _expected_model_calls(
+                candidate_count=50,
+                probe_schedule=[4, 1, 1],
+                max_adaptive_candidates=10,
+            ),
+            235,
+        )
+        self.assertEqual(
+            _expected_model_calls(
+                candidate_count=100,
+                probe_schedule=[4, 1, 1],
+                max_adaptive_candidates=10,
+            ),
+            435,
+        )
+
+    def test_catalog_ladder_model_override_preserves_unspecified_parameters(self) -> None:
+        model = {
+            "provider_model_id": "provider/model",
+            "max_completion_tokens": 100000,
+            "matched_evals": [{"model_name": "Model (xhigh)"}],
+        }
+
+        configured = _candidate_model(
+            model,
+            "P01",
+            {"params": {"reasoning": {"effort": "low"}, "temperature": 0}},
+        )
+
+        self.assertEqual(configured["params"]["max_tokens"], 40000)
+        self.assertEqual(configured["params"]["reasoning"], {"effort": "low"})
+        self.assertEqual(configured["params"]["temperature"], 0)
+
+    def test_catalog_ladder_configs_match_frozen_fifty_model_selection(self) -> None:
+        selection = json.loads(
+            (ROOT / "data" / "catalog_ladder_50.selection.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        selected_routes = set(selection["provider_model_ids"])
+        catalog = json.loads(
+            (ROOT / "data" / "model_catalog.openrouter.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        route_limits = {
+            model["provider_model_id"]: model.get("max_completion_tokens")
+            for model in catalog["models"]
+        }
+
+        for filename, judge_route in [
+            ("catalog_ladder50_sol.openrouter.json", "openai/gpt-5.6-sol"),
+            ("catalog_ladder50_fable.openrouter.json", "anthropic/claude-fable-5"),
+        ]:
+            with self.subTest(filename=filename):
+                config = load_experiment_config(ROOT / "examples" / filename)
+                participant_ids = [participant.id for participant in config.participants]
+                participant_routes = {
+                    config.models[participant.model].model
+                    for participant in config.participants
+                }
+                phase = config.protocol.phases[0]
+
+                self.assertEqual(len(participant_ids), 50)
+                self.assertEqual(len(set(participant_ids)), 50)
+                self.assertEqual(participant_routes, selected_routes)
+                self.assertIn(judge_route, participant_routes)
+                for participant in config.participants:
+                    model = config.models[participant.model]
+                    route_limit = route_limits[model.model]
+                    expected_limit = min(40000, route_limit) if route_limit else 40000
+                    self.assertEqual(model.params.get("max_tokens"), expected_limit)
+                self.assertEqual(phase.probe_schedule, [4, 1, 1])
+                self.assertEqual(phase.comparison_order, "seeded_shuffle")
+                self.assertEqual(phase.incomplete_answer_policy, "record_unavailable")
+                self.assertTrue(config.run.continue_batch_on_call_error)
+                self.assertEqual(
+                    config.providers["openrouter_candidates"].timeout_seconds,
+                    300,
+                )
+                self.assertEqual(config.providers["openrouter_judge"].timeout_seconds, 900)
+                self.assertTrue(
+                    all(
+                        config.models[participant.model].provider
+                        == "openrouter_candidates"
+                        for participant in config.participants
+                    )
+                )
+                self.assertEqual(config.models["judge_primary"].provider, "openrouter_judge")
+
     def test_independent_judge_phase_requires_judge_roster(self) -> None:
         data = _minimal_config_dict()
         data["protocol"]["phases"] = [
@@ -49,6 +143,59 @@ class ConfigTests(unittest.TestCase):
 
         data["run"]["max_parallel_calls"] = 0
         with self.assertRaisesRegex(ConfigError, "max_parallel_calls must be at least 1"):
+            ExperimentConfig.from_dict(data)
+
+    def test_continue_batch_on_call_error_requires_boolean(self) -> None:
+        data = _minimal_config_dict()
+        data["run"] = {"continue_batch_on_call_error": True}
+        self.assertTrue(ExperimentConfig.from_dict(data).run.continue_batch_on_call_error)
+
+        data["run"]["continue_batch_on_call_error"] = "yes"
+        with self.assertRaisesRegex(ConfigError, "continue_batch_on_call_error"):
+            ExperimentConfig.from_dict(data)
+
+    def test_incomplete_answer_policy_is_explicit_and_validated(self) -> None:
+        data = _minimal_config_dict()
+        phase = data["protocol"]["phases"][0]
+        phase["incomplete_answer_policy"] = "record_unavailable"
+        self.assertEqual(
+            ExperimentConfig.from_dict(data).protocol.phases[0].incomplete_answer_policy,
+            "record_unavailable",
+        )
+
+        phase["incomplete_answer_policy"] = "ignore"
+        with self.assertRaisesRegex(ConfigError, "incomplete_answer_policy"):
+            ExperimentConfig.from_dict(data)
+
+    def test_reuse_unavailable_answers_requires_boolean(self) -> None:
+        data = _minimal_config_dict()
+        phase = data["protocol"]["phases"][0]
+        phase["reuse_unavailable_answers"] = True
+        self.assertTrue(
+            ExperimentConfig.from_dict(data).protocol.phases[0].reuse_unavailable_answers
+        )
+
+        phase["reuse_unavailable_answers"] = "yes"
+        with self.assertRaisesRegex(ConfigError, "reuse_unavailable_answers"):
+            ExperimentConfig.from_dict(data)
+
+    def test_retry_unavailable_rounds_are_validated(self) -> None:
+        data = _minimal_config_dict()
+        phase = data["protocol"]["phases"][0]
+        phase["reuse_unavailable_answers"] = True
+        phase["retry_unavailable_rounds"] = [2, 3]
+        self.assertEqual(
+            ExperimentConfig.from_dict(data).protocol.phases[0].retry_unavailable_rounds,
+            [2, 3],
+        )
+
+        phase["retry_unavailable_rounds"] = [2, 2]
+        with self.assertRaisesRegex(ConfigError, "must not contain duplicates"):
+            ExperimentConfig.from_dict(data)
+
+        phase["retry_unavailable_rounds"] = [2]
+        phase["reuse_unavailable_answers"] = False
+        with self.assertRaisesRegex(ConfigError, "requires reuse_unavailable_answers"):
             ExperimentConfig.from_dict(data)
 
     def test_loads_and_validates_provider_request_retries(self) -> None:
@@ -198,6 +345,30 @@ class ConfigTests(unittest.TestCase):
             config.protocol.phases[0].model_params,
             {"max_tokens": 1000, "reasoning": {"effort": "none"}},
         )
+
+    def test_validates_comparison_presentation_order(self) -> None:
+        data = _minimal_config_dict()
+        data["judges"] = [
+            {"id": "J1", "model": "model", "system_prompt": "independent_intelligence_judge"}
+        ]
+        phase = data["protocol"]["phases"][0]
+        phase.update(
+            {
+                "kind": "independent_judge_ranking",
+                "prompt": "adaptive_judge_probe",
+                "visibility": "private",
+                "comparison_order": "seeded_shuffle",
+                "comparison_seed": 17,
+            }
+        )
+
+        config = ExperimentConfig.from_dict(data)
+        self.assertEqual(config.protocol.phases[0].comparison_order, "seeded_shuffle")
+        self.assertEqual(config.protocol.phases[0].comparison_seed, 17)
+
+        phase["comparison_order"] = "random"
+        with self.assertRaisesRegex(ConfigError, "comparison_order"):
+            ExperimentConfig.from_dict(data)
 
     def test_loads_structured_json_retries(self) -> None:
         data = _minimal_config_dict()

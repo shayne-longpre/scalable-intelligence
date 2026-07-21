@@ -7,14 +7,104 @@ from pathlib import Path
 from ai_council.config import ExperimentConfig
 from ai_council.core import TranscriptEntry
 from ai_council.report_card import (
+    _final_prior_agreement,
     _highlight_candidates,
     _judge_condition_summary,
+    _probe_budget_results,
     build_report_card,
 )
 from ai_council.storage import RunStore
 
 
 class ReportCardTests(unittest.TestCase):
+    def test_judge_condition_summary_compares_final_rankings_across_runs(self) -> None:
+        cards = [
+            {
+                "name": "run-a",
+                "participants": [
+                    {"id": "P1", "provider_model_id": "candidate/1"},
+                    {"id": "P2", "provider_model_id": "candidate/2"},
+                    {"id": "P3", "provider_model_id": "candidate/3"},
+                ],
+                "judges": [
+                    {"id": "J1", "model_ref": "judge", "provider_model_id": "model/a"}
+                ],
+                "final_rankings": [{"speaker": "J1", "ranking": ["P1", "P2", "P3"]}],
+            },
+            {
+                "name": "run-b",
+                "participants": [
+                    {"id": "P1", "provider_model_id": "candidate/1"},
+                    {"id": "P2", "provider_model_id": "candidate/2"},
+                    {"id": "P3", "provider_model_id": "candidate/3"},
+                ],
+                "judges": [
+                    {"id": "J1", "model_ref": "judge", "provider_model_id": "model/b"}
+                ],
+                "final_rankings": [{"speaker": "J1", "ranking": ["P1", "P3", "P2"]}],
+            },
+        ]
+
+        summary = _judge_condition_summary(cards)
+
+        self.assertAlmostEqual(summary["mean_final_interjudge_tau"], 1 / 3)
+        self.assertEqual(len(summary["final_interjudge_pairs"]), 1)
+        self.assertTrue(summary["final_interjudge_pairs"][0]["same_top1"])
+
+    def test_judge_condition_summary_does_not_compare_different_rosters(self) -> None:
+        cards = [
+            {
+                "name": "run-a",
+                "participants": [{"id": "P1", "provider_model_id": "candidate/a"}],
+                "judges": [{"id": "J1", "provider_model_id": "judge/a"}],
+                "final_rankings": [{"speaker": "J1", "ranking": ["P1"]}],
+            },
+            {
+                "name": "run-b",
+                "participants": [{"id": "P1", "provider_model_id": "candidate/b"}],
+                "judges": [{"id": "J1", "provider_model_id": "judge/b"}],
+                "final_rankings": [{"speaker": "J1", "ranking": ["P1"]}],
+            },
+        ]
+
+        summary = _judge_condition_summary(cards)
+
+        self.assertEqual(summary["final_interjudge_pairs"], [])
+        self.assertIsNone(summary["mean_final_interjudge_tau"])
+
+    def test_reported_score_subset_is_primary_but_all_candidate_metrics_remain(self) -> None:
+        judgment = {
+            "phase": "judge_ranking",
+            "speaker": "J1",
+            "round_index": 1,
+            "judgment_probe_count": 4,
+            "is_primary_judgment": True,
+            "ranking": ["P1", "P2", "P3"],
+            "kendall_tau": 0.2,
+            "spearman_rho": 0.3,
+            "pairwise_accuracy": 0.6,
+            "rank_score_r_squared": 0.4,
+            "top1_matches_prior": False,
+            "reported_score_subset": {
+                "candidate_count": 2,
+                "kendall_tau": 1.0,
+                "spearman_rho": 1.0,
+                "pairwise_accuracy": 1.0,
+                "rank_score_r_squared": 0.9,
+                "top1_matches_prior": True,
+            },
+        }
+        prior = {"judgments": [judgment]}
+
+        final = _final_prior_agreement(prior)
+        budget = _probe_budget_results(prior)[0]
+
+        self.assertEqual(final["mean_tau"], 1.0)
+        self.assertEqual(final["all_candidate_mean_tau"], 0.2)
+        self.assertEqual(final["basis"], "reported-score subset")
+        self.assertEqual(budget["pairwise_accuracy"], 1.0)
+        self.assertEqual(budget["all_candidate_pairwise_accuracy"], 0.6)
+
     def test_judge_condition_summary_aggregates_per_model_not_anonymous_id(self) -> None:
         cards = []
         for run_index, pairwise in enumerate((1.0, 0.5), start=1):

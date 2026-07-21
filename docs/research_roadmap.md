@@ -17,13 +17,13 @@ invent their own criteria and probes.
 | 1. Measurement validity | Complete | Role-scoped taxonomy counts, source-turn provenance, and ranking metrics validated against hand-labeled transcripts | Are reported patterns real properties of the interaction rather than extraction artifacts? |
 | 2. Conversation dynamics | Complete | Separate preplanned battery progression from evidence-conditioned follow-up and topical change | Do evaluators deepen, broaden, or adapt as evidence accumulates? |
 | 3. Baseline freeze | Complete | Versioned adaptive-wave prompts, taxonomy, config, analysis schema, and three accepted replications | Can later experiments be compared without silent protocol drift? |
-| 4. Independent-judge ladder | Initial pilot complete | Two judges independently rank 12 anonymous candidates after six common probes | Can capable models recover a broad external capability ordering? |
+| 4. Independent-judge ladder | 50-model primary runs complete; crossed control pending | Sol and Fable independently rank the same 50 anonymous candidates using a four-probe opening and bounded adaptive rounds | Can capable models recover a broad external capability ordering? |
 | 5. Selective adaptivity | Three stress pilots complete | Four opening probes, direct per-probe comparison, cumulative evidence dossiers, bounded common follow-ups, and adaptive-decision traces | Can extra evidence resolve the difficult part of a ranking efficiently? |
 | 5b. Probe-budget ablation | Initial pilot complete | Fresh evidence cards and rankings using only the first 2, 4, or 6 probes from one shared run | How much does additional probe evidence improve ranking accuracy? |
 | 6. Close capability ladder | Initial four-model replication complete | Repeated ladders concentrated near the discrimination boundary | How small can capability gaps become before judgments approach chance? |
 | 7. Free vs. structured | Pending | Paired runs with the same roster, budgets, and external prior | What does round-robin structure improve or suppress? |
 | 8. Publication figures | Pending | Auditable plots linked back to source turns and model spend | Which findings are robust, interpretable, and worth communicating? |
-| 9. Scale-out | Pending | Overlapping candidate panels with anchor models and repeated judges | Can the method rank a large catalog without one unmanageably large context? |
+| 9. Scale-out | Global 50-answer pilot complete; order audit pending | Direct global comparison first; saved-answer replay through overlapping panels if attention audits justify it | Can the method rank a large catalog without one unmanageably large context? |
 
 ## First Ladder Design
 
@@ -76,7 +76,9 @@ candidate count.
 
 The initial design uses independent GPT-5.6 Sol and Claude Fable 5 judges over a
 50-model roster, followed by a shared-evidence cross-over. See
-`docs/catalog_ladder_design.md`.
+`docs/catalog_ladder_design.md`. Every exact answer is archived so the same
+evidence can later be compared in smaller overlapping panels without another
+candidate call.
 
 ### 2. The Oversight Frontier
 
@@ -216,16 +218,35 @@ reliability evidence. Full analysis is in
 `docs/pilot_analysis_adaptive_judge_quality_20260721.md`; the report card is
 `runs/report_cards/adaptive_judge_quality_close_p4_v3/report_card.html`.
 
+## 50-Model Catalog Pilot
+
+The independent Sol and Fable catalog runs are complete. Both judges compared
+all 50 answers globally for each opening probe, then used two common adaptive
+probes over at most ten candidates. The 47-model direct-score primary analysis
+reached final pairwise accuracy of 0.839 for Sol and 0.798 for Fable. Their
+final rankings agreed at Kendall tau 0.605.
+
+Accuracy depended strongly on capability gap. Both judges exceeded 0.91 on
+pairs separated by more than ten external-score points, while pairs separated
+by less than two points remained near chance. Sol improved across the two
+adaptive checkpoints; Fable did not. This makes the shared-evidence cross-over,
+presentation-order audit, and oversight frontier more informative next steps
+than immediately adding more candidates.
+
+All exact answers were archived, so alternative answer orders and overlapping
+panels require judge calls but no new candidate calls. Full results and caveats
+are in `docs/pilot_analysis_catalog_ladder50_20260721.md`; the combined report
+card is
+`runs/report_cards/catalog_ladder50_sol_fable_20260721_v5/report_card.html`.
+
 ## Immediate Next Steps
 
-1. Add prior-sensitivity analysis for adjacent frontier ranks and tie bands;
-   manually adjudicate the probe evidence behind disputed pair inversions.
-2. Run a shared-evidence control so strong and medium judges compare identical
-   candidate answers, separating probe design from evidence interpretation.
-3. Run the scalable-oversight test on small rosters that include candidates
-   stronger than the medium judge, with five probes as the preregistered primary
-   checkpoint and later rounds reported as adaptive extensions.
-4. Run the matched free-versus-structured comparison with the same roster,
-   model budgets, prior, and independent final rankings.
-5. Expand to larger overlapping ladders only after the close-roster effects and
-   stopping behavior replicate.
+1. Run the shared-evidence cross-over so each judge interprets the other
+   judge's probes and answers, separating probe design from interpretation.
+2. Replay the frozen evidence through a second seeded presentation order. Use
+   overlapping panels with common anchors only if the global ranking is
+   materially order-sensitive.
+3. Audit a sample of post-hoc labels and decisive answer summaries by hand,
+   then freeze the analysis version for the first confirmatory study.
+4. Return to the oversight frontier with small close rosters above and below
+   each judge, then run the matched structured-versus-free study.

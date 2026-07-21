@@ -243,10 +243,10 @@ def _best_match(matches: list[dict[str, Any]]) -> dict[str, Any] | None:
     return matches[0] if matches else None
 
 
-def _match_sort_key(match: dict[str, Any]) -> tuple[float, int, str]:
+def _match_sort_key(match: dict[str, Any]) -> tuple[int, float, str]:
     score = float(match.get("intelligenceIndex") or -999.0)
     estimated_penalty = 1 if match.get("intelligenceIndexIsEstimated") else 0
-    return (-score, estimated_penalty, str(match.get("name") or ""))
+    return (estimated_penalty, -score, str(match.get("name") or ""))
 
 
 def _catalog_sort_key(entry: dict[str, Any]) -> tuple[int, float, str, str]:

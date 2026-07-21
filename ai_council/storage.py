@@ -17,6 +17,8 @@ class RunStore:
         self.run_dir = run_dir
         self.transcript_path = run_dir / "transcript.jsonl"
         self.findings_path = run_dir / "monitor_findings.jsonl"
+        self.pending_batch_path = run_dir / "pending_batch_entries.jsonl"
+        self.batch_failures_path = run_dir / "batch_failures.jsonl"
 
     @classmethod
     def create(cls, base_dir: str | Path, config: ExperimentConfig) -> "RunStore":
@@ -50,6 +52,19 @@ class RunStore:
     def append_finding(self, finding: Any) -> None:
         with self.findings_path.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(_to_jsonable(finding), ensure_ascii=False) + "\n")
+
+    def reset_pending_batch(self) -> None:
+        self.pending_batch_path.unlink(missing_ok=True)
+
+    def append_pending_entry(self, entry: TranscriptEntry, position: int) -> None:
+        record = entry.to_dict()
+        record["metadata"] = {**record["metadata"], "batch_position": position}
+        with self.pending_batch_path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+    def append_batch_failure(self, record: dict[str, Any]) -> None:
+        with self.batch_failures_path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(_to_jsonable(record), ensure_ascii=False) + "\n")
 
     def write_json(self, name: str, data: Any) -> None:
         with (self.run_dir / name).open("w", encoding="utf-8") as handle:

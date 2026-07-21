@@ -112,6 +112,45 @@ class ModelCatalogTests(unittest.TestCase):
         self.assertEqual(entry["rank_confidence"], "medium")
         self.assertEqual(entry["matched_evals"][0]["match_type"], "slug_or_name")
 
+    def test_build_catalog_prefers_reported_variant_over_higher_estimated_variant(self) -> None:
+        openrouter_payload = {
+            "data": [
+                {
+                    "id": "provider/model",
+                    "name": "Provider: Model",
+                    "created": 1780000000,
+                    "architecture": {"input_modalities": ["text"], "output_modalities": ["text"]},
+                    "top_provider": {},
+                    "pricing": {},
+                }
+            ]
+        }
+        artificial_analysis_models = [
+            {
+                "id": "estimated",
+                "name": "Model (estimated variant)",
+                "slug": "model",
+                "intelligenceIndex": 60.0,
+                "intelligenceIndexIsEstimated": True,
+                "openrouterApiId": "provider/model",
+            },
+            {
+                "id": "reported",
+                "name": "Model (reported variant)",
+                "slug": "model",
+                "intelligenceIndex": 55.0,
+                "intelligenceIndexIsEstimated": False,
+                "openrouterApiId": "provider/model",
+            },
+        ]
+
+        catalog = build_openrouter_catalog(openrouter_payload, artificial_analysis_models)
+        entry = catalog["models"][0]
+
+        self.assertEqual(entry["intelligence_score"], 55.0)
+        self.assertEqual(entry["ranking_basis"], "artificial_analysis_reported")
+        self.assertFalse(entry["intelligence_score_is_estimated"])
+
 
 def _script_payload(payload: str) -> str:
     compact_payload = json.dumps(json.loads(payload), separators=(",", ":"))

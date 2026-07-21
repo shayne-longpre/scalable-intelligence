@@ -18,6 +18,8 @@ from ai_council.orchestrator import (
     CouncilRunner,
     ExperimentViolationError,
     _PreparedCall,
+    _comparison_presentation_order,
+    _load_preauthored_answers,
     _load_preauthored_probes,
 )
 from ai_council.storage import RunStore, load_jsonl
@@ -25,6 +27,139 @@ from ai_council.validation import revalidate_run
 
 
 class InterviewModeTests(unittest.TestCase):
+    def test_preauthored_answer_directory_merges_transcript_and_pending_journal(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            run_dir = Path(tmpdir)
+            entries = []
+            for participant, stream_id in [("P1", "probe:P1"), ("P2", "probe:P2")]:
+                entries.append(
+                    {
+                        "turn_id": 1 if participant == "P1" else 0,
+                        "speaker": participant,
+                        "content": f"Answer from {participant}",
+                        "metadata": {
+                            "interaction_role": "answer",
+                            "stream_id": stream_id,
+                            "model_ref": f"candidate_{participant.lower()}",
+                            "finish_reason": "stop",
+                        },
+                    }
+                )
+            (run_dir / "transcript.jsonl").write_text(
+                json.dumps(entries[0]) + "\n",
+                encoding="utf-8",
+            )
+            (run_dir / "pending_batch_entries.jsonl").write_text(
+                json.dumps(entries[1]) + "\n",
+                encoding="utf-8",
+            )
+
+            loaded = _load_preauthored_answers(str(run_dir), set())
+
+        self.assertEqual(set(loaded), {"probe:P1", "probe:P2"})
+        self.assertTrue(loaded["probe:P1"]["source_file"].endswith("transcript.jsonl"))
+        self.assertTrue(
+            loaded["probe:P2"]["source_file"].endswith("pending_batch_entries.jsonl")
+        )
+
+    def test_preauthored_answer_directory_deduplicates_committed_journal_entry(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            run_dir = Path(tmpdir)
+            metadata = {
+                "interaction_role": "answer",
+                "stream_id": "probe:P1",
+                "model_ref": "candidate_p1",
+                "finish_reason": "stop",
+            }
+            committed = {
+                "turn_id": 5,
+                "speaker": "P1",
+                "content": "same answer",
+                "metadata": metadata,
+            }
+            pending = {
+                **committed,
+                "turn_id": 0,
+                "metadata": {**metadata, "batch_position": 0},
+            }
+            (run_dir / "transcript.jsonl").write_text(
+                json.dumps(committed) + "\n",
+                encoding="utf-8",
+            )
+            (run_dir / "pending_batch_entries.jsonl").write_text(
+                json.dumps(pending) + "\n",
+                encoding="utf-8",
+            )
+
+            loaded = _load_preauthored_answers(str(run_dir), set())
+
+        self.assertEqual(list(loaded), ["probe:P1"])
+        self.assertEqual(loaded["probe:P1"]["source_turn_id"], 5)
+
+    def test_preauthored_answer_loader_replays_explicitly_unavailable_answer(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            transcript = Path(tmpdir) / "transcript.jsonl"
+            transcript.write_text(
+                json.dumps(
+                    {
+                        "turn_id": 3,
+                        "speaker": "P1",
+                        "content": "",
+                        "metadata": {
+                            "interaction_role": "answer",
+                            "stream_id": "probe:P1",
+                            "model_ref": "candidate_p1",
+                            "finish_reason": "provider_error",
+                            "answer_unavailable": True,
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            loaded = _load_preauthored_answers(str(transcript), set())
+            included = _load_preauthored_answers(
+                str(transcript),
+                set(),
+                include_unavailable=True,
+            )
+
+        self.assertNotIn("probe:P1", loaded)
+        self.assertTrue(included["probe:P1"]["metadata"]["answer_unavailable"])
+
+    def test_preauthored_answer_loader_retries_unavailable_selected_rounds(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            transcript = Path(tmpdir) / "transcript.jsonl"
+            entries = [
+                {
+                    "turn_id": round_index,
+                    "round_index": round_index,
+                    "speaker": "P1",
+                    "content": "",
+                    "metadata": {
+                        "interaction_role": "answer",
+                        "stream_id": f"round-{round_index}:P1",
+                        "answer_unavailable": True,
+                    },
+                }
+                for round_index in (1, 2)
+            ]
+            transcript.write_text(
+                "".join(json.dumps(entry) + "\n" for entry in entries),
+                encoding="utf-8",
+            )
+
+            loaded = _load_preauthored_answers(
+                str(transcript),
+                set(),
+                include_unavailable=True,
+                retry_unavailable_rounds={2},
+            )
+
+        self.assertIn("round-1:P1", loaded)
+        self.assertNotIn("round-2:P1", loaded)
+
     def test_independent_judge_can_replay_preauthored_probes_with_provenance(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             battery_path = Path(tmpdir) / "battery.json"
@@ -319,6 +454,7 @@ class InterviewModeTests(unittest.TestCase):
             run_summary = json.loads(
                 (store.run_dir / "run_summary.json").read_text(encoding="utf-8")
             )
+            failures = load_jsonl(store.batch_failures_path)
 
         self.assertEqual(len(client.requests), 3)
         self.assertEqual(client.peak_calls, 2)
@@ -330,6 +466,177 @@ class InterviewModeTests(unittest.TestCase):
         self.assertEqual(entries[-1]["speaker"], "P2")
         self.assertEqual(run_summary["status"], "failed")
         self.assertEqual(run_summary["error"]["type"], "ModelClientError")
+        self.assertEqual(len(failures), 1)
+        self.assertEqual(failures[0]["speaker"], "P1")
+        self.assertEqual(failures[0]["error_type"], "ModelClientError")
+
+    def test_parallel_scheduler_can_finish_batch_after_provider_failure(self) -> None:
+        config = _parallel_judge_config(
+            max_parallel_calls=2,
+            probes_per_round=1,
+            continue_batch_on_call_error=True,
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store = RunStore.create(tmpdir, config)
+            client = FailingParallelMockClient(config.providers["mock"])
+            runner = CouncilRunner(config, {"mock": client}, store)
+
+            with self.assertRaises(ModelClientError):
+                runner.run()
+
+            entries = load_jsonl(store.transcript_path)
+
+        answers = [
+            entry
+            for entry in entries
+            if entry["metadata"].get("interaction_role") == "answer"
+        ]
+        self.assertEqual(len(client.requests), 4)
+        self.assertEqual(runner.model_calls, 3)
+        self.assertEqual([entry["speaker"] for entry in answers], ["P2", "P3"])
+
+    def test_incomplete_answer_does_not_cancel_other_candidate_calls(self) -> None:
+        config = _parallel_judge_config(
+            max_parallel_calls=2,
+            probes_per_round=1,
+            visible_text_retries=0,
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store = RunStore.create(tmpdir, config)
+            client = IncompleteParallelMockClient(config.providers["mock"])
+            with self.assertRaisesRegex(ExperimentViolationError, "incomplete answer"):
+                CouncilRunner(config, {"mock": client}, store).run()
+            entries = load_jsonl(store.transcript_path)
+
+        answers = [
+            entry
+            for entry in entries
+            if entry["metadata"].get("interaction_role") == "answer"
+        ]
+        self.assertEqual(len(client.requests), 4)
+        self.assertEqual([entry["speaker"] for entry in answers], ["P1", "P2", "P3"])
+        self.assertEqual(answers[0]["content"], "")
+
+    def test_incomplete_answer_can_be_recorded_as_unavailable_after_qualification(self) -> None:
+        config = _parallel_judge_config(
+            max_parallel_calls=2,
+            probes_per_round=1,
+            visible_text_retries=0,
+            incomplete_answer_policy="record_unavailable",
+            probe_schedule=[1],
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store = RunStore.create(tmpdir, config)
+            client = IncompleteParallelMockClient(config.providers["mock"])
+            CouncilRunner(config, {"mock": client}, store).run()
+            entries = load_jsonl(store.transcript_path)
+            analyze_run(store.run_dir)
+            archive = json.loads(
+                (store.run_dir / "probe_answer_archive.json").read_text(encoding="utf-8")
+            )
+
+        unavailable = next(
+            entry
+            for entry in entries
+            if entry["metadata"].get("interaction_role") == "answer"
+            and entry["speaker"] == "P1"
+        )
+        comparison_request = next(
+            request
+            for request in client.requests
+            if request.metadata.get("interaction_role") == "probe_comparison"
+        )
+        self.assertEqual(unavailable["content"], "")
+        self.assertTrue(unavailable["metadata"]["answer_unavailable"])
+        self.assertIn("missing evidence, not evidence of low capability", comparison_request.messages[-1]["content"])
+        archived = next(
+            answer
+            for answer in archive["probes"][0]["answers"]
+            if answer["candidate_id"] == "P1"
+        )
+        self.assertTrue(archived["answer_unavailable"])
+
+    def test_provider_failure_can_be_recorded_as_unavailable_after_qualification(self) -> None:
+        config = _parallel_judge_config(
+            max_parallel_calls=2,
+            probes_per_round=1,
+            continue_batch_on_call_error=True,
+            incomplete_answer_policy="record_unavailable",
+            probe_schedule=[1],
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store = RunStore.create(tmpdir, config)
+            client = FailingParallelMockClient(config.providers["mock"])
+            CouncilRunner(config, {"mock": client}, store).run()
+            entries = load_jsonl(store.transcript_path)
+            failures = load_jsonl(store.batch_failures_path)
+
+        unavailable = next(
+            entry
+            for entry in entries
+            if entry["metadata"].get("interaction_role") == "answer"
+            and entry["speaker"] == "P1"
+        )
+        self.assertEqual(unavailable["content"], "")
+        self.assertTrue(unavailable["metadata"]["answer_unavailable"])
+        self.assertEqual(unavailable["metadata"]["provider_error_type"], "ModelClientError")
+        self.assertEqual(len(failures), 1)
+
+    def test_serial_provider_failure_uses_the_same_unavailable_policy(self) -> None:
+        config = _parallel_judge_config(
+            max_parallel_calls=1,
+            probes_per_round=1,
+            continue_batch_on_call_error=True,
+            incomplete_answer_policy="record_unavailable",
+            probe_schedule=[1],
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store = RunStore.create(tmpdir, config)
+            client = FailingParallelMockClient(config.providers["mock"])
+            CouncilRunner(config, {"mock": client}, store).run()
+            entries = load_jsonl(store.transcript_path)
+
+        answers = [
+            entry
+            for entry in entries
+            if entry["metadata"].get("interaction_role") == "answer"
+        ]
+        self.assertEqual([entry["speaker"] for entry in answers], ["P1", "P2", "P3"])
+        self.assertTrue(answers[0]["metadata"]["answer_unavailable"])
+        self.assertTrue(answers[1]["content"].strip())
+
+    def test_parallel_batch_journals_completed_entries_before_slowest_call_finishes(self) -> None:
+        config = _parallel_judge_config(max_parallel_calls=2, probes_per_round=1)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store = RunStore.create(tmpdir, config)
+            client = CheckpointBlockingMockClient(config.providers["mock"])
+            runner = CouncilRunner(config, {"mock": client}, store)
+            error: list[Exception] = []
+
+            def run() -> None:
+                try:
+                    runner.run()
+                except Exception as exc:
+                    error.append(exc)
+
+            thread = threading.Thread(target=run)
+            thread.start()
+            self.assertTrue(client.first_answer_completed.wait(1))
+            for _ in range(100):
+                if store.pending_batch_path.exists():
+                    break
+                time.sleep(0.01)
+            pending = load_jsonl(store.pending_batch_path)
+            client.release_answers.set()
+            thread.join(3)
+            pending_cleared = not store.pending_batch_path.exists()
+
+        self.assertFalse(thread.is_alive())
+        self.assertEqual(error, [])
+        self.assertEqual(len(pending), 1)
+        self.assertEqual(pending[0]["metadata"]["interaction_role"], "answer")
+        self.assertEqual(pending[0]["metadata"]["respondent"], "P1")
+        self.assertTrue(pending_cleared)
 
     def test_batch_preflights_the_full_call_budget_at_every_concurrency(self) -> None:
         for max_parallel_calls in (1, 2):
@@ -954,6 +1261,126 @@ class InterviewModeTests(unittest.TestCase):
             )
         )
 
+    def test_adaptive_comparisons_can_replay_a_sparse_probe_set(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            source_config = _parallel_judge_config(
+                max_parallel_calls=2,
+                probe_schedule=[2],
+            )
+            source_store = RunStore.create(tmpdir, source_config)
+            CouncilRunner(
+                source_config,
+                build_clients(source_config),
+                source_store,
+            ).run()
+            source_entries = load_jsonl(source_store.transcript_path)
+            second_comparison = next(
+                entry
+                for entry in source_entries
+                if entry["metadata"].get("interaction_role") == "probe_comparison"
+                and entry["metadata"].get("probe_sequence_number") == 2
+            )
+            partial_evidence = Path(tmpdir) / "partial_evidence.jsonl"
+            partial_evidence.write_text(
+                json.dumps(second_comparison) + "\n",
+                encoding="utf-8",
+            )
+            replay_config = _parallel_judge_config(
+                max_parallel_calls=2,
+                probe_schedule=[2],
+                preauthored_probe_file=str(source_store.transcript_path),
+                preauthored_answer_file=str(source_store.transcript_path),
+                preauthored_evidence_file=str(partial_evidence),
+            )
+            replay_store = RunStore.create(tmpdir, replay_config)
+            CouncilRunner(
+                replay_config,
+                build_clients(replay_config),
+                replay_store,
+            ).run()
+            replay_entries = load_jsonl(replay_store.transcript_path)
+            replay_summary = json.loads(
+                (replay_store.run_dir / "run_summary.json").read_text(encoding="utf-8")
+            )
+
+        comparisons = [
+            entry
+            for entry in replay_entries
+            if entry["metadata"].get("interaction_role") == "probe_comparison"
+        ]
+        comparison_by_probe = {
+            entry["metadata"]["probe_sequence_number"]: entry
+            for entry in comparisons
+        }
+        self.assertEqual(replay_summary["model_calls"], 2)
+        self.assertFalse(
+            comparison_by_probe[1]["metadata"].get("preauthored_evidence", False)
+        )
+        self.assertTrue(comparison_by_probe[2]["metadata"]["preauthored_evidence"])
+
+    def test_fifty_candidate_comparison_is_complete_and_seeded(self) -> None:
+        candidate_ids = [f"P{index:02d}" for index in range(1, 51)]
+        config = ExperimentConfig.from_dict(
+            {
+                "name": "fifty_candidate_comparison",
+                "run": {"max_parallel_calls": 16},
+                "providers": [{"name": "mock", "kind": "mock"}],
+                "models": [{"name": "mock_model", "provider": "mock", "model": "mock:model"}],
+                "participants": [
+                    {"id": candidate_id, "model": "mock_model", "system_prompt": "blind_evaluation_candidate"}
+                    for candidate_id in candidate_ids
+                ],
+                "judges": [
+                    {"id": "J1", "model": "mock_model", "system_prompt": "independent_intelligence_judge"}
+                ],
+                "protocol": {
+                    "name": "global_comparison_stress",
+                    "phases": [
+                        {
+                            "name": "judge_ranking",
+                            "kind": "independent_judge_ranking",
+                            "prompt": "adaptive_judge_probe",
+                            "probe_schedule": [1],
+                            "comparison_order": "seeded_shuffle",
+                            "comparison_seed": 2718,
+                            "visibility": "private",
+                        }
+                    ],
+                },
+            }
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            store = RunStore.create(tmpdir, config)
+            CouncilRunner(config, build_clients(config), store).run()
+            analyze_run(store.run_dir)
+            entries = load_jsonl(store.transcript_path)
+            archive = json.loads((store.run_dir / "probe_answer_archive.json").read_text())
+
+        comparison = next(
+            entry
+            for entry in entries
+            if entry["metadata"].get("interaction_role") == "probe_comparison"
+        )
+        presented = comparison["metadata"]["answer_presentation_order"]
+        self.assertEqual(set(presented), set(candidate_ids))
+        self.assertNotEqual(presented, candidate_ids)
+        self.assertEqual(set(comparison["parsed"]["candidate_summaries"]), set(candidate_ids))
+        self.assertEqual(archive["probe_count"], 1)
+        self.assertEqual(archive["answer_count"], 50)
+
+    def test_seeded_comparison_order_is_repeatable_by_probe_number(self) -> None:
+        candidates = [f"P{index}" for index in range(1, 9)]
+        first = _comparison_presentation_order(candidates, "seeded_shuffle", 41, 1)
+        self.assertEqual(
+            first,
+            _comparison_presentation_order(candidates, "seeded_shuffle", 41, 1),
+        )
+        self.assertNotEqual(
+            first,
+            _comparison_presentation_order(candidates, "seeded_shuffle", 41, 2),
+        )
+        self.assertEqual(candidates, [f"P{index}" for index in range(1, 9)])
+
     def test_round_robin_probes_use_one_probe_per_interviewer_and_round_outputs(self) -> None:
         config = ExperimentConfig.from_dict(
             {
@@ -1495,6 +1922,48 @@ class FailingParallelMockClient(ConcurrencyTrackingMockClient):
             self._finish_request()
 
 
+class IncompleteParallelMockClient(ConcurrencyTrackingMockClient):
+    def generate(self, request: ModelRequest) -> ModelResponse:
+        if (
+            request.metadata.get("interaction_role") == "answer"
+            and request.metadata.get("respondent_id") == "P1"
+        ):
+            self._start_request(request)
+            try:
+                return ModelResponse(
+                    content="",
+                    raw={"choices": [{"finish_reason": "length"}]},
+                    usage={},
+                    model=request.model,
+                    provider="mock",
+                )
+            finally:
+                self._finish_request()
+        return super().generate(request)
+
+
+class CheckpointBlockingMockClient(ConcurrencyTrackingMockClient):
+    def __init__(self, provider) -> None:
+        super().__init__(provider)
+        self.first_answer_completed = threading.Event()
+        self.release_answers = threading.Event()
+
+    def generate(self, request: ModelRequest) -> ModelResponse:
+        self._start_request(request)
+        try:
+            if request.metadata.get("interaction_role") == "answer":
+                if request.metadata.get("respondent_id") == "P1":
+                    with self._mock_state_lock:
+                        response = MockModelClient.generate(self, request)
+                    self.first_answer_completed.set()
+                    return response
+                self.release_answers.wait(2)
+            with self._mock_state_lock:
+                return MockModelClient.generate(self, request)
+        finally:
+            self._finish_request()
+
+
 class DeterministicRecoveryMockClient(ConcurrencyTrackingMockClient):
     def __init__(self, provider) -> None:
         super().__init__(provider)
@@ -1613,12 +2082,24 @@ def _parallel_judge_config(
     probes_per_round: int = 2,
     max_reported_cost_usd: float | None = None,
     max_model_calls: int | None = None,
+    visible_text_retries: int | None = None,
+    continue_batch_on_call_error: bool = False,
+    incomplete_answer_policy: str = "fail",
+    probe_schedule: list[int] | None = None,
+    preauthored_probe_file: str | None = None,
+    preauthored_answer_file: str | None = None,
+    preauthored_evidence_file: str | None = None,
 ) -> ExperimentConfig:
-    run = {"max_parallel_calls": max_parallel_calls}
+    run = {
+        "max_parallel_calls": max_parallel_calls,
+        "continue_batch_on_call_error": continue_batch_on_call_error,
+    }
     if max_reported_cost_usd is not None:
         run["max_reported_cost_usd"] = max_reported_cost_usd
     if max_model_calls is not None:
         run["max_model_calls"] = max_model_calls
+    if visible_text_retries is not None:
+        run["visible_text_retries"] = visible_text_retries
     return ExperimentConfig.from_dict(
         {
             "name": f"parallel_judge_{max_parallel_calls}",
@@ -1648,7 +2129,35 @@ def _parallel_judge_config(
                         "kind": "independent_judge_ranking",
                         "prompt": "independent_judge_probe",
                         "rounds": 1,
-                        "probes_per_round": probes_per_round,
+                        **(
+                            {"probes_per_round": probes_per_round}
+                            if probe_schedule is None
+                            else {}
+                        ),
+                        "incomplete_answer_policy": incomplete_answer_policy,
+                        **(
+                            {
+                                "prompt": "adaptive_judge_probe",
+                                "probe_schedule": probe_schedule,
+                            }
+                            if probe_schedule is not None
+                            else {}
+                        ),
+                        **(
+                            {"preauthored_probe_file": preauthored_probe_file}
+                            if preauthored_probe_file is not None
+                            else {}
+                        ),
+                        **(
+                            {"preauthored_answer_file": preauthored_answer_file}
+                            if preauthored_answer_file is not None
+                            else {}
+                        ),
+                        **(
+                            {"preauthored_evidence_file": preauthored_evidence_file}
+                            if preauthored_evidence_file is not None
+                            else {}
+                        ),
                         "visibility": "private",
                     }
                 ],

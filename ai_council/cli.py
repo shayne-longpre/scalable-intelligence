@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import nullcontext
 import json
 from pathlib import Path
+from threading import Lock
+from time import perf_counter
 
 from ai_council.analysis import analyze_run
 from ai_council.clients import build_clients
@@ -28,6 +32,7 @@ def main(argv: list[str] | None = None) -> int:
 
     smoke_parser = subparsers.add_parser("smoke")
     smoke_parser.add_argument("--config", required=True)
+    smoke_parser.add_argument("--output")
 
     analyze_parser = subparsers.add_parser("analyze")
     analyze_parser.add_argument("--run-dir", required=True)
@@ -66,32 +71,60 @@ def main(argv: list[str] | None = None) -> int:
             seen_model_names = sorted(
                 {agent.model for agent in [*config.participants, *config.judges]}
             )
-            results = []
-            for model_name in seen_model_names:
+            provider_locks = {name: Lock() for name in clients}
+
+            def smoke_model(model_name: str) -> dict[str, object]:
                 model = config.models[model_name]
                 client = clients[model.provider]
-                response = client.generate(
-                    ModelRequest(
-                        model=model.model,
-                        messages=[{"role": "user", "content": "Reply with exactly: smoke ok"}],
-                        params={
-                            **model.params,
-                            "max_tokens": _smoke_max_tokens(model.params),
-                        },
-                        metadata={"smoke": True},
-                    )
+                guard = (
+                    nullcontext()
+                    if client.supports_parallel_requests
+                    else provider_locks[model.provider]
                 )
-                results.append(
-                    {
+                started = perf_counter()
+                try:
+                    with guard:
+                        response = client.generate(
+                            ModelRequest(
+                                model=model.model,
+                                messages=[
+                                    {"role": "user", "content": "Reply with exactly: smoke ok"}
+                                ],
+                                params={
+                                    **model.params,
+                                    "max_tokens": _smoke_max_tokens(model.params),
+                                },
+                                metadata={"smoke": True},
+                            )
+                        )
+                except Exception as exc:
+                    return {
                         "model_ref": model_name,
                         "provider": model.provider,
-                        "model": response.model,
-                        "ok": "smoke ok" in response.content.lower(),
-                        "content": response.content.strip(),
-                        "usage": response.usage,
+                        "model": model.model,
+                        "ok": False,
+                        "error": f"{type(exc).__name__}: {exc}",
+                        "latency_seconds": perf_counter() - started,
                     }
-                )
-            print(json.dumps({"ok": all(result["ok"] for result in results), "results": results}, indent=2))
+                return {
+                    "model_ref": model_name,
+                    "provider": model.provider,
+                    "model": response.model,
+                    "ok": bool(response.content.strip()),
+                    "instruction_ok": "smoke ok" in response.content.lower(),
+                    "content": response.content.strip(),
+                    "usage": response.usage,
+                    "latency_seconds": perf_counter() - started,
+                }
+
+            with ThreadPoolExecutor(max_workers=config.run.max_parallel_calls) as executor:
+                results = list(executor.map(smoke_model, seen_model_names))
+            payload = {"ok": all(result["ok"] for result in results), "results": results}
+            if args.output:
+                output_path = Path(args.output)
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                output_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+            print(json.dumps(payload, indent=2))
             return 0
 
         if args.command == "analyze":

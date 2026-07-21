@@ -1,6 +1,6 @@
 {
   "name": "machine_society_evaluation_taxonomy",
-  "version": "2026-07-21.5",
+  "version": "2026-07-21.6",
   "description": "A compact, evolving taxonomy for coding how AI participants evaluate intelligence in machine-society experiments. Tags are intentionally behavioral and observable rather than claims about internal state.",
   "basis": [
     "Human cognitive assessment families: verbal comprehension, fluid reasoning, quantitative reasoning, working memory, processing speed, visual-spatial reasoning, crystallized knowledge, and social judgment.",
@@ -90,6 +90,14 @@
       "human_basis": ["WAIS/WISC Similarities", "Vocabulary", "verbal comprehension"],
       "ai_basis": ["natural-language understanding", "analogy and abstraction tasks"],
       "indicators": ["similarity", "similarities", "definition", "define the term", "give a definition", "analogy", "analogical reasoning", "metaphor", "conceptual distinction", "abstract relationship", "underlying principle"]
+    },
+    {
+      "id": "linguistic_rule_induction",
+      "label": "Language Induction",
+      "description": "Infers grammar, morphology, syntax, or meaning rules from examples in an unfamiliar or constructed language.",
+      "human_basis": ["language-learning aptitude", "grammatical sensitivity", "inductive language learning"],
+      "ai_basis": ["few-shot rule induction", "linguistic reasoning benchmarks", "observed machine-society probes"],
+      "indicators": ["invented language", "constructed language", "artificial language", "infer the grammar", "grammar you inferred", "infer grammatical", "induce the grammar", "grammatical rule", "morphological rule", "word order", "unattested form"]
     },
     {
       "id": "crystallized_knowledge_recall",
