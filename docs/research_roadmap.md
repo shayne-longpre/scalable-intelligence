@@ -74,6 +74,10 @@ Primary plots: inferred rank or score versus the external prior; pairwise
 accuracy by prior capability gap; judge-to-judge agreement; accuracy and cost by
 candidate count.
 
+The initial design uses independent GPT-5.6 Sol and Claude Fable 5 judges over a
+50-model roster, followed by a shared-evidence cross-over. See
+`docs/catalog_ladder_design.md`.
+
 ### 2. The Oversight Frontier
 
 Judges at several capability levels rank small panels containing candidates
