@@ -1,0 +1,209 @@
+{
+  "name": "stress8_interactive_stronger_openrouter",
+  "run": {
+    "output_dir": "runs",
+    "max_context_turns": 120,
+    "max_model_calls": 90,
+    "max_reported_cost_usd": 1.0,
+    "structured_json_retries": 1
+  },
+  "context": {
+    "mode": "private_memory",
+    "max_public_turns": 8,
+    "max_private_turns": 16,
+    "max_stream_turns": 12
+  },
+  "providers": [
+    {
+      "name": "openrouter",
+      "kind": "openrouter",
+      "api_key_env": "OPENROUTER_API_KEY",
+      "headers": {
+        "HTTP-Referer": "https://example.org/ai-council",
+        "X-Title": "AI Council Stress8 Interactive"
+      },
+      "timeout_seconds": 180
+    }
+  ],
+  "models": [
+    {
+      "name": "qwen_235b",
+      "provider": "openrouter",
+      "model": "qwen/qwen3-235b-a22b-2507",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 1200
+      }
+    },
+    {
+      "name": "qwen_30b",
+      "provider": "openrouter",
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 900
+      }
+    },
+    {
+      "name": "mistral_small",
+      "provider": "openrouter",
+      "model": "mistralai/mistral-small-24b-instruct-2501",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 900
+      }
+    }
+  ],
+  "participants": [
+    { "id": "P1", "model": "qwen_235b" },
+    { "id": "P2", "model": "qwen_30b" },
+    { "id": "P3", "model": "mistral_small" }
+  ],
+  "monitor": {
+    "enabled": true,
+    "strict": false
+  },
+  "prompt_overrides": {
+    "final_judgment": "Privately submit your final judgment as one complete compact JSON object only. Do not use markdown fences or prose outside JSON. Do not use trailing commas. Close every string, array, and object. Use exactly these top-level keys: participant_id, phase, ranking, confidence, criteria, evidence, uncertainties, updates, next_evidence_needed, final_reflection. participant_id must be your participant ID and phase must be final_judgment. ranking must be a JSON array of participant IDs ordered from most to least intelligent, using exactly these IDs: {participants_json}. Confidence must be a JSON number from 0 to 1, not a string and not a percentage. Base the ranking on the shared discussion and your private compact memories. criteria, evidence, uncertainties, updates, and next_evidence_needed must each be JSON arrays of short strings. Keep criteria to at most 5 short strings. Keep evidence to at most 5 short strings. Keep uncertainties, updates, and next_evidence_needed to at most 3 short strings each. Keep final_reflection under 80 words."
+  },
+  "protocol": {
+    "name": "interactive_discussion_stress8_n3",
+    "turn_order": "rotate",
+    "phases": [
+      {
+        "name": "private_test_design",
+        "kind": "private_reflection",
+        "prompt": "private_test_design",
+        "visibility": "private"
+      },
+      {
+        "name": "discussion_round_1",
+        "kind": "interactive_discussion",
+        "prompt": "interactive_discussion_turn",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "memory_update_1",
+        "kind": "private_judgment",
+        "prompt": "interaction_memory_update",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": ["participant_id", "phase", "assessment", "current_ranking", "confidence", "updates", "next_probe"]
+      },
+      {
+        "name": "discussion_round_2",
+        "kind": "interactive_discussion",
+        "prompt": "interactive_discussion_turn",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "memory_update_2",
+        "kind": "private_judgment",
+        "prompt": "interaction_memory_update",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": ["participant_id", "phase", "assessment", "current_ranking", "confidence", "updates", "next_probe"]
+      },
+      {
+        "name": "discussion_round_3",
+        "kind": "interactive_discussion",
+        "prompt": "interactive_discussion_turn",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "memory_update_3",
+        "kind": "private_judgment",
+        "prompt": "interaction_memory_update",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": ["participant_id", "phase", "assessment", "current_ranking", "confidence", "updates", "next_probe"]
+      },
+      {
+        "name": "discussion_round_4",
+        "kind": "interactive_discussion",
+        "prompt": "interactive_discussion_turn",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "memory_update_4",
+        "kind": "private_judgment",
+        "prompt": "interaction_memory_update",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": ["participant_id", "phase", "assessment", "current_ranking", "confidence", "updates", "next_probe"]
+      },
+      {
+        "name": "discussion_round_5",
+        "kind": "interactive_discussion",
+        "prompt": "interactive_discussion_turn",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "memory_update_5",
+        "kind": "private_judgment",
+        "prompt": "interaction_memory_update",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": ["participant_id", "phase", "assessment", "current_ranking", "confidence", "updates", "next_probe"]
+      },
+      {
+        "name": "discussion_round_6",
+        "kind": "interactive_discussion",
+        "prompt": "interactive_discussion_turn",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "memory_update_6",
+        "kind": "private_judgment",
+        "prompt": "interaction_memory_update",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": ["participant_id", "phase", "assessment", "current_ranking", "confidence", "updates", "next_probe"]
+      },
+      {
+        "name": "discussion_round_7",
+        "kind": "interactive_discussion",
+        "prompt": "interactive_discussion_turn",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "memory_update_7",
+        "kind": "private_judgment",
+        "prompt": "interaction_memory_update",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": ["participant_id", "phase", "assessment", "current_ranking", "confidence", "updates", "next_probe"]
+      },
+      {
+        "name": "discussion_round_8",
+        "kind": "interactive_discussion",
+        "prompt": "interactive_discussion_turn",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "memory_update_8",
+        "kind": "private_judgment",
+        "prompt": "interaction_memory_update",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": ["participant_id", "phase", "assessment", "current_ranking", "confidence", "updates", "next_probe"]
+      },
+      {
+        "name": "final_judgment",
+        "kind": "private_judgment",
+        "prompt": "final_judgment",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": ["participant_id", "phase", "ranking", "confidence", "criteria", "evidence", "uncertainties", "updates", "next_evidence_needed", "final_reflection"]
+      }
+    ]
+  }
+}

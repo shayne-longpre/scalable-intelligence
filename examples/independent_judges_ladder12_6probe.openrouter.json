@@ -1,0 +1,276 @@
+{
+  "name": "independent_judges_ladder12_6probe",
+  "run": {
+    "output_dir": "runs",
+    "max_context_turns": 40,
+    "max_parallel_calls": 12,
+    "max_model_calls": 280,
+    "max_reported_cost_usd": 20.0,
+    "structured_json_retries": 1,
+    "visible_text_retries": 1
+  },
+  "context": {
+    "mode": "private_memory",
+    "max_public_turns": 0,
+    "max_private_turns": 12,
+    "max_stream_turns": 8
+  },
+  "providers": [
+    {
+      "name": "openrouter",
+      "kind": "openrouter",
+      "api_key_env": "OPENROUTER_API_KEY",
+      "headers": {
+        "HTTP-Referer": "https://example.org/ai-council",
+        "X-Title": "AI Council 12-Model Judge Ladder"
+      },
+      "timeout_seconds": 300,
+      "request_retries": 0
+    }
+  ],
+  "models": [
+    {
+      "name": "judge_sol_56",
+      "provider": "openrouter",
+      "model": "openai/gpt-5.6-sol",
+      "params": {
+        "max_tokens": 7000,
+        "reasoning": { "effort": "xhigh" }
+      },
+      "recovery_params": {
+        "max_tokens": 1800,
+        "reasoning": { "effort": "none" }
+      }
+    },
+    {
+      "name": "judge_glm_45_air",
+      "provider": "openrouter",
+      "model": "z-ai/glm-4.5-air",
+      "params": {
+        "temperature": 0.3,
+        "max_tokens": 2400,
+        "reasoning": { "effort": "none" }
+      },
+      "recovery_params": {
+        "temperature": 0,
+        "max_tokens": 5000,
+        "reasoning": { "effort": "none" }
+      }
+    },
+    {
+      "name": "claude_fable_5",
+      "provider": "openrouter",
+      "model": "anthropic/claude-fable-5",
+      "params": {
+        "max_tokens": 5000,
+        "reasoning": { "effort": "medium" }
+      },
+      "recovery_params": {
+        "max_tokens": 1800,
+        "reasoning": { "effort": "none" }
+      }
+    },
+    {
+      "name": "gpt_54",
+      "provider": "openrouter",
+      "model": "openai/gpt-5.4",
+      "params": {
+        "max_tokens": 5000,
+        "reasoning": { "effort": "medium" }
+      },
+      "recovery_params": {
+        "max_tokens": 1800,
+        "reasoning": { "effort": "none" }
+      }
+    },
+    {
+      "name": "mistral_medium_35",
+      "provider": "openrouter",
+      "model": "mistralai/mistral-medium-3-5",
+      "params": {
+        "temperature": 0.3,
+        "max_tokens": 2200
+      },
+      "recovery_params": {
+        "temperature": 0,
+        "max_tokens": 3000
+      }
+    },
+    {
+      "name": "gpt_54_mini",
+      "provider": "openrouter",
+      "model": "openai/gpt-5.4-mini",
+      "params": {
+        "max_tokens": 5000,
+        "reasoning": { "effort": "medium" }
+      },
+      "recovery_params": {
+        "max_tokens": 1800,
+        "reasoning": { "effort": "none" }
+      }
+    },
+    {
+      "name": "gpt_5_mini",
+      "provider": "openrouter",
+      "model": "openai/gpt-5-mini",
+      "params": {
+        "max_tokens": 5000,
+        "reasoning": { "effort": "medium" }
+      },
+      "recovery_params": {
+        "max_tokens": 4000,
+        "reasoning": { "effort": "minimal" }
+      }
+    },
+    {
+      "name": "gemini_25_pro",
+      "provider": "openrouter",
+      "model": "google/gemini-2.5-pro",
+      "params": {
+        "temperature": 0.3,
+        "max_tokens": 5000,
+        "reasoning": { "effort": "medium" }
+      },
+      "recovery_params": {
+        "max_tokens": 8000,
+        "reasoning": { "effort": "low" }
+      }
+    },
+    {
+      "name": "gpt_oss_120b",
+      "provider": "openrouter",
+      "model": "openai/gpt-oss-120b",
+      "params": {
+        "temperature": 0.3,
+        "max_tokens": 5000,
+        "reasoning": { "effort": "medium" },
+        "provider": { "only": ["groq"], "allow_fallbacks": false }
+      },
+      "recovery_params": {
+        "max_tokens": 12000,
+        "reasoning": { "effort": "minimal" },
+        "provider": { "only": ["groq"], "allow_fallbacks": false }
+      }
+    },
+    {
+      "name": "llama_4_maverick",
+      "provider": "openrouter",
+      "model": "meta-llama/llama-4-maverick",
+      "params": {
+        "temperature": 0.3,
+        "max_tokens": 1800
+      },
+      "recovery_params": {
+        "temperature": 0,
+        "max_tokens": 3000
+      }
+    },
+    {
+      "name": "gpt_4o_2024_11_20",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-2024-11-20",
+      "params": {
+        "temperature": 0.3,
+        "max_tokens": 1800
+      },
+      "recovery_params": {
+        "temperature": 0,
+        "max_tokens": 3000
+      }
+    },
+    {
+      "name": "mistral_small_32_24b",
+      "provider": "openrouter",
+      "model": "mistralai/mistral-small-3.2-24b-instruct",
+      "params": {
+        "temperature": 0.3,
+        "max_tokens": 1800
+      },
+      "recovery_params": {
+        "temperature": 0,
+        "max_tokens": 3000
+      }
+    },
+    {
+      "name": "gpt_4_turbo",
+      "provider": "openrouter",
+      "model": "openai/gpt-4-turbo",
+      "params": {
+        "temperature": 0.3,
+        "max_tokens": 1800
+      },
+      "recovery_params": {
+        "temperature": 0,
+        "max_tokens": 3000
+      }
+    },
+    {
+      "name": "llama_31_8b",
+      "provider": "openrouter",
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "params": {
+        "temperature": 0.3,
+        "max_tokens": 1800
+      },
+      "recovery_params": {
+        "temperature": 0,
+        "max_tokens": 3000
+      }
+    }
+  ],
+  "participants": [
+    { "id": "P1", "model": "gpt_4_turbo", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P2", "model": "mistral_medium_35", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P3", "model": "gpt_oss_120b", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P4", "model": "claude_fable_5", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P5", "model": "llama_31_8b", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P6", "model": "gpt_5_mini", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P7", "model": "mistral_small_32_24b", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P8", "model": "gpt_54", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P9", "model": "llama_4_maverick", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P10", "model": "gpt_54_mini", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P11", "model": "gpt_4o_2024_11_20", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P12", "model": "gemini_25_pro", "system_prompt": "blind_evaluation_candidate" }
+  ],
+  "judges": [
+    { "id": "J1", "model": "judge_sol_56", "system_prompt": "independent_intelligence_judge" },
+    { "id": "J2", "model": "judge_glm_45_air", "system_prompt": "independent_intelligence_judge" }
+  ],
+  "monitor": {
+    "enabled": true,
+    "strict": false
+  },
+  "protocol": {
+    "name": "independent_judges_ladder12_common_battery",
+    "turn_order": "fixed",
+    "phases": [
+      {
+        "name": "judge_ranking",
+        "kind": "independent_judge_ranking",
+        "prompt": "independent_judge_probe",
+        "question_prompt": "independent_judge_probe",
+        "answer_prompt": "independent_judge_answer",
+        "assessment_prompt": "independent_judge_evidence_card",
+        "ranking_prompt": "independent_judge_ranking",
+        "rounds": 1,
+        "probes_per_round": 6,
+        "judgment_probe_counts": [2, 4, 6],
+        "preauthored_probe_file": "runs/20260719T034813Z_independent_judges_ladder12_6probe/transcript.jsonl",
+        "preauthored_answer_file": "runs/20260719T034813Z_independent_judges_ladder12_6probe/transcript.jsonl",
+        "preauthored_answer_participants": ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10", "P11", "P12"],
+        "preauthored_evidence_file": "runs/20260719T034813Z_independent_judges_ladder12_6probe/transcript.jsonl",
+        "preauthored_ranking_file": "runs/20260719T034813Z_independent_judges_ladder12_6probe/transcript.jsonl",
+        "adaptive_probes_per_round": 1,
+        "max_adaptive_candidates": 4,
+        "visibility": "private"
+      }
+    ]
+  },
+  "metadata": {
+    "design": "Two independent judges administer separate six-probe common batteries to a shuffled 12-model ladder.",
+    "probe_budget_ablation": "Fresh evidence cards and rankings use only the first 2, 4, or 6 probe-answer pairs; candidate calls are shared.",
+    "adaptivity": "Disabled in this one-round baseline. Later rounds can selectively follow up on the full-evidence ranking.",
+    "gold_prior": "data/model_catalog.openrouter.json",
+    "roster_selection_date": "2026-07-18"
+  }
+}

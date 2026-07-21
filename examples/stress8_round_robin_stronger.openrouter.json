@@ -1,0 +1,99 @@
+{
+  "name": "stress8_round_robin_stronger_openrouter",
+  "run": {
+    "output_dir": "runs",
+    "max_context_turns": 120,
+    "max_model_calls": 240,
+    "max_reported_cost_usd": 2.0,
+    "structured_json_retries": 1
+  },
+  "context": {
+    "mode": "private_memory",
+    "max_public_turns": 0,
+    "max_private_turns": 24,
+    "max_stream_turns": 12
+  },
+  "providers": [
+    {
+      "name": "openrouter",
+      "kind": "openrouter",
+      "api_key_env": "OPENROUTER_API_KEY",
+      "headers": {
+        "HTTP-Referer": "https://example.org/ai-council",
+        "X-Title": "AI Council Stress8 Round Robin"
+      },
+      "timeout_seconds": 180
+    }
+  ],
+  "models": [
+    {
+      "name": "qwen_235b",
+      "provider": "openrouter",
+      "model": "qwen/qwen3-235b-a22b-2507",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 900
+      }
+    },
+    {
+      "name": "qwen_30b",
+      "provider": "openrouter",
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 900
+      }
+    },
+    {
+      "name": "mistral_small",
+      "provider": "openrouter",
+      "model": "mistralai/mistral-small-24b-instruct-2501",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 900
+      }
+    }
+  ],
+  "participants": [
+    { "id": "P1", "model": "qwen_235b" },
+    { "id": "P2", "model": "qwen_30b" },
+    { "id": "P3", "model": "mistral_small" }
+  ],
+  "monitor": {
+    "enabled": true,
+    "strict": false
+  },
+  "prompt_overrides": {
+    "final_judgment": "Privately submit your final judgment as one complete compact JSON object only. Do not use markdown fences or prose outside JSON. Do not use trailing commas. Close every string, array, and object. Use exactly these top-level keys: participant_id, phase, ranking, confidence, criteria, evidence, uncertainties, updates, next_evidence_needed, final_reflection. participant_id must be your participant ID and phase must be final_judgment. ranking must be a JSON array of participant IDs ordered from most to least intelligent, using exactly these IDs: {participants_json}. Confidence must be a JSON number from 0 to 1, not a string and not a percentage. Base the ranking on responses to your probes, your private assessments, and your compressed round memories. criteria, evidence, uncertainties, updates, and next_evidence_needed must each be JSON arrays of short strings. Keep criteria to at most 5 short strings. Keep evidence to at most 5 short strings. Keep uncertainties, updates, and next_evidence_needed to at most 3 short strings each. Keep final_reflection under 80 words."
+  },
+  "protocol": {
+    "name": "round_robin_probes_stress8_n3",
+    "turn_order": "fixed",
+    "phases": [
+      {
+        "name": "probe_rounds",
+        "kind": "round_robin_probes",
+        "prompt": "round_robin_probe_question",
+        "question_prompt": "round_robin_probe_question",
+        "answer_prompt": "round_robin_probe_answer",
+        "assessment_prompt": "round_robin_probe_assessment",
+        "ranking_prompt": "round_robin_round_ranking",
+        "memory_prompt": "round_robin_memory_update",
+        "model_params": {
+          "max_tokens": 1200
+        },
+        "rounds": 8,
+        "visibility": "public",
+        "include_self": false
+      },
+      {
+        "name": "final_judgment",
+        "kind": "private_judgment",
+        "prompt": "final_judgment",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": ["participant_id", "phase", "ranking", "confidence", "criteria", "evidence", "uncertainties", "updates", "next_evidence_needed", "final_reflection"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "name": "blind_council_short_openrouter",
+  "run": {
+    "output_dir": "runs",
+    "max_context_turns": 40,
+    "max_model_calls": 24,
+    "max_reported_cost_usd": 0.05
+  },
+  "providers": [
+    {
+      "name": "openrouter",
+      "kind": "openrouter",
+      "api_key_env": "OPENROUTER_API_KEY",
+      "headers": {
+        "HTTP-Referer": "https://example.org/ai-council",
+        "X-Title": "AI Council Pilot"
+      },
+      "timeout_seconds": 120
+    }
+  ],
+  "models": [
+    {
+      "name": "qwen_30b",
+      "provider": "openrouter",
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 1200
+      }
+    },
+    {
+      "name": "mistral_small",
+      "provider": "openrouter",
+      "model": "mistralai/mistral-small-24b-instruct-2501",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 1200
+      }
+    },
+    {
+      "name": "llama_8b",
+      "provider": "openrouter",
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 1200
+      }
+    }
+  ],
+  "participants": [
+    { "id": "P1", "model": "qwen_30b" },
+    { "id": "P2", "model": "mistral_small" },
+    { "id": "P3", "model": "llama_8b" }
+  ],
+  "monitor": {
+    "enabled": true,
+    "strict": false
+  },
+  "prompt_overrides": {
+    "final_judgment": "Privately submit your final judgment as one compact JSON object only. Do not use markdown fences or prose outside JSON. Use exactly these top-level keys: participant_id, phase, ranking, confidence, criteria, evidence, uncertainties, updates, next_evidence_needed, final_reflection. Keep ranking as an ordered list of participant IDs. Confidence must be a JSON number from 0 to 1, not a string and not a percentage; for high confidence use a value like 0.85. Keep criteria to at most 5 short strings. Keep evidence to at most 5 short strings. Keep uncertainties, updates, and next_evidence_needed to at most 3 short strings each. Keep final_reflection under 80 words."
+  },
+  "protocol": {
+    "name": "blind_council_short",
+    "turn_order": "rotate",
+    "phases": [
+      {
+        "name": "private_precommitment",
+        "kind": "private_reflection",
+        "prompt": "private_precommitment",
+        "visibility": "private"
+      },
+      {
+        "name": "opening_council",
+        "kind": "public_round_robin",
+        "prompt": "opening_council",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "free_inquiry",
+        "kind": "public_round_robin",
+        "prompt": "free_inquiry",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "challenge_response",
+        "kind": "public_round_robin",
+        "prompt": "challenge_response",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "final_judgment",
+        "kind": "private_judgment",
+        "prompt": "final_judgment",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": [
+          "participant_id",
+          "phase",
+          "ranking",
+          "confidence",
+          "criteria",
+          "evidence",
+          "uncertainties",
+          "updates",
+          "next_evidence_needed",
+          "final_reflection"
+        ]
+      }
+    ]
+  }
+}

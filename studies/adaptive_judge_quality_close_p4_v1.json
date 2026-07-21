@@ -1,0 +1,124 @@
+{
+  "name": "adaptive_judge_quality_close_p4_v1",
+  "status": "completed_pilot",
+  "base_config": "examples/adaptive_judge_quality_close_p4.openrouter.json",
+  "research_question": "How reliably do strong and medium AI judges separate the same close frontier roster when each controls its own probing strategy?",
+  "protocol": {
+    "probe_schedule": [4, 1, 1, 1],
+    "adaptive_targeting": "judge_selected",
+    "max_adaptive_candidates": 3,
+    "judge_isolation": true,
+    "fresh_candidate_context_per_probe": true,
+    "candidate_answer_limit_words": 600
+  },
+  "freeze": {
+    "prompt_version": "2026-07-20-adaptive-waves-v4",
+    "prompt_sha256": "d1269699ed87983bf4da231eff3f0454510a28e37338f14db36970a19a20f8e3",
+    "taxonomy_version": "2026-07-20.4",
+    "taxonomy_sha256": "612d17d8bf811bb7e0ce7d039c14c7702e41aa094b5da6d47f80d6f8b2b3fc70",
+    "audit_schema": "2026-07-20.3",
+    "change_policy": "Do not change prompts, taxonomy, roster, or schedule between accepted replications. Restart the batch after any critical protocol or runtime fix."
+  },
+  "judges": [
+    {
+      "id": "J1",
+      "model": "openai/gpt-5.6-sol",
+      "condition": "strong"
+    },
+    {
+      "id": "J2",
+      "model": "openai/gpt-5.4-mini",
+      "condition": "medium"
+    }
+  ],
+  "candidates": [
+    "anthropic/claude-fable-5",
+    "openai/gpt-5.4",
+    "google/gemini-3.5-flash",
+    "anthropic/claude-sonnet-4.6"
+  ],
+  "external_prior_order": [
+    "anthropic/claude-fable-5",
+    "openai/gpt-5.4",
+    "google/gemini-3.5-flash",
+    "anthropic/claude-sonnet-4.6"
+  ],
+  "replicates": [
+    {
+      "id": "r1",
+      "candidate_mapping": {
+        "P1": "claude_sonnet_46",
+        "P2": "claude_fable_5",
+        "P3": "gemini_35_flash",
+        "P4": "gpt_54"
+      }
+    },
+    {
+      "id": "r2",
+      "candidate_mapping": {
+        "P1": "gpt_54",
+        "P2": "claude_sonnet_46",
+        "P3": "claude_fable_5",
+        "P4": "gemini_35_flash"
+      }
+    },
+    {
+      "id": "r3",
+      "candidate_mapping": {
+        "P1": "gemini_35_flash",
+        "P2": "gpt_54",
+        "P3": "claude_sonnet_46",
+        "P4": "claude_fable_5"
+      }
+    }
+  ],
+  "primary_outcomes": [
+    "pairwise_accuracy_against_external_prior",
+    "kendall_tau_against_external_prior",
+    "inter_judge_agreement",
+    "probe_validity",
+    "adaptive_target_coverage",
+    "ranking_churn_by_round",
+    "confidence_change_by_round",
+    "provider_reported_spend"
+  ],
+  "interpretation_note": "Because each judge authors its own probes, this study measures complete evaluator capability: test design, evidence interpretation, adaptivity, and ranking. A later shared-evidence control can isolate judgment quality alone.",
+  "results": {
+    "accepted_runs": [
+      "runs/20260720T220852Z_adaptive_judge_quality_close_p4_r1",
+      "runs/20260720T230711Z_adaptive_judge_quality_close_p4_r2",
+      "runs/20260720T234726Z_adaptive_judge_quality_close_p4_r3"
+    ],
+    "excluded_attempts": [
+      {
+        "run": "runs/20260720T211602Z_adaptive_judge_quality_close_p4_r1",
+        "reason": "embedded_provider_error_before_retry_fix"
+      },
+      {
+        "run": "runs/20260720T212209Z_adaptive_judge_quality_close_p4_r1",
+        "reason": "structured_repair_changed_fixed_judge_identity"
+      },
+      {
+        "run": "runs/20260720T225254Z_adaptive_judge_quality_close_p4_r2",
+        "reason": "candidate_route_content_filtered_a_common_probe"
+      },
+      {
+        "run": "runs/20260720T230624Z_adaptive_judge_quality_close_p4_r2_resume1",
+        "reason": "checkpoint_confirmed_the_same_route_content_filter"
+      }
+    ],
+    "accepted_model_calls": 272,
+    "accepted_reported_cost_usd": 17.2588735,
+    "excluded_model_calls": 121,
+    "excluded_reported_cost_usd": 7.287047,
+    "posthoc_taxonomy_version": "2026-07-21.5",
+    "posthoc_taxonomy_sha256": "8a537642694ba6cf1029c883767e77ec6f99001a33bf1895429192eb5e12e763",
+    "report_card": "runs/report_cards/adaptive_judge_quality_close_p4_v3/report_card.html",
+    "run_report_cards": {
+      "r1": "runs/report_cards/adaptive_judge_quality_close_p4_r1/report_card.html",
+      "r2": "runs/report_cards/adaptive_judge_quality_close_p4_r2/report_card.html",
+      "r3": "runs/report_cards/adaptive_judge_quality_close_p4_r3/report_card.html"
+    },
+    "analysis": "docs/pilot_analysis_adaptive_judge_quality_20260721.md"
+  }
+}

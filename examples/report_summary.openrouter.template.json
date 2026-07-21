@@ -1,0 +1,16 @@
+{
+  "provider": {
+    "name": "openrouter",
+    "kind": "openrouter",
+    "api_key_env": "OPENROUTER_API_KEY",
+    "headers": {
+      "HTTP-Referer": "https://example.org/ai-council",
+      "X-Title": "AI Council Report Summary"
+    }
+  },
+  "model": "REPLACE_WITH_OPENROUTER_MODEL",
+  "params": {
+    "temperature": 0.2,
+    "max_tokens": 320
+  }
+}

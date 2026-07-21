@@ -1,0 +1,168 @@
+{
+  "name": "blind_council_mock",
+  "run": {
+    "output_dir": "runs",
+    "max_context_turns": 80
+  },
+  "providers": [
+    {
+      "name": "mock",
+      "kind": "mock"
+    }
+  ],
+  "models": [
+    {
+      "name": "mock_frontier_a",
+      "provider": "mock",
+      "model": "mock:frontier-a",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 900
+      }
+    },
+    {
+      "name": "mock_frontier_b",
+      "provider": "mock",
+      "model": "mock:frontier-b",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 900
+      }
+    },
+    {
+      "name": "mock_mid_a",
+      "provider": "mock",
+      "model": "mock:mid-a",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 900
+      }
+    },
+    {
+      "name": "mock_mid_b",
+      "provider": "mock",
+      "model": "mock:mid-b",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 900
+      }
+    },
+    {
+      "name": "mock_small",
+      "provider": "mock",
+      "model": "mock:small",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 900
+      }
+    },
+    {
+      "name": "mock_open_weight",
+      "provider": "mock",
+      "model": "mock:open-weight",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 900
+      }
+    },
+    {
+      "name": "mock_frontier_a_limited",
+      "provider": "mock",
+      "model": "mock:frontier-a-limited",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 500
+      }
+    }
+  ],
+  "participants": [
+    { "id": "P1", "model": "mock_frontier_a" },
+    { "id": "P2", "model": "mock_frontier_b" },
+    { "id": "P3", "model": "mock_mid_a" },
+    { "id": "P4", "model": "mock_mid_b" },
+    { "id": "P5", "model": "mock_small" },
+    { "id": "P6", "model": "mock_open_weight" },
+    { "id": "P7", "model": "mock_frontier_a_limited" }
+  ],
+  "monitor": {
+    "enabled": true,
+    "strict": false
+  },
+  "protocol": {
+    "name": "blind_council_baseline",
+    "turn_order": "fixed",
+    "phases": [
+      {
+        "name": "private_precommitment",
+        "kind": "private_reflection",
+        "prompt": "private_precommitment",
+        "visibility": "private"
+      },
+      {
+        "name": "opening_council",
+        "kind": "public_round_robin",
+        "prompt": "opening_council",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "free_inquiry",
+        "kind": "public_round_robin",
+        "prompt": "free_inquiry",
+        "rounds": 4,
+        "visibility": "public"
+      },
+      {
+        "name": "checkpoint_ranking",
+        "kind": "private_judgment",
+        "prompt": "checkpoint_ranking",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": [
+          "participant_id",
+          "phase",
+          "ranking",
+          "confidence",
+          "criteria",
+          "evidence",
+          "uncertainties",
+          "updates",
+          "next_evidence_needed"
+        ]
+      },
+      {
+        "name": "focused_challenge",
+        "kind": "public_round_robin",
+        "prompt": "focused_challenge",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "deliberation",
+        "kind": "public_round_robin",
+        "prompt": "deliberation",
+        "rounds": 2,
+        "visibility": "public"
+      },
+      {
+        "name": "final_judgment",
+        "kind": "private_judgment",
+        "prompt": "final_judgment",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": [
+          "participant_id",
+          "phase",
+          "ranking",
+          "confidence",
+          "criteria",
+          "evidence",
+          "uncertainties",
+          "updates",
+          "next_evidence_needed",
+          "final_reflection"
+        ]
+      }
+    ]
+  }
+}

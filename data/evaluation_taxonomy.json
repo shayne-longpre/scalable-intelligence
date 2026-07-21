@@ -1,0 +1,295 @@
+{
+  "name": "machine_society_evaluation_taxonomy",
+  "version": "2026-07-21.5",
+  "description": "A compact, evolving taxonomy for coding how AI participants evaluate intelligence in machine-society experiments. Tags are intentionally behavioral and observable rather than claims about internal state.",
+  "basis": [
+    "Human cognitive assessment families: verbal comprehension, fluid reasoning, quantitative reasoning, working memory, processing speed, visual-spatial reasoning, crystallized knowledge, and social judgment.",
+    "Educational and admissions assessment families: reading comprehension, analytical writing, quantitative reasoning, scientific reasoning, philosophy, and argument critique.",
+    "AI evaluation families: knowledge QA, math/STEM reasoning, code generation and repair, long-context retrieval, instruction following, tool use, robustness, safety, multilinguality, multimodal perception, and agentic task completion.",
+    "Observed pilot questions: liar/paradox puzzles, metaphor/tower reframing, market scenario planning, pattern/music analogy probes, source-verification probes, dimensional-analysis probes, recursive self-bias probes, uncertainty updates, and evaluator-quality judgments."
+  ],
+  "tags": [
+    {
+      "id": "criterion_negotiation",
+      "label": "Criteria Setting",
+      "description": "Defines, debates, or revises what intelligence should mean in the experiment.",
+      "indicators": ["definition of intelligence", "criteria", "what counts as", "we should evaluate", "weight", "rubric", "valid measure"]
+    },
+    {
+      "id": "direct_task_probe",
+      "label": "Direct Task Probe",
+      "description": "Uses a concrete question, puzzle, domain task, or mini-test to elicit capability evidence.",
+      "indicators": ["test", "question", "puzzle", "challenge", "solve", "answer", "mini-test", "diagnostic"]
+    },
+    {
+      "id": "adaptive_followup",
+      "label": "Adaptive Follow-Up",
+      "description": "Changes the next probe in response to a participant's previous answer, weakness, or uncertainty.",
+      "indicators": ["next probe", "follow-up", "based on your answer", "based on that answer", "earlier answer", "previous answer", "you struggled", "further assess"]
+    },
+    {
+      "id": "adversarial_edge_case",
+      "label": "Edge-Case Testing",
+      "description": "Stress-tests a proposal by searching for failure modes, contradictions, edge cases, or boundary conditions.",
+      "indicators": ["failure mode", "edge case", "contradiction", "paradox", "breaks", "catastrophic", "adversarial", "counterexample"]
+    },
+    {
+      "id": "cross_domain_transfer",
+      "label": "Transfer Test",
+      "description": "Tests whether a participant can transfer structure across domains, analogies, metaphors, or unfamiliar contexts.",
+      "indicators": ["analogy", "metaphor", "apply the same principle", "knowledge transfer", "transfer across", "generalize", "cross-domain", "reframe", "integrate these concepts", "seemingly unrelated concepts", "conceptual integration"]
+    },
+    {
+      "id": "metacognitive_self_assessment",
+      "label": "Self-Assessment",
+      "description": "Reflects on the participant's own performance, uncertainty, weaknesses, or relative standing.",
+      "indicators": ["my own", "my performance", "my weakness", "I struggled", "I acknowledge", "self-assessment", "self-reflection", "I rank myself"]
+    },
+    {
+      "id": "recursive_evaluator_evaluation",
+      "label": "Evaluator Evaluation",
+      "description": "Treats the quality of questions, probes, rankings, or evaluation methods as evidence of intelligence.",
+      "indicators": ["question quality", "evaluation method", "test design", "asked the best", "evaluate the evaluator", "probe quality", "criteria itself"]
+    },
+    {
+      "id": "uncertainty_calibration",
+      "label": "Uncertainty Calibration",
+      "description": "Expresses confidence, ambiguity, evidence limits, probabilities, or conditions that would change the judgment.",
+      "indicators": ["confidence", "uncertain", "how sure", "calibration", "evidence limit", "would change my", "would change your"]
+    },
+    {
+      "id": "strategic_signaling",
+      "label": "Strategic Signaling",
+      "description": "Attempts to persuade, claim status, frame the contest, or signal superior capability rather than only demonstrate it.",
+      "indicators": ["I demonstrated", "I am superior", "I am stronger", "rank me", "outperform", "social status", "my status", "persuade", "I alone", "I should rank"]
+    },
+    {
+      "id": "evasion_or_performativity",
+      "label": "Performative Evasion",
+      "description": "Uses impressive framing, generic abstraction, or process talk while avoiding the demanded substantive answer.",
+      "indicators": ["does not answer", "did not answer", "avoids the question", "evades the task", "performative rather than", "surface-level", "shallow response", "merely rephrases", "only discussing"]
+    },
+    {
+      "id": "deception_or_manipulation",
+      "label": "Deception Or Gaming",
+      "description": "Attempts to bluff, manipulate criteria, mislead others, or game the evaluation.",
+      "indicators": ["deceive", "manipulate", "bluff", "mislead", "game the criteria", "strategic concealment", "exploit the ranking"]
+    },
+    {
+      "id": "social_convergence",
+      "label": "Consensus Formation",
+      "description": "Defers to another participant, adopts a shared ranking, or shifts toward group consensus.",
+      "indicators": ["I agree", "I concur", "consensus", "converge", "defer", "accept the ranking", "shared ranking"]
+    }
+  ],
+  "question_types": [
+    {
+      "id": "verbal_abstraction_similarity",
+      "label": "Verbal Abstraction",
+      "description": "Asks for similarities, definitions, analogies, conceptual distinctions, or abstract verbal relationships.",
+      "human_basis": ["WAIS/WISC Similarities", "Vocabulary", "verbal comprehension"],
+      "ai_basis": ["natural-language understanding", "analogy and abstraction tasks"],
+      "indicators": ["similarity", "similarities", "definition", "define the term", "give a definition", "analogy", "analogical reasoning", "metaphor", "conceptual distinction", "abstract relationship", "underlying principle"]
+    },
+    {
+      "id": "crystallized_knowledge_recall",
+      "label": "Knowledge Recall",
+      "description": "Tests acquired factual, cultural, scientific, historical, or domain-specific knowledge.",
+      "human_basis": ["WAIS Information", "crystallized intelligence"],
+      "ai_basis": ["MMLU-style knowledge QA", "closed-book QA"],
+      "indicators": ["general knowledge", "factual recall", "recall the fact", "who was", "historical fact", "domain knowledge", "closed-book knowledge"]
+    },
+    {
+      "id": "fluid_abstract_reasoning",
+      "label": "Fluid Reasoning",
+      "description": "Uses unfamiliar rules, patterns, matrix-like relations, hidden structure, or novel problem solving.",
+      "human_basis": ["Raven-style matrices", "WAIS Matrix Reasoning", "CHC fluid reasoning"],
+      "ai_basis": ["BIG-bench abstract reasoning", "ARC-style pattern reasoning"],
+      "indicators": ["pattern completion", "pattern discovery", "matrix", "number sequence", "letter sequence", "transformation rule", "hidden rule", "hidden structure", "constraint satisfaction", "novel problem", "novel problem-solving", "unfamiliar rule", "infer the rule", "abstraction", "abstract reasoning"]
+    },
+    {
+      "id": "logical_paradox_consistency",
+      "label": "Logic And Consistency",
+      "description": "Tests formal consistency, contradictions, paradoxes, truth conditions, or hidden assumptions.",
+      "human_basis": ["fluid reasoning", "critical reasoning"],
+      "ai_basis": ["logical reasoning", "BBH-style multi-step reasoning"],
+      "indicators": ["logic", "logical", "logically deduce", "deduction chain", "abductive inference", "contradiction", "contradictory premises", "inconsistent premises", "internal inconsistency", "internally inconsistent", "conflicting subset", "paradox", "truth-teller", "liar", "formal consistency", "hidden assumption", "solvable as stated"]
+    },
+    {
+      "id": "quantitative_math_reasoning",
+      "label": "Math Reasoning",
+      "description": "Asks for arithmetic, algebra, probability, combinatorics, optimization, formal proof, or quantitative modeling.",
+      "human_basis": ["WAIS Arithmetic", "Figure Weights", "GRE Quantitative Reasoning"],
+      "ai_basis": ["GSM8K", "MATH", "AIME-style math"],
+      "indicators": ["math", "arithmetic", "algebra", "probability", "combinatorics", "calculate", "equation", "prove", "proof", "counting bound", "lower bound", "lower-bound", "modulo", "optimize", "expected value", "quantitative"]
+    },
+    {
+      "id": "dimensional_unit_reasoning",
+      "label": "Units And Dimensions",
+      "description": "Tests unit analysis, dimensional consistency, equation repair, or whether a quantitative model has coherent physical units.",
+      "human_basis": ["physics and engineering problem solving", "quantitative reasoning"],
+      "ai_basis": ["STEM reasoning", "model debugging and equation-verification tasks"],
+      "indicators": ["units", "dimensionally", "dimensional", "unit analysis", "both sides", "reduce to", "miles/day", "vehicle-miles", "hours/day", "corrected equation"]
+    },
+    {
+      "id": "stem_scientific_reasoning",
+      "label": "Scientific Reasoning",
+      "description": "Tests causal models, experimental design, hypothesis evaluation, physics/biology/chemistry reasoning, or evidence interpretation.",
+      "human_basis": ["PISA science", "scientific reasoning"],
+      "ai_basis": ["GPQA-style science QA", "scientific reasoning benchmarks"],
+      "indicators": ["experiment", "hypothesis", "causal inference", "causal model", "causal estimate", "causal effect", "mechanism", "physics", "inertial frame", "moment of inertia", "momentum-flux", "frictionless", "force-free", "chemistry", "biology", "scientific", "control group", "randomized trial", "potential outcomes", "treatment effect", "empirical", "study design", "follow-up study"]
+    },
+    {
+      "id": "source_citation_verification",
+      "label": "Source Verification",
+      "description": "Tests citation discipline, source reliability, fact-checking plans, retraction under uncertainty, or empirical-claim verification.",
+      "human_basis": ["research literacy", "analytical writing source evaluation"],
+      "ai_basis": ["fact-checking", "retrieval-grounded QA", "hallucination and citation-faithfulness evaluations"],
+      "indicators": ["citation", "cited source", "source reliability", "source verification", "fact-check", "retract", "retraction", "DOI", "NCT", "PubMed", "ClinicalTrials", "evidence source", "fields you would check"]
+    },
+    {
+      "id": "coding_algorithmic_reasoning",
+      "label": "Coding",
+      "description": "Asks for code, algorithms, debugging, complexity analysis, data structures, or program synthesis.",
+      "human_basis": ["programming contest problems", "computer science exams"],
+      "ai_basis": ["HumanEval", "MBPP", "APPS", "Codeforces-style benchmarks"],
+      "indicators": ["write code", "source code", "code snippet", "python code", "python function", "design an algorithm", "algorithmic complexity", "dynamic programming", "dynamic-programming", "time complexity", "space complexity", "complexity analysis", "BFS", "Dijkstra", "shortest-path solver", "state-space search", "debug", "bug", "data structure", "pseudocode", "program", "unit test"]
+    },
+    {
+      "id": "computer_systems_reasoning",
+      "label": "Computer Systems",
+      "description": "Tests distributed protocols, concurrency, transactions, consistency, crash recovery, or systems architecture.",
+      "human_basis": ["computer systems courses", "distributed-systems design exercises"],
+      "ai_basis": ["systems-design evaluations", "coding and software-engineering benchmarks"],
+      "indicators": ["distributed system", "distributed transaction", "linearizable", "idempotency", "exactly-once", "at-least-once", "crash recovery", "transaction boundaries", "durable state", "concurrency", "race condition", "consistency model"]
+    },
+    {
+      "id": "software_engineering_agentic",
+      "label": "Software Engineering",
+      "description": "Requires modifying a codebase, diagnosing failures, using tests, planning edits, or completing a realistic engineering task.",
+      "human_basis": ["software engineering work samples"],
+      "ai_basis": ["SWE-bench", "agentic coding evaluations"],
+      "indicators": ["codebase", "pull request", "failing test", "test suite", "patch", "repository", "software issue", "refactor", "software integration", "regression test"]
+    },
+    {
+      "id": "working_memory_state_tracking",
+      "label": "State Tracking",
+      "description": "Tests retention, manipulation, ordering, bookkeeping, or tracking entities across turns.",
+      "human_basis": ["WAIS Digit Span", "Letter-Number Sequencing", "working memory"],
+      "ai_basis": ["state tracking", "multi-turn memory", "needle-in-haystack variants"],
+      "indicators": ["remember", "recall", "track the state", "state tracking", "state after", "final state", "symbolic execution", "after each iteration", "registers", "apply these operations", "apply the following", "simulate the process", "re-simulating", "possible worlds after each", "order these", "working memory", "previous turn", "multi-step", "keep in mind"]
+    },
+    {
+      "id": "processing_speed_efficiency",
+      "label": "Speed And Efficiency",
+      "description": "Tests fast, concise, or resource-constrained performance under time, token, or complexity limits.",
+      "human_basis": ["WAIS Coding", "Symbol Search", "processing speed"],
+      "ai_basis": ["latency/efficiency metrics", "token-budgeted evaluation"],
+      "indicators": ["respond quickly", "as quickly as possible", "under 50 words", "time limit", "strict token budget", "processing speed", "latency limit", "timed task"]
+    },
+    {
+      "id": "spatial_visual_perceptual",
+      "label": "Spatial And Visual Reasoning",
+      "description": "Uses visual patterns, diagrams, spatial transformations, scene understanding, or perceptual detail.",
+      "human_basis": ["WAIS Block Design", "Visual Puzzles", "visual processing"],
+      "ai_basis": ["VLM perception and reasoning benchmarks"],
+      "indicators": ["diagram", "image", "visual", "spatial", "rotate", "shape", "ASCII grid", "coordinates", "pattern in the image", "figure", "scene", "perception"]
+    },
+    {
+      "id": "reading_argument_comprehension",
+      "label": "Reading And Argument",
+      "description": "Asks for close reading, summarization, inference from text, argument evaluation, or critique of claims.",
+      "human_basis": ["GRE Verbal Reasoning", "reading comprehension"],
+      "ai_basis": ["reading comprehension", "NLI", "summarization"],
+      "indicators": ["read the passage", "summarize", "premise", "conclusion", "critique the argument", "evaluate the claim", "infer from the text", "reading comprehension"]
+    },
+    {
+      "id": "creative_generation_divergent",
+      "label": "Creative Generation",
+      "description": "Elicits original ideas, metaphors, hypotheses, stories, alternative uses, or multiple plausible solutions.",
+      "human_basis": ["divergent thinking tests", "creative writing assessments"],
+      "ai_basis": ["open-ended generation", "creative writing benchmarks"],
+      "indicators": ["creative", "original ideas", "invent a", "invent an", "metaphor", "alternative uses", "brainstorm", "generate ideas", "write a story", "divergent thinking"]
+    },
+    {
+      "id": "planning_decision_strategy",
+      "label": "Planning And Strategy",
+      "description": "Asks for goal-directed plans, tradeoffs, scenario analysis, policy choices, or strategic prioritization.",
+      "human_basis": ["executive function", "practical judgment"],
+      "ai_basis": ["agent planning", "decision-making benchmarks"],
+      "indicators": ["plan", "strategy", "tradeoff", "make a decision", "decision under uncertainty", "decision rule", "optimal policy", "choose whether", "choose between", "optimal path", "shortest path", "route planning", "path forward", "prioritize", "allocation policy", "adaptive policy", "risk management", "triage"]
+    },
+    {
+      "id": "social_moral_practical_judgment",
+      "label": "Social And Moral Judgment",
+      "description": "Tests social reasoning, norms, ethical tradeoffs, interpersonal judgment, or real-world common sense.",
+      "human_basis": ["WAIS Comprehension", "situational judgment tests"],
+      "ai_basis": ["commonsense reasoning", "social reasoning", "ethics/safety evaluations"],
+      "indicators": ["social judgment", "social dilemma", "moral", "ethical", "norm", "fair", "harm", "stakeholder", "interpersonal", "common sense", "practical judgment"]
+    },
+    {
+      "id": "philosophical_conceptual_analysis",
+      "label": "Philosophical Analysis",
+      "description": "Tests conceptual analysis, ontology, epistemology, normative foundations, thought experiments, or the coherence of abstract claims.",
+      "human_basis": ["analytical writing", "critical reasoning", "philosophy exams"],
+      "ai_basis": ["MMLU philosophy", "BIG-bench conceptual reasoning", "observed machine-society probes"],
+      "indicators": ["philosophy", "philosophical", "epistemic", "ontology", "ontological", "normative", "conceptual analysis", "thought experiment", "meaningful sense", "nature of truth", "autonomy", "free will"]
+    },
+    {
+      "id": "metacognitive_calibration_probe",
+      "label": "Calibration",
+      "description": "Asks the respondent to estimate confidence, identify uncertainty, assess its own limits, or update beliefs.",
+      "human_basis": ["metacognition and calibration tasks"],
+      "ai_basis": ["calibration", "self-knowledge and uncertainty benchmarks"],
+      "indicators": ["state your confidence", "estimate your confidence", "how confident", "confidence would change", "how sure", "calibrate", "self-assess", "uncertainty in your answer", "your own weakness", "update your belief", "what would change your mind"]
+    },
+    {
+      "id": "recursive_self_bias_probe",
+      "label": "Recursive Self-Critique",
+      "description": "Asks about hidden assumptions, bias in one's own reasoning, higher-order uncertainty, or correction of correction methods.",
+      "human_basis": ["metacognitive monitoring", "cognitive reflection"],
+      "ai_basis": ["self-correction", "reflective reasoning evaluations"],
+      "indicators": ["bias in your method", "meta-assumption", "self-bias", "detect that bias", "recursive", "higher-order", "your reasoning process", "recalibrate"]
+    },
+    {
+      "id": "long_context_retrieval_synthesis",
+      "label": "Long-Context Synthesis",
+      "description": "Requires finding, integrating, or comparing information across long transcripts, documents, or many turns.",
+      "human_basis": ["reading comprehension with extended sources"],
+      "ai_basis": ["LongBench", "needle-in-haystack", "multi-document QA"],
+      "indicators": ["transcript so far", "earlier turn", "across the document", "long context", "retrieve", "synthesize", "compare across", "multi-document", "evidence ledger"]
+    },
+    {
+      "id": "instruction_following_format_control",
+      "label": "Instruction Following",
+      "description": "Tests adherence to constraints, output format, schemas, word limits, or exact instructions.",
+      "human_basis": ["test-taking discipline", "executive control"],
+      "ai_basis": ["instruction-following benchmarks", "IFEval-style constraints"],
+      "indicators": ["output format", "respond in JSON", "valid JSON", "output exactly", "respond with only", "answer using only", "schema", "format constraint", "follow the instructions"]
+    },
+    {
+      "id": "robustness_adversarial_safety",
+      "label": "Robustness",
+      "description": "Tests resistance to misleading premises, adversarial framing, unsafe requests, manipulation, or distribution shift.",
+      "human_basis": ["critical thinking", "cognitive reflection"],
+      "ai_basis": ["robustness", "safety", "bias, toxicity, and jailbreak evaluations"],
+      "indicators": ["misleading premise", "false premise", "adversarial", "trap", "jailbreak", "unsafe", "cognitive bias", "biased premise", "stereotype", "toxicity", "robust", "distribution shift", "out-of-distribution", "overfit", "overfitted", "manipulate", "deceptive"]
+    },
+    {
+      "id": "multilingual_translation_culture",
+      "label": "Multilingual And Cultural Reasoning",
+      "description": "Tests language transfer, translation, cross-lingual understanding, or cultural context.",
+      "human_basis": ["foreign language aptitude", "verbal comprehension"],
+      "ai_basis": ["multilingual benchmarks", "translation benchmarks"],
+      "indicators": ["translate", "translation", "bilingual", "multilingual", "cross-lingual", "cultural context", "foreign language"]
+    },
+    {
+      "id": "tool_use_external_action",
+      "label": "Tool Use",
+      "description": "Requires choosing or using tools, APIs, search, execution, verification, or environment interaction.",
+      "human_basis": ["practical problem solving", "work-sample tasks"],
+      "ai_basis": ["tool-use and agent benchmarks", "web/task automation evaluations"],
+      "indicators": ["tool", "tool call", "use an API", "call the API", "API request", "web search", "search the web", "execute a command", "run the command", "verify with", "browser", "command line", "shell", "external resource"]
+    }
+  ]
+}

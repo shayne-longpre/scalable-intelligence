@@ -1,0 +1,157 @@
+{
+  "name": "pair_adaptive_compact_openrouter",
+  "run": {
+    "output_dir": "runs",
+    "max_context_turns": 80,
+    "max_model_calls": 20,
+    "max_reported_cost_usd": 0.03
+  },
+  "context": {
+    "mode": "private_memory",
+    "max_public_turns": 2,
+    "max_private_turns": 12
+  },
+  "providers": [
+    {
+      "name": "openrouter",
+      "kind": "openrouter",
+      "api_key_env": "OPENROUTER_API_KEY",
+      "headers": {
+        "HTTP-Referer": "https://example.org/ai-council",
+        "X-Title": "AI Council Compact Pair Pilot"
+      },
+      "timeout_seconds": 120
+    }
+  ],
+  "models": [
+    {
+      "name": "qwen_30b",
+      "provider": "openrouter",
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 1000
+      }
+    },
+    {
+      "name": "mistral_small",
+      "provider": "openrouter",
+      "model": "mistralai/mistral-small-24b-instruct-2501",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 1000
+      }
+    }
+  ],
+  "participants": [
+    { "id": "P1", "model": "qwen_30b" },
+    { "id": "P2", "model": "mistral_small" }
+  ],
+  "monitor": {
+    "enabled": true,
+    "strict": false
+  },
+  "prompt_overrides": {
+    "final_judgment": "Privately submit your final judgment as one complete compact JSON object only. Do not use markdown fences or prose outside JSON. Do not use trailing commas. Close every string, array, and object. Use exactly these top-level keys: participant_id, phase, ranking, confidence, criteria, evidence, uncertainties, updates, next_evidence_needed, final_reflection. participant_id must be your participant ID and phase must be final_judgment. ranking must be a JSON array of participant IDs ordered from most to least intelligent, using exactly these IDs: {participants_json}. Confidence must be a JSON number from 0 to 1, not a string and not a percentage. criteria, evidence, uncertainties, updates, and next_evidence_needed must each be JSON arrays of short strings. Base the ranking on the full 1-1 dialogue and your private compact memories: questions asked, answers, follow-up probes, revisions, and changes in your judgment over rounds. Keep criteria to at most 5 short strings. Keep evidence to at most 5 short strings. Keep uncertainties, updates, and next_evidence_needed to at most 3 short strings each. Keep final_reflection under 80 words."
+  },
+  "protocol": {
+    "name": "pair_adaptive_k3_compact_memory",
+    "turn_order": "rotate",
+    "phases": [
+      {
+        "name": "private_test_design",
+        "kind": "private_reflection",
+        "prompt": "private_test_design",
+        "visibility": "private"
+      },
+      {
+        "name": "pair_round_1",
+        "kind": "public_round_robin",
+        "prompt": "pair_adaptive_probe",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "memory_update_1",
+        "kind": "private_judgment",
+        "prompt": "interaction_memory_update",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": [
+          "participant_id",
+          "phase",
+          "assessment",
+          "current_ranking",
+          "confidence",
+          "updates",
+          "next_probe"
+        ]
+      },
+      {
+        "name": "pair_round_2",
+        "kind": "public_round_robin",
+        "prompt": "pair_adaptive_probe",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "memory_update_2",
+        "kind": "private_judgment",
+        "prompt": "interaction_memory_update",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": [
+          "participant_id",
+          "phase",
+          "assessment",
+          "current_ranking",
+          "confidence",
+          "updates",
+          "next_probe"
+        ]
+      },
+      {
+        "name": "pair_round_3",
+        "kind": "public_round_robin",
+        "prompt": "pair_adaptive_probe",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "memory_update_3",
+        "kind": "private_judgment",
+        "prompt": "interaction_memory_update",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": [
+          "participant_id",
+          "phase",
+          "assessment",
+          "current_ranking",
+          "confidence",
+          "updates",
+          "next_probe"
+        ]
+      },
+      {
+        "name": "final_judgment",
+        "kind": "private_judgment",
+        "prompt": "final_judgment",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": [
+          "participant_id",
+          "phase",
+          "ranking",
+          "confidence",
+          "criteria",
+          "evidence",
+          "uncertainties",
+          "updates",
+          "next_evidence_needed",
+          "final_reflection"
+        ]
+      }
+    ]
+  }
+}

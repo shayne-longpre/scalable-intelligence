@@ -1,0 +1,131 @@
+{
+  "name": "blind_council_generated_tests_openrouter",
+  "run": {
+    "output_dir": "runs",
+    "max_context_turns": 80,
+    "max_model_calls": 40,
+    "max_reported_cost_usd": 0.05
+  },
+  "providers": [
+    {
+      "name": "openrouter",
+      "kind": "openrouter",
+      "api_key_env": "OPENROUTER_API_KEY",
+      "headers": {
+        "HTTP-Referer": "https://example.org/ai-council",
+        "X-Title": "AI Council Generated Tests Pilot"
+      },
+      "timeout_seconds": 120
+    }
+  ],
+  "models": [
+    {
+      "name": "qwen_30b",
+      "provider": "openrouter",
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 1000
+      }
+    },
+    {
+      "name": "mistral_small",
+      "provider": "openrouter",
+      "model": "mistralai/mistral-small-24b-instruct-2501",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 1000
+      }
+    },
+    {
+      "name": "llama_8b",
+      "provider": "openrouter",
+      "model": "meta-llama/llama-3.1-8b-instruct",
+      "params": {
+        "temperature": 0.7,
+        "max_tokens": 1000
+      }
+    }
+  ],
+  "participants": [
+    { "id": "P1", "model": "qwen_30b" },
+    { "id": "P2", "model": "mistral_small" },
+    { "id": "P3", "model": "llama_8b" }
+  ],
+  "monitor": {
+    "enabled": true,
+    "strict": false
+  },
+  "prompt_overrides": {
+    "final_judgment": "Privately submit your final judgment as one compact JSON object only. Do not use markdown fences or prose outside JSON. Use exactly these top-level keys: participant_id, phase, ranking, confidence, criteria, evidence, uncertainties, updates, next_evidence_needed, final_reflection. Keep ranking as an ordered list of participant IDs. Confidence must be a JSON number from 0 to 1, not a string and not a percentage; for high confidence use a value like 0.85. Base the ranking on participant-generated tests, answers, evaluations, follow-up probes, and revisions in the transcript. Keep criteria to at most 5 short strings. Keep evidence to at most 5 short strings. Keep uncertainties, updates, and next_evidence_needed to at most 3 short strings each. Keep final_reflection under 80 words."
+  },
+  "protocol": {
+    "name": "participant_generated_tests",
+    "turn_order": "rotate",
+    "phases": [
+      {
+        "name": "private_test_design",
+        "kind": "private_reflection",
+        "prompt": "private_test_design",
+        "visibility": "private"
+      },
+      {
+        "name": "public_test_proposal",
+        "kind": "public_round_robin",
+        "prompt": "public_test_proposal",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "test_application",
+        "kind": "public_test_matrix",
+        "prompt": "test_answer",
+        "visibility": "public",
+        "response_visibility": "private",
+        "source_phase": "public_test_proposal",
+        "include_self": true
+      },
+      {
+        "name": "test_evaluation",
+        "kind": "public_test_evaluation",
+        "prompt": "test_evaluation",
+        "visibility": "public",
+        "source_phase": "public_test_proposal",
+        "answer_phase": "test_application"
+      },
+      {
+        "name": "followup_probe",
+        "kind": "public_round_robin",
+        "prompt": "followup_probe",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "followup_response",
+        "kind": "public_round_robin",
+        "prompt": "followup_response",
+        "rounds": 1,
+        "visibility": "public"
+      },
+      {
+        "name": "final_judgment",
+        "kind": "private_judgment",
+        "prompt": "final_judgment",
+        "visibility": "private",
+        "require_json": true,
+        "required_keys": [
+          "participant_id",
+          "phase",
+          "ranking",
+          "confidence",
+          "criteria",
+          "evidence",
+          "uncertainties",
+          "updates",
+          "next_evidence_needed",
+          "final_reflection"
+        ]
+      }
+    ]
+  }
+}

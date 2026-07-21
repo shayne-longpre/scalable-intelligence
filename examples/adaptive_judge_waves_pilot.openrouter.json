@@ -1,0 +1,124 @@
+{
+  "name": "adaptive_judge_waves_p4_round_stress",
+  "run": {
+    "output_dir": "runs",
+    "max_context_turns": 20,
+    "max_parallel_calls": 4,
+    "max_model_calls": 75,
+    "max_reported_cost_usd": 10.0,
+    "structured_json_retries": 1,
+    "visible_text_retries": 1
+  },
+  "context": {
+    "mode": "private_memory",
+    "max_public_turns": 0,
+    "max_private_turns": 8,
+    "max_stream_turns": 4
+  },
+  "providers": [
+    {
+      "name": "openrouter",
+      "kind": "openrouter",
+      "api_key_env": "OPENROUTER_API_KEY",
+      "headers": {
+        "HTTP-Referer": "https://example.org/ai-council",
+        "X-Title": "AI Council Adaptive Judge Pilot"
+      },
+      "timeout_seconds": 180,
+      "request_retries": 2
+    }
+  ],
+  "models": [
+    {
+      "name": "judge_fable_5",
+      "provider": "openrouter",
+      "model": "anthropic/claude-fable-5",
+      "params": {
+        "max_tokens": 6000,
+        "reasoning": { "effort": "medium" }
+      },
+      "recovery_params": {
+        "max_tokens": 6000,
+        "reasoning": { "effort": "low" }
+      }
+    },
+    {
+      "name": "gpt_54",
+      "provider": "openrouter",
+      "model": "openai/gpt-5.4",
+      "params": {
+        "max_tokens": 6000,
+        "reasoning": { "effort": "medium" }
+      }
+    },
+    {
+      "name": "gpt_54_mini",
+      "provider": "openrouter",
+      "model": "openai/gpt-5.4-mini",
+      "params": {
+        "max_tokens": 6000,
+        "reasoning": { "effort": "medium" }
+      }
+    },
+    {
+      "name": "gemini_35_flash",
+      "provider": "openrouter",
+      "model": "google/gemini-3.5-flash",
+      "params": {
+        "temperature": 0.3,
+        "max_tokens": 6000,
+        "reasoning": { "effort": "medium" }
+      }
+    },
+    {
+      "name": "claude_sonnet_46",
+      "provider": "openrouter",
+      "model": "anthropic/claude-sonnet-4.6",
+      "params": {
+        "max_tokens": 6000,
+        "reasoning": { "effort": "medium" }
+      }
+    }
+  ],
+  "participants": [
+    { "id": "P1", "model": "gpt_54", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P2", "model": "gpt_54_mini", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P3", "model": "gemini_35_flash", "system_prompt": "blind_evaluation_candidate" },
+    { "id": "P4", "model": "claude_sonnet_46", "system_prompt": "blind_evaluation_candidate" }
+  ],
+  "judges": [
+    { "id": "J1", "model": "judge_fable_5", "system_prompt": "independent_intelligence_judge" }
+  ],
+  "monitor": {
+    "enabled": true,
+    "strict": false
+  },
+  "protocol": {
+    "name": "adaptive_probe_waves",
+    "turn_order": "fixed",
+    "phases": [
+      {
+        "name": "judge_ranking",
+        "kind": "independent_judge_ranking",
+        "prompt": "adaptive_judge_probe",
+        "question_prompt": "adaptive_judge_probe",
+        "answer_prompt": "independent_judge_answer",
+        "assessment_prompt": "independent_judge_probe_comparison",
+        "ranking_prompt": "independent_judge_wave_judgment",
+        "probe_schedule": [4, 1, 1, 1],
+        "adaptive_targeting": "judge_selected",
+        "max_adaptive_candidates": 3,
+        "recovery_model_params": {
+          "max_tokens": 6000,
+          "reasoning": { "effort": "low" }
+        },
+        "visibility": "private"
+      }
+    ]
+  },
+  "metadata": {
+    "design": "Four opening probes followed by three adaptive probe rounds.",
+    "stopping_points": [4, 5, 6, 7],
+    "gold_prior": "data/model_catalog.openrouter.json"
+  }
+}
