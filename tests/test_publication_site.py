@@ -1,9 +1,11 @@
 import unittest
 
 from scripts.build_publication_site import (
+    kendall_order,
     pairwise_accuracy,
     partial_spearman,
     ranked,
+    score_pairwise_accuracy,
     spearman,
 )
 
@@ -26,3 +28,13 @@ class PublicationSiteTests(unittest.TestCase):
         # Both observed variables follow the control; their apparent relationship
         # contains no residual variance after conditioning.
         self.assertEqual(partial_spearman(control, control, control), 0.0)
+
+    def test_score_pairwise_accuracy_gives_half_credit_to_prediction_ties(self) -> None:
+        predictions = {"a": 4.0, "b": 3.0, "c": 3.0}
+        scores = {"a": 30.0, "b": 20.0, "c": 10.0}
+        self.assertEqual(score_pairwise_accuracy(predictions, scores), 5 / 6)
+
+    def test_kendall_order_compares_complete_rankings(self) -> None:
+        self.assertEqual(kendall_order(["a", "b", "c"], ["a", "b", "c"]), 1.0)
+        self.assertEqual(kendall_order(["a", "b", "c"], ["c", "b", "a"]), -1.0)
+        self.assertEqual(kendall_order(["a"], ["a"]), 0.0)

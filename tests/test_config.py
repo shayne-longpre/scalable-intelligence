@@ -105,6 +105,57 @@ class ConfigTests(unittest.TestCase):
                 )
                 self.assertEqual(config.models["judge_primary"].provider, "openrouter_judge")
 
+    def test_oversight_frontier_configs_straddle_each_judge(self) -> None:
+        study = json.loads(
+            (ROOT / "studies" / "oversight_frontier_v1.json").read_text()
+        )
+        catalog = json.loads(
+            (ROOT / "data" / "model_catalog.openrouter.json").read_text()
+        )
+        scores = {
+            model["provider_model_id"]: model["intelligence_score"]
+            for model in catalog["models"]
+        }
+
+        for condition in study["conditions"]:
+            selection = json.loads((ROOT / condition["selection"]).read_text())
+            routes = selection["provider_model_ids"]
+            judge_route = condition["judge_model"]
+            judge_score = condition["judge_external_score"]
+            self.assertEqual(len(routes), 7)
+            self.assertEqual(len(set(routes)), 7)
+            self.assertIn(judge_route, routes)
+            self.assertTrue(any(scores[route] > judge_score for route in routes))
+            self.assertTrue(any(scores[route] < judge_score for route in routes))
+
+            participant_seeds = set()
+            comparison_seeds = set()
+            for config_path in condition["configs"]:
+                config = load_experiment_config(ROOT / config_path)
+                phase = config.protocol.phases[0]
+                configured_routes = {
+                    config.models[participant.model].model
+                    for participant in config.participants
+                }
+                configured_judge = config.models[config.judges[0].model].model
+                self.assertEqual(configured_routes, set(routes))
+                self.assertEqual(configured_judge, judge_route)
+                self.assertEqual(phase.probe_schedule, [4, 1])
+                self.assertEqual(phase.max_adaptive_candidates, 4)
+                participant_seeds.add(config.metadata["participant_seed"])
+                comparison_seeds.add(config.metadata["comparison_seed"])
+            self.assertEqual(len(participant_seeds), 2)
+            self.assertEqual(len(comparison_seeds), 2)
+
+    def test_five_probe_catalog_configs_isolate_the_opening_battery(self) -> None:
+        for filename in (
+            "catalog_ladder50_sol_p5.openrouter.json",
+            "catalog_ladder50_fable_p5.openrouter.json",
+        ):
+            config = load_experiment_config(ROOT / "examples" / filename)
+            self.assertEqual(len(config.participants), 50)
+            self.assertEqual(config.protocol.phases[0].probe_schedule, [5])
+
     def test_independent_judge_phase_requires_judge_roster(self) -> None:
         data = _minimal_config_dict()
         data["protocol"]["phases"] = [

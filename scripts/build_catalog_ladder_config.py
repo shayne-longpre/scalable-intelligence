@@ -14,7 +14,9 @@ def main() -> int:
     parser.add_argument("--judge-model", required=True)
     parser.add_argument("--judge-effort", default="xhigh")
     parser.add_argument("--probe-schedule", default="4,1,1")
+    parser.add_argument("--max-adaptive-candidates", type=int, default=10)
     parser.add_argument("--comparison-seed", type=int, default=20260720)
+    parser.add_argument("--participant-seed", type=int)
     parser.add_argument("--candidate-timeout-seconds", type=float, default=300)
     parser.add_argument("--judge-timeout-seconds", type=float, default=900)
     parser.add_argument("--model-overrides")
@@ -52,8 +54,13 @@ def main() -> int:
     if missing:
         raise ValueError(f"selection contains models absent from catalog: {missing}")
 
+    participant_seed = (
+        args.participant_seed
+        if args.participant_seed is not None
+        else int(selection["participant_seed"])
+    )
     participant_ids = [f"P{index:02d}" for index in range(1, len(selected_ids) + 1)]
-    random.Random(int(selection["participant_seed"])).shuffle(participant_ids)
+    random.Random(participant_seed).shuffle(participant_ids)
     assignments = dict(zip(selected_ids, participant_ids, strict=True))
     models = [
         _candidate_model(
@@ -80,7 +87,11 @@ def main() -> int:
         }
     )
     schedule = [int(value) for value in args.probe_schedule.split(",") if value.strip()]
-    max_adaptive_candidates = 10
+    max_adaptive_candidates = args.max_adaptive_candidates
+    if max_adaptive_candidates < 1 or max_adaptive_candidates > len(selected_ids):
+        raise ValueError(
+            "max adaptive candidates must be between one and the candidate count"
+        )
     expected_calls = _expected_model_calls(
         candidate_count=len(selected_ids),
         probe_schedule=schedule,
@@ -176,7 +187,7 @@ def main() -> int:
             "selection_file": str(selection_path),
             "catalog_file": str(catalog_path),
             "catalog_generated_at": catalog.get("generated_at"),
-            "participant_seed": selection["participant_seed"],
+            "participant_seed": participant_seed,
             "comparison_seed": args.comparison_seed,
             "gold_prior": str(catalog_path),
             **({"model_overrides_file": args.model_overrides} if args.model_overrides else {}),

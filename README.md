@@ -80,6 +80,12 @@ Results from the first two independent 50-model runs are summarized in
 [`docs/pilot_analysis_catalog_ladder50_20260721.md`](docs/pilot_analysis_catalog_ladder50_20260721.md).
 The matched shared-evidence cross-over is summarized in
 [`docs/pilot_analysis_catalog_ladder50_crossed_20260721.md`](docs/pilot_analysis_catalog_ladder50_crossed_20260721.md).
+The seeded answer-order replay and fixed-scale scoring analysis are in
+[`docs/pilot_analysis_catalog_order_20260725.md`](docs/pilot_analysis_catalog_order_20260725.md)
+and
+[`docs/pilot_analysis_probe_scoring_20260725.md`](docs/pilot_analysis_probe_scoring_20260725.md).
+The next primary study is specified in
+[`docs/oversight_frontier_design.md`](docs/oversight_frontier_design.md).
 
 ## Core Methodology
 
@@ -173,6 +179,14 @@ or discard a flawed probe. It is explicitly warned that some candidates may be
 more capable than the judge and that disagreement is not automatically a
 candidate error. The fixed-battery evidence-card protocol remains available as
 a reproducible control for earlier studies.
+
+Archived answers may also be rescored probe by probe with
+`ai_council.probe_scoring`. This post-hoc layer shows every anonymous answer to
+one independent scoring judge, requests a short probe-specific rubric, and
+applies an anchored `0–4` answer-quality scale. It does not enter the live
+experiment or replace the judge's holistic ranking. The journaled, resumable
+example is `examples/catalog_ladder50_probe_scoring.openrouter.json`; its
+sanitized versioned output is `data/catalog_ladder50_probe_scores.json`.
 
 The main scale controls stay in config:
 
@@ -278,6 +292,9 @@ The repository includes config examples that map onto the two modes:
   Per-probe comparisons and cumulative dossiers replace required isolated
   ability scores. The medium- and Sol-judge configs retain five rounds as
   stress-test fixtures.
+- `examples/oversight_frontier_{sol,mini,haiku}_r{1,2}.openrouter.json`: the
+  frozen three-level oversight study, with seven candidates, four opening
+  probes, one adaptive tie-breaker, and two anonymous-ID permutations.
 - `examples/independent_judges_pilot.openrouter.json`: legacy fixed-battery
   control with candidate evidence cards and optional probe-prefix ablations.
 - `examples/separate_interviews_compact.openrouter.json`: N-participant isolated

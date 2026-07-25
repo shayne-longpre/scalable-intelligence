@@ -491,6 +491,13 @@ blockquote {
   color: var(--red);
 }
 
+.heatmap thead th small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
 .heatmap tbody th {
   position: sticky;
   left: 0;

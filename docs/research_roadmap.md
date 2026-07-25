@@ -17,13 +17,13 @@ invent their own criteria and probes.
 | 1. Measurement validity | Complete | Role-scoped taxonomy counts, source-turn provenance, and ranking metrics validated against hand-labeled transcripts | Are reported patterns real properties of the interaction rather than extraction artifacts? |
 | 2. Conversation dynamics | Complete | Separate preplanned battery progression from evidence-conditioned follow-up and topical change | Do evaluators deepen, broaden, or adapt as evidence accumulates? |
 | 3. Baseline freeze | Complete | Versioned adaptive-wave prompts, taxonomy, config, analysis schema, and three accepted replications | Can later experiments be compared without silent protocol drift? |
-| 4. Independent-judge ladder | Complete; one order replay pending | Sol and Fable independently rank the same 50 anonymous candidates, followed by a shared-evidence cross-over | Can capable models recover a broad external capability ordering? |
+| 4. Independent-judge ladder | Complete, including order replay and answer scoring | Sol and Fable independently rank the same 50 anonymous candidates, followed by a shared-evidence cross-over | Can capable models recover a broad external capability ordering? |
 | 5. Selective adaptivity | Three stress pilots complete | Four opening probes, direct per-probe comparison, cumulative evidence dossiers, bounded common follow-ups, and adaptive-decision traces | Can extra evidence resolve the difficult part of a ranking efficiently? |
 | 5b. Probe-budget ablation | Initial pilot complete | Fresh evidence cards and rankings using only the first 2, 4, or 6 probes from one shared run | How much does additional probe evidence improve ranking accuracy? |
-| 6. Oversight frontier | Next primary experiment | Judges above, near, and below small candidate panels, with candidates on both sides of the judge's capability | Can a model recognize a system more capable than itself? |
-| 7. Judge-strategy scaling | High priority after oversight | Probe-type, difficulty, adaptation, and answer-quality comparisons across judge capability | Do stronger judges ask systematically different or more diagnostic questions? |
+| 6. Oversight frontier | Configured and mock-smoked; next paid experiment | Judges above, near, and below small candidate panels, with candidates on both sides of the judge's capability | Can a model recognize a system more capable than itself? |
+| 7. Judge-strategy scaling | Fixed-scale catalog scoring complete; judge-capability comparison pending | Probe-type, difficulty, adaptation, and answer-quality comparisons across judge capability | Do stronger judges ask systematically different or more diagnostic questions? |
 | 8. Free vs. structured | Later exploratory study | Paired runs with the same roster, budgets, and external prior | What does round-robin structure improve or suppress? |
-| 9. Publication figures | Reader-facing results site in progress | Auditable plots, tables, taxonomy, model provenance, and compact human-review samples | Which findings are robust, interpretable, and worth communicating? |
+| 9. Publication figures | Catalog results, fixed-scale heatmap, references, and audit sample generated | Auditable plots, tables, taxonomy, model provenance, and compact human-review samples | Which findings are robust, interpretable, and worth communicating? |
 | 10. Scale beyond 50 | Paused | Extend the archived-answer and panel machinery only if a research question requires it | Can the method rank a much larger catalog tractably? |
 
 ## First Ladder Design
@@ -247,16 +247,27 @@ are in `docs/pilot_analysis_catalog_ladder50_20260721.md`; the combined report
 card is
 `runs/report_cards/catalog_ladder50_sol_fable_20260721_v5/report_card.html`.
 
+The seeded order replay retained the same top three and agreed with the original
+four-probe ranking at Kendall tau 0.814. External pairwise accuracy moved from
+0.867 to 0.837, so order is a reported uncertainty but does not currently
+justify panel merging as the primary method. See
+`docs/pilot_analysis_catalog_order_20260725.md`.
+
+Sol and Fable also assigned fixed `0–4` answer-quality scores to the eight
+opening probes. Mean score across probes correlated 0.874 with the external
+index and ordered 84.8% of direct-score model pairs correctly. One probe has
+only Sol scores after repeated zero-content Fable responses. See
+`docs/pilot_analysis_probe_scoring_20260725.md`.
+
 ## Immediate Next Steps
 
-1. Complete one seeded presentation-order replay of the best catalog condition.
-   A preliminary position screen found low mean residual association but one
-   moderate probe-level signal. Introduce overlapping panels only if the replay
-   shows material ranking instability.
-2. Review the six-item human audit sample, make only evidenced taxonomy or
+1. Review the eight-item human audit sample, make only evidenced taxonomy or
    summary changes, and freeze the measurement version for confirmatory work.
-3. Run the oversight-frontier study with small panels above and below each
-   judge. This is the next primary scientific experiment.
+2. Run the first permutation for the Sol, GPT-5.4 Mini, and Claude Haiku 4.5
+   oversight panels. Inspect probe validity, routing, and above-judge
+   comparisons before purchasing the second permutations.
+3. Run the second oversight permutations without prompt changes, then build the
+   judge-capability by candidate-gap result.
 4. Rerun the Sol and Fable catalog openings with five probes as a short
    methodology check. Treat evidence/adaptivity scaling as supporting analysis,
    not a separate large program.

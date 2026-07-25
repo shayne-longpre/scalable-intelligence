@@ -1,0 +1,74 @@
+{
+  "name": "oversight_frontier_v1",
+  "status": "ready",
+  "research_question": "Can an anonymous AI judge recognize and rank candidate models that are more capable than the judge itself?",
+  "protocol": {
+    "probe_schedule": [4, 1],
+    "adaptive_targeting": "judge_selected",
+    "max_adaptive_candidates": 4,
+    "judge_isolation": true,
+    "fresh_candidate_context_per_probe": true,
+    "candidate_answer_limit_words": 600,
+    "replicates_per_condition": 2,
+    "replicate_difference": "anonymous participant IDs and answer presentation order only"
+  },
+  "conditions": [
+    {
+      "id": "sol",
+      "judge_model": "openai/gpt-5.6-sol",
+      "judge_effort": "xhigh",
+      "judge_external_score": 58.889831189723,
+      "selection": "data/oversight_frontier_sol.selection.json",
+      "configs": [
+        "examples/oversight_frontier_sol_r1.openrouter.json",
+        "examples/oversight_frontier_sol_r2.openrouter.json"
+      ]
+    },
+    {
+      "id": "mini",
+      "judge_model": "openai/gpt-5.4-mini",
+      "judge_effort": "xhigh",
+      "judge_external_score": 39.9783061419024,
+      "selection": "data/oversight_frontier_mini.selection.json",
+      "configs": [
+        "examples/oversight_frontier_mini_r1.openrouter.json",
+        "examples/oversight_frontier_mini_r2.openrouter.json"
+      ]
+    },
+    {
+      "id": "haiku",
+      "judge_model": "anthropic/claude-haiku-4.5",
+      "judge_effort": "high",
+      "judge_external_score": 29.5762345971708,
+      "selection": "data/oversight_frontier_haiku.selection.json",
+      "configs": [
+        "examples/oversight_frontier_haiku_r1.openrouter.json",
+        "examples/oversight_frontier_haiku_r2.openrouter.json"
+      ]
+    }
+  ],
+  "replicates": [
+    {
+      "id": "r1",
+      "participant_seed": 20260725,
+      "comparison_seed": 20260725
+    },
+    {
+      "id": "r2",
+      "participant_seed": 20260726,
+      "comparison_seed": 20260726
+    }
+  ],
+  "primary_outcomes": [
+    "pairwise_accuracy_by_candidate_gap_from_judge",
+    "probability_of_correctly_ordering_a_candidate_above_the_judge",
+    "pairwise_accuracy_below_near_and_above_the_judge",
+    "kendall_tau_against_external_prior",
+    "inter_replicate_agreement",
+    "ranking_churn_after_the_adaptive_probe",
+    "adaptive_target_coverage",
+    "probe_type_strategy_and_dynamics",
+    "provider_reported_spend"
+  ],
+  "interpretation": "The external index locates candidates relative to each judge but remains a noisy reference. Report nearby-score pairs separately and do not infer a sharp oversight threshold from one panel."
+}

@@ -1,0 +1,70 @@
+{
+  "name": "catalog_ladder50_opening_probe_scoring_v1",
+  "providers": [
+    {
+      "name": "openrouter",
+      "kind": "openrouter",
+      "api_key_env": "OPENROUTER_API_KEY",
+      "headers": {
+        "HTTP-Referer": "https://github.com/shayne-longpre/scalable-intelligence",
+        "X-Title": "Scalable Intelligence Probe Scoring"
+      },
+      "timeout_seconds": 900,
+      "request_retries": 1
+    }
+  ],
+  "judges": [
+    {
+      "id": "sol",
+      "provider": "openrouter",
+      "model": "openai/gpt-5.6-sol",
+      "params": {
+        "max_tokens": 24000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 16000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    {
+      "id": "fable",
+      "provider": "openrouter",
+      "model": "anthropic/claude-fable-5",
+      "params": {
+        "max_tokens": 24000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "recovery_params": {
+        "max_tokens": 16000,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "label": "sol_opening",
+      "run_dir": "runs/20260721T085927Z_catalog_ladder50_gpt_5_6_sol",
+      "question_turn_ids": [1, 2, 3, 4]
+    },
+    {
+      "label": "fable_opening",
+      "run_dir": "runs/20260721T102640Z_catalog_ladder50_claude_fable_5",
+      "question_turn_ids": [1, 2, 3, 4]
+    }
+  ],
+  "output_dir": "runs/probe_scoring/catalog_ladder50_opening_v1",
+  "export_path": "data/catalog_ladder50_probe_scores.json",
+  "comparison_seed": 20260725,
+  "max_parallel_calls": 4,
+  "structured_json_retries": 1,
+  "max_reported_cost_usd": 50.0
+}

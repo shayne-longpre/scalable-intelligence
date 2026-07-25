@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A compact six-item audit of labels, conversation dynamics, and evidence summaries.">
+  <meta name="description" content="A compact audit of labels, dynamics, evidence summaries, and answer scoring.">
   <title>Human audit sample</title>
   <link rel="stylesheet" href="site.css">
 </head>
@@ -14,11 +14,11 @@
   </header>
   <main>
 <section class="page-head">
-  <p class="eyebrow">Six-item review sheet</p>
+  <p class="eyebrow">Eight-item review sheet</p>
   <h1>Human audit sample</h1>
   <p class="dek">A small, deliberately mixed sample covering semantic labels,
-  multi-round dynamics, and evidence-summary fidelity. It is meant to take
-  minutes, not become a second study.</p>
+  multi-round dynamics, summary fidelity, and answer-score calibration. It is
+  meant to take minutes, not become a second study.</p>
 </section>
 <section class="prose">
   <div class="legend-box"><strong>What to do</strong>
@@ -125,6 +125,40 @@
       <p class="source-ref">Fable judging Sol systems probe, P10</p>
     </details>
     <fieldset><legend>Your decision</legend><label><input type="radio" name="audit-6" value="accept"> Accept</label><label><input type="radio" name="audit-6" value="change"> Change</label><label><input type="radio" name="audit-6" value="unsure"> Unsure</label></fieldset>
+    <label class="comment-label">Short note
+      <textarea rows="2" placeholder="Only if something should change"></textarea>
+    </label>
+  </div>
+</article><article class="audit-card" data-audit-id="audit-7">
+  <div class="audit-index">07</div>
+  <div>
+    <p class="section-kicker">Answer-score calibration</p>
+    <h2>Should missing causal assumptions cost two points?</h2>
+    <p>Sol required explicit exchangeability and transportability assumptions; Fable accepted the numerical and qualitative answer. Which score better matches the anchored rubric?</p>
+    <div class="audit-output"><strong>Automated output</strong>
+      <p>Sol 2/4: Correct rates, expectations, and Q3–Q4, but Q2 does not condition its recommendation on causal exchangeability and transportability. | Fable 4/4: Correct throughout; Q3 correctly conditions pooled validity on randomization.</p></div>
+    <details><summary>Inspect source evidence</summary>
+      <pre>PROBE **PROBE 3 — Causal reasoning and quantitative judgment from observational data** A hospital&#x27;s records show outcomes for two treatments, stratified by severity **assessed at intake, before the treatment was chosen**: | | Treatment T1 | Treatment T2 | |---|---|---| | Low severity | 90 of 100 recovered | 170 of 200 recovered | | High severity | 60 of 200 recovered | 25 of 100 recovered | Assume the records are accurate and complete. Answer all four questions. Exact arithmetic is required where numbers are involved; state explicitly any assumption your answer depends on. **Q1.** Compute the recovery rate for each treatment within each severity group, and pooled across groups. The comparisons appear to contradict each other. Explain numerically *why* this happens in this specific dataset — not just the name of the phenomenon, but the mechanism in these numbers. **Q2.** A new patient arrives and must be assigned a treatment **before** severity can be assessed. Which treatment maximizes their expected recovery probability? Give the expected recovery probability under each treatment as an exact number, state what assumption about the new patient your calculation requires, and note how your answer relates (or doesn&#x27;t) to the pooled rates from Q1. **Q3.** Now suppose the severity ratings had instead been recorded **one week after treatment began**. Does the reasoning you used in Q1–Q2 still justify a recommendation? Explain what changes about the validity of the stratified comparison, the pooled comparison, or both — and what, if anything, could be concluded from this data in that case. **Q4.** A colleague argues: &quot;The pooled comparison uses larger samples per cell, so it is statistically more reliable — we should trust it and prefer T2.&quot; In at most three sentences, identify the precise flaw in this argument. **Rules for your answer:** - Maximum **600 words**. - Show your arithmetic; unexplained numbers earn no credit. - Distinguish clearly between what the data shows and what requires an assumption. If a question cannot be answered from the data alone, say what minimal additional assumption or information would settle it. - Do not use or simulate code execution. - Number your answers Q1–Q4. ANSWER **Q1.** Recovery rates per group: - T1 Low: 90/100 = 0.9 - T1 High: 60/200 = 0.3 - T2 Low: 170/200 = 0.85 - T2 High: 25/100 = 0.25 Pooled rates: T1: (90+60)/(100+200) = 150/300 = 0.5 T2: (170+25)/(200+100) = 195/300 = 0.65 Contradiction: Within each severity group, T1 outperforms T2 (0.9 &gt; 0.85 in low; 0.3 &gt; 0.25 in high), but pooled T2 outperforms T1 (0.65 &gt; 0.5). This happens because T1 is given mostly to high-severity patients (200 of 300, 2/3), who have lower recovery rates, while T2 is given mostly to low-severity patients (200 of 300, 2/3). The pooled rates are weighted averages: T1 = (100/300)×0.9 + (200/300)×0.3 = 0.5; T2 = (200/300)×0.85 + (100/300)×0.25 = 0.65. The imbalance in severity distributions reverses the apparent advantage. **Q2.** To compute expected recovery for a new patient before severity assessment, we need the distribution of severity in the population. Assuming the marginal distribution from the data (300 low out of 600 total, so P(low) = 0.5, P(high) = 0.5): - P(recovery | T1) = 0.5×0.9 + 0.5×0.3 = 0.6 - P(recovery | T2) = 0.5×0.85 + 0.5×0.25 = 0.55 Thus T1 maximizes expected recovery probability (0.6 &gt; 0.55). This differs from the pooled rates because pooling uses the imbalanced severity mix within each treatment group, not the population marginal distribution. **Q3.** If severity is recorded post-treatment, it may be affected by treatment (a mediator). Then stratified comparisons become invalid for causal inference—conditioning on a mediator can bias treatment effect estimates (e.g., by opening collider paths). The pooled comparison might still be confounded by pre-treatment factors unless treatment assignment was random. Without knowing assignment mechanism, neither comparison is reliable. Minimal additional assumption: If treatment was randomized, the pooled comparison unbiasedly estimates average treatment effect; otherwise, pre-treatment confounders are needed. **Q4.** The flaw is equating statistical precision with causal validity. Larger samples reduce random error but do not eliminate systematic bias from confounding. The pooled estimate is biased because treatment groups differ in severity distributions; trusting it overlooks this confounding. Stratified analysis, though possibly less precise, better addresses confounding.</pre>
+      <p class="source-ref">Fable causal-choice probe, P46</p>
+    </details>
+    <fieldset><legend>Your decision</legend><label><input type="radio" name="audit-7" value="accept"> Accept</label><label><input type="radio" name="audit-7" value="change"> Change</label><label><input type="radio" name="audit-7" value="unsure"> Unsure</label></fieldset>
+    <label class="comment-label">Short note
+      <textarea rows="2" placeholder="Only if something should change"></textarea>
+    </label>
+  </div>
+</article><article class="audit-card" data-audit-id="audit-8">
+  <div class="audit-index">08</div>
+  <div>
+    <p class="section-kicker">Answer-score calibration</p>
+    <h2>How much should an answer-limit violation matter?</h2>
+    <p>Both judges found the technical answer complete. Decide whether materially exceeding the 600-word limit warrants 3 rather than 4.</p>
+    <div class="audit-output"><strong>Automated output</strong>
+      <p>Sol 3/4: Technically excellent and complete, including a precise two-bit wrap execution, but materially exceeds the explicit 600-word limit. | Fable 4/4: Complete and rigorous everywhere; valid torn reads for parts 2 and 5, careful proofs and liveness analysis.</p></div>
+    <details><summary>Inspect source evidence</summary>
+      <pre>**P48 — Answer** **1. Single writer: linearizable.** The writer&#x27;s two `fetch_add`s are totally ordered; `seq` is odd exactly between them, and A/B stores lie strictly inside that window. Suppose a Read returns with s1 = s2 = s (even). Between its s1-load and s2-load, no `fetch_add` occurred (s2 = s1), hence no A/B store occurred: any store is preceded by an odd-making increment (which would make s1 odd or change seq) and followed by another increment (making s2 ≠ s1). So a, b are the values written by the last Write whose second `fetch_add` precedes the s1-load — call it W. **Linearization points:** Write at its second `fetch_add`; successful Read at its s1-load (failed attempts are not operations). Both LPs lie within their operation&#x27;s real-time interval, and the Read returns exactly the latest Write linearized before it, or (0,0) initially. Real-time order is preserved since LPs respect invocation/response. ∎ **2. Two writers: torn read.** W1 invokes Write(1,1), W2 invokes Write(2,2), then R reads: 1. W1: `seq.fetch_add` → seq=1 2. W2: `seq.fetch_add` → seq=2 3. W1: `A.store(1)` 4. W2: `A.store(2)` 5. W2: `B.store(2)` 6. W1: `B.store(1)` 7. W1: `seq.fetch_add` → seq=3 (W1 returns) 8. W2: `seq.fetch_add` → seq=4 (W2 returns) 9. R: s1 = 4 (even, passes) 10. R: a = A.load() = 2; b = B.load() = 1 11. R: s2 = 4 = s1 ✓ → returns **(2,1)**, supplied by no Write. Both Writes completed before R began, so R must return (2,2); not linearizable. Failure cause: two writers&#x27; increments interleave, so `seq` is even while a writer is mid-update. **3. Repair (CAS-based seqlock):** ```text Write(a,b): loop: s = seq.load() if s is odd: continue if seq.compare_exchange(s, s+1): break A.store(a); B.store(b) seq.store(s+2) ``` *Proof:* `seq` goes even→odd only via a successful CAS; CAS on a stale expected value fails, so at most one writer holds the &quot;odd&quot; state at a time — writer critical sections are mutually exclusive, and A/B stores occur only inside them. Writers&#x27; sections are totally ordered by their release stores. A returning Read (s1 = s2 = s even) had no CAS and no release store between its two loads (each changes seq), so no A/B store overlapped; a,b come from the last writer to release before s1. Linearize each Write at its release store, each successful Read at its s1-load; LPs are within intervals, results match sequential spec. ∎ **4. Liveness.** - *Reader starvation:* Yes. Readers are blocking w.r.t. writers. An adversarial scheduler with an endless stream of completing writes can ensure every attempt sees odd s1 or a changed s2 (a write&#x27;s CAS or release lands in every attempt window). The reader retries forever while writes keep completing; it is neither wait-free nor lock-free. It needs one quiescent window (no write event between its four loads). - *Paused holder:* Yes, total blockage. After a successful CAS, `seq` stays odd: every other writer spins on `compare_exchange`, every reader spins on the odd check. One paused writer prevents all other operations from completing — the protocol is blocking. **5. Wrapping w-bit seq.** The check fails. Example w=2 (seq mod 4), writes W1(1,1), W2(2,2) using the repaired protocol: 1. R: s1 = 0 (even) 2. W1: CAS 0→1; `A.store(1)` 3. R: a = A.load() = 1 4. W1: `B.store(1)`; release: seq=2 5. W2: CAS 2→3; `A.store(2)`; `B.store(2)` 6. R: b = B.load() = 2 7. W2: release: seq = 0 (wrapped) 8. R: s2 = 0 = s1 ✓ → returns **(1,2)** — torn, no Write supplied it. 2^(w−1) complete writes advance seq by 2^w ≡ 0, hiding any number of overlapping writes. **Sufficient restoration assumption:** strictly fewer than 2^(w−1) writes complete during any single read attempt (e.g., bounded write rate plus bounded reader step latency, or w large enough that wrap within one attempt is physically impossible). Then s1 = s2 implies zero increments occurred, and the Part 1/3 argument applies unchanged.</pre>
+      <p class="source-ref">Sol concurrency probe, P48</p>
+    </details>
+    <fieldset><legend>Your decision</legend><label><input type="radio" name="audit-8" value="accept"> Accept</label><label><input type="radio" name="audit-8" value="change"> Change</label><label><input type="radio" name="audit-8" value="unsure"> Unsure</label></fieldset>
     <label class="comment-label">Short note
       <textarea rows="2" placeholder="Only if something should change"></textarea>
     </label>

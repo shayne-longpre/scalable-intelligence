@@ -19,6 +19,27 @@ DEFAULT_REPORT = (
     / "report_card_summary.json"
 )
 DEFAULT_OUTPUT = ROOT / "docs" / "site"
+DEFAULT_SCORE_SUMMARY = (
+    ROOT
+    / "data"
+    / "catalog_ladder50_probe_scores.json"
+)
+ORDER_REPLAY_RUN = (
+    ROOT
+    / "runs"
+    / "20260725T203344Z_catalog_ladder50_order_audit_fable_on_sol_seed_20260814"
+)
+
+PROBE_TITLES = [
+    ("Sol", "Pooled tests"),
+    ("Sol", "Mechanics"),
+    ("Sol", "Concurrency"),
+    ("Sol", "Causal ID"),
+    ("Fable", "Reachability"),
+    ("Fable", "Language"),
+    ("Fable", "Causal choice"),
+    ("Fable", "Proof audit"),
+]
 
 STRATEGY_PROVENANCE = {
     "criterion_negotiation": "Observed in pilots; related to rubric design and construct validity.",
@@ -216,6 +237,45 @@ def pairwise_accuracy(ordering: list[str], scores: dict[str, float]) -> float:
     return correct / total if total else 0.0
 
 
+def score_pairwise_accuracy(
+    predictions: dict[str, float], scores: dict[str, float]
+) -> float:
+    comparable = sorted(predictions.keys() & scores.keys())
+    correct = 0.0
+    total = 0
+    for left_index, left in enumerate(comparable):
+        for right in comparable[left_index + 1 :]:
+            if scores[left] == scores[right]:
+                continue
+            total += 1
+            if predictions[left] == predictions[right]:
+                correct += 0.5
+            elif (predictions[left] > predictions[right]) == (
+                scores[left] > scores[right]
+            ):
+                correct += 1
+    return correct / total if total else 0.0
+
+
+def kendall_order(left: list[str], right: list[str]) -> float:
+    if set(left) != set(right) or len(left) < 2:
+        return 0.0
+    left_position = {item: index for index, item in enumerate(left)}
+    right_position = {item: index for index, item in enumerate(right)}
+    concordant = 0
+    discordant = 0
+    for left_index, first in enumerate(left):
+        for second in left[left_index + 1 :]:
+            same_direction = (
+                left_position[first] - left_position[second]
+            ) * (
+                right_position[first] - right_position[second]
+            )
+            concordant += same_direction > 0
+            discordant += same_direction < 0
+    return (concordant - discordant) / (concordant + discordant)
+
+
 def page(title: str, description: str, body: str, active: str) -> str:
     nav_items = [
         ("Results", "index.html", "results"),
@@ -275,6 +335,7 @@ def article(
     report: dict,
     catalog: dict,
     taxonomy: dict,
+    score_summary: dict | None,
 ) -> str:
     runs = report["runs"]
     best_run = next(
@@ -318,9 +379,10 @@ def article(
         )
 
     probe_cards = build_probe_cards(taxonomy)
-    heatmap, heatmap_stats = build_heatmap(runs, catalog_by_id)
-    position_audit = presentation_position_audit(runs)
-    top_position = max(position_audit, key=lambda item: abs(item["partial_rho"]))
+    heatmap, heatmap_stats = build_heatmap(
+        runs, catalog_by_id, score_summary=score_summary
+    )
+    order_audit = presentation_order_replay(best_checkpoint["ranking"])
     source_pair = report["judge_condition_summary"]["final_interjudge_pairs"]
     same_evidence = [
         item["kendall_tau"]
@@ -331,6 +393,17 @@ def article(
     direct_scores = len(best_run["prior_reported_score_participants"])
     strategy_count = len(taxonomy["tags"])
     question_count = len(taxonomy["question_types"])
+    heatmap_method = (
+        "Each cell is the mean anchored answer-quality score from Sol and Fable"
+        if score_summary
+        else "Each cell is the mean within-probe percentile from Sol and Fable"
+    )
+    heatmap_caveat = (
+        "Seven probes have both judges; the pooled-test column uses Sol alone "
+        "because Fable repeatedly returned an empty provider response."
+        if score_summary
+        else "These are relative positions, not absolute difficulty scores."
+    )
 
     return f"""
 <article>
@@ -433,14 +506,14 @@ def article(
     <aside class="background-note">
       <strong>Stability checks.</strong> The shared-evidence cross-over showed
       substantially greater agreement when judges saw the same answers than when
-      one judge saw different probe batteries. A lightweight order screen found
-      a mean absolute partial rank correlation of
-      {mean(abs(item['partial_rho']) for item in position_audit):.2f} between
-      answer position and judged position after controlling for external rank.
-      One language-induction comparison reached
-      {abs(top_position['partial_rho']):.2f}, so a true shuffled-order replay is
-      warranted before claiming order invariance. Panels remain conditional on
-      that replay rather than an automatic complication.
+      one judge saw different probe batteries. In a fresh shuffled-order replay
+      of the best four-probe condition, the two rankings agreed at Kendall
+      {order_audit['kendall_tau']:.2f}; their top three were unchanged and
+      {order_audit['top10_overlap']} of the top ten overlapped. External pairwise
+      accuracy moved from {best_checkpoint['pairwise_accuracy']:.1%} to
+      {order_audit['pairwise_accuracy']:.1%}. This is bounded but real order
+      sensitivity. Global comparison remains primary; panels would add anchoring
+      and merge assumptions without clear evidence of a net gain.
     </aside>
   </section>
 
@@ -475,20 +548,17 @@ def article(
   </section>
 
   <section id="answer-map" class="wide ruled">
-    <p class="section-kicker">Preliminary answer map</p>
+    <p class="section-kicker">Answer-quality map</p>
     <h2>Different probes expose different capability profiles</h2>
-    <p class="section-intro">Rows follow the external ladder. Each cell is that
-    model's average within-probe percentile across the two judges who saw the
-    same archived answer. This is a relative comparison, not yet an absolute
-    difficulty score.</p>
-    <div class="heat-legend"><span>Lower within probe</span>
+    <p class="section-intro">Rows follow the external ladder. {heatmap_method}.
+    The fixed scale runs from 0 (no usable answer) to 4 (fully correct,
+    complete, and rigorous).</p>
+    <div class="heat-legend"><span>0 · unusable</span>
       <i class="heat h1"></i><i class="heat h3"></i><i class="heat h5"></i>
-      <i class="heat h7"></i><i class="heat h9"></i><span>Higher within probe</span>
+      <i class="heat h7"></i><i class="heat h9"></i><span>4 · fully correct</span>
       <i class="heat missing"></i><span>Missing answer</span></div>
     <div class="table-frame heat-frame">{heatmap}</div>
-    <p class="note">{heatmap_stats}. A fixed-scale Fable/Sol rescoring pass will
-    later estimate absolute answer quality and judge disagreement; this table
-    deliberately does not pretend ordinal ranks are difficulty scores.</p>
+    <p class="note">{heatmap_stats}. {heatmap_caveat}</p>
   </section>
 
   <section id="oversight-frontier" class="prose ruled">
@@ -552,8 +622,13 @@ def build_probe_cards(taxonomy: dict) -> str:
 
 
 def build_heatmap(
-    runs: list[dict], catalog_by_id: dict[str, dict]
+    runs: list[dict],
+    catalog_by_id: dict[str, dict],
+    score_summary: dict | None = None,
 ) -> tuple[str, str]:
+    if score_summary is not None:
+        return build_score_heatmap(runs, catalog_by_id, score_summary)
+
     run_by_name = {run["name"]: run for run in runs}
     batteries = [
         (
@@ -661,6 +736,114 @@ def build_heatmap(
         f"the range was {min(all_alignments):.0%}–{max(all_alignments):.0%}"
     )
     return table, stats
+
+
+def build_score_heatmap(
+    runs: list[dict],
+    catalog_by_id: dict[str, dict],
+    score_summary: dict,
+) -> tuple[str, str]:
+    run_by_name = {run["name"]: run for run in runs}
+    source_run = run_by_name["catalog_ladder50_gpt_5_6_sol"]
+    participants = {
+        item["id"]: item["provider_model_id"] for item in source_run["participants"]
+    }
+    scores = source_run["prior_participant_scores"]
+    reported = set(source_run["prior_reported_score_participants"])
+    external_order = sorted(scores, key=lambda item: (-scores[item], item))
+    probes = score_summary["probes"]
+    if len(probes) != len(PROBE_TITLES):
+        raise ValueError(
+            f"expected {len(PROBE_TITLES)} scored probes, found {len(probes)}"
+        )
+
+    headers = []
+    for probe, (author, title) in zip(probes, PROBE_TITLES, strict=True):
+        headers.append(
+            f'<th title="{escape(author)} probe; mean answer score '
+            f'{probe["mean_answer_score"]:.2f}; '
+            f'{probe["substantially_correct_rate"]:.0%} scored 3 or 4">'
+            f"<span>{escape(author)}</span>{escape(title)}"
+            f"<small>μ {probe['mean_answer_score']:.1f}</small></th>"
+        )
+
+    aggregate: dict[str, list[float]] = {}
+    rows = []
+    for external_rank, participant_id in enumerate(external_order, start=1):
+        provider_id = participants[participant_id]
+        name = catalog_by_id[provider_id]["display_name"].split(": ", 1)[-1]
+        cells = []
+        for probe in probes:
+            value = probe["mean_scores"].get(participant_id)
+            if value is None:
+                cells.append('<td class="heat missing" title="Missing answer">—</td>')
+                continue
+            aggregate.setdefault(participant_id, []).append(float(value))
+            bucket = max(1, min(9, round(float(value) * 2) + 1))
+            cells.append(
+                f'<td class="heat h{bucket}" title="{value:.1f} / 4; '
+                f'{probe["judge_count"]} scoring judge'
+                f'{"s" if probe["judge_count"] != 1 else ""}">{value:.1f}</td>'
+            )
+        rows.append(
+            f"<tr><th><span>{external_rank}</span>{escape(name)}"
+            f"<small>{scores[participant_id]:.1f}</small></th>{''.join(cells)}</tr>"
+        )
+
+    aggregate_means = {
+        participant_id: mean(values)
+        for participant_id, values in aggregate.items()
+        if participant_id in reported
+    }
+    direct_scores = {
+        participant_id: scores[participant_id] for participant_id in aggregate_means
+    }
+    correlation = spearman(
+        [aggregate_means[item] for item in aggregate_means],
+        [direct_scores[item] for item in aggregate_means],
+    )
+    alignment = score_pairwise_accuracy(aggregate_means, direct_scores)
+    disagreement = [
+        probe["mean_judge_score_range"]
+        for probe in probes
+        if probe["mean_judge_score_range"] is not None
+    ]
+    table = (
+        '<table class="heatmap"><thead><tr><th>External ladder</th>'
+        f"{''.join(headers)}</tr></thead><tbody>{''.join(rows)}</tbody></table>"
+    )
+    stats = (
+        "Averaging scores across probes produced Spearman "
+        f"{correlation:.2f} with the external index and {alignment:.1%} "
+        "pairwise alignment. Mean absolute judge disagreement across the seven "
+        f"jointly scored probes was {mean(disagreement):.2f} points"
+    )
+    return table, stats
+
+
+def presentation_order_replay(original_ranking: list[str]) -> dict[str, float | int]:
+    analysis = load_json(ORDER_REPLAY_RUN / "analysis_summary.json")
+    judgment = analysis["prior_agreement"]["judgments"][-1]
+    replay_ranking = judgment["ranking"]
+    original_position = {
+        participant_id: rank
+        for rank, participant_id in enumerate(original_ranking, start=1)
+    }
+    replay_position = {
+        participant_id: rank
+        for rank, participant_id in enumerate(replay_ranking, start=1)
+    }
+    return {
+        "kendall_tau": kendall_order(original_ranking, replay_ranking),
+        "top10_overlap": len(set(original_ranking[:10]) & set(replay_ranking[:10])),
+        "mean_absolute_displacement": mean(
+            abs(original_position[item] - replay_position[item])
+            for item in original_ranking
+        ),
+        "pairwise_accuracy": judgment["reported_score_subset"][
+            "pairwise_accuracy"
+        ],
+    }
 
 
 def presentation_position_audit(runs: list[dict]) -> list[dict]:
@@ -873,6 +1056,9 @@ def audit_page(report: dict) -> str:
     ]["adaptive"]["decision_trace"]
     cross_probe = crossed["probe_comparisons"][2]
     cross_turns = transcript_by_turn(ROOT / crossed["run_dir"])
+    fable_probe = fable["probe_comparisons"][2]
+    fable_turns = transcript_by_turn(ROOT / fable["run_dir"])
+    scoring = load_json(DEFAULT_SCORE_SUMMARY)
 
     def event(turn_id: int, events: list[dict]) -> dict:
         return next(item for item in events if item["turn_id"] == turn_id)
@@ -883,6 +1069,33 @@ def audit_page(report: dict) -> str:
             if turn["speaker"] == participant_id:
                 return turn["content"]
         raise KeyError(participant_id)
+
+    def probe_answer(
+        comparison: dict, turns: dict[int, dict], participant_id: str
+    ) -> str:
+        question = turns[comparison["question_turn_id"]]["content"]
+        response = next(
+            turns[turn_id]["content"]
+            for turn_id in comparison["answer_turn_ids"]
+            if turns[turn_id]["speaker"] == participant_id
+        )
+        return f"PROBE\n{question}\n\nANSWER\n{response}"
+
+    def scored_probe(probe_id: str) -> dict:
+        return next(item for item in scoring["probes"] if item["probe_id"] == probe_id)
+
+    def judge_score(probe: dict, judge_id: str, participant_id: str) -> dict:
+        result = next(
+            item for item in probe["judge_results"] if item["judge_id"] == judge_id
+        )
+        return result["scores"][participant_id]
+
+    causal_probe = scored_probe("fable_opening:turn_3")
+    causal_sol = judge_score(causal_probe, "sol", "P46")
+    causal_fable = judge_score(causal_probe, "fable", "P46")
+    systems_probe = scored_probe("sol_opening:turn_3")
+    systems_sol = judge_score(systems_probe, "sol", "P48")
+    systems_fable = judge_score(systems_probe, "fable", "P48")
 
     items = [
         {
@@ -975,6 +1188,35 @@ def audit_page(report: dict) -> str:
             "evidence": answer("P10"),
             "source": "Fable judging Sol systems probe, P10",
         },
+        {
+            "title": "Should missing causal assumptions cost two points?",
+            "kind": "Answer-score calibration",
+            "question": (
+                "Sol required explicit exchangeability and transportability "
+                "assumptions; Fable accepted the numerical and qualitative answer. "
+                "Which score better matches the anchored rubric?"
+            ),
+            "output": (
+                f"Sol {causal_sol['score']}/4: {causal_sol['summary']} | "
+                f"Fable {causal_fable['score']}/4: {causal_fable['summary']}"
+            ),
+            "evidence": probe_answer(fable_probe, fable_turns, "P46"),
+            "source": "Fable causal-choice probe, P46",
+        },
+        {
+            "title": "How much should an answer-limit violation matter?",
+            "kind": "Answer-score calibration",
+            "question": (
+                "Both judges found the technical answer complete. Decide whether "
+                "materially exceeding the 600-word limit warrants 3 rather than 4."
+            ),
+            "output": (
+                f"Sol {systems_sol['score']}/4: {systems_sol['summary']} | "
+                f"Fable {systems_fable['score']}/4: {systems_fable['summary']}"
+            ),
+            "evidence": answer("P48"),
+            "source": "Sol concurrency probe, P48",
+        },
     ]
     cards = []
     for index, item in enumerate(items, start=1):
@@ -1010,11 +1252,11 @@ def audit_page(report: dict) -> str:
         )
     return f"""
 <section class="page-head">
-  <p class="eyebrow">Six-item review sheet</p>
+  <p class="eyebrow">Eight-item review sheet</p>
   <h1>Human audit sample</h1>
   <p class="dek">A small, deliberately mixed sample covering semantic labels,
-  multi-round dynamics, and evidence-summary fidelity. It is meant to take
-  minutes, not become a second study.</p>
+  multi-round dynamics, summary fidelity, and answer-score calibration. It is
+  meant to take minutes, not become a second study.</p>
 </section>
 <section class="prose">
   <div class="legend-box"><strong>What to do</strong>
@@ -1083,6 +1325,9 @@ def build(output_dir: Path, report_path: Path) -> None:
     catalog = load_json(ROOT / "data" / "model_catalog.openrouter.json")
     taxonomy = load_json(ROOT / "data" / "evaluation_taxonomy.json")
     selection = load_json(ROOT / "data" / "catalog_ladder_50.selection.json")
+    score_summary = (
+        load_json(DEFAULT_SCORE_SUMMARY) if DEFAULT_SCORE_SUMMARY.exists() else None
+    )
     selected_ids = selection["provider_model_ids"]
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -1090,7 +1335,7 @@ def build(output_dir: Path, report_path: Path) -> None:
         "index.html": page(
             "Can AI systems recognize intelligence?",
             "Results from a 50-model experiment in AI-authored intelligence evaluation.",
-            article(report, catalog, taxonomy),
+            article(report, catalog, taxonomy, score_summary),
             "results",
         ),
         "taxonomy.html": page(
@@ -1107,7 +1352,7 @@ def build(output_dir: Path, report_path: Path) -> None:
         ),
         "audit.html": page(
             "Human audit sample",
-            "A compact six-item audit of labels, conversation dynamics, and evidence summaries.",
+            "A compact audit of labels, dynamics, evidence summaries, and answer scoring.",
             audit_page(report),
             "audit",
         ),

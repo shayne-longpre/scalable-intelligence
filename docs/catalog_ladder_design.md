@@ -196,3 +196,15 @@ evidence reached 0.809. The primary-run analysis is in
 [`pilot_analysis_catalog_ladder50_20260721.md`](pilot_analysis_catalog_ladder50_20260721.md),
 and the crossed analysis is in
 [`pilot_analysis_catalog_ladder50_crossed_20260721.md`](pilot_analysis_catalog_ladder50_crossed_20260721.md).
+
+A fresh shuffled-order replay of the best four-probe condition agreed with the
+original at Kendall tau 0.814, retained the same top three, and moved direct-
+score pairwise accuracy from 0.867 to 0.837. This supports global comparison
+with explicit order uncertainty rather than panel merging. See
+[`pilot_analysis_catalog_order_20260725.md`](pilot_analysis_catalog_order_20260725.md).
+
+The archived opening answers were also scored on a fixed `0–4` correctness
+scale by Sol and Fable. Averaged scores ordered 84.8% of direct-score model
+pairs correctly and exposed meaningful differences in probe difficulty and
+judge rubrics. See
+[`pilot_analysis_probe_scoring_20260725.md`](pilot_analysis_probe_scoring_20260725.md).
