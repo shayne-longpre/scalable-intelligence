@@ -66,6 +66,11 @@ remain auditable.
 Implementation and study progress are tracked in
 [`docs/research_roadmap.md`](docs/research_roadmap.md).
 
+The evolving reader-facing overview is
+[`docs/site/index.html`](docs/site/index.html). Its linked taxonomy, model table,
+and compact audit sheet are generated directly from the versioned catalog and
+run artifacts by `scripts/build_publication_site.py`.
+
 The first broad benchmark uses two independent judges and a frozen 50-model
 ladder. Its plain-language protocol is in
 [`docs/catalog_ladder_design.md`](docs/catalog_ladder_design.md), and the exact

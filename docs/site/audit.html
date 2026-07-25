@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A compact six-item audit of labels, conversation dynamics, and evidence summaries.">
+  <title>Human audit sample</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="index.html">Machine Societies</a>
+    <nav aria-label="Primary"><a href="index.html">Results</a><a href="taxonomy.html">Taxonomy</a><a href="models.html">Models</a><a href="audit.html" aria-current="page">Audit sample</a></nav>
+  </header>
+  <main>
+<section class="page-head">
+  <p class="eyebrow">Six-item review sheet</p>
+  <h1>Human audit sample</h1>
+  <p class="dek">A small, deliberately mixed sample covering semantic labels,
+  multi-round dynamics, and evidence-summary fidelity. It is meant to take
+  minutes, not become a second study.</p>
+</section>
+<section class="prose">
+  <div class="legend-box"><strong>What to do</strong>
+    <span>1. Read the automated output and review question.</span>
+    <span>2. Open source evidence only when needed.</span>
+    <span>3. Mark Accept, Change, or Unsure. Notes are stored only in this browser.</span>
+  </div>
+</section>
+<section class="audit-list"><article class="audit-card" data-audit-id="audit-1">
+  <div class="audit-index">01</div>
+  <div>
+    <p class="section-kicker">Question-type classification</p>
+    <h2>Does the systems probe have the right labels?</h2>
+    <p>Accept Math Reasoning + Coding + Computer Systems, or change the set? State Tracking is a plausible boundary case.</p>
+    <div class="audit-output"><strong>Automated output</strong>
+      <p>Math Reasoning · Coding · Computer Systems</p></div>
+    <details><summary>Inspect source evidence</summary>
+      <pre>Assume sequentially consistent atomic operations and, initially, unbounded integer atomics `seq = A = B = 0`. The intended object is a linearizable atomic pair register. Proposed implementation: ```text Write(a,b): seq.fetch_add(1) A.store(a) B.store(b) seq.fetch_add(1) Read(): loop: s1 = seq.load() if s1 is odd: continue a = A.load() b = B.load() s2 = seq.load() if s1 == s2: return (a,b) ``` A valid execution must allow every completed operation to be placed in a sequential order consistent with real-time precedence, with each `Read` returning the pair from the latest preceding `Write` (or `(0,0)` initially). 1. With exactly one writer thread and any number of readers, determine whether the implementation is linearizable. Prove your answer and, if it is, give valid linearization points. 2. With two writer threads, each invoking `Write` once with arguments `(1,1)` and `(2,2)`, give a precise interleaving in which a `Read` returns a pair that no `Write` supplied. Include all operations needed to justify the accepted sequence-number checks. 3. Repair `Write` for arbitrarily many writers while leaving `Read` unchanged, using only the existing variables and `compare_exchange` on `seq`—no mutex or additional shared state. Give pseudocode and prove linearizability under the unbounded-counter assumption. 4. For your repaired protocol: - Can a reader be forced to retry forever even while writes keep completing? - If a writer pauses immediately after acquiring permission to update, can other operations be prevented from completing? Explain both answers. 5. Now suppose `seq` is a wrapping unsigned \(w\)-bit integer. Construct a wraparound execution that defeats the reader’s equality check, or prove none exists. State a sufficient operational assumption that restores correctness. **Answer limit: 600 words.**</pre>
+      <p class="source-ref">Sol catalog run, turn 3</p>
+    </details>
+    <fieldset><legend>Your decision</legend><label><input type="radio" name="audit-1" value="accept"> Accept</label><label><input type="radio" name="audit-1" value="change"> Change</label><label><input type="radio" name="audit-1" value="unsure"> Unsure</label></fieldset>
+    <label class="comment-label">Short note
+      <textarea rows="2" placeholder="Only if something should change"></textarea>
+    </label>
+  </div>
+</article><article class="audit-card" data-audit-id="audit-2">
+  <div class="audit-index">02</div>
+  <div>
+    <p class="section-kicker">Question-type classification</p>
+    <h2>Is “Multilingual” a false positive?</h2>
+    <p>The probe asks for translation in a constructed language. Keep Language Induction; decide whether Multilingual should be removed.</p>
+    <div class="audit-output"><strong>Automated output</strong>
+      <p>Language Induction · Multilingual And Cultural Reasoning</p></div>
+    <details><summary>Inspect source evidence</summary>
+      <pre>**PROBE 2 — Novel language induction and knowing the limits of your data** Below are eight sentences in an invented language, with English translations. The language is internally consistent. Study them, then complete the tasks. 1. *kelo lami sefuo* — &quot;The child chases the dog.&quot; 2. *tikelo lami sefuo* — &quot;The child chased the dog.&quot; 3. *muta roha lamio* — &quot;The dog sees the bird.&quot; 4. *muta lalami rohao* — &quot;The bird sees the dogs.&quot; 5. *tipira tepi rohao nu* — &quot;The bird ate the fish; I saw it happen myself.&quot; 6. *pira tetepi lamio* — &quot;The dog eats the fishes.&quot; 7. *kelo sesefu lamio* — &quot;The dog chases the children.&quot; 8. *timuta roha sefuo nu* — &quot;The child saw the bird; I saw it happen myself.&quot; **Tasks:** **T1.** State the grammar you inferred in at most five short rules (word order; how agent, plural, past tense, and *nu* are expressed). **T2.** Translate into English, capturing every grammatical distinction present: *tikelo sesefu lalamio nu* **T3.** Translate into the language: &quot;The fish sees the birds.&quot; **T4.** Translate into the language: &quot;The children chased the fish — but I did not witness it; someone told me.&quot; If any part of this meaning cannot be reliably expressed from the evidence given, produce your best translation anyway and state precisely what is uncertain and why. **T5.** Name two specific grammatical questions about this language that these eight sentences cannot settle. For each, give one sentence explaining why the data underdetermines it. (Missing vocabulary does not count; identify structural/grammatical unknowns.) **Rules for your answer:** - Maximum **500 words**. - Briefly cite the evidence for any word or affix your answer depends on (e.g., &quot;*lami* = dog, from sentences 1 and 3&quot;). - Unjustified guesses earn no credit; a correct form with wrong or missing justification earns at most partial credit. - If two analyses fit the data equally well, say so explicitly rather than silently picking one.</pre>
+      <p class="source-ref">Fable catalog run, turn 2</p>
+    </details>
+    <fieldset><legend>Your decision</legend><label><input type="radio" name="audit-2" value="accept"> Accept</label><label><input type="radio" name="audit-2" value="change"> Change</label><label><input type="radio" name="audit-2" value="unsure"> Unsure</label></fieldset>
+    <label class="comment-label">Short note
+      <textarea rows="2" placeholder="Only if something should change"></textarea>
+    </label>
+  </div>
+</article><article class="audit-card" data-audit-id="audit-3">
+  <div class="audit-index">03</div>
+  <div>
+    <p class="section-kicker">Conversation dynamics</p>
+    <h2>Did Sol genuinely broaden adaptively?</h2>
+    <p>Does the follow-up respond to unresolved evidence while changing domain, rather than merely continuing a prewritten battery?</p>
+    <div class="audit-output"><strong>Automated output</strong>
+      <p>adaptive_broadening · rank_changing</p></div>
+    <details><summary>Inspect source evidence</summary>
+      <pre>{ &quot;rationale&quot;: [ &quot;The first four are in a saturated near-perfect cluster with only minor, domain-specific slips.&quot;, &quot;Two have excellent evidence on three domains but no probe_1 response.&quot;, &quot;The remaining four failed mainly on hypothesis enumeration while succeeding elsewhere, so a new probe can test whether that weakness generalizes.&quot;, &quot;A common difficult probe would improve both top-tier resolution and anomaly diagnosis.&quot; ], &quot;plan&quot;: [ &quot;Change domain to a novel sequential planning or algorithm-design problem rather than repeat the four covered areas.&quot;, &quot;Increase difficulty and require a construction, an optimality or impossibility argument, and adversarial edge-case checks.&quot;, &quot;Use a concise response cap so candidates must prioritize decisive reasoning without rewarding verbosity.&quot;, &quot;Include a hidden-state enumeration step to replicate the apparent weakness of the anomalous mid-high candidates.&quot;, &quot;Avoid familiar checklist structure and make every claimed strategy directly simulable from the answer.&quot; ], &quot;covered_uncertain_pairs&quot;: [ [ &quot;P33&quot;, &quot;P48&quot; ], [ &quot;P25&quot;, &quot;P28&quot; ], [ &quot;P44&quot;, &quot;P16&quot; ], [ &quot;P24&quot;, &quot;P32&quot; ], [ &quot;P11&quot;, &quot;P36&quot; ] ] }</pre>
+      <p class="source-ref">Sol catalog run, adaptive decision before turn 210</p>
+    </details>
+    <fieldset><legend>Your decision</legend><label><input type="radio" name="audit-3" value="accept"> Accept</label><label><input type="radio" name="audit-3" value="change"> Change</label><label><input type="radio" name="audit-3" value="unsure"> Unsure</label></fieldset>
+    <label class="comment-label">Short note
+      <textarea rows="2" placeholder="Only if something should change"></textarea>
+    </label>
+  </div>
+</article><article class="audit-card" data-audit-id="audit-4">
+  <div class="audit-index">04</div>
+  <div>
+    <p class="section-kicker">Conversation dynamics</p>
+    <h2>Did Fable deepen a diagnosed weakness?</h2>
+    <p>Does the third-round probe retest an observed failure at greater difficulty, or should it be labeled broadening?</p>
+    <div class="audit-output"><strong>Automated output</strong>
+      <p>adaptive_deepening · rank_changing</p></div>
+    <details><summary>Inspect source evidence</summary>
+      <pre>{ &quot;rationale&quot;: [ &quot;Top seven error-free candidates need a substantially harder probe; all existing probes saturated for them&quot;, &quot;P35 needs any delivered response to convert two evidence gaps into signal&quot;, &quot;P40&#x27;s pr2-style induction ability is still untested; include a light induction component&quot;, &quot;P09 needs one more precision-demanding task to see if quoting/garbling errors persist&quot; ], &quot;plan&quot;: [ &quot;Increase difficulty sharply: a multi-constraint construction-plus-impossibility-proof task where partial credit gradations can split the error-free top tier&quot;, &quot;Change domain to adversarial estimation/planning with an embedded subtly-wrong intermediate result requiring exact identification, replicating the trap signal at higher difficulty&quot;, &quot;Demand exact quotation and strict domain restrictions to retest the pr5 precision failures&quot;, &quot;Keep responses terse-mandatory; route the probe so the pr5 non-responder gets a delivery retry&quot; ], &quot;covered_uncertain_pairs&quot;: [ [ &quot;P48&quot;, &quot;P44&quot; ], [ &quot;P18&quot;, &quot;P28&quot; ] ] }</pre>
+      <p class="source-ref">Fable catalog run, adaptive decision before turn 223</p>
+    </details>
+    <fieldset><legend>Your decision</legend><label><input type="radio" name="audit-4" value="accept"> Accept</label><label><input type="radio" name="audit-4" value="change"> Change</label><label><input type="radio" name="audit-4" value="unsure"> Unsure</label></fieldset>
+    <label class="comment-label">Short note
+      <textarea rows="2" placeholder="Only if something should change"></textarea>
+    </label>
+  </div>
+</article><article class="audit-card" data-audit-id="audit-5">
+  <div class="audit-index">05</div>
+  <div>
+    <p class="section-kicker">Evidence-summary fidelity</p>
+    <h2>Does the strong-answer summary preserve the evidence?</h2>
+    <p>Check whether the summary captures the decisive successes and any meaningful omissions in the full answer.</p>
+    <div class="audit-output"><strong>Automated output</strong>
+      <p>All parts correct: careful single-writer proof, valid torn (1,2) trace, correct CAS repair with proof, both liveness answers yes with lock-free/blocking nuance, precise wrap ABA yielding torn (a_i,b_j) after 2^{w-1} writes, correct &lt;2^{w-1} bound.</p></div>
+    <details><summary>Inspect source evidence</summary>
+      <pre>**1. Single writer: linearizable.** Since only one writer exists, `seq` follows 0,1,2,3,… with even ⇔ no write in progress. A read that returns requires `s1 == s2` with `s1` even. Under sequential consistency, `seq` is non-decreasing, so equality means `seq` never changed between the two loads; hence no writer store to `A` or `B` overlapped the reader&#x27;s `A`/`B` loads. The pair returned is therefore exactly the pair of the last write whose second `fetch_add` preceded the reader&#x27;s `s1` load (or `(0,0)`). **Linearization points:** `Write` at its second `fetch_add`; `Read` at its final (successful) `s1` load. Both points lie inside their operation&#x27;s interval, respect real-time order, and every read returns the latest preceding write&#x27;s pair. **2. Two writers — torn read.** - W1: `seq.fetch_add` → seq = 1 - W2: `seq.fetch_add` → seq = 2 (even again!) - R: `s1 = 2` (even, passes) - W1: `A.store(1)` - R: `a = 1` - W2: `A.store(2)`; `B.store(2)` - R: `b = 2` - R: `s2 = 2`, `s1 == s2` → **returns (1,2)** — a pair no write supplied. - (W1: `B.store(1)`; W1: `fetch_add` → 3; W2: `fetch_add` → 4.) Both checks pass because the two writers&#x27; first increments together restore an even value. **3. Repair with CAS (readers unchanged).** ```text Write(a,b): loop: s = seq.load() if s is odd: continue if seq.compare_exchange(s, s+1): break A.store(a) B.store(b) seq.fetch_add(1) // s+2 ``` **Proof.** A successful CAS transitions `seq` even→odd; no other writer&#x27;s CAS can succeed until the final `fetch_add` restores an even value. Hence writers&#x27; `A`/`B` stores are mutually exclusive, and `seq` is strictly increasing, changing only via even→odd (acquire) and odd→even (release). If a reader observes `s1 == s2` (even), `seq` was unchanged throughout, so no acquire occurred in between; the reader&#x27;s snapshot lies entirely between one release and the next acquire and equals the pair of the last released write. **Linearization points:** `Write` at its final `fetch_add`; `Read` at its last `s1` load. Real-time order is respected and every accepted read returns the latest linearized write&#x27;s pair. **4. Progress properties.** - **Reader starvation: yes.** If writes complete continuously, a reader can always observe `seq` odd or `s1 ≠ s2` on every attempt and retry forever. The protocol is lock-free system-wide (writers make progress) but readers are not wait-free. - **Paused writer: yes, it blocks everything.** After a successful CAS, `seq` is odd. Every other writer spins in the acquire loop, and every reader spins on `s1` odd. The CAS acts as a spinlock; a stalled lock-holder halts all other operations, so the protocol is blocking, not lock-free overall. **5. Wraparound (w-bit `seq`): the check can be defeated (ABA).** Each complete write adds 2 (mod 2^w). Execution: - R: `s1 = s` (even). - R: `a = A` (value from write W_i). - Exactly 2^(w−1) full writes complete; `seq` advances by 2·2^(w−1) ≡ 0 (mod 2^w), returning to `s`. - R: `b = B` (value from the last write W_j, j ≠ i). - R: `s2 = s = s1` → accepts a torn pair `(a_i, b_j)`. **Sufficient assumption:** strictly fewer than 2^(w−1) writes can complete during any single read attempt (between its two `seq` loads) — a bounded-speed / bounded-overlap assumption. Then `s1 == s2` implies `seq` genuinely did not change (no full wrap fits in the window), restoring the unbounded-counter argument and hence linearizability.</pre>
+      <p class="source-ref">Fable judging Sol systems probe, P44</p>
+    </details>
+    <fieldset><legend>Your decision</legend><label><input type="radio" name="audit-5" value="accept"> Accept</label><label><input type="radio" name="audit-5" value="change"> Change</label><label><input type="radio" name="audit-5" value="unsure"> Unsure</label></fieldset>
+    <label class="comment-label">Short note
+      <textarea rows="2" placeholder="Only if something should change"></textarea>
+    </label>
+  </div>
+</article><article class="audit-card" data-audit-id="audit-6">
+  <div class="audit-index">06</div>
+  <div>
+    <p class="section-kicker">Evidence-summary fidelity</p>
+    <h2>Does the weak-answer summary distinguish error from style?</h2>
+    <p>Check that the summary identifies substantive technical failures without treating brevity, tone, or identity as capability evidence.</p>
+    <div class="audit-output"><strong>Automated output</strong>
+      <p>Incoherent on every part: vacuous part 1, nonsensical interleavings, repair that &#x27;swaps A and B&#x27;, misunderstands liveness as code modification, and gibberish wraparound. No valid technical content.</p></div>
+    <details><summary>Inspect source evidence</summary>
+      <pre>**Answer to Probe J1: round_1:probe_3** **1. Linearizability of the implementation:** The proposed implementation is linearizable because it satisfies the sequential consistency requirement. The `fetch_add` and `store` operations are atomic, and the `load` operation is also atomic. The `Read` loop ensures that the pair is returned in the latest preceding `Write` (or `(0,0)` initially), which is a valid sequential consistency requirement. **2. Interleaving with two writer threads:** To achieve this, we can use a combination of `compare_exchange` and `fetch_add` to reorder the writes. Here&#x27;s a possible interleaving: 1. Write `(1,1)` and `(2,2)` in any order, but ensure that the `Read` returns a pair that no `Write` supplied. 2. After the first write, read the pair returned by the first `Read` and use it as the initial value for the second `Read`. 3. Write `(1,1)` again, and then read the pair returned by the second `Read`. 4. Write `(2,2)` again, and then read the pair returned by the third `Read`. This interleaving ensures that the pair is returned in the latest preceding `Write` (or `(0,0)` initially), satisfying the sequential consistency requirement. **3. Repairing `Write` for arbitrarily many writers:** To repair `Write` for arbitrarily many writers, we can use a single `compare_exchange` operation to reorder the writes. Here&#x27;s a possible implementation: 1. Initialize `seq` to `(0,0)`. 2. For each write, use `compare_exchange` to reorder the writes: * If the write is `(1,1)`, swap the values of `A` and `B` using `compare_exchange` with `seq`. * If the write is `(2,2)`, swap the values of `A` and `B` using `compare_exchange` with `seq`. 3. After all writes have been reordered, use `fetch_add` to update `seq` to `(1,1)`. This implementation ensures that the `Read` returns a pair that no `Write` supplied, satisfying the sequential consistency requirement. **4. Can a reader be forced to retry forever?** Yes, a reader can be forced to retry forever even while writes keep completing. This is because the `Read` loop can be modified to use a loop that continues indefinitely, allowing the reader to retry the `Read` operation repeatedly. **5. Wraparound execution that defeats the reader&#x27;s equality check:** To construct a wraparound execution that defeats the reader&#x27;s equality check, we can use a combination of `compare_exchange` and `fetch_add` to reorder the writes. Here&#x27;s a possible implementation: 1. Write `(1,1)` and `(2,2)` in any order, but ensure that the `Read` returns a pair that no `Write` supplied. 2. After the first write, read the pair returned by the first `Read` and use it as the initial value for the second `Read`. 3. Write `(1,1)` again, and then read the pair returned by the second `Read`. 4. Write `(2,2)` again, and then read the pair returned by the third `Read`. 5. Write `(1,1)` again, and then read the pair returned by the fourth `Read`. 6. Write `(2,2)` again, and then read the pair returned by the fifth `Read`. 7. Write `(1,1)` again, and then read the pair returned by the sixth `Read`. 8. Write `(2,2)` again, and then read the pair returned by the seventh `Read`. This wraparound execution ensures that the pair is returned in the latest preceding `Write` (or `(0,0)` initially), satisfying the sequential consistency requirement. **6. Operational assumption to restore correctness:** To restore correctness, we can use a wrapping counter `w` to keep track of the current position in the sequence. We can use the wrapping counter to reorder the writes and `Read` operations to ensure that the pair is returned in the latest preceding `Write` (or `(0,0)` initially).</pre>
+      <p class="source-ref">Fable judging Sol systems probe, P10</p>
+    </details>
+    <fieldset><legend>Your decision</legend><label><input type="radio" name="audit-6" value="accept"> Accept</label><label><input type="radio" name="audit-6" value="change"> Change</label><label><input type="radio" name="audit-6" value="unsure"> Unsure</label></fieldset>
+    <label class="comment-label">Short note
+      <textarea rows="2" placeholder="Only if something should change"></textarea>
+    </label>
+  </div>
+</article></section>
+<script>
+const storageKey = "machine-societies-audit-v1";
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(storageKey) || "{}"); } catch (_) {}
+for (const card of document.querySelectorAll("[data-audit-id]")) {
+  const id = card.dataset.auditId;
+  const state = saved[id] || {};
+  if (state.decision) {
+    const radio = card.querySelector(`input[value="${state.decision}"]`);
+    if (radio) radio.checked = true;
+  }
+  card.querySelector("textarea").value = state.note || "";
+  card.addEventListener("input", () => {
+    saved[id] = {
+      decision: card.querySelector("input:checked")?.value || "",
+      note: card.querySelector("textarea").value
+    };
+    localStorage.setItem(storageKey, JSON.stringify(saved));
+  });
+}
+</script>
+</main>
+  <footer>
+    <p>Exploratory results. External intelligence scores are reference measurements, not ground truth.</p>
+    <p>Generated from versioned run artifacts on 2026-07-25.</p>
+  </footer>
+</body>
+</html>
