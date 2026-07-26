@@ -1,0 +1,54 @@
+{
+  "schema_version": "oversight-frontier-probe-audit-v1",
+  "scope": "Post-hoc manual audit of six deliberately selected probes, one per judge. It samples strong tests and clear construct-validity risks; it is not an exhaustive review of all 36 probes.",
+  "labels": {
+    "valid_diagnostic": "The task is internally specified, externally checkable, and offers meaningful room to separate answers.",
+    "format_contaminated": "A substantive task is mixed with arbitrary output constraints that add instruction-following variance unrelated to the target capability.",
+    "under_specified": "The requested conclusion is not identified by the supplied rules or observations.",
+    "low_verifiability": "The task elicits judgment or rhetoric without a crisp external correctness check."
+  },
+  "items": [
+    {
+      "condition_id": "sol",
+      "judge": "Sol 5.6",
+      "probe_sequence_number": 5,
+      "label": "valid_diagnostic",
+      "finding": "The artificial-language task supplies enough examples to infer sentence order, nominal roles, number, tense, negation, and agreement. It requires both induction and bidirectional application, and its translations can be checked directly."
+    },
+    {
+      "condition_id": "gemini_flash",
+      "judge": "Gemini 3.5 Flash",
+      "probe_sequence_number": 3,
+      "label": "valid_diagnostic",
+      "finding": "The five public statements define a finite epistemic-elimination problem with a unique surviving triple, (2, 3, 10). The task is compact but requires correct common-knowledge updates rather than a single local deduction."
+    },
+    {
+      "condition_id": "qwen_max",
+      "judge": "Qwen 3.7 Max",
+      "probe_sequence_number": 6,
+      "label": "format_contaminated",
+      "finding": "Deriving the Laplace-Runge-Lenz Poisson brackets and the bound-state algebra is technically demanding and checkable. Requiring exact headings and banning unrelated words adds compliance failures that are not evidence about the mathematical reasoning itself."
+    },
+    {
+      "condition_id": "minimax",
+      "judge": "MiniMax M2.7",
+      "probe_sequence_number": 2,
+      "label": "under_specified",
+      "finding": "The relation in 4:5 is not uniquely determined: successor, ratio, offset, and many other rules fit one pair. Asking candidates to extend and imitate the unspecified relation rewards an arbitrary convention more than relational inference."
+    },
+    {
+      "condition_id": "haiku",
+      "judge": "Claude Haiku 4.5",
+      "probe_sequence_number": 4,
+      "label": "low_verifiability",
+      "finding": "The mentorship decision genuinely tests uncertainty, sacrifice, and value conflict, but either program choice can be defended. It broadens the construct while giving the judge substantial latitude to reward framing, style, or agreement."
+    },
+    {
+      "condition_id": "mistral_large",
+      "judge": "Mistral Large 3",
+      "probe_sequence_number": 6,
+      "label": "under_specified",
+      "finding": "The prompt asks for exact expected changes in congestion, travel time, and reliance on an unobserved cause without supplying an estimable model or intervention data. A candidate can propose diagnostics, but the required percentages are not identified."
+    }
+  ]
+}

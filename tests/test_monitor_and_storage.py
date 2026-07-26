@@ -488,6 +488,35 @@ class MonitorAndStorageTests(unittest.TestCase):
             ["interviewer_id_mismatch", "target_participant_id_mismatch"],
         )
 
+    def test_probe_validity_object_is_rejected_without_crashing(self) -> None:
+        monitor = RuleBasedMonitor()
+        transcript_entry = TranscriptEntry(
+            turn_id=13,
+            phase="judge_ranking",
+            speaker="J1",
+            visibility="private",
+            content="{}",
+            metadata={
+                "interaction_role": "probe_comparison",
+                "respondents": ["P1", "P2"],
+            },
+        )
+
+        findings = monitor.check_structured_values(
+            transcript_entry,
+            {
+                "ordering": ["P1", "P2"],
+                "ties": [],
+                "probe_validity": {"label": "informative"},
+            },
+            participant_ids=["P1", "P2"],
+        )
+
+        self.assertIn(
+            "invalid_probe_validity",
+            [finding.code for finding in findings],
+        )
+
 
 def _minimal_config(phase: dict, monitor: dict) -> ExperimentConfig:
     return ExperimentConfig.from_dict(

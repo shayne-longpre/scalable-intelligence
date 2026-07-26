@@ -413,7 +413,10 @@ def _check_comparative_judgment_fields(
         )
 
     validity = parsed.get("probe_validity")
-    if "probe_validity" in parsed and validity not in {"informative", "limited", "invalid"}:
+    if "probe_validity" in parsed and (
+        not isinstance(validity, str)
+        or validity not in {"informative", "limited", "invalid"}
+    ):
         findings.append(
             MonitorFinding(
                 code="invalid_probe_validity",

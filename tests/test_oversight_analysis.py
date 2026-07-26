@@ -29,6 +29,24 @@ class OversightAnalysisTests(unittest.TestCase):
             self.assertIn(item["label"], audit["labels"])
             self.assertIn(item["probe_sequence_number"], range(1, 7))
 
+    def test_replication_probe_audit_covers_each_judge_once(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        study = json.loads(
+            (root / "studies" / "oversight_frontier_v2.json").read_text()
+        )
+        audit = json.loads(
+            (root / "data" / "oversight_frontier_v2_probe_audit.json").read_text()
+        )
+
+        self.assertEqual(
+            {item["condition_id"] for item in audit["items"]},
+            {condition["id"] for condition in study["conditions"]},
+        )
+        self.assertEqual(len(audit["items"]), len(study["conditions"]))
+        for item in audit["items"]:
+            self.assertIn(item["label"], audit["labels"])
+            self.assertIn(item["probe_sequence_number"], range(1, 7))
+
     def test_pair_metrics_separate_below_crossing_and_above_judge(self) -> None:
         scores = {
             "strong_a": 60.0,
@@ -124,6 +142,33 @@ class OversightAnalysisTests(unittest.TestCase):
         self.assertEqual(discovered["alpha"].name, repaired_alpha.name)
         self.assertEqual(discovered["beta"].name, beta.name)
 
+    def test_discovery_scopes_reused_condition_ids_to_study_file(self) -> None:
+        study = {"conditions": [{"id": "shared"}]}
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            old = root / "20260101_old"
+            new = root / "20260102_new"
+            _write_run(
+                old,
+                "shared",
+                "completed",
+                study_file="studies/old.json",
+            )
+            _write_run(
+                new,
+                "shared",
+                "completed",
+                study_file="studies/new.json",
+            )
+
+            discovered = discover_study_runs(
+                study,
+                root,
+                study_path=Path("studies/new.json").resolve(),
+            )
+
+        self.assertEqual(discovered["shared"].name, new.name)
+
 
 def _write_run(
     path: Path,
@@ -132,11 +177,14 @@ def _write_run(
     *,
     unavailable_answers: int = 0,
     is_repair: bool = False,
+    study_file: str | None = None,
 ) -> None:
     path.mkdir()
     metadata = {"study_condition": condition_id}
     if is_repair:
         metadata["repair_source_run"] = "source"
+    if study_file:
+        metadata["study_file"] = study_file
     (path / "config.json").write_text(
         json.dumps({"metadata": metadata}),
         encoding="utf-8",

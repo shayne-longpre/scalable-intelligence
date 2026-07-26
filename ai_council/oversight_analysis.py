@@ -23,8 +23,10 @@ GAP_BINS = (
 def discover_study_runs(
     study: Mapping[str, Any],
     runs_root: str | Path,
+    *,
+    study_path: str | Path | None = None,
 ) -> dict[str, Path]:
-    attempts = discover_study_attempts(study, runs_root)
+    attempts = discover_study_attempts(study, runs_root, study_path=study_path)
     completed = {}
     for condition_id, paths in attempts.items():
         completed_paths = [
@@ -42,16 +44,24 @@ def discover_study_runs(
 def discover_study_attempts(
     study: Mapping[str, Any],
     runs_root: str | Path,
+    *,
+    study_path: str | Path | None = None,
 ) -> dict[str, list[Path]]:
     condition_ids = {condition["id"] for condition in study["conditions"]}
+    expected_study = str(study_path) if study_path is not None else None
     matches: dict[str, list[Path]] = {condition_id: [] for condition_id in condition_ids}
     for config_path in Path(runs_root).glob("*/config.json"):
         try:
             config = _load_json(config_path)
         except (OSError, json.JSONDecodeError):
             continue
-        condition_id = config.get("metadata", {}).get("study_condition")
+        metadata = config.get("metadata", {})
+        condition_id = metadata.get("study_condition")
         if condition_id not in matches:
+            continue
+        if expected_study is not None and not _same_path(
+            metadata.get("study_file"), expected_study
+        ):
             continue
         summary_path = config_path.parent / "run_summary.json"
         if summary_path.exists():
@@ -74,6 +84,12 @@ def _completed_run_selection_key(path: Path) -> tuple[int, int, str]:
     return unavailable, int(is_repair), path.name
 
 
+def _same_path(recorded: Any, expected: str) -> bool:
+    if not isinstance(recorded, str):
+        return False
+    return Path(recorded).resolve() == Path(expected).resolve()
+
+
 def build_oversight_study_report(
     *,
     study_path: str | Path,
@@ -92,8 +108,8 @@ def build_oversight_study_report(
         for model in catalog["models"]
         if model.get("intelligence_score") is not None
     }
-    attempts = discover_study_attempts(study, runs_root)
-    run_dirs = discover_study_runs(study, runs_root)
+    attempts = discover_study_attempts(study, runs_root, study_path=study_path)
+    run_dirs = discover_study_runs(study, runs_root, study_path=study_path)
     missing = [
         condition["id"]
         for condition in study["conditions"]
@@ -208,6 +224,8 @@ def summarize_pair_observations(
 def render_oversight_report(summary: Mapping[str, Any]) -> str:
     conditions = summary["conditions"]
     aggregate = summary["aggregate"]
+    judge_scores = [condition["judge_external_score"] for condition in conditions]
+    judge_count = len(conditions)
     judge_rows = "".join(_judge_row(condition) for condition in conditions)
     heatmap_rows = "".join(_relative_heatmap_row(condition) for condition in conditions)
     probe_rows = "".join(_probe_row(condition) for condition in conditions)
@@ -296,9 +314,11 @@ def render_oversight_report(summary: Mapping[str, Any]) -> str:
 </head>
 <body><main>
   <h1>Where does AI oversight break?</h1>
-  <p class="dek">{escape(summary['research_question'])} Six anonymous judges,
-  spanning 15.9 to 58.9 on the external intelligence index, each tested seven
-  candidates with five opening probes and one adaptive follow-up.</p>
+  <p class="dek">{escape(summary['research_question'])} {judge_count} anonymous
+  {"judge" if judge_count == 1 else "judges"}, spanning
+  {min(judge_scores):.1f} to {max(judge_scores):.1f} on the external intelligence
+  index, each tested seven candidates with five opening probes and one adaptive
+  follow-up.</p>
 
   <section class="metrics">
     <div class="metric"><strong>{_pct(aggregate['final_pair_accuracy'])}</strong>

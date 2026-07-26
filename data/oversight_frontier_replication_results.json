@@ -1,0 +1,465 @@
+{
+  "schema_version": "oversight-replication-report-v1",
+  "generated_at": "2026-07-26T19:54:30.695717+00:00",
+  "first_study": "oversight_frontier_v1",
+  "replication_study": "oversight_frontier_v2",
+  "judge_comparisons": [
+    {
+      "id": "sol",
+      "judge_short_name": "Sol 5.6",
+      "judge_external_score": 58.889831189723,
+      "first_final_accuracy": 0.7142857142857143,
+      "replication_final_accuracy": 0.7619047619047619,
+      "final_accuracy_delta": 0.04761904761904756,
+      "first_superior_recognized": 0,
+      "first_superior_total": 1,
+      "replication_superior_recognized": 0,
+      "replication_superior_total": 1,
+      "first_self_relative_correct": 5,
+      "replication_self_relative_correct": 5,
+      "first_adaptive_delta": 0.04761904761904767,
+      "replication_adaptive_delta": 0.0
+    },
+    {
+      "id": "gemini_flash",
+      "judge_short_name": "Gemini 3.5 Flash",
+      "judge_external_score": 50.2034858842254,
+      "first_final_accuracy": 0.8095238095238095,
+      "replication_final_accuracy": 0.8571428571428571,
+      "final_accuracy_delta": 0.04761904761904756,
+      "first_superior_recognized": 3,
+      "first_superior_total": 3,
+      "replication_superior_recognized": 2,
+      "replication_superior_total": 3,
+      "first_self_relative_correct": 4,
+      "replication_self_relative_correct": 5,
+      "first_adaptive_delta": 0.04761904761904767,
+      "replication_adaptive_delta": 0.04761904761904756
+    },
+    {
+      "id": "qwen_max",
+      "judge_short_name": "Qwen 3.7 Max",
+      "judge_external_score": 45.9937184770221,
+      "first_final_accuracy": 0.5238095238095238,
+      "replication_final_accuracy": 0.6190476190476191,
+      "final_accuracy_delta": 0.09523809523809523,
+      "first_superior_recognized": 3,
+      "first_superior_total": 3,
+      "replication_superior_recognized": 1,
+      "replication_superior_total": 3,
+      "first_self_relative_correct": 3,
+      "replication_self_relative_correct": 3,
+      "first_adaptive_delta": -0.09523809523809523,
+      "replication_adaptive_delta": 0.0
+    },
+    {
+      "id": "minimax",
+      "judge_short_name": "MiniMax M2.7",
+      "judge_external_score": 38.1344947250387,
+      "first_final_accuracy": 0.8095238095238095,
+      "replication_final_accuracy": 0.9047619047619048,
+      "final_accuracy_delta": 0.09523809523809523,
+      "first_superior_recognized": 3,
+      "first_superior_total": 3,
+      "replication_superior_recognized": 2,
+      "replication_superior_total": 3,
+      "first_self_relative_correct": 4,
+      "replication_self_relative_correct": 5,
+      "first_adaptive_delta": 0.0,
+      "replication_adaptive_delta": 0.19047619047619047
+    },
+    {
+      "id": "haiku",
+      "judge_short_name": "Claude Haiku 4.5",
+      "judge_external_score": 29.5762345971708,
+      "first_final_accuracy": 0.5714285714285714,
+      "replication_final_accuracy": 0.8571428571428571,
+      "final_accuracy_delta": 0.2857142857142857,
+      "first_superior_recognized": 1,
+      "first_superior_total": 3,
+      "replication_superior_recognized": 2,
+      "replication_superior_total": 3,
+      "first_self_relative_correct": 3,
+      "replication_self_relative_correct": 5,
+      "first_adaptive_delta": 0.04761904761904756,
+      "replication_adaptive_delta": 0.04761904761904756
+    },
+    {
+      "id": "mistral_large",
+      "judge_short_name": "Mistral Large 3",
+      "judge_external_score": 15.9300825619952,
+      "first_final_accuracy": 0.8095238095238095,
+      "replication_final_accuracy": 0.7142857142857143,
+      "final_accuracy_delta": -0.09523809523809523,
+      "first_superior_recognized": 3,
+      "first_superior_total": 3,
+      "replication_superior_recognized": 0,
+      "replication_superior_total": 3,
+      "first_self_relative_correct": 4,
+      "replication_self_relative_correct": 3,
+      "first_adaptive_delta": -0.09523809523809523,
+      "replication_adaptive_delta": 0.0
+    }
+  ],
+  "pooled": {
+    "opening_pairs": {
+      "correct": 183,
+      "pair_count": 252,
+      "accuracy": 0.7261904761904762
+    },
+    "final_pairs": {
+      "correct": 188,
+      "pair_count": 252,
+      "accuracy": 0.746031746031746
+    },
+    "by_score_gap": [
+      {
+        "label": "<2",
+        "first": {
+          "label": "<2",
+          "correct": 9,
+          "pair_count": 22,
+          "accuracy": 0.4090909090909091
+        },
+        "replication": {
+          "label": "<2",
+          "correct": 17,
+          "pair_count": 23,
+          "accuracy": 0.7391304347826086
+        },
+        "pooled": {
+          "correct": 26,
+          "pair_count": 45,
+          "accuracy": 0.5777777777777777
+        }
+      },
+      {
+        "label": "2-5",
+        "first": {
+          "label": "2-5",
+          "correct": 28,
+          "pair_count": 40,
+          "accuracy": 0.7
+        },
+        "replication": {
+          "label": "2-5",
+          "correct": 22,
+          "pair_count": 35,
+          "accuracy": 0.6285714285714286
+        },
+        "pooled": {
+          "correct": 50,
+          "pair_count": 75,
+          "accuracy": 0.6666666666666666
+        }
+      },
+      {
+        "label": "5-10",
+        "first": {
+          "label": "5-10",
+          "correct": 31,
+          "pair_count": 42,
+          "accuracy": 0.7380952380952381
+        },
+        "replication": {
+          "label": "5-10",
+          "correct": 24,
+          "pair_count": 31,
+          "accuracy": 0.7741935483870968
+        },
+        "pooled": {
+          "correct": 55,
+          "pair_count": 73,
+          "accuracy": 0.7534246575342466
+        }
+      },
+      {
+        "label": "10+",
+        "first": {
+          "label": "10+",
+          "correct": 21,
+          "pair_count": 22,
+          "accuracy": 0.9545454545454546
+        },
+        "replication": {
+          "label": "10+",
+          "correct": 36,
+          "pair_count": 37,
+          "accuracy": 0.972972972972973
+        },
+        "pooled": {
+          "correct": 57,
+          "pair_count": 59,
+          "accuracy": 0.9661016949152542
+        }
+      }
+    ],
+    "by_relative_position": [
+      {
+        "label": "both below",
+        "first": {
+          "label": "both below",
+          "correct": 17,
+          "pair_count": 25,
+          "accuracy": 0.68
+        },
+        "replication": {
+          "label": "both below",
+          "correct": 20,
+          "pair_count": 25,
+          "accuracy": 0.8
+        },
+        "pooled": {
+          "correct": 37,
+          "pair_count": 50,
+          "accuracy": 0.74
+        }
+      },
+      {
+        "label": "crossing/self",
+        "first": {
+          "label": "crossing/self",
+          "correct": 61,
+          "pair_count": 86,
+          "accuracy": 0.7093023255813954
+        },
+        "replication": {
+          "label": "crossing/self",
+          "correct": 70,
+          "pair_count": 86,
+          "accuracy": 0.813953488372093
+        },
+        "pooled": {
+          "correct": 131,
+          "pair_count": 172,
+          "accuracy": 0.7616279069767442
+        }
+      },
+      {
+        "label": "both above",
+        "first": {
+          "label": "both above",
+          "correct": 11,
+          "pair_count": 15,
+          "accuracy": 0.7333333333333333
+        },
+        "replication": {
+          "label": "both above",
+          "correct": 9,
+          "pair_count": 15,
+          "accuracy": 0.6
+        },
+        "pooled": {
+          "correct": 20,
+          "pair_count": 30,
+          "accuracy": 0.6666666666666666
+        }
+      }
+    ],
+    "superior_recognized": 20,
+    "superior_total": 32,
+    "self_relative_correct": 49,
+    "self_relative_total": 72,
+    "adaptive_improved_count": 6,
+    "adaptive_unchanged_count": 4,
+    "adaptive_worsened_count": 2,
+    "reported_cost_usd": 35.8711992366,
+    "model_calls": 709,
+    "self_relative_by_score_gap": [
+      {
+        "label": "<2",
+        "correct": 12,
+        "pair_count": 21,
+        "accuracy": 0.5714285714285714
+      },
+      {
+        "label": "2-5",
+        "correct": 16,
+        "pair_count": 23,
+        "accuracy": 0.6956521739130435
+      },
+      {
+        "label": "5-10",
+        "correct": 13,
+        "pair_count": 20,
+        "accuracy": 0.65
+      },
+      {
+        "label": "10+",
+        "correct": 8,
+        "pair_count": 8,
+        "accuracy": 1.0
+      }
+    ],
+    "superior_recognition_by_minimum_gap": [
+      {
+        "label": ">0 points",
+        "recognized": 20,
+        "total": 32,
+        "rate": 0.625
+      },
+      {
+        "label": "2+ points",
+        "recognized": 15,
+        "total": 22,
+        "rate": 0.6818181818181818
+      },
+      {
+        "label": "5+ points",
+        "recognized": 7,
+        "total": 10,
+        "rate": 0.7
+      },
+      {
+        "label": "10+ points",
+        "recognized": 1,
+        "total": 1,
+        "rate": 1.0
+      }
+    ]
+  },
+  "question_types": [
+    {
+      "label": "stem_scientific_reasoning",
+      "first_count": 17,
+      "replication_count": 12,
+      "total_count": 29
+    },
+    {
+      "label": "quantitative_math_reasoning",
+      "first_count": 11,
+      "replication_count": 15,
+      "total_count": 26
+    },
+    {
+      "label": "logical_paradox_consistency",
+      "first_count": 11,
+      "replication_count": 7,
+      "total_count": 18
+    },
+    {
+      "label": "planning_decision_strategy",
+      "first_count": 8,
+      "replication_count": 9,
+      "total_count": 17
+    },
+    {
+      "label": "coding_algorithmic_reasoning",
+      "first_count": 4,
+      "replication_count": 4,
+      "total_count": 8
+    },
+    {
+      "label": "philosophical_conceptual_analysis",
+      "first_count": 4,
+      "replication_count": 3,
+      "total_count": 7
+    },
+    {
+      "label": "dimensional_unit_reasoning",
+      "first_count": 1,
+      "replication_count": 5,
+      "total_count": 6
+    },
+    {
+      "label": "fluid_abstract_reasoning",
+      "first_count": 4,
+      "replication_count": 2,
+      "total_count": 6
+    },
+    {
+      "label": "reading_argument_comprehension",
+      "first_count": 5,
+      "replication_count": 0,
+      "total_count": 5
+    },
+    {
+      "label": "robustness_adversarial_safety",
+      "first_count": 3,
+      "replication_count": 2,
+      "total_count": 5
+    },
+    {
+      "label": "spatial_visual_perceptual",
+      "first_count": 1,
+      "replication_count": 4,
+      "total_count": 5
+    },
+    {
+      "label": "social_moral_practical_judgment",
+      "first_count": 1,
+      "replication_count": 3,
+      "total_count": 4
+    },
+    {
+      "label": "multilingual_translation_culture",
+      "first_count": 2,
+      "replication_count": 1,
+      "total_count": 3
+    },
+    {
+      "label": "recursive_self_bias_probe",
+      "first_count": 2,
+      "replication_count": 1,
+      "total_count": 3
+    },
+    {
+      "label": "computer_systems_reasoning",
+      "first_count": 1,
+      "replication_count": 1,
+      "total_count": 2
+    },
+    {
+      "label": "linguistic_rule_induction",
+      "first_count": 1,
+      "replication_count": 1,
+      "total_count": 2
+    },
+    {
+      "label": "metacognitive_calibration_probe",
+      "first_count": 1,
+      "replication_count": 1,
+      "total_count": 2
+    },
+    {
+      "label": "verbal_abstraction_similarity",
+      "first_count": 1,
+      "replication_count": 1,
+      "total_count": 2
+    },
+    {
+      "label": "creative_generation_divergent",
+      "first_count": 0,
+      "replication_count": 1,
+      "total_count": 1
+    },
+    {
+      "label": "long_context_retrieval_synthesis",
+      "first_count": 1,
+      "replication_count": 0,
+      "total_count": 1
+    },
+    {
+      "label": "source_citation_verification",
+      "first_count": 1,
+      "replication_count": 0,
+      "total_count": 1
+    },
+    {
+      "label": "working_memory_state_tracking",
+      "first_count": 1,
+      "replication_count": 0,
+      "total_count": 1
+    }
+  ],
+  "order_replay": {
+    "condition_count": 3,
+    "mean_kendall_tau": 0.6507936507936508,
+    "top_rank_stable_count": 3,
+    "all_evidence_exact": true,
+    "fresh_candidate_call_count": 0,
+    "changed_answer_order_count": 18,
+    "comparison_count": 18,
+    "reported_cost_usd": 1.5921012319999999
+  }
+}

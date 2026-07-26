@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Mapping, Sequence
 import random
 
@@ -305,3 +307,54 @@ def openrouter_provider(
         "timeout_seconds": timeout_seconds,
         "request_retries": request_retries,
     }
+
+
+def build_exact_evidence_order_replay_config(
+    source_config: Mapping[str, Any],
+    *,
+    source_run: str | Path,
+    comparison_seed: int,
+    study_condition: str,
+    name_suffix: str = "order_replay",
+) -> dict[str, Any]:
+    config = deepcopy(dict(source_config))
+    phases = config.get("protocol", {}).get("phases", [])
+    if len(phases) != 1 or phases[0].get("kind") != "independent_judge_ranking":
+        raise ValueError(
+            "order replay requires one independent_judge_ranking phase"
+        )
+    phase = phases[0]
+    source_seed = int(phase.get("comparison_seed", 0))
+    if comparison_seed == source_seed:
+        raise ValueError("order replay comparison seed must differ from the source")
+
+    source_run = Path(source_run)
+    phase.update(
+        {
+            "comparison_order": "seeded_shuffle",
+            "comparison_seed": int(comparison_seed),
+            "preauthored_probe_file": str(source_run / "transcript.jsonl"),
+            "preauthored_answer_file": str(source_run),
+            "reuse_unavailable_answers": True,
+            "replay_source_targets": True,
+            "retry_unavailable_rounds": [],
+        }
+    )
+    phase.pop("preauthored_evidence_file", None)
+    phase.pop("preauthored_ranking_file", None)
+
+    config["name"] = f"{config['name']}_{name_suffix}"
+    metadata = config.setdefault("metadata", {})
+    source_condition = metadata.get("study_condition")
+    metadata.pop("repair_source_run", None)
+    metadata.pop("repair_retry_unavailable_rounds", None)
+    metadata.update(
+        {
+            "study_condition": study_condition,
+            "source_study_condition": source_condition,
+            "order_replay_source_run": str(source_run),
+            "order_replay_source_comparison_seed": source_seed,
+            "comparison_seed": int(comparison_seed),
+        }
+    )
+    return config

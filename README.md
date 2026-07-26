@@ -86,10 +86,13 @@ and
 [`docs/pilot_analysis_probe_scoring_20260725.md`](docs/pilot_analysis_probe_scoring_20260725.md).
 The six-judge oversight-frontier study is specified in
 [`docs/oversight_frontier_design.md`](docs/oversight_frontier_design.md), with
-results in
+the first-panel results in
 [`docs/pilot_analysis_oversight_frontier_20260725.md`](docs/pilot_analysis_oversight_frontier_20260725.md)
-and a reader-facing
-[`oversight report`](docs/site/oversight.html).
+and the new-panel replication plus exact-evidence answer-order audit in
+[`docs/pilot_analysis_oversight_frontier_replication_20260726.md`](docs/pilot_analysis_oversight_frontier_replication_20260726.md).
+The combined reader-facing
+[`oversight report`](docs/site/oversight.html) links back to machine-readable
+study results and versioned probe audits.
 
 ## Core Methodology
 
@@ -301,6 +304,11 @@ The repository includes config examples that map onto the two modes:
   one adaptive tie-breaker. Resolved configs are generated into `runs/` with
   `python -m scripts.build_adaptive_judge_study`; they are not duplicated in
   source control.
+- `studies/oversight_frontier_v2.json`: the frozen-protocol replication with
+  new candidate panels and independent participant and answer-order seeds.
+- `studies/oversight_frontier_v1_order_replay.json`: exact probes and answers
+  from three v1 conditions under new seeded presentation orders. It makes no
+  candidate calls and regenerates only comparative judgments.
 - `examples/independent_judges_pilot.openrouter.json`: legacy fixed-battery
   control with candidate evidence cards and optional probe-prefix ablations.
 - `examples/separate_interviews_compact.openrouter.json`: N-participant isolated

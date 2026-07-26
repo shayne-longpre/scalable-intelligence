@@ -10,11 +10,13 @@ from ai_council.config import ConfigError, ExperimentConfig, load_experiment_con
 from ai_council.experiment_builders import (
     AdaptiveJudgeConfigSpec,
     build_adaptive_judge_config,
+    build_exact_evidence_order_replay_config,
     candidate_model,
     expected_model_calls,
     judge_model_params,
 )
 from scripts.build_adaptive_judge_study import build_study_configs
+from scripts.build_partial_resume_config import build_partial_resume_config
 from scripts.build_replay_repair_config import build_replay_repair_config
 
 
@@ -215,6 +217,93 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(config["protocol"]["phases"][0]["probe_schedule"], [5])
         self.assertEqual(len(config["participants"]), 2)
 
+    def test_oversight_replication_changes_panels_without_changing_protocol(self) -> None:
+        first = json.loads(
+            (ROOT / "studies" / "oversight_frontier_v1.json").read_text()
+        )
+        second = json.loads(
+            (ROOT / "studies" / "oversight_frontier_v2.json").read_text()
+        )
+        catalog = json.loads(
+            (ROOT / "data" / "model_catalog.openrouter.json").read_text()
+        )
+        scores = {
+            model["provider_model_id"]: model["intelligence_score"]
+            for model in catalog["models"]
+        }
+        first_by_id = {condition["id"]: condition for condition in first["conditions"]}
+
+        self.assertEqual(second["protocol"]["probe_schedule"], [5, 1])
+        self.assertEqual(len(second["conditions"]), 6)
+        for condition in second["conditions"]:
+            source = first_by_id[condition["id"]]
+            judge = condition["judge"]["model"]
+            routes = condition["candidate_models"]
+            self.assertEqual(condition["judge"], source["judge"])
+            self.assertNotEqual(routes, source["candidate_models"])
+            self.assertNotEqual(
+                condition["participant_seed"], source["participant_seed"]
+            )
+            self.assertNotEqual(
+                condition["comparison_seed"], source["comparison_seed"]
+            )
+            self.assertEqual(len(routes), 7)
+            self.assertEqual(len(set(routes)), 7)
+            self.assertIn(judge, routes)
+            self.assertTrue(any(scores[route] > scores[judge] for route in routes))
+            self.assertTrue(any(scores[route] < scores[judge] for route in routes))
+
+    def test_exact_order_replay_reuses_answers_but_regenerates_judgments(self) -> None:
+        source = {
+            "name": "source",
+            "protocol": {
+                "phases": [
+                    {
+                        "kind": "independent_judge_ranking",
+                        "comparison_order": "seeded_shuffle",
+                        "comparison_seed": 10,
+                        "preauthored_evidence_file": "old-evidence.jsonl",
+                        "preauthored_ranking_file": "old-rankings.jsonl",
+                    }
+                ]
+            },
+            "metadata": {
+                "study_condition": "sol",
+                "repair_source_run": "old",
+                "repair_retry_unavailable_rounds": [2],
+            },
+        }
+
+        replay = build_exact_evidence_order_replay_config(
+            source,
+            source_run="runs/source",
+            comparison_seed=20,
+            study_condition="sol_order",
+        )
+        phase = replay["protocol"]["phases"][0]
+
+        self.assertEqual(source["protocol"]["phases"][0]["comparison_seed"], 10)
+        self.assertEqual(
+            phase["preauthored_probe_file"], "runs/source/transcript.jsonl"
+        )
+        self.assertEqual(phase["preauthored_answer_file"], "runs/source")
+        self.assertEqual(phase["comparison_seed"], 20)
+        self.assertTrue(phase["reuse_unavailable_answers"])
+        self.assertTrue(phase["replay_source_targets"])
+        self.assertNotIn("preauthored_evidence_file", phase)
+        self.assertNotIn("preauthored_ranking_file", phase)
+        self.assertEqual(replay["metadata"]["study_condition"], "sol_order")
+        self.assertEqual(replay["metadata"]["source_study_condition"], "sol")
+        self.assertNotIn("repair_source_run", replay["metadata"])
+
+        with self.assertRaisesRegex(ValueError, "must differ"):
+            build_exact_evidence_order_replay_config(
+                source,
+                source_run="runs/source",
+                comparison_seed=10,
+                study_condition="sol_order",
+            )
+
     def test_replay_repair_reuses_evidence_but_recomputes_comparisons(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
@@ -267,6 +356,37 @@ class ConfigTests(unittest.TestCase):
             ],
             1,
         )
+
+    def test_partial_resume_reuses_completed_stages_only(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            source_run = Path(temp_dir) / "source"
+            source_run.mkdir()
+            source_config = {
+                "name": "partial",
+                "protocol": {
+                    "phases": [
+                        {
+                            "kind": "independent_judge_ranking",
+                            "replay_source_targets": True,
+                            "retry_unavailable_rounds": [1],
+                        }
+                    ]
+                },
+            }
+            (source_run / "config.json").write_text(json.dumps(source_config))
+
+            resumed = build_partial_resume_config(source_run)
+
+        phase = resumed["protocol"]["phases"][0]
+        transcript = str(source_run / "transcript.jsonl")
+        self.assertEqual(phase["preauthored_probe_file"], transcript)
+        self.assertEqual(phase["preauthored_answer_file"], str(source_run))
+        self.assertEqual(phase["preauthored_evidence_file"], transcript)
+        self.assertEqual(phase["preauthored_ranking_file"], transcript)
+        self.assertTrue(phase["reuse_unavailable_answers"])
+        self.assertFalse(phase["replay_source_targets"])
+        self.assertEqual(phase["retry_unavailable_rounds"], [])
+        self.assertEqual(resumed["metadata"]["resume_source_run"], str(source_run))
 
     def test_independent_judge_phase_requires_judge_roster(self) -> None:
         data = _minimal_config_dict()

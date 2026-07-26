@@ -1,0 +1,44 @@
+{
+  "name": "oversight_frontier_v1_order_replay",
+  "status": "complete",
+  "results": "data/oversight_frontier_v1_order_replay_results.json",
+  "report": "runs/report_cards/oversight_frontier_v1_order_replay/report_card.html",
+  "catalog": "data/model_catalog.openrouter.json",
+  "source_study": "studies/oversight_frontier_v1.json",
+  "research_question": "How sensitive are oversight-frontier rankings to the order in which a judge sees the same anonymous answers?",
+  "protocol": {
+    "probe_schedule": [5, 1],
+    "evidence_policy": "Reuse the exact probes, candidate targets, and candidate answers from the selected source run.",
+    "judgment_policy": "Regenerate per-probe comparisons and cumulative rankings under a new seeded answer order.",
+    "candidate_calls": 0
+  },
+  "conditions": [
+    {
+      "id": "sol_order",
+      "source_condition_id": "sol",
+      "source_run": "runs/20260725T232701Z_oversight_frontier_v1_sol_complete",
+      "comparison_seed": 20261725,
+      "judge": {"model": "openai/gpt-5.6-sol"}
+    },
+    {
+      "id": "minimax_order",
+      "source_condition_id": "minimax",
+      "source_run": "runs/20260725T223321Z_oversight_frontier_v1_minimax",
+      "comparison_seed": 20261728,
+      "judge": {"model": "minimax/minimax-m2.7"}
+    },
+    {
+      "id": "mistral_order",
+      "source_condition_id": "mistral_large",
+      "source_run": "runs/20260725T221857Z_oversight_frontier_v1_mistral_large",
+      "comparison_seed": 20261730,
+      "judge": {"model": "mistralai/mistral-large-2512"}
+    }
+  ],
+  "primary_outcomes": [
+    "kendall_tau_between_source_and_replay_rankings",
+    "change_in_pairwise_accuracy_against_external_prior",
+    "change_in_candidate_self_relations",
+    "top_rank_stability"
+  ]
+}
