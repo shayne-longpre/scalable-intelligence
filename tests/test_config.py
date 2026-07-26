@@ -2,11 +2,20 @@ from __future__ import annotations
 
 import copy
 import json
+import tempfile
 import unittest
 from pathlib import Path
 
 from ai_council.config import ConfigError, ExperimentConfig, load_experiment_config
-from scripts.build_catalog_ladder_config import _candidate_model, _expected_model_calls
+from ai_council.experiment_builders import (
+    AdaptiveJudgeConfigSpec,
+    build_adaptive_judge_config,
+    candidate_model,
+    expected_model_calls,
+    judge_model_params,
+)
+from scripts.build_adaptive_judge_study import build_study_configs
+from scripts.build_replay_repair_config import build_replay_repair_config
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class ConfigTests(unittest.TestCase):
     def test_catalog_ladder_call_budget_scales_with_roster_and_schedule(self) -> None:
         self.assertEqual(
-            _expected_model_calls(
+            expected_model_calls(
                 candidate_count=50,
                 probe_schedule=[4, 1, 1],
                 max_adaptive_candidates=10,
@@ -23,7 +32,7 @@ class ConfigTests(unittest.TestCase):
             235,
         )
         self.assertEqual(
-            _expected_model_calls(
+            expected_model_calls(
                 candidate_count=100,
                 probe_schedule=[4, 1, 1],
                 max_adaptive_candidates=10,
@@ -38,7 +47,7 @@ class ConfigTests(unittest.TestCase):
             "matched_evals": [{"model_name": "Model (xhigh)"}],
         }
 
-        configured = _candidate_model(
+        configured = candidate_model(
             model,
             "P01",
             {"params": {"reasoning": {"effort": "low"}, "temperature": 0}},
@@ -47,6 +56,18 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(configured["params"]["max_tokens"], 40000)
         self.assertEqual(configured["params"]["reasoning"], {"effort": "low"})
         self.assertEqual(configured["params"]["temperature"], 0)
+
+    def test_non_reasoning_judge_does_not_receive_reasoning_parameters(self) -> None:
+        model = {
+            "provider_model_id": "provider/model",
+            "max_completion_tokens": 64000,
+            "matched_evals": [{"model_name": "Model"}],
+        }
+
+        params, recovery = judge_model_params(model)
+
+        self.assertEqual(params, {"max_tokens": 20000, "temperature": 0.2})
+        self.assertEqual(recovery, {"max_tokens": 8000, "temperature": 0})
 
     def test_catalog_ladder_configs_match_frozen_fifty_model_selection(self) -> None:
         selection = json.loads(
@@ -105,9 +126,10 @@ class ConfigTests(unittest.TestCase):
                 )
                 self.assertEqual(config.models["judge_primary"].provider, "openrouter_judge")
 
-    def test_oversight_frontier_configs_straddle_each_judge(self) -> None:
+    def test_oversight_frontier_manifest_builds_six_diverse_judge_configs(self) -> None:
+        study_path = ROOT / "studies" / "oversight_frontier_v1.json"
         study = json.loads(
-            (ROOT / "studies" / "oversight_frontier_v1.json").read_text()
+            study_path.read_text()
         )
         catalog = json.loads(
             (ROOT / "data" / "model_catalog.openrouter.json").read_text()
@@ -117,44 +139,134 @@ class ConfigTests(unittest.TestCase):
             for model in catalog["models"]
         }
 
+        self.assertEqual(study["protocol"]["probe_schedule"], [5, 1])
+        self.assertEqual(len(study["conditions"]), 6)
+        self.assertEqual(
+            len(
+                {
+                    condition["judge"]["model"].split("/", 1)[0]
+                    for condition in study["conditions"]
+                }
+            ),
+            6,
+        )
         for condition in study["conditions"]:
-            selection = json.loads((ROOT / condition["selection"]).read_text())
-            routes = selection["provider_model_ids"]
-            judge_route = condition["judge_model"]
-            judge_score = condition["judge_external_score"]
+            routes = condition["candidate_models"]
+            judge_route = condition["judge"]["model"]
+            judge_score = scores[judge_route]
             self.assertEqual(len(routes), 7)
             self.assertEqual(len(set(routes)), 7)
             self.assertIn(judge_route, routes)
             self.assertTrue(any(scores[route] > judge_score for route in routes))
             self.assertTrue(any(scores[route] < judge_score for route in routes))
 
-            participant_seeds = set()
-            comparison_seeds = set()
-            for config_path in condition["configs"]:
-                config = load_experiment_config(ROOT / config_path)
+        with tempfile.TemporaryDirectory() as temp_dir:
+            index = build_study_configs(study_path, Path(temp_dir))
+            self.assertEqual(len(index["configs"]), 6)
+            for built in index["configs"]:
+                config = load_experiment_config(built["config"])
                 phase = config.protocol.phases[0]
+                condition = next(
+                    row
+                    for row in study["conditions"]
+                    if row["id"] == built["condition_id"]
+                )
                 configured_routes = {
                     config.models[participant.model].model
                     for participant in config.participants
                 }
                 configured_judge = config.models[config.judges[0].model].model
-                self.assertEqual(configured_routes, set(routes))
-                self.assertEqual(configured_judge, judge_route)
-                self.assertEqual(phase.probe_schedule, [4, 1])
+                self.assertEqual(configured_routes, set(condition["candidate_models"]))
+                self.assertEqual(configured_judge, condition["judge"]["model"])
+                self.assertEqual(phase.probe_schedule, [5, 1])
                 self.assertEqual(phase.max_adaptive_candidates, 4)
-                participant_seeds.add(config.metadata["participant_seed"])
-                comparison_seeds.add(config.metadata["comparison_seed"])
-            self.assertEqual(len(participant_seeds), 2)
-            self.assertEqual(len(comparison_seeds), 2)
+                self.assertEqual(config.run.visible_text_retries, 1)
+                self.assertEqual(
+                    config.providers["openrouter_candidates"].request_retries, 1
+                )
+                self.assertEqual(
+                    config.models[config.judges[0].model].params,
+                    condition["judge"]["params"],
+                )
 
-    def test_five_probe_catalog_configs_isolate_the_opening_battery(self) -> None:
-        for filename in (
-            "catalog_ladder50_sol_p5.openrouter.json",
-            "catalog_ladder50_fable_p5.openrouter.json",
-        ):
-            config = load_experiment_config(ROOT / "examples" / filename)
-            self.assertEqual(len(config.participants), 50)
-            self.assertEqual(config.protocol.phases[0].probe_schedule, [5])
+    def test_adaptive_judge_builder_does_not_require_checked_in_generated_config(self) -> None:
+        catalog = json.loads(
+            (ROOT / "data" / "model_catalog.openrouter.json").read_text()
+        )
+        selected = [
+            "anthropic/claude-fable-5",
+            "openai/gpt-5.6-sol",
+        ]
+        config = build_adaptive_judge_config(
+            spec=AdaptiveJudgeConfigSpec(
+                name="generated_test",
+                judge_model="openai/gpt-5.6-sol",
+                participant_seed=7,
+                comparison_seed=11,
+                probe_schedule=(5,),
+                max_adaptive_candidates=2,
+            ),
+            selected_model_ids=selected,
+            catalog=catalog,
+            catalog_label="catalog.json",
+            selection_label="study.json#condition",
+        )
+
+        self.assertEqual(config["protocol"]["phases"][0]["probe_schedule"], [5])
+        self.assertEqual(len(config["participants"]), 2)
+
+    def test_replay_repair_reuses_evidence_but_recomputes_comparisons(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            built = build_study_configs(
+                ROOT / "studies" / "oversight_frontier_v1.json",
+                root / "configs",
+            )
+            source_run = root / "source"
+            source_run.mkdir()
+            source_config = json.loads(
+                Path(built["configs"][0]["config"]).read_text()
+            )
+            phase = source_config["protocol"]["phases"][0]
+            phase["preauthored_evidence_file"] = "old-comparisons.jsonl"
+            phase["preauthored_ranking_file"] = "old-rankings.jsonl"
+            (source_run / "config.json").write_text(json.dumps(source_config))
+
+            repaired = build_replay_repair_config(
+                source_run,
+                retry_unavailable_rounds=[2, 1, 2],
+            )
+            source_config["providers"] = {
+                provider["name"]: provider for provider in source_config["providers"]
+            }
+            (source_run / "config.json").write_text(json.dumps(source_config))
+            repaired_from_resolved_config = build_replay_repair_config(
+                source_run,
+                retry_unavailable_rounds=[2],
+            )
+
+        phase = repaired["protocol"]["phases"][0]
+        self.assertEqual(
+            phase["preauthored_probe_file"], str(source_run / "transcript.jsonl")
+        )
+        self.assertEqual(phase["preauthored_answer_file"], str(source_run))
+        self.assertEqual(phase["retry_unavailable_rounds"], [1, 2])
+        self.assertTrue(phase["reuse_unavailable_answers"])
+        self.assertTrue(phase["replay_source_targets"])
+        self.assertNotIn("preauthored_evidence_file", phase)
+        self.assertNotIn("preauthored_ranking_file", phase)
+        candidate_provider = next(
+            provider
+            for provider in repaired["providers"]
+            if provider["name"] == "openrouter_candidates"
+        )
+        self.assertEqual(candidate_provider["request_retries"], 1)
+        self.assertEqual(
+            repaired_from_resolved_config["providers"]["openrouter_candidates"][
+                "request_retries"
+            ],
+            1,
+        )
 
     def test_independent_judge_phase_requires_judge_roster(self) -> None:
         data = _minimal_config_dict()

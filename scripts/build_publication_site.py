@@ -9,6 +9,8 @@ import math
 from pathlib import Path
 from statistics import mean
 
+from ai_council.oversight_analysis import render_oversight_report
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_REPORT = (
@@ -24,6 +26,7 @@ DEFAULT_SCORE_SUMMARY = (
     / "data"
     / "catalog_ladder50_probe_scores.json"
 )
+DEFAULT_OVERSIGHT_SUMMARY = ROOT / "data" / "oversight_frontier_results.json"
 ORDER_REPLAY_RUN = (
     ROOT
     / "runs"
@@ -336,6 +339,7 @@ def article(
     catalog: dict,
     taxonomy: dict,
     score_summary: dict | None,
+    oversight_summary: dict | None,
 ) -> str:
     runs = report["runs"]
     best_run = next(
@@ -404,6 +408,7 @@ def article(
         if score_summary
         else "These are relative positions, not absolute difficulty scores."
     )
+    oversight_section = _oversight_section(oversight_summary).strip()
 
     return f"""
 <article>
@@ -561,17 +566,7 @@ def article(
     <p class="note">{heatmap_stats}. {heatmap_caveat}</p>
   </section>
 
-  <section id="oversight-frontier" class="prose ruled">
-    <p class="section-kicker">Next primary experiment</p>
-    <h2>The oversight frontier</h2>
-    <div class="placeholder">
-      <strong>Can a model recognize a system more capable than itself?</strong>
-      <p>Judges at several capability levels will rank small anonymous panels
-      containing models below, near, and above their own external score. The
-      central result will be a judge-capability × candidate-gap accuracy map.</p>
-      <span>Experiment design ready · results pending</span>
-    </div>
-  </section>
+  {oversight_section}
 </article>
 <script>
 for (const input of document.querySelectorAll("[data-table-filter]")) {{
@@ -585,6 +580,37 @@ for (const input of document.querySelectorAll("[data-table-filter]")) {{
 }}
 </script>
 """
+
+
+def _oversight_section(summary: dict | None) -> str:
+    if not summary:
+        return """
+  <section id="oversight-frontier" class="prose ruled">
+    <p class="section-kicker">Next primary experiment</p>
+    <h2>The oversight frontier</h2>
+    <div class="placeholder">
+      <strong>Can a model recognize a system more capable than itself?</strong>
+      <p>Judges at several capability levels rank small anonymous panels
+      containing models below, near, and above their own external score.</p>
+      <span>Experiment design ready · results pending</span>
+    </div>
+  </section>"""
+    aggregate = summary["aggregate"]
+    return f"""
+  <section id="oversight-frontier" class="prose ruled">
+    <p class="section-kicker">Scalable oversight</p>
+    <h2>The oversight frontier</h2>
+    <p>Six judges spanning the capability ladder each wrote five opening probes,
+    ranked seven anonymous candidates, and used one targeted follow-up. Together
+    they ordered {aggregate['final_pair_accuracy']:.1%} of candidate pairs in
+    line with the external index and placed
+    {aggregate['superior_recognized']} of {aggregate['superior_total']} externally
+    stronger candidates above their own anonymous selves. Across both stronger
+    and weaker candidates, {aggregate['self_relative_correct']} of
+    {aggregate['self_relative_total']} self-relative comparisons were correct.</p>
+    <p><a class="text-link" href="oversight.html">Explore the full oversight
+    scorecard, probe repertoire, and adaptive results →</a></p>
+  </section>"""
 
 
 def build_probe_cards(taxonomy: dict) -> str:
@@ -1328,6 +1354,11 @@ def build(output_dir: Path, report_path: Path) -> None:
     score_summary = (
         load_json(DEFAULT_SCORE_SUMMARY) if DEFAULT_SCORE_SUMMARY.exists() else None
     )
+    oversight_summary = (
+        load_json(DEFAULT_OVERSIGHT_SUMMARY)
+        if DEFAULT_OVERSIGHT_SUMMARY.exists()
+        else None
+    )
     selected_ids = selection["provider_model_ids"]
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -1335,7 +1366,7 @@ def build(output_dir: Path, report_path: Path) -> None:
         "index.html": page(
             "Can AI systems recognize intelligence?",
             "Results from a 50-model experiment in AI-authored intelligence evaluation.",
-            article(report, catalog, taxonomy, score_summary),
+            article(report, catalog, taxonomy, score_summary, oversight_summary),
             "results",
         ),
         "taxonomy.html": page(
@@ -1357,6 +1388,8 @@ def build(output_dir: Path, report_path: Path) -> None:
             "audit",
         ),
     }
+    if oversight_summary:
+        pages["oversight.html"] = render_oversight_report(oversight_summary)
     for filename, contents in pages.items():
         (output_dir / filename).write_text(contents)
 

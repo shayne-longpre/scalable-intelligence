@@ -1,70 +1,184 @@
 {
   "name": "oversight_frontier_v1",
-  "status": "ready",
+  "status": "completed",
+  "completed_at": "2026-07-25",
+  "results": {
+    "analysis": "data/oversight_frontier_results.json",
+    "probe_audit": "data/oversight_frontier_probe_audit.json",
+    "report": "docs/site/oversight.html"
+  },
+  "catalog": "data/model_catalog.openrouter.json",
   "research_question": "Can an anonymous AI judge recognize and rank candidate models that are more capable than the judge itself?",
   "protocol": {
-    "probe_schedule": [4, 1],
+    "probe_schedule": [5, 1],
     "adaptive_targeting": "judge_selected",
     "max_adaptive_candidates": 4,
     "judge_isolation": true,
     "fresh_candidate_context_per_probe": true,
     "candidate_answer_limit_words": 600,
-    "replicates_per_condition": 2,
-    "replicate_difference": "anonymous participant IDs and answer presentation order only"
+    "candidate_timeout_seconds": 300,
+    "judge_timeout_seconds": 900,
+    "candidate_request_retries": 1,
+    "incomplete_answer_policy": "record_unavailable",
+    "order_robustness": "Replay the same probes, answers, and judgments under a new answer order. Do not regenerate evidence and call it an order replicate."
   },
   "conditions": [
     {
       "id": "sol",
-      "judge_model": "openai/gpt-5.6-sol",
-      "judge_effort": "xhigh",
-      "judge_external_score": 58.889831189723,
-      "selection": "data/oversight_frontier_sol.selection.json",
-      "configs": [
-        "examples/oversight_frontier_sol_r1.openrouter.json",
-        "examples/oversight_frontier_sol_r2.openrouter.json"
+      "judge": {
+        "model": "openai/gpt-5.6-sol",
+        "params": {
+          "max_tokens": 50000,
+          "reasoning": {"effort": "xhigh"}
+        },
+        "recovery_params": {
+          "max_tokens": 30000,
+          "reasoning": {"effort": "low"}
+        }
+      },
+      "participant_seed": 20260725,
+      "comparison_seed": 20260725,
+      "candidate_models": [
+        "anthropic/claude-fable-5",
+        "openai/gpt-5.6-sol",
+        "moonshotai/kimi-k3",
+        "anthropic/claude-opus-4.8",
+        "openai/gpt-5.5",
+        "google/gemini-3.5-flash",
+        "qwen/qwen3.7-max"
       ]
     },
     {
-      "id": "mini",
-      "judge_model": "openai/gpt-5.4-mini",
-      "judge_effort": "xhigh",
-      "judge_external_score": 39.9783061419024,
-      "selection": "data/oversight_frontier_mini.selection.json",
-      "configs": [
-        "examples/oversight_frontier_mini_r1.openrouter.json",
-        "examples/oversight_frontier_mini_r2.openrouter.json"
+      "id": "gemini_flash",
+      "judge": {
+        "model": "google/gemini-3.5-flash",
+        "params": {
+          "max_tokens": 50000,
+          "reasoning": {"effort": "high"}
+        },
+        "recovery_params": {
+          "max_tokens": 30000,
+          "reasoning": {"effort": "low"}
+        }
+      },
+      "participant_seed": 20260726,
+      "comparison_seed": 20260726,
+      "candidate_models": [
+        "anthropic/claude-fable-5",
+        "anthropic/claude-sonnet-5",
+        "openai/gpt-5.4",
+        "google/gemini-3.5-flash",
+        "anthropic/claude-sonnet-4.6",
+        "qwen/qwen3.7-max",
+        "minimax/minimax-m3"
+      ]
+    },
+    {
+      "id": "qwen_max",
+      "judge": {
+        "model": "qwen/qwen3.7-max",
+        "params": {
+          "max_tokens": 20000,
+          "temperature": 0.2
+        },
+        "recovery_params": {
+          "max_tokens": 8000,
+          "temperature": 0
+        }
+      },
+      "participant_seed": 20260727,
+      "comparison_seed": 20260727,
+      "candidate_models": [
+        "google/gemini-3.5-flash",
+        "anthropic/claude-sonnet-4.6",
+        "google/gemini-3.1-pro-preview",
+        "qwen/qwen3.7-max",
+        "minimax/minimax-m3",
+        "moonshotai/kimi-k2.6",
+        "openai/gpt-5.4-mini"
+      ]
+    },
+    {
+      "id": "minimax",
+      "judge": {
+        "model": "minimax/minimax-m2.7",
+        "params": {
+          "max_tokens": 20000,
+          "temperature": 0.2
+        },
+        "recovery_params": {
+          "max_tokens": 8000,
+          "temperature": 0
+        }
+      },
+      "participant_seed": 20260728,
+      "comparison_seed": 20260728,
+      "candidate_models": [
+        "xiaomi/mimo-v2.5-pro",
+        "thinkingmachines/inkling",
+        "openai/gpt-5.4-mini",
+        "minimax/minimax-m2.7",
+        "qwen/qwen3.6-27b",
+        "deepseek/deepseek-v3.2",
+        "anthropic/claude-haiku-4.5"
       ]
     },
     {
       "id": "haiku",
-      "judge_model": "anthropic/claude-haiku-4.5",
-      "judge_effort": "high",
-      "judge_external_score": 29.5762345971708,
-      "selection": "data/oversight_frontier_haiku.selection.json",
-      "configs": [
-        "examples/oversight_frontier_haiku_r1.openrouter.json",
-        "examples/oversight_frontier_haiku_r2.openrouter.json"
+      "judge": {
+        "model": "anthropic/claude-haiku-4.5",
+        "params": {
+          "max_tokens": 50000,
+          "reasoning": {"effort": "high"}
+        },
+        "recovery_params": {
+          "max_tokens": 30000,
+          "reasoning": {"effort": "low"}
+        }
+      },
+      "participant_seed": 20260729,
+      "comparison_seed": 20260729,
+      "candidate_models": [
+        "openai/gpt-5",
+        "deepseek/deepseek-v3.2",
+        "mistralai/mistral-medium-3-5",
+        "anthropic/claude-haiku-4.5",
+        "google/gemini-2.5-pro",
+        "openai/gpt-oss-120b",
+        "qwen/qwen3.5-9b"
       ]
-    }
-  ],
-  "replicates": [
-    {
-      "id": "r1",
-      "participant_seed": 20260725,
-      "comparison_seed": 20260725
     },
     {
-      "id": "r2",
-      "participant_seed": 20260726,
-      "comparison_seed": 20260726
+      "id": "mistral_large",
+      "judge": {
+        "model": "mistralai/mistral-large-2512",
+        "params": {
+          "max_tokens": 20000,
+          "temperature": 0.2
+        },
+        "recovery_params": {
+          "max_tokens": 8000,
+          "temperature": 0
+        }
+      },
+      "participant_seed": 20260730,
+      "comparison_seed": 20260730,
+      "candidate_models": [
+        "anthropic/claude-haiku-4.5",
+        "qwen/qwen3.5-9b",
+        "mistralai/mistral-small-2603",
+        "mistralai/mistral-large-2512",
+        "openai/gpt-oss-20b",
+        "mistralai/ministral-14b-2512",
+        "meta-llama/llama-3.1-8b-instruct"
+      ]
     }
   ],
   "primary_outcomes": [
     "pairwise_accuracy_by_candidate_gap_from_judge",
-    "probability_of_correctly_ordering_a_candidate_above_the_judge",
-    "pairwise_accuracy_below_near_and_above_the_judge",
+    "superior_candidates_ranked_above_the_anonymous_judge",
+    "pairwise_accuracy_below_crossing_and_above_the_judge",
     "kendall_tau_against_external_prior",
-    "inter_replicate_agreement",
     "ranking_churn_after_the_adaptive_probe",
     "adaptive_target_coverage",
     "probe_type_strategy_and_dynamics",

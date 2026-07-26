@@ -20,7 +20,7 @@ invent their own criteria and probes.
 | 4. Independent-judge ladder | Complete, including order replay and answer scoring | Sol and Fable independently rank the same 50 anonymous candidates, followed by a shared-evidence cross-over | Can capable models recover a broad external capability ordering? |
 | 5. Selective adaptivity | Three stress pilots complete | Four opening probes, direct per-probe comparison, cumulative evidence dossiers, bounded common follow-ups, and adaptive-decision traces | Can extra evidence resolve the difficult part of a ranking efficiently? |
 | 5b. Probe-budget ablation | Initial pilot complete | Fresh evidence cards and rankings using only the first 2, 4, or 6 probes from one shared run | How much does additional probe evidence improve ranking accuracy? |
-| 6. Oversight frontier | Configured and mock-smoked; next paid experiment | Judges above, near, and below small candidate panels, with candidates on both sides of the judge's capability | Can a model recognize a system more capable than itself? |
+| 6. Oversight frontier | First six-judge study complete | Judges above, near, and below small candidate panels, with candidates on both sides of the judge's capability | Can a model recognize a system more capable than itself? |
 | 7. Judge-strategy scaling | Fixed-scale catalog scoring complete; judge-capability comparison pending | Probe-type, difficulty, adaptation, and answer-quality comparisons across judge capability | Do stronger judges ask systematically different or more diagnostic questions? |
 | 8. Free vs. structured | Later exploratory study | Paired runs with the same roster, budgets, and external prior | What does round-robin structure improve or suppress? |
 | 9. Publication figures | Catalog results, fixed-scale heatmap, references, and audit sample generated | Auditable plots, tables, taxonomy, model provenance, and compact human-review samples | Which findings are robust, interpretable, and worth communicating? |
@@ -259,19 +259,43 @@ index and ordered 84.8% of direct-score model pairs correctly. One probe has
 only Sol scores after repeated zero-content Fable responses. See
 `docs/pilot_analysis_probe_scoring_20260725.md`.
 
+## Oversight Frontier Pilot
+
+Six independent judges spanning external scores from 15.9 to 58.9 each ranked
+seven anonymous candidates distributed around the judge's own capability. Every
+judge authored five common opening probes and one bounded adaptive follow-up.
+
+Across 126 candidate pairs, final accuracy was 70.6%. Capability distance was
+far more predictive than judge identity: accuracy was 40.9% for pairs separated
+by less than two external-score points and 95.5% beyond ten points. Judges
+placed 13 of 16 stronger candidates above their anonymous selves, but symmetric
+self-relative accuracy was only 23 of 36 because several judges also placed
+weaker candidates above themselves.
+
+The adaptive probe improved three judges, left one unchanged, and worsened two;
+aggregate accuracy moved from 71.4% to 70.6%. This does not support assuming
+that a single follow-up is beneficial. The result also exposed a measurement
+risk: adversarial false-premise questions were diagnostic when the judge
+rewarded correction and misleading when it punished correction.
+
+The complete interpretation is in
+`docs/pilot_analysis_oversight_frontier_20260725.md`; the publication report is
+`docs/site/oversight.html`.
+
 ## Immediate Next Steps
 
-1. Review the eight-item human audit sample, make only evidenced taxonomy or
-   summary changes, and freeze the measurement version for confirmatory work.
-2. Run the first permutation for the Sol, GPT-5.4 Mini, and Claude Haiku 4.5
-   oversight panels. Inspect probe validity, routing, and above-judge
-   comparisons before purchasing the second permutations.
-3. Run the second oversight permutations without prompt changes, then build the
-   judge-capability by candidate-gap result.
-4. Rerun the Sol and Fable catalog openings with five probes as a short
-   methodology check. Treat evidence/adaptivity scaling as supporting analysis,
-   not a separate large program.
-5. Compare probe repertoire, difficulty, and adaptive behavior across judge
-   capability. This is the next major analysis after the oversight frontier.
+1. Freeze the current oversight protocol and probe-validity audit rules. Do not
+   tune them on the reported accuracy.
+2. Run exact-evidence answer-order replays for a small high-, middle-, and
+   low-capability judge sample. This isolates presentation sensitivity without
+   repurchasing candidate answers.
+3. Confirm the frontier result with new candidate panels and seeds. Power the
+   study around candidate-score gap and self-relative comparisons rather than a
+   monotonic judge-score curve.
+4. Compare probe repertoire, validity, difficulty, and adaptive behavior across
+   judge capability. Treat this as a joint measurement of question design and
+   answer interpretation.
+5. Rerun the Sol and Fable catalog openings with five probes as a methodology
+   check, then test evidence-budget effects using archived answers.
 6. Keep structured-versus-free councils as later exploratory work. Do not scale
    beyond 50 candidates unless the substantive research question requires it.

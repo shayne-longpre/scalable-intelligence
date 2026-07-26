@@ -150,6 +150,18 @@ experiment config
   metadata to Artificial Analysis leaderboard rows. Each rank records source,
   confidence, release date, context window, pricing, and matched eval variants.
 
+- `ai_council.experiment_builders`
+  Builds resolved adaptive-judge configs from compact study manifests. Candidate
+  parameters are derived from catalog metadata, while judge parameters may be
+  frozen explicitly. Generated configs live under `runs/`; the manifest remains
+  the source of truth.
+
+- `ai_council.oversight_analysis`
+  Analyzes oversight-frontier studies across judge conditions. It separates
+  candidate pairs below, across, and above each judge; measures whether stronger
+  candidates are placed above the judge's anonymous self; tracks adaptive
+  changes, probe types, failed-attempt spend, and writes a focused HTML report.
+
 - `ai_council.cli`
   Command-line entry point:
   - `validate-config`

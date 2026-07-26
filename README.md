@@ -84,8 +84,12 @@ The seeded answer-order replay and fixed-scale scoring analysis are in
 [`docs/pilot_analysis_catalog_order_20260725.md`](docs/pilot_analysis_catalog_order_20260725.md)
 and
 [`docs/pilot_analysis_probe_scoring_20260725.md`](docs/pilot_analysis_probe_scoring_20260725.md).
-The next primary study is specified in
-[`docs/oversight_frontier_design.md`](docs/oversight_frontier_design.md).
+The six-judge oversight-frontier study is specified in
+[`docs/oversight_frontier_design.md`](docs/oversight_frontier_design.md), with
+results in
+[`docs/pilot_analysis_oversight_frontier_20260725.md`](docs/pilot_analysis_oversight_frontier_20260725.md)
+and a reader-facing
+[`oversight report`](docs/site/oversight.html).
 
 ## Core Methodology
 
@@ -292,9 +296,11 @@ The repository includes config examples that map onto the two modes:
   Per-probe comparisons and cumulative dossiers replace required isolated
   ability scores. The medium- and Sol-judge configs retain five rounds as
   stress-test fixtures.
-- `examples/oversight_frontier_{sol,mini,haiku}_r{1,2}.openrouter.json`: the
-  frozen three-level oversight study, with seven candidates, four opening
-  probes, one adaptive tie-breaker, and two anonymous-ID permutations.
+- `studies/oversight_frontier_v1.json`: the six-level oversight-frontier study.
+  Each judge evaluates seven anonymous candidates with five opening probes and
+  one adaptive tie-breaker. Resolved configs are generated into `runs/` with
+  `python -m scripts.build_adaptive_judge_study`; they are not duplicated in
+  source control.
 - `examples/independent_judges_pilot.openrouter.json`: legacy fixed-battery
   control with candidate evidence cards and optional probe-prefix ablations.
 - `examples/separate_interviews_compact.openrouter.json`: N-participant isolated
