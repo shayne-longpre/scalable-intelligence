@@ -10,6 +10,7 @@ from ai_council.oversight_analysis import (
     judgment_metrics,
     pair_observations,
     summarize_pair_observations,
+    visible_text_retry_count,
 )
 
 
@@ -107,6 +108,24 @@ class OversightAnalysisTests(unittest.TestCase):
         self.assertEqual(metrics["inferior_below_self"], 0)
         self.assertEqual(metrics["self_relative_correct"], 2)
         self.assertEqual(metrics["self_relative_total"], 4)
+
+    def test_visible_retry_counter_supports_current_and_legacy_metadata(self) -> None:
+        self.assertEqual(
+            visible_text_retry_count(
+                {
+                    "visible_text_retry": {
+                        "attempted": True,
+                        "attempts": [{}, {}],
+                    }
+                }
+            ),
+            2,
+        )
+        self.assertEqual(
+            visible_text_retry_count({"visible_text_retry_count": 1}),
+            1,
+        )
+        self.assertEqual(visible_text_retry_count({}), 0)
 
     def test_discovery_prefers_repairs_only_when_they_reduce_missing_evidence(self) -> None:
         study = {"conditions": [{"id": "alpha"}, {"id": "beta"}]}

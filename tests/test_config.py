@@ -253,6 +253,56 @@ class ConfigTests(unittest.TestCase):
             self.assertTrue(any(scores[route] > scores[judge] for route in routes))
             self.assertTrue(any(scores[route] < scores[judge] for route in routes))
 
+    def test_above_heavy_frontier_has_ten_judges_and_five_superiors_when_available(
+        self,
+    ) -> None:
+        study_path = ROOT / "studies" / "oversight_frontier_v3_above_heavy.json"
+        study = json.loads(study_path.read_text())
+        catalog = json.loads(
+            (ROOT / "data" / "model_catalog.openrouter.json").read_text()
+        )
+        scores = {
+            model["provider_model_id"]: model["intelligence_score"]
+            for model in catalog["models"]
+        }
+        conditions = study["conditions"]
+
+        self.assertEqual(study["protocol"]["probe_schedule"], [5, 1])
+        self.assertEqual(len(conditions), 10)
+        self.assertEqual(len({condition["id"] for condition in conditions}), 10)
+        self.assertEqual(
+            len({condition["judge"]["model"] for condition in conditions}), 10
+        )
+        self.assertEqual(
+            len(
+                {
+                    condition["judge"]["model"].split("/", 1)[0]
+                    for condition in conditions
+                }
+            ),
+            10,
+        )
+        for condition in conditions:
+            routes = condition["candidate_models"]
+            judge = condition["judge"]["model"]
+            superior_count = sum(scores[route] > scores[judge] for route in routes)
+            inferior_count = sum(scores[route] < scores[judge] for route in routes)
+            self.assertEqual(len(routes), 9)
+            self.assertEqual(len(set(routes)), 9)
+            self.assertIn(judge, routes)
+            self.assertEqual(superior_count, 1 if condition["id"] == "sol" else 5)
+            self.assertEqual(inferior_count, 7 if condition["id"] == "sol" else 3)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            index = build_study_configs(study_path, Path(temp_dir))
+            self.assertEqual(len(index["configs"]), 10)
+            for built in index["configs"]:
+                config = load_experiment_config(built["config"])
+                phase = config.protocol.phases[0]
+                self.assertEqual(len(config.participants), 9)
+                self.assertEqual(phase.probe_schedule, [5, 1])
+                self.assertEqual(phase.max_adaptive_candidates, 4)
+
     def test_exact_order_replay_reuses_answers_but_regenerates_judgments(self) -> None:
         source = {
             "name": "source",

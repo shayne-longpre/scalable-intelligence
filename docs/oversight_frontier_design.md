@@ -7,7 +7,8 @@ are more capable than the judge itself?
 
 ## Study
 
-Six popular model families span a wide range of external capability estimates:
+The initial study used six popular model families spanning a wide range of
+external capability estimates:
 
 | Judge | Organization | External index | Candidate panel |
 | --- | --- | ---: | --- |
@@ -18,16 +19,25 @@ Six popular model families span a wide range of external capability estimates:
 | Claude Haiku 4.5 | Anthropic | 29.6 | 21.4–34.7 |
 | Mistral Large 3 | Mistral AI | 15.9 | 7.6–29.6 |
 
-Every panel contains seven candidates, including the judge behind an anonymous
-participant ID. Each panel also contains models above and below the judge on
-the external index. The routes, parameters, seeds, and exact panels are frozen
-in [`studies/oversight_frontier_v1.json`](../studies/oversight_frontier_v1.json).
+The first two waves gave each of these judges a different seven-candidate panel.
+The third wave expands the spectrum to ten judges and uses nine-candidate
+panels. Where the catalog permits, each third-wave panel contains five models
+above the judge, the judge behind an anonymous participant ID, and three models
+below it. Sol has only one catalog model above it, so its panel uses that model
+and seven high-capability models below it.
+
+The protocol is frozen across waves; only judges, panels, and randomization
+seeds change. Exact assignments live in
+[`studies/oversight_frontier_v1.json`](../studies/oversight_frontier_v1.json),
+[`studies/oversight_frontier_v2.json`](../studies/oversight_frontier_v2.json),
+and
+[`studies/oversight_frontier_v3_above_heavy.json`](../studies/oversight_frontier_v3_above_heavy.json).
 
 The judge:
 
 1. authors five complementary probes before seeing any answer;
-2. sends each probe unchanged to all seven candidates;
-3. compares the seven answers directly, one probe at a time;
+2. sends each probe unchanged to every candidate in its panel;
+3. compares all answers directly, one probe at a time;
 4. merges the comparisons into a full ranking;
 5. selects at most four uncertain candidates for one common adaptive probe;
 6. updates the ranking after the follow-up.
@@ -46,9 +56,12 @@ Candidate pairs are grouped by their position relative to the judge:
 
 The main outcomes are final pairwise accuracy, the share of externally stronger
 candidates placed above the judge's anonymous self, and the difference between
-the five-probe ranking and the ranking after adaptation. The report also shows
-probe types, adaptive targeting, malformed-output recovery, and
-provider-reported spend.
+the five-probe ranking and the ranking after adaptation. Recognition is reported
+in disjoint bins based on how far the candidate is above the judge on the
+external index. Reports distinguish repeated candidate appearances from unique
+stronger models and show uncertainty intervals without treating repeated panels
+as independent samples. They also show probe types, adaptive targeting,
+malformed-output recovery, and provider-reported spend.
 
 The judge's own claim that a probe was informative is not treated as ground
 truth. Probe validity is audited separately: a judge can create an impossible
@@ -69,7 +82,7 @@ python -m scripts.build_adaptive_judge_study \
   --output-dir runs/configs/oversight_frontier_v1
 ```
 
-After all six conditions complete:
+After every condition in a wave completes:
 
 ```bash
 python -m scripts.analyze_oversight_frontier \
@@ -83,3 +96,13 @@ python -m scripts.analyze_oversight_frontier \
 An order-robustness check must replay the exact same probes and answers under a
 new presentation order. Regenerating probes or candidate answers is a new
 replication, not an order test.
+
+Two or more completed waves can be pooled with:
+
+```bash
+python -m scripts.analyze_oversight_synthesis \
+  --result data/oversight_frontier_results.json \
+  --result data/oversight_frontier_v2_results.json \
+  --result data/oversight_frontier_v3_results.json \
+  --output-dir runs/report_cards/oversight_frontier_synthesis
+```

@@ -1,6 +1,7 @@
 import unittest
 
 from scripts.build_publication_site import (
+    _oversight_section,
     kendall_order,
     pairwise_accuracy,
     partial_spearman,
@@ -38,3 +39,20 @@ class PublicationSiteTests(unittest.TestCase):
         self.assertEqual(kendall_order(["a", "b", "c"], ["a", "b", "c"]), 1.0)
         self.assertEqual(kendall_order(["a", "b", "c"], ["c", "b", "a"]), -1.0)
         self.assertEqual(kendall_order(["a"], ["a"]), 0.0)
+
+    def test_oversight_section_supports_pooled_synthesis(self) -> None:
+        html = _oversight_section(
+            {
+                "pooled": {
+                    "condition_count": 22,
+                    "judge_count": 10,
+                    "final_pairs": {"accuracy": 0.8},
+                    "superior_recognized": 40,
+                    "superior_total": 60,
+                }
+            }
+        )
+
+        self.assertIn("22 panels", html)
+        self.assertIn("10 distinct judges", html)
+        self.assertIn("40 of", html)

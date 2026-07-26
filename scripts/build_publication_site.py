@@ -10,6 +10,7 @@ from pathlib import Path
 from statistics import mean
 
 from ai_council.oversight_analysis import render_oversight_report
+from ai_council.oversight_synthesis import render_frontier_synthesis
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,6 +28,9 @@ DEFAULT_SCORE_SUMMARY = (
     / "catalog_ladder50_probe_scores.json"
 )
 DEFAULT_OVERSIGHT_SUMMARY = ROOT / "data" / "oversight_frontier_results.json"
+DEFAULT_OVERSIGHT_SYNTHESIS = (
+    ROOT / "data" / "oversight_frontier_synthesis_results.json"
+)
 ORDER_REPLAY_RUN = (
     ROOT
     / "runs"
@@ -594,6 +598,22 @@ def _oversight_section(summary: dict | None) -> str:
       containing models below, near, and above their own external score.</p>
       <span>Experiment design ready · results pending</span>
     </div>
+  </section>"""
+    if "pooled" in summary:
+        pooled = summary["pooled"]
+        return f"""
+  <section id="oversight-frontier" class="prose ruled">
+    <p class="section-kicker">Scalable oversight</p>
+    <h2>The oversight frontier</h2>
+    <p>Across {pooled['condition_count']} panels and
+    {pooled['judge_count']} distinct judges, models ordered
+    {pooled['final_pairs']['accuracy']:.1%} of candidate pairs in line with the
+    external index and placed {pooled['superior_recognized']} of
+    {pooled['superior_total']} externally stronger candidates above their own
+    anonymous selves. Results are reported by the candidate's capability margin
+    over the judge.</p>
+    <p><a class="text-link" href="oversight.html">Explore the full oversight
+    scorecard, margin analysis, and judge coverage →</a></p>
   </section>"""
     aggregate = summary["aggregate"]
     return f"""
@@ -1355,9 +1375,13 @@ def build(output_dir: Path, report_path: Path) -> None:
         load_json(DEFAULT_SCORE_SUMMARY) if DEFAULT_SCORE_SUMMARY.exists() else None
     )
     oversight_summary = (
-        load_json(DEFAULT_OVERSIGHT_SUMMARY)
-        if DEFAULT_OVERSIGHT_SUMMARY.exists()
-        else None
+        load_json(DEFAULT_OVERSIGHT_SYNTHESIS)
+        if DEFAULT_OVERSIGHT_SYNTHESIS.exists()
+        else (
+            load_json(DEFAULT_OVERSIGHT_SUMMARY)
+            if DEFAULT_OVERSIGHT_SUMMARY.exists()
+            else None
+        )
     )
     selected_ids = selection["provider_model_ids"]
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -1389,7 +1413,11 @@ def build(output_dir: Path, report_path: Path) -> None:
         ),
     }
     if oversight_summary:
-        pages["oversight.html"] = render_oversight_report(oversight_summary)
+        pages["oversight.html"] = (
+            render_frontier_synthesis(oversight_summary)
+            if "pooled" in oversight_summary
+            else render_oversight_report(oversight_summary)
+        )
     for filename, contents in pages.items():
         (output_dir / filename).write_text(contents)
 

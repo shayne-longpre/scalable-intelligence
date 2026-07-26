@@ -226,6 +226,14 @@ def render_oversight_report(summary: Mapping[str, Any]) -> str:
     aggregate = summary["aggregate"]
     judge_scores = [condition["judge_external_score"] for condition in conditions]
     judge_count = len(conditions)
+    candidate_counts = sorted(
+        {int(condition["candidate_count"]) for condition in conditions}
+    )
+    candidate_count_text = (
+        str(candidate_counts[0])
+        if len(candidate_counts) == 1
+        else f"{candidate_counts[0]}-{candidate_counts[-1]}"
+    )
     judge_rows = "".join(_judge_row(condition) for condition in conditions)
     heatmap_rows = "".join(_relative_heatmap_row(condition) for condition in conditions)
     probe_rows = "".join(_probe_row(condition) for condition in conditions)
@@ -317,7 +325,7 @@ def render_oversight_report(summary: Mapping[str, Any]) -> str:
   <p class="dek">{escape(summary['research_question'])} {judge_count} anonymous
   {"judge" if judge_count == 1 else "judges"}, spanning
   {min(judge_scores):.1f} to {max(judge_scores):.1f} on the external intelligence
-  index, each tested seven candidates with five opening probes and one adaptive
+  index, each tested {candidate_count_text} candidates with five opening probes and one adaptive
   follow-up.</p>
 
   <section class="metrics">
@@ -488,8 +496,7 @@ def _analyze_condition(
         for row in transcript
     )
     visible_retries = sum(
-        int(row.get("metadata", {}).get("visible_text_retry_count", 0))
-        for row in transcript
+        visible_text_retry_count(row.get("metadata", {})) for row in transcript
     )
     unavailable_answers = sum(
         bool(row.get("metadata", {}).get("answer_unavailable"))
@@ -534,6 +541,16 @@ def _analyze_condition(
         "run_model_calls": int(run_summary.get("model_calls", 0)),
         "model_calls": total_model_calls,
     }
+
+
+def visible_text_retry_count(metadata: Mapping[str, Any]) -> int:
+    if "visible_text_retry_count" in metadata:
+        return int(metadata["visible_text_retry_count"])
+    retry = metadata.get("visible_text_retry")
+    if not isinstance(retry, Mapping) or not retry.get("attempted"):
+        return 0
+    attempts = retry.get("attempts")
+    return len(attempts) if isinstance(attempts, list) else 1
 
 
 def judgment_metrics(
@@ -919,6 +936,10 @@ def _model_short_name(model_id: str) -> str:
         "minimax/minimax-m2.7": "MiniMax M2.7",
         "anthropic/claude-haiku-4.5": "Claude Haiku 4.5",
         "mistralai/mistral-large-2512": "Mistral Large 3",
+        "x-ai/grok-4.5": "Grok 4.5",
+        "deepseek/deepseek-v4-pro": "DeepSeek V4 Pro",
+        "moonshotai/kimi-k2-thinking": "Kimi K2 Thinking",
+        "meta-llama/llama-4-maverick": "Llama 4 Maverick",
     }
     return aliases.get(model_id, model_id.rsplit("/", 1)[-1])
 

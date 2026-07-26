@@ -84,12 +84,14 @@ The seeded answer-order replay and fixed-scale scoring analysis are in
 [`docs/pilot_analysis_catalog_order_20260725.md`](docs/pilot_analysis_catalog_order_20260725.md)
 and
 [`docs/pilot_analysis_probe_scoring_20260725.md`](docs/pilot_analysis_probe_scoring_20260725.md).
-The six-judge oversight-frontier study is specified in
+The oversight-frontier study is specified in
 [`docs/oversight_frontier_design.md`](docs/oversight_frontier_design.md), with
 the first-panel results in
 [`docs/pilot_analysis_oversight_frontier_20260725.md`](docs/pilot_analysis_oversight_frontier_20260725.md)
 and the new-panel replication plus exact-evidence answer-order audit in
 [`docs/pilot_analysis_oversight_frontier_replication_20260726.md`](docs/pilot_analysis_oversight_frontier_replication_20260726.md).
+The ten-judge, above-heavy extension and pooled 22-panel analysis are in
+[`docs/pilot_analysis_oversight_frontier_above_heavy_20260726.md`](docs/pilot_analysis_oversight_frontier_above_heavy_20260726.md).
 The combined reader-facing
 [`oversight report`](docs/site/oversight.html) links back to machine-readable
 study results and versioned probe audits.
@@ -306,6 +308,10 @@ The repository includes config examples that map onto the two modes:
   source control.
 - `studies/oversight_frontier_v2.json`: the frozen-protocol replication with
   new candidate panels and independent participant and answer-order seeds.
+- `studies/oversight_frontier_v3_above_heavy.json`: ten judges spanning the
+  catalog, each evaluating nine candidates. Where the catalog permits, five
+  candidates are stronger than the anonymous judge, one is the judge, and
+  three are weaker.
 - `studies/oversight_frontier_v1_order_replay.json`: exact probes and answers
   from three v1 conditions under new seeded presentation orders. It makes no
   candidate calls and regenerates only comparative judgments.

@@ -305,16 +305,33 @@ three retained the same top candidate. Full methods, results, caveats, and
 links are in
 `docs/pilot_analysis_oversight_frontier_replication_20260726.md`.
 
+## Ten-Judge Oversight Extension
+
+The third wave expands the study to ten judges and uses nine-candidate panels
+that contain five candidates above the judge wherever the catalog permits.
+Across all three waves, 22 panels ordered 466 of 612 candidate pairs correctly
+and placed 50 of 78 externally stronger candidates above anonymous self.
+Recognition reached 75% for candidates more than ten external-score points above
+the judge, but margin-bin intervals overlap and judge behavior is highly
+heterogeneous. There is no supported universal oversight threshold yet.
+
+The third wave cost $32.07 across 621 model calls. Nineteen of 488 candidate
+answers were unavailable after bounded retries; each was a single-probe gap,
+none affected anonymous self, and every affected candidate retained at least
+four opening answers. The results and protocol caveats are in
+`docs/pilot_analysis_oversight_frontier_above_heavy_20260726.md`.
+
 ## Immediate Next Steps
 
-1. Freeze these two panels and the order audit as the oversight baseline. Do
-   not tune prompts or validity rules against their reported accuracy.
-2. Compare probe repertoire, validity, difficulty, and adaptive behavior across
-   judge capability, separating question design from answer interpretation.
-3. Rerun the Sol and Fable catalog openings with five probes as a methodology
-   check, then test evidence-budget effects using archived answers.
-4. Add more oversight panels only where they increase support for large
-   above-judge gaps; do not spend runs estimating a smooth judge-score curve
-   from heterogeneous local panels.
+1. If archived-evidence replay is approved, retry only the 19 unavailable
+   third-wave answer cells and publish raw and repaired protocol-health results
+   separately.
+2. Rerun the Sol and Fable 50-model catalog openings with five probes, preserving
+   every answer for evidence-budget and cross-judge analysis.
+3. Compare probe repertoire, validity, difficulty, adaptation, and self-placement
+   behavior across all completed judge runs.
+4. Add oversight panels only where they increase independent support for
+   above-judge recognition; do not fit a smooth frontier to heterogeneous local
+   panels yet.
 5. Keep structured-versus-free councils as later exploratory work. Do not scale
    beyond 50 candidates unless the substantive research question requires it.

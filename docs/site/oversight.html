@@ -1,18 +1,17 @@
 <!doctype html>
-<html lang="en">
-<head>
+<html lang="en"><head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Oversight frontier replication</title>
+  <title>Oversight frontier synthesis</title>
   <style>
     :root { --ink:#172026; --muted:#637078; --line:#d9dfe2; --soft:#f4f6f6;
-      --blue:#276b9c; --red:#b84a45; }
+      --blue:#276b9c; }
     * { box-sizing:border-box; }
     body { margin:0; color:var(--ink); font:15px/1.5 system-ui,sans-serif; }
-    main { max-width:1180px; margin:0 auto; padding:48px 26px 72px; }
-    h1 { margin:0 0 10px; max-width:850px; font:700 42px/1.08 Georgia,serif; }
+    main { max-width:1160px; margin:0 auto; padding:48px 26px 72px; }
+    h1 { margin:0 0 10px; max-width:900px; font:700 42px/1.08 Georgia,serif; }
     h2 { margin:42px 0 12px; font:700 25px/1.2 Georgia,serif; }
-    p { max-width:850px; color:var(--muted); }
+    p { max-width:860px; color:var(--muted); }
     a { color:var(--blue); text-underline-offset:2px; }
     .resources { display:flex; flex-wrap:wrap; gap:8px 18px; margin:18px 0 4px;
       font-size:13px; }
@@ -21,96 +20,85 @@
     .metric { padding:18px 12px; }
     .metric strong { display:block; font:700 28px/1.1 Georgia,serif; }
     .metric span { color:var(--muted); font-size:13px; }
-    .grid { display:grid; grid-template-columns:1.1fr .9fr; gap:24px; }
-    .grid > * { min-width:0; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
     figure { margin:0; border-top:2px solid var(--ink); padding-top:10px; }
     svg { width:100%; height:auto; display:block; background:var(--soft); }
-    figcaption { margin-top:7px; color:var(--muted); font-size:13px; }
+    figcaption,.small { color:var(--muted); font-size:13px; }
     .table-wrap { overflow:auto; border-top:2px solid var(--ink); }
     table { width:100%; border-collapse:collapse; min-width:700px; }
     th,td { padding:9px 10px; border-bottom:1px solid var(--line); text-align:left; }
     thead th { color:var(--muted); font-size:12px; white-space:nowrap; }
-    .note { border-left:3px solid var(--blue); background:var(--soft);
-      padding:12px 14px; color:var(--ink); }
+    .num { text-align:right; font-variant-numeric:tabular-nums; }
     @media (max-width:760px) {
       main { padding:30px 16px 52px; } h1 { font-size:34px; }
       .metrics { grid-template-columns:1fr 1fr; } .grid { grid-template-columns:1fr; }
     }
   </style>
-</head>
-<body><main>
-  <h1>Can weaker models recognize stronger ones?</h1>
-  <p>Two independent panels tested the same six judges. Each judge wrote five
-  common probes, ranked seven anonymous candidates including itself, then used
-  one targeted follow-up. External scores are a noisy reference, not ground truth.</p>
+</head><body><main>
+  <h1>Can models recognize intelligence above their own?</h1>
+  <p>22 anonymous judge panels across
+  10 distinct judges. Every judge authored five common
+  opening probes and one targeted follow-up. Catalog scores are an external,
+  noisy reference rather than ground truth.</p>
   <nav class="resources" aria-label="Study resources">
     <a href="../oversight_frontier_design.md">Protocol</a>
     <a href="taxonomy.html">Taxonomy</a>
     <a href="models.html">Model catalog</a>
-    <a href="../../data/oversight_frontier_v2_probe_audit.json">Probe audit</a>
-    <a href="../../data/oversight_frontier_replication_results.json">Results JSON</a>
+    <a href="../pilot_analysis_oversight_frontier_above_heavy_20260726.md">Analysis</a>
+    <a href="../../data/oversight_frontier_synthesis_results.json">Results JSON</a>
   </nav>
   <section class="metrics">
-    <div class="metric"><strong>74.6%</strong><span>pooled pair ordering</span></div>
-    <div class="metric"><strong>20/32</strong><span>stronger candidates above judge</span></div>
-    <div class="metric"><strong>49/72</strong><span>all candidate-vs-self relations</span></div>
-    <div class="metric"><strong>96.6%</strong><span>pairs separated by 10+ points</span></div>
+    <div class="metric"><strong>76.1%</strong>
+      <span>all final pair orderings</span></div>
+    <div class="metric"><strong>50/78</strong>
+      <span>stronger candidates above judge</span></div>
+    <div class="metric"><strong>10/22</strong>
+      <span>panels improved by follow-up</span></div>
+    <div class="metric"><strong>$67.94</strong>
+      <span>provider-reported study spend</span></div>
   </section>
 
   <div class="grid">
-    <figure><svg viewBox='0 0 520 300' role='img' aria-label='Accuracy by capability gap'><line x1='48' y1='160.8' x2='500' y2='160.8' stroke='#d9dfe2'/><text x='41' y='164.8' text-anchor='end' font-size='11' fill='#637078'>40%</text><line x1='48' y1='115.2' x2='500' y2='115.2' stroke='#d9dfe2'/><text x='41' y='119.2' text-anchor='end' font-size='11' fill='#637078'>60%</text><line x1='48' y1='69.6' x2='500' y2='69.6' stroke='#d9dfe2'/><text x='41' y='73.6' text-anchor='end' font-size='11' fill='#637078'>80%</text><line x1='48' y1='24.0' x2='500' y2='24.0' stroke='#d9dfe2'/><text x='41' y='28.0' text-anchor='end' font-size='11' fill='#637078'>100%</text><text x='104.5' y='282' text-anchor='middle' font-size='11' fill='#637078'>&lt;2</text><text x='217.5' y='282' text-anchor='middle' font-size='11' fill='#637078'>2-5</text><text x='330.5' y='282' text-anchor='middle' font-size='11' fill='#637078'>5-10</text><text x='443.5' y='282' text-anchor='middle' font-size='11' fill='#637078'>10+</text><polyline points='104.5,158.7 217.5,92.4 330.5,83.7 443.5,34.4' fill='none' stroke='#9aa5ab' stroke-width='2'/><circle cx='104.5' cy='158.7' r='4' fill='#9aa5ab'/><circle cx='217.5' cy='92.4' r='4' fill='#9aa5ab'/><circle cx='330.5' cy='83.7' r='4' fill='#9aa5ab'/><circle cx='443.5' cy='34.4' r='4' fill='#9aa5ab'/><polyline points='104.5,83.5 217.5,108.7 330.5,75.5 443.5,30.2' fill='none' stroke='#276b9c' stroke-width='2'/><circle cx='104.5' cy='83.5' r='4' fill='#276b9c'/><circle cx='217.5' cy='108.7' r='4' fill='#276b9c'/><circle cx='330.5' cy='75.5' r='4' fill='#276b9c'/><circle cx='443.5' cy='30.2' r='4' fill='#276b9c'/><polyline points='104.5,120.3 217.5,100.0 330.5,80.2 443.5,31.7' fill='none' stroke='#172026' stroke-width='2'/><circle cx='104.5' cy='120.3' r='4' fill='#172026'/><circle cx='217.5' cy='100.0' r='4' fill='#172026'/><circle cx='330.5' cy='80.2' r='4' fill='#172026'/><circle cx='443.5' cy='31.7' r='4' fill='#172026'/><text x='286' y='14' font-size='11' fill='#9aa5ab'>Panel 1</text><text x='354' y='14' font-size='11' fill='#276b9c'>Panel 2</text><text x='425' y='14' font-size='11' fill='#172026'>Pooled</text></svg>
-      <figcaption>Large capability gaps were consistently easier than local
-      ordering. The two panels disagree most on near-ties.</figcaption></figure>
-    <figure><svg viewBox='0 0 520 300' role='img' aria-label='Judge accuracy across panels'><line x1='64.0' y1='24' x2='64.0' y2='250' stroke='#d9dfe2'/><text x='64.0' y='280' text-anchor='middle' font-size='11' fill='#637078'>40%</text><line x1='208.7' y1='24' x2='208.7' y2='250' stroke='#d9dfe2'/><text x='208.7' y='280' text-anchor='middle' font-size='11' fill='#637078'>60%</text><line x1='353.3' y1='24' x2='353.3' y2='250' stroke='#d9dfe2'/><text x='353.3' y='280' text-anchor='middle' font-size='11' fill='#637078'>80%</text><line x1='498.0' y1='24' x2='498.0' y2='250' stroke='#d9dfe2'/><text x='498.0' y='280' text-anchor='middle' font-size='11' fill='#637078'>100%</text><text x='57' y='46.8' text-anchor='end' font-size='10' fill='#637078'>Sol 5.6</text><line x1='291.3' y1='42.8' x2='325.8' y2='42.8' stroke='#aeb8bd' stroke-width='2'/><circle cx='291.3' cy='42.8' r='5' fill='#9aa5ab'/><circle cx='325.8' cy='42.8' r='5' fill='#276b9c'/><text x='57' y='84.5' text-anchor='end' font-size='10' fill='#637078'>Gemini 3.5 Flash</text><line x1='360.2' y1='80.5' x2='394.7' y2='80.5' stroke='#aeb8bd' stroke-width='2'/><circle cx='360.2' cy='80.5' r='5' fill='#9aa5ab'/><circle cx='394.7' cy='80.5' r='5' fill='#276b9c'/><text x='57' y='122.2' text-anchor='end' font-size='10' fill='#637078'>Qwen 3.7 Max</text><line x1='153.6' y1='118.2' x2='222.4' y2='118.2' stroke='#aeb8bd' stroke-width='2'/><circle cx='153.6' cy='118.2' r='5' fill='#9aa5ab'/><circle cx='222.4' cy='118.2' r='5' fill='#276b9c'/><text x='57' y='159.8' text-anchor='end' font-size='10' fill='#637078'>MiniMax M2.7</text><line x1='360.2' y1='155.8' x2='429.1' y2='155.8' stroke='#aeb8bd' stroke-width='2'/><circle cx='360.2' cy='155.8' r='5' fill='#9aa5ab'/><circle cx='429.1' cy='155.8' r='5' fill='#276b9c'/><text x='57' y='197.5' text-anchor='end' font-size='10' fill='#637078'>Claude Haiku 4.5</text><line x1='188.0' y1='193.5' x2='394.7' y2='193.5' stroke='#aeb8bd' stroke-width='2'/><circle cx='188.0' cy='193.5' r='5' fill='#9aa5ab'/><circle cx='394.7' cy='193.5' r='5' fill='#276b9c'/><text x='57' y='235.2' text-anchor='end' font-size='10' fill='#637078'>Mistral Large 3</text><line x1='360.2' y1='231.2' x2='291.3' y2='231.2' stroke='#aeb8bd' stroke-width='2'/><circle cx='360.2' cy='231.2' r='5' fill='#9aa5ab'/><circle cx='291.3' cy='231.2' r='5' fill='#276b9c'/></svg>
-      <figcaption>Condition-level accuracy moved substantially with the candidate
-      panel. Judge identity alone does not define a stable frontier.</figcaption></figure>
-  </div>
-
-  <h2>Judge by judge</h2>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Judge</th><th>Score</th><th>Panel 1</th><th>Panel 2</th><th>Change</th>
-    <th>Stronger P1</th><th>Stronger P2</th><th>Self P1</th><th>Self P2</th></tr></thead>
-    <tbody><tr><th>Sol 5.6</th><td>58.9</td><td>71.4%</td><td>76.2%</td><td>+4.8%</td><td>0/1</td><td>0/1</td><td>5/6</td><td>5/6</td></tr><tr><th>Gemini 3.5 Flash</th><td>50.2</td><td>81.0%</td><td>85.7%</td><td>+4.8%</td><td>3/3</td><td>2/3</td><td>4/6</td><td>5/6</td></tr><tr><th>Qwen 3.7 Max</th><td>46.0</td><td>52.4%</td><td>61.9%</td><td>+9.5%</td><td>3/3</td><td>1/3</td><td>3/6</td><td>3/6</td></tr><tr><th>MiniMax M2.7</th><td>38.1</td><td>81.0%</td><td>90.5%</td><td>+9.5%</td><td>3/3</td><td>2/3</td><td>4/6</td><td>5/6</td></tr><tr><th>Claude Haiku 4.5</th><td>29.6</td><td>57.1%</td><td>85.7%</td><td>+28.6%</td><td>1/3</td><td>2/3</td><td>3/6</td><td>5/6</td></tr><tr><th>Mistral Large 3</th><td>15.9</td><td>81.0%</td><td>71.4%</td><td>-9.5%</td><td>3/3</td><td>0/3</td><td>4/6</td><td>3/6</td></tr></tbody>
-  </table></div>
-
-  <h2>Capability gap</h2>
-  <div class="table-wrap"><table>
-    <thead><tr><th>External-score gap</th><th>Panel 1</th><th>Panel 2</th><th>Pooled</th></tr></thead>
-    <tbody><tr><th>&lt;2</th><td>9/22 (40.9%)</td><td>17/23 (73.9%)</td><td><strong>26/45 (57.8%)</strong></td></tr><tr><th>2-5</th><td>28/40 (70.0%)</td><td>22/35 (62.9%)</td><td><strong>50/75 (66.7%)</strong></td></tr><tr><th>5-10</th><td>31/42 (73.8%)</td><td>24/31 (77.4%)</td><td><strong>55/73 (75.3%)</strong></td></tr><tr><th>10+</th><td>21/22 (95.5%)</td><td>36/37 (97.3%)</td><td><strong>57/59 (96.6%)</strong></td></tr></tbody>
-  </table></div>
-
-  <div class="grid">
-    <div><h2>Candidate versus judge</h2>
+    <figure><svg viewBox='0 0 520 300' role='img' aria-label='Recognition of stronger candidates by capability margin'><line x1='48' y1='252.0' x2='500' y2='252.0' stroke='#d9dfe2'/><text x='41' y='256.0' text-anchor='end' font-size='11' fill='#637078'>0%</text><line x1='48' y1='195.0' x2='500' y2='195.0' stroke='#d9dfe2'/><text x='41' y='199.0' text-anchor='end' font-size='11' fill='#637078'>25%</text><line x1='48' y1='138.0' x2='500' y2='138.0' stroke='#d9dfe2'/><text x='41' y='142.0' text-anchor='end' font-size='11' fill='#637078'>50%</text><line x1='48' y1='81.0' x2='500' y2='81.0' stroke='#d9dfe2'/><text x='41' y='85.0' text-anchor='end' font-size='11' fill='#637078'>75%</text><line x1='48' y1='24.0' x2='500' y2='24.0' stroke='#d9dfe2'/><text x='41' y='28.0' text-anchor='end' font-size='11' fill='#637078'>100%</text><rect x='75.1' y='102.9' width='58.8' height='149.1' fill='#276b9c'/><line x1='104.5' y1='68.3' x2='104.5' y2='146.6' stroke='#172026' stroke-width='2'/><line x1='99.5' y1='68.3' x2='109.5' y2='68.3' stroke='#172026'/><line x1='99.5' y1='146.6' x2='109.5' y2='146.6' stroke='#172026'/><text x='104.5' y='282' text-anchor='middle' font-size='11' fill='#637078'>&lt;2</text><text x='104.5' y='95.9' text-anchor='middle' font-size='11' fill='#172026'>17/26</text><rect x='188.1' y='126.6' width='58.8' height='125.4' fill='#276b9c'/><line x1='217.5' y1='82.9' x2='217.5' y2='174.0' stroke='#172026' stroke-width='2'/><line x1='212.5' y1='82.9' x2='222.5' y2='82.9' stroke='#172026'/><line x1='212.5' y1='174.0' x2='222.5' y2='174.0' stroke='#172026'/><text x='217.5' y='282' text-anchor='middle' font-size='11' fill='#637078'>2-5</text><text x='217.5' y='119.6' text-anchor='middle' font-size='11' fill='#172026'>11/20</text><rect x='301.1' y='100.0' width='58.8' height='152.0' fill='#276b9c'/><line x1='330.5' y1='65.0' x2='330.5' y2='145.5' stroke='#172026' stroke-width='2'/><line x1='325.5' y1='65.0' x2='335.5' y2='65.0' stroke='#172026'/><line x1='325.5' y1='145.5' x2='335.5' y2='145.5' stroke='#172026'/><text x='330.5' y='282' text-anchor='middle' font-size='11' fill='#637078'>5-10</text><text x='330.5' y='93.0' text-anchor='middle' font-size='11' fill='#172026'>16/24</text><rect x='414.1' y='81.0' width='58.8' height='171.0' fill='#276b9c'/><line x1='443.5' y1='40.3' x2='443.5' y2='158.7' stroke='#172026' stroke-width='2'/><line x1='438.5' y1='40.3' x2='448.5' y2='40.3' stroke='#172026'/><line x1='438.5' y1='158.7' x2='448.5' y2='158.7' stroke='#172026'/><text x='443.5' y='282' text-anchor='middle' font-size='11' fill='#637078'>10+</text><text x='443.5' y='74.0' text-anchor='middle' font-size='11' fill='#172026'>6/8</text></svg>
+      <figcaption>Recognition of candidates above the judge, grouped by the
+      candidate's external-score lead. Bars show Wilson 95% intervals.</figcaption>
+    </figure>
+    <div>
+      <h2>Capability margin</h2>
       <div class="table-wrap"><table>
-        <thead><tr><th>Absolute score gap</th><th>Correct</th><th>Accuracy</th></tr></thead>
-        <tbody><tr><th>&lt;2</th><td>12/21</td><td>57.1%</td></tr><tr><th>2-5</th><td>16/23</td><td>69.6%</td></tr><tr><th>5-10</th><td>13/20</td><td>65.0%</td></tr><tr><th>10+</th><td>8/8</td><td>100.0%</td></tr></tbody>
+        <thead><tr><th>Lead over judge</th><th class="num">Recognized</th>
+          <th class="num">Rate</th><th class="num">95% interval</th></tr></thead>
+        <tbody><tr><th>&lt;2</th><td class='num'>17/26</td><td class='num'>65.4%</td><td class='num'>46.2%-80.6%</td></tr><tr><th>2-5</th><td class='num'>11/20</td><td class='num'>55.0%</td><td class='num'>34.2%-74.2%</td></tr><tr><th>5-10</th><td class='num'>16/24</td><td class='num'>66.7%</td><td class='num'>46.7%-82.0%</td></tr><tr><th>10+</th><td class='num'>6/8</td><td class='num'>75.0%</td><td class='num'>40.9%-92.9%</td></tr></tbody>
       </table></div>
-    </div>
-    <div><h2>Recognizing a stronger model</h2>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Minimum lead over judge</th><th>Recognized</th><th>Rate</th></tr></thead>
-        <tbody><tr><th>&gt;0 points</th><td>20/32</td><td>62.5%</td></tr><tr><th>2+ points</th><td>15/22</td><td>68.2%</td></tr><tr><th>5+ points</th><td>7/10</td><td>70.0%</td></tr><tr><th>10+ points</th><td>1/1</td><td>100.0%</td></tr></tbody>
-      </table></div>
+      <p class="small">Bins are disjoint. Counts are candidate appearances, not
+      independent draws; the interval is descriptive and does not model clustering
+      by judge or candidate.</p>
     </div>
   </div>
 
-  <h2>What judges tested</h2>
+  <h2>Judge coverage</h2>
   <div class="table-wrap"><table>
-    <thead><tr><th>Question type</th><th>Panel 1</th><th>Panel 2</th><th>Total</th></tr></thead>
-    <tbody><tr><th>Stem Scientific</th><td>17</td><td>12</td><td>29</td></tr><tr><th>Quantitative Math</th><td>11</td><td>15</td><td>26</td></tr><tr><th>Logical Paradox Consistency</th><td>11</td><td>7</td><td>18</td></tr><tr><th>Planning Decision Strategy</th><td>8</td><td>9</td><td>17</td></tr><tr><th>Coding Algorithmic</th><td>4</td><td>4</td><td>8</td></tr><tr><th>Philosophical Conceptual Analysis</th><td>4</td><td>3</td><td>7</td></tr><tr><th>Dimensional Unit</th><td>1</td><td>5</td><td>6</td></tr><tr><th>Fluid Abstract</th><td>4</td><td>2</td><td>6</td></tr><tr><th>Reading Argument Comprehension</th><td>5</td><td>0</td><td>5</td></tr><tr><th>Robustness Adversarial Safety</th><td>3</td><td>2</td><td>5</td></tr></tbody>
+    <thead><tr><th>Judge</th><th class="num">Score</th><th class="num">Panels</th>
+      <th class="num">Stronger recognized</th><th class="num">Unique stronger</th>
+      <th class="num">All pairs</th><th class="num">Both above</th>
+      <th class="num">Adaptive helped</th><th class="num">Missing answers</th></tr></thead>
+    <tbody><tr><th>Sol 5.6</th><td class='num'>58.9</td><td class='num'>3</td><td class='num'>1/3</td><td class='num'>1</td><td class='num'>73.1%</td><td class='num'>n/a</td><td class='num'>2/3</td><td class='num'>5/127</td></tr><tr><th>Grok 4.5</th><td class='num'>53.8</td><td class='num'>1</td><td class='num'>5/5</td><td class='num'>5</td><td class='num'>77.8%</td><td class='num'>20.0%</td><td class='num'>0/1</td><td class='num'>6/49</td></tr><tr><th>Gemini 3.5 Flash</th><td class='num'>50.2</td><td class='num'>3</td><td class='num'>9/11</td><td class='num'>7</td><td class='num'>75.6%</td><td class='num'>87.5%</td><td class='num'>2/3</td><td class='num'>3/127</td></tr><tr><th>Qwen 3.7 Max</th><td class='num'>46.0</td><td class='num'>3</td><td class='num'>8/11</td><td class='num'>7</td><td class='num'>67.9%</td><td class='num'>43.8%</td><td class='num'>1/3</td><td class='num'>5/127</td></tr><tr><th>DeepSeek V4 Pro</th><td class='num'>44.3</td><td class='num'>1</td><td class='num'>4/5</td><td class='num'>5</td><td class='num'>91.7%</td><td class='num'>100.0%</td><td class='num'>0/1</td><td class='num'>0/49</td></tr><tr><th>MiniMax M2.7</th><td class='num'>38.1</td><td class='num'>3</td><td class='num'>10/11</td><td class='num'>9</td><td class='num'>84.6%</td><td class='num'>87.5%</td><td class='num'>1/3</td><td class='num'>2/127</td></tr><tr><th>Kimi K2 Thinking</th><td class='num'>32.7</td><td class='num'>1</td><td class='num'>0/5</td><td class='num'>5</td><td class='num'>50.0%</td><td class='num'>30.0%</td><td class='num'>0/1</td><td class='num'>1/49</td></tr><tr><th>Claude Haiku 4.5</th><td class='num'>29.6</td><td class='num'>3</td><td class='num'>4/11</td><td class='num'>8</td><td class='num'>73.1%</td><td class='num'>68.8%</td><td class='num'>2/3</td><td class='num'>2/126</td></tr><tr><th>Mistral Large 3</th><td class='num'>15.9</td><td class='num'>3</td><td class='num'>4/11</td><td class='num'>6</td><td class='num'>80.8%</td><td class='num'>75.0%</td><td class='num'>1/3</td><td class='num'>1/127</td></tr><tr><th>Llama 4 Maverick</th><td class='num'>14.3</td><td class='num'>1</td><td class='num'>5/5</td><td class='num'>5</td><td class='num'>88.9%</td><td class='num'>70.0%</td><td class='num'>1/1</td><td class='num'>0/47</td></tr></tbody>
   </table></div>
+  <p class="small">“Stronger recognized” asks whether each externally stronger
+  candidate was ranked above the judge's anonymous self. “Both above” tests
+  whether a judge could order two candidates that both exceeded it.</p>
 
-  <h2>Robustness checks</h2>
-  <p class="note">The exact-evidence order replay changed all
-  18 answer presentations. Mean rank agreement was
-  Kendall τ=0.65; all three judges retained the same
-  top candidate, but the two lower-capability judges each fell to τ=0.52.
-  Presentation order is therefore a real uncertainty, especially below the
-  strongest judge.</p>
-  <p>Across both panels, the adaptive probe improved
-  6 rankings, left
-  4 unchanged, and worsened
-  2. Pooled accuracy moved from
-  72.6% to 74.6%.
-  The mechanism is operationally useful, but its effect is not uniformly positive.</p>
+  <h2>Study waves</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Wave</th><th class="num">Panels</th><th class="num">Candidates</th>
+      <th class="num">Stronger recognized</th><th class="num">All pairs</th>
+      <th class="num">Missing answers</th><th class="num">Spend</th></tr></thead>
+    <tbody><tr><th>oversight_frontier_v1</th><td class='num'>6</td><td class='num'>7</td><td class='num'>13/16</td><td class='num'>70.6%</td><td class='num'>2/234</td><td class='num'>$19.57</td></tr><tr><th>oversight_frontier_v2</th><td class='num'>6</td><td class='num'>7</td><td class='num'>7/16</td><td class='num'>78.6%</td><td class='num'>4/234</td><td class='num'>$16.30</td></tr><tr><th>oversight_frontier_v3_above_heavy</th><td class='num'>10</td><td class='num'>9</td><td class='num'>30/46</td><td class='num'>77.2%</td><td class='num'>19/487</td><td class='num'>$32.07</td></tr></tbody>
+  </table></div>
+  <p class="small">Across all waves, 25 of
+  955 routed answers remained unavailable,
+  4 visible-text retries were attempted, and
+  14 private JSON outputs required bounded
+  same-model repair. Missing answers remain visible to the judge as missing
+  evidence, never as low-quality answers.</p>
 </main></body></html>
