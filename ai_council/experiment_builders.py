@@ -358,3 +358,66 @@ def build_exact_evidence_order_replay_config(
         }
     )
     return config
+
+
+def build_exact_evidence_cross_judge_config(
+    source_config: Mapping[str, Any],
+    *,
+    source_run: str | Path,
+    comparison_seed: int,
+    study_condition: str,
+    judge_model: str,
+    catalog: Mapping[str, Any],
+) -> dict[str, Any]:
+    config = build_exact_evidence_order_replay_config(
+        source_config,
+        source_run=source_run,
+        comparison_seed=comparison_seed,
+        study_condition=study_condition,
+        name_suffix="cross_judge",
+    )
+    catalog_by_id = {
+        row["provider_model_id"]: row for row in catalog.get("models", [])
+    }
+    if judge_model not in catalog_by_id:
+        raise ValueError(f"cross judge route absent from catalog: {judge_model}")
+
+    judges = config.get("judges", [])
+    if len(judges) != 1:
+        raise ValueError("cross-judge replay requires exactly one judge")
+    judge_ref = judges[0]["model"]
+    model_rows = config.get("models", [])
+    if isinstance(model_rows, Mapping):
+        judge_row = model_rows.get(judge_ref)
+    else:
+        judge_row = next(
+            (row for row in model_rows if row.get("name") == judge_ref),
+            None,
+        )
+    if not isinstance(judge_row, dict):
+        raise ValueError(f"cross-judge replay cannot resolve model {judge_ref}")
+    source_judge_model = str(judge_row.get("model"))
+    params, recovery_params = judge_model_params(catalog_by_id[judge_model])
+    judge_row.update(
+        {
+            "provider": "openrouter_judge",
+            "model": judge_model,
+            "params": params,
+            "recovery_params": recovery_params,
+        }
+    )
+
+    metadata = config.setdefault("metadata", {})
+    for key in (
+        "order_replay_source_run",
+        "order_replay_source_comparison_seed",
+    ):
+        metadata.pop(key, None)
+    metadata.update(
+        {
+            "exact_evidence_source_run": str(source_run),
+            "source_judge_model": source_judge_model,
+            "cross_judge_model": judge_model,
+        }
+    )
+    return config

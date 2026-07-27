@@ -132,7 +132,7 @@ def build_oversight_study_report(
     ]
     probe_audit = _load_json(probe_audit_path) if probe_audit_path else None
     summary = {
-        "schema_version": "oversight-frontier-report-v1",
+        "schema_version": "oversight-frontier-report-v2",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "study": study["name"],
         "research_question": study["research_question"],
@@ -333,12 +333,12 @@ def render_oversight_report(summary: Mapping[str, Any]) -> str:
   follow-up.</p>
 
   <section class="metrics">
-    <div class="metric"><strong>{_pct(aggregate['final_pair_accuracy'])}</strong>
-      <span>all final pair orderings</span></div>
-    <div class="metric"><strong>{aggregate['superior_recognized']}/{aggregate['superior_total']}</strong>
-      <span>stronger candidates placed above the judge</span></div>
-    <div class="metric"><strong>{aggregate['self_relative_correct']}/{aggregate['self_relative_total']}</strong>
-      <span>all candidate-vs-self relations correct</span></div>
+    <div class="metric"><strong>{_pct(aggregate['opening_pair_accuracy'])}</strong>
+      <span>all pair orderings after five probes</span></div>
+    <div class="metric"><strong>{aggregate['opening_superior_recognized']}/{aggregate['opening_superior_total']}</strong>
+      <span>stronger candidates above the judge after five probes</span></div>
+    <div class="metric"><strong>{aggregate['opening_self_relative_correct']}/{aggregate['opening_self_relative_total']}</strong>
+      <span>candidate-vs-self relations correct after five probes</span></div>
     <div class="metric"><strong>{aggregate['adaptive_improved_count']}/{len(conditions)}</strong>
       <span>judges helped by the adaptive probe</span></div>
   </section>
@@ -347,15 +347,17 @@ def render_oversight_report(summary: Mapping[str, Any]) -> str:
   <div class="table-wrap"><table>
     <thead><tr><th>Judge</th><th class="num">External score</th><th>Panel range</th>
       <th class="num">After 5 probes</th><th class="num">After adaptive</th>
-      <th>Stronger above self</th><th>Weaker below self</th><th>Self rank</th>
+      <th>Stronger above self, 5 probes</th><th>Weaker below self, 5 probes</th>
+      <th>Self rank, 5 probes</th>
       <th>Recovery</th><th class="num">Spend</th></tr></thead>
     <tbody>{judge_rows}</tbody>
   </table></div>
 
   <div class="chart-grid">
     <figure>{_frontier_svg(conditions)}
-      <figcaption>Final pairwise accuracy against the external ordering. Point labels
-      show how many externally stronger candidates the judge placed above its anonymous self.</figcaption>
+      <figcaption>Five-probe pairwise accuracy against the external ordering.
+      Point labels show how many externally stronger candidates the judge
+      placed above its anonymous self at the primary checkpoint.</figcaption>
     </figure>
     <figure>{_adaptive_svg(conditions)}
       <figcaption>Opening portfolio versus final ranking. The sixth probe was targeted
@@ -369,8 +371,9 @@ def render_oversight_report(summary: Mapping[str, Any]) -> str:
       <th class="heat">Crossing / self</th><th class="heat">Both above</th></tr></thead>
     <tbody>{heatmap_rows}</tbody>
   </table></div>
-  <p class="small">Each cell is final pairwise accuracy, with the number of candidate
-  pairs in parentheses. “Both above” is the hardest scalable-oversight case.</p>
+  <p class="small">Each cell is five-probe pairwise accuracy, with the number of
+  candidate pairs in parentheses. “Both above” is the hardest
+  scalable-oversight case.</p>
 
   <h2>Probe design and adaptation</h2>
   <div class="table-wrap"><table>
@@ -555,8 +558,13 @@ def _analyze_condition(
 
 def repair_runtime_metadata(config: Mapping[str, Any]) -> dict[str, Any]:
     metadata = config.get("metadata", {})
-    is_repair = bool(metadata.get("repair_source_run"))
-    uses_recovery_params = bool(metadata.get("repair_uses_recovery_params"))
+    is_repair = bool(
+        metadata.get("repair_source_run") or metadata.get("resume_source_run")
+    )
+    uses_recovery_params = bool(
+        metadata.get("repair_uses_recovery_params")
+        or metadata.get("resume_judge_uses_recovery_params")
+    )
     parameter_overrides = metadata.get("repair_parameter_overrides", {})
     if not isinstance(parameter_overrides, Mapping):
         parameter_overrides = {}
@@ -688,9 +696,22 @@ def _aggregate(conditions: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         )
     ]
     return {
+        "opening_pairs": summarize_pair_observations(opening_rows),
         "opening_pair_accuracy": _accuracy(opening_rows)["accuracy"],
         "final_pair_accuracy": _accuracy(final_rows)["accuracy"],
         "final_pairs": summarize_pair_observations(final_rows),
+        "opening_superior_total": sum(
+            condition["opening"]["superior_total"] for condition in conditions
+        ),
+        "opening_superior_recognized": sum(
+            condition["opening"]["superior_recognized"] for condition in conditions
+        ),
+        "opening_self_relative_correct": sum(
+            condition["opening"]["self_relative_correct"] for condition in conditions
+        ),
+        "opening_self_relative_total": sum(
+            condition["opening"]["self_relative_total"] for condition in conditions
+        ),
         "superior_total": sum(
             condition["final"]["superior_total"] for condition in conditions
         ),
@@ -754,16 +775,16 @@ def _judge_row(condition: Mapping[str, Any]) -> str:
     opening = condition["opening"]["pairs"]["overall"]["accuracy"]
     final = condition["final"]["pairs"]["overall"]["accuracy"]
     recognized = (
-        f"{condition['final']['superior_recognized']}/"
-        f"{condition['final']['superior_total']}"
+        f"{condition['opening']['superior_recognized']}/"
+        f"{condition['opening']['superior_total']}"
     )
     inferior = (
-        f"{condition['final']['inferior_below_self']}/"
-        f"{condition['final']['inferior_total']}"
+        f"{condition['opening']['inferior_below_self']}/"
+        f"{condition['opening']['inferior_total']}"
     )
     self_rank = (
-        f"{condition['final']['predicted_self_rank']} "
-        f"(expected {condition['final']['expected_self_rank']})"
+        f"{condition['opening']['predicted_self_rank']} "
+        f"(expected {condition['opening']['expected_self_rank']})"
     )
     recovery = []
     if condition["failed_attempt_count"]:
@@ -795,7 +816,7 @@ def _judge_row(condition: Mapping[str, Any]) -> str:
 def _relative_heatmap_row(condition: Mapping[str, Any]) -> str:
     metrics = {
         row["label"]: row
-        for row in condition["final"]["pairs"]["by_relative_position"]
+        for row in condition["opening"]["pairs"]["by_relative_position"]
     }
     cells = "".join(_heat_cell(metrics[label]) for label in RELATIVE_PAIR_LABELS)
     return f"<tr><th>{escape(condition['judge_short_name'])}</th>{cells}</tr>"
@@ -874,10 +895,10 @@ def _frontier_svg(conditions: Sequence[Mapping[str, Any]]) -> str:
         )
     points = []
     for condition in conditions:
-        accuracy = condition["final"]["pairs"]["overall"]["accuracy"]
+        accuracy = condition["opening"]["pairs"]["overall"]["accuracy"]
         recognized = (
-            f"{condition['final']['superior_recognized']}/"
-            f"{condition['final']['superior_total']}"
+            f"{condition['opening']['superior_recognized']}/"
+            f"{condition['opening']['superior_total']}"
         )
         px, py = x(condition["judge_external_score"]), y(accuracy)
         label_x = px - 8 if px > width - 120 else px + 8
@@ -890,7 +911,7 @@ def _frontier_svg(conditions: Sequence[Mapping[str, Any]]) -> str:
         )
     return (
         f"<svg viewBox='0 0 {width} {height}' role='img' "
-        "aria-label='Judge intelligence score versus final pairwise accuracy'>"
+        "aria-label='Judge intelligence score versus five-probe pairwise accuracy'>"
         + "".join(grid)
         + f"<line x1='{left}' y1='{top}' x2='{left}' y2='{height-bottom}' stroke='#172026'/>"
         + f"<line x1='{left}' y1='{height-bottom}' x2='{width-right}' y2='{height-bottom}' stroke='#172026'/>"

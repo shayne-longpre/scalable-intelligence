@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 
 from ai_council.oversight_analysis import (
+    _aggregate,
     discover_study_runs,
     judgment_metrics,
     pair_observations,
@@ -120,6 +121,44 @@ class OversightAnalysisTests(unittest.TestCase):
         self.assertEqual(metrics["self_relative_correct"], 2)
         self.assertEqual(metrics["self_relative_total"], 4)
 
+    def test_aggregate_keeps_opening_and_final_self_metrics_separate(self) -> None:
+        scores = {"strong": 2.0, "judge": 1.0, "weak": 0.0}
+        condition = {
+            "participant_scores": scores,
+            "judge_external_score": 1.0,
+            "opening": judgment_metrics(
+                ["strong", "judge", "weak"],
+                scores,
+                judge_score=1.0,
+                self_participant="judge",
+            ),
+            "final": judgment_metrics(
+                ["judge", "strong", "weak"],
+                scores,
+                judge_score=1.0,
+                self_participant="judge",
+            ),
+            "adaptive_delta_pair_accuracy": -1 / 3,
+            "reported_cost_usd": 1.0,
+            "failed_attempt_count": 0,
+            "setup_failure_count": 0,
+            "structured_repair_count": 0,
+            "visible_text_retry_count": 0,
+            "unavailable_answer_count": 0,
+            "selected_run_is_repair": False,
+            "runtime_sensitive_repair": False,
+            "model_calls": 1,
+        }
+
+        aggregate = _aggregate([condition])
+
+        self.assertEqual(aggregate["opening_pair_accuracy"], 1.0)
+        self.assertEqual(aggregate["final_pair_accuracy"], 2 / 3)
+        self.assertEqual(aggregate["opening_superior_recognized"], 1)
+        self.assertEqual(aggregate["superior_recognized"], 0)
+        self.assertEqual(aggregate["opening_self_relative_correct"], 2)
+        self.assertEqual(aggregate["self_relative_correct"], 1)
+
     def test_visible_retry_counter_supports_current_and_legacy_metadata(self) -> None:
         self.assertEqual(
             visible_text_retry_count(
@@ -168,6 +207,20 @@ class OversightAnalysisTests(unittest.TestCase):
             ],
             40000,
         )
+
+    def test_repair_runtime_metadata_counts_recovery_profile_resume(self) -> None:
+        resumed = repair_runtime_metadata(
+            {
+                "metadata": {
+                    "resume_source_run": "source",
+                    "resume_judge_uses_recovery_params": True,
+                }
+            }
+        )
+
+        self.assertTrue(resumed["selected_run_is_repair"])
+        self.assertTrue(resumed["repair_uses_recovery_params"])
+        self.assertTrue(resumed["runtime_sensitive_repair"])
 
     def test_discovery_prefers_repairs_only_when_they_reduce_missing_evidence(self) -> None:
         study = {"conditions": [{"id": "alpha"}, {"id": "beta"}]}

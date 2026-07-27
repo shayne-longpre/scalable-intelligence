@@ -59,8 +59,35 @@ def _indicator_matches(indicator: str, text: str) -> bool:
         return False
     if _is_word_or_phrase(indicator):
         pattern = rf"(?<![a-z0-9_]){re.escape(indicator)}(?![a-z0-9_])"
-        return re.search(pattern, text) is not None
-    return indicator in text
+        return any(
+            not _match_is_negated(text, match.start())
+            for match in re.finditer(pattern, text)
+        )
+    return any(
+        not _match_is_negated(text, index)
+        for index in _substring_positions(indicator, text)
+    )
+
+
+def _match_is_negated(text: str, start: int) -> bool:
+    prefix = text[max(0, start - 80) : start]
+    return re.search(
+        r"(?:\bdo\s+not|\bdon't|\bmust\s+not|\bno|\bwithout|"
+        r"\bavoid(?:ing)?|\bforbid(?:den|s)?)"
+        r"(?:\s+[\w-]+){0,3}\s*$",
+        prefix,
+    ) is not None
+
+
+def _substring_positions(needle: str, text: str) -> list[int]:
+    positions = []
+    start = 0
+    while True:
+        index = text.find(needle, start)
+        if index < 0:
+            return positions
+        positions.append(index)
+        start = index + len(needle)
 
 
 def _is_word_or_phrase(indicator: str) -> bool:

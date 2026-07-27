@@ -101,8 +101,13 @@ and the new-panel replication plus exact-evidence answer-order audit in
 [`docs/pilot_analysis_oversight_frontier_replication_20260726.md`](docs/pilot_analysis_oversight_frontier_replication_20260726.md).
 The ten-judge, above-heavy extension and pooled 22-panel analysis are in
 [`docs/pilot_analysis_oversight_frontier_above_heavy_20260726.md`](docs/pilot_analysis_oversight_frontier_above_heavy_20260726.md).
-The matched analysis of all 60 judge-authored probes is in
+The matched-panel extension and pooled 30-panel analysis are in
+[`docs/pilot_analysis_oversight_matched_20260727.md`](docs/pilot_analysis_oversight_matched_20260727.md).
+The matched analysis of all 108 fixed-protocol judge-authored probes is in
 [`docs/pilot_analysis_probe_evolution_20260727.md`](docs/pilot_analysis_probe_evolution_20260727.md).
+The exact-evidence cross-over separating probe design from evidence
+interpretation is in
+[`docs/pilot_analysis_probe_design_cross_20260727.md`](docs/pilot_analysis_probe_design_cross_20260727.md).
 The combined reader-facing
 [`oversight report`](docs/site/oversight.html) links back to machine-readable
 study results and versioned probe audits.

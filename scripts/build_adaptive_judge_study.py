@@ -20,10 +20,14 @@ def build_study_configs(
     study = _load_json(study_path)
     resolved_catalog_path = catalog_path or Path(study["catalog"])
     catalog = _load_json(resolved_catalog_path)
-    catalog_routes = {
-        model["provider_model_id"] for model in catalog.get("models", [])
+    catalog_by_route = {
+        model["provider_model_id"]: model for model in catalog.get("models", [])
     }
+    catalog_routes = set(catalog_by_route)
     protocol = study["protocol"]
+    relative_gap_requirements = study.get("panel_design", {}).get(
+        "relative_gap_requirements", []
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
 
     generated: list[dict[str, Any]] = []
@@ -36,6 +40,13 @@ def build_study_configs(
             raise ValueError(f"{condition_id} contains routes absent from catalog: {unknown}")
         if judge["model"] not in candidates:
             raise ValueError(f"{condition_id} must include the judge in its candidate panel")
+        relative_gap_counts = validate_relative_gap_requirements(
+            condition_id=condition_id,
+            judge_model=judge["model"],
+            candidate_models=candidates,
+            catalog_by_route=catalog_by_route,
+            requirements=relative_gap_requirements,
+        )
 
         config_name = f"{study['name']}_{condition_id}"
         config = build_adaptive_judge_config(
@@ -78,6 +89,7 @@ def build_study_configs(
                 "judge_model": judge["model"],
                 "config": str(config_path),
                 "candidate_count": len(candidates),
+                "relative_gap_counts": relative_gap_counts,
             }
         )
 
@@ -91,6 +103,78 @@ def build_study_configs(
         json.dumps(index, indent=2) + "\n", encoding="utf-8"
     )
     return index
+
+
+def validate_relative_gap_requirements(
+    *,
+    condition_id: str,
+    judge_model: str,
+    candidate_models: list[str],
+    catalog_by_route: dict[str, dict[str, Any]],
+    requirements: list[dict[str, Any]],
+) -> dict[str, int]:
+    if not requirements:
+        return {}
+    judge_score = catalog_by_route[judge_model].get("intelligence_score")
+    if not isinstance(judge_score, (int, float)):
+        raise ValueError(f"{condition_id} judge has no intelligence score")
+    deltas = []
+    for model in candidate_models:
+        if model == judge_model:
+            continue
+        score = catalog_by_route[model].get("intelligence_score")
+        if not isinstance(score, (int, float)):
+            raise ValueError(f"{condition_id} candidate {model} has no intelligence score")
+        deltas.append(float(score) - float(judge_score))
+
+    counts: dict[str, int] = {}
+    for requirement in requirements:
+        label = str(requirement["label"])
+        if label in counts:
+            raise ValueError(
+                f"{condition_id} repeats gap requirement label {label}"
+            )
+        side = requirement["side"]
+        if side not in {"above", "below"}:
+            raise ValueError(f"{condition_id} gap requirement {label} has invalid side")
+        minimum = requirement["minimum"]
+        if isinstance(minimum, bool) or not isinstance(minimum, int):
+            raise ValueError(
+                f"{condition_id} gap requirement {label} minimum must be an integer"
+            )
+        min_gap = float(requirement.get("min_gap", 0))
+        max_gap = requirement.get("max_gap")
+        max_gap = float(max_gap) if max_gap is not None else None
+        if minimum < 0 or min_gap < 0 or (max_gap is not None and max_gap <= min_gap):
+            raise ValueError(f"{condition_id} gap requirement {label} has invalid bounds")
+        count = sum(
+            _gap_in_requirement(
+                delta,
+                side=side,
+                min_gap=min_gap,
+                max_gap=max_gap,
+            )
+            for delta in deltas
+        )
+        counts[label] = count
+        if count < minimum:
+            raise ValueError(
+                f"{condition_id} requires {minimum} {label} candidate(s), found {count}"
+            )
+    return counts
+
+
+def _gap_in_requirement(
+    delta: float,
+    *,
+    side: str,
+    min_gap: float,
+    max_gap: float | None,
+) -> bool:
+    if (side == "above" and delta <= 0) or (side == "below" and delta >= 0):
+        return False
+    gap = abs(delta)
+    return gap >= min_gap and (max_gap is None or gap < max_gap)
 
 
 def main() -> int:

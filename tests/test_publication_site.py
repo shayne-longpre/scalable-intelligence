@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 import unittest
 
 from scripts.build_publication_site import (
@@ -46,6 +48,9 @@ class PublicationSiteTests(unittest.TestCase):
                 "pooled": {
                     "condition_count": 22,
                     "judge_count": 10,
+                    "opening_pairs": {"accuracy": 0.75},
+                    "opening_superior_recognized": 41,
+                    "opening_superior_total": 60,
                     "final_pairs": {"accuracy": 0.8},
                     "superior_recognized": 40,
                     "superior_total": 60,
@@ -55,4 +60,26 @@ class PublicationSiteTests(unittest.TestCase):
 
         self.assertIn("22 panels", html)
         self.assertIn("10 distinct judges", html)
-        self.assertIn("40 of", html)
+        self.assertIn("75.0%", html)
+        self.assertIn("41 of", html)
+        self.assertIn("adaptive follow-up is a separate", html)
+
+    def test_oversight_section_accepts_report_card_repo_prefix(self) -> None:
+        from ai_council.oversight_synthesis import render_frontier_synthesis
+
+        summary = json.loads(
+            (
+                Path(__file__).resolve().parents[1]
+                / "data"
+                / "oversight_frontier_synthesis_matched_results.json"
+            ).read_text()
+        )
+        html = render_frontier_synthesis(
+            summary,
+            repo_prefix="../../..",
+        )
+
+        self.assertIn(
+            "../../../data/oversight_frontier_synthesis_matched_results.json",
+            html,
+        )

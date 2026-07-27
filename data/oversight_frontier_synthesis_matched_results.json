@@ -1,0 +1,650 @@
+{
+  "schema_version": "oversight-frontier-synthesis-v1",
+  "generated_at": "2026-07-27T09:26:54.201956+00:00",
+  "source_results": [
+    "data/oversight_frontier_results.json",
+    "data/oversight_frontier_v2_results.json",
+    "data/oversight_frontier_v3_repaired_results.json",
+    "data/oversight_frontier_v4_results.json"
+  ],
+  "studies": [
+    {
+      "study": "oversight_frontier_v1",
+      "condition_count": 6,
+      "candidate_count_text": "7",
+      "superior_recognized": 13,
+      "superior_total": 16,
+      "opening_superior_recognized": 13,
+      "opening_superior_total": 16,
+      "final_pair_accuracy": 0.7063492063492064,
+      "unavailable_answer_count": 2,
+      "candidate_answer_count": 234,
+      "reported_cost_usd": 19.5683002828
+    },
+    {
+      "study": "oversight_frontier_v2",
+      "condition_count": 6,
+      "candidate_count_text": "7",
+      "superior_recognized": 7,
+      "superior_total": 16,
+      "opening_superior_recognized": 6,
+      "opening_superior_total": 16,
+      "final_pair_accuracy": 0.7857142857142857,
+      "unavailable_answer_count": 4,
+      "candidate_answer_count": 234,
+      "reported_cost_usd": 16.3028989538
+    },
+    {
+      "study": "oversight_frontier_v3_above_heavy",
+      "condition_count": 10,
+      "candidate_count_text": "9",
+      "superior_recognized": 30,
+      "superior_total": 46,
+      "opening_superior_recognized": 32,
+      "opening_superior_total": 46,
+      "final_pair_accuracy": 0.7805555555555556,
+      "unavailable_answer_count": 1,
+      "candidate_answer_count": 487,
+      "reported_cost_usd": 42.805053845859995
+    },
+    {
+      "study": "oversight_frontier_v4_matched_extension",
+      "condition_count": 8,
+      "candidate_count_text": "9",
+      "superior_recognized": 26,
+      "superior_total": 40,
+      "opening_superior_recognized": 26,
+      "opening_superior_total": 40,
+      "final_pair_accuracy": 0.6180555555555556,
+      "unavailable_answer_count": 0,
+      "candidate_answer_count": 390,
+      "reported_cost_usd": 16.33325494051
+    }
+  ],
+  "pooled": {
+    "condition_count": 30,
+    "judge_count": 10,
+    "opening_pairs": {
+      "correct": 645,
+      "pair_count": 900,
+      "accuracy": 0.7166666666666667
+    },
+    "final_pairs": {
+      "correct": 647,
+      "pair_count": 900,
+      "accuracy": 0.7188888888888889
+    },
+    "opening_superior_recognized": 77,
+    "opening_superior_total": 118,
+    "opening_superior_by_margin": [
+      {
+        "label": "<2",
+        "recognized": 26,
+        "total": 42,
+        "rate": 0.6190476190476191,
+        "wilson_95_low": 0.46813768219996377,
+        "wilson_95_high": 0.7500047910121407
+      },
+      {
+        "label": "2-5",
+        "recognized": 16,
+        "total": 28,
+        "rate": 0.5714285714285714,
+        "wilson_95_low": 0.390704789856154,
+        "wilson_95_high": 0.7349170381926877
+      },
+      {
+        "label": "5-10",
+        "recognized": 22,
+        "total": 34,
+        "rate": 0.6470588235294118,
+        "wilson_95_low": 0.4791365883001342,
+        "wilson_95_high": 0.7851228510470394
+      },
+      {
+        "label": "10+",
+        "recognized": 13,
+        "total": 14,
+        "rate": 0.9285714285714286,
+        "wilson_95_low": 0.6853073044604219,
+        "wilson_95_high": 0.9872781138877085
+      }
+    ],
+    "opening_superior_by_judge_band": [
+      {
+        "label": "lower third",
+        "judge_score_min": 14.2657978659374,
+        "judge_score_max": 32.7026871189548,
+        "cells": [
+          {
+            "label": "<2",
+            "recognized": 9,
+            "total": 16,
+            "rate": 0.5625
+          },
+          {
+            "label": "2-5",
+            "recognized": 4,
+            "total": 14,
+            "rate": 0.2857142857142857
+          },
+          {
+            "label": "5-10",
+            "recognized": 7,
+            "total": 13,
+            "rate": 0.5384615384615384
+          },
+          {
+            "label": "10+",
+            "recognized": 8,
+            "total": 9,
+            "rate": 0.8888888888888888
+          }
+        ]
+      },
+      {
+        "label": "middle third",
+        "judge_score_min": 38.1344947250387,
+        "judge_score_max": 45.9937184770221,
+        "cells": [
+          {
+            "label": "<2",
+            "recognized": 7,
+            "total": 14,
+            "rate": 0.5
+          },
+          {
+            "label": "2-5",
+            "recognized": 7,
+            "total": 8,
+            "rate": 0.875
+          },
+          {
+            "label": "5-10",
+            "recognized": 5,
+            "total": 10,
+            "rate": 0.5
+          },
+          {
+            "label": "10+",
+            "recognized": 5,
+            "total": 5,
+            "rate": 1.0
+          }
+        ]
+      },
+      {
+        "label": "upper third",
+        "judge_score_min": 50.2034858842254,
+        "judge_score_max": 58.889831189723,
+        "cells": [
+          {
+            "label": "<2",
+            "recognized": 10,
+            "total": 12,
+            "rate": 0.8333333333333334
+          },
+          {
+            "label": "2-5",
+            "recognized": 5,
+            "total": 6,
+            "rate": 0.8333333333333334
+          },
+          {
+            "label": "5-10",
+            "recognized": 10,
+            "total": 11,
+            "rate": 0.9090909090909091
+          },
+          {
+            "label": "10+",
+            "recognized": 0,
+            "total": 0,
+            "rate": null
+          }
+        ]
+      }
+    ],
+    "superior_recognized": 76,
+    "superior_total": 118,
+    "superior_by_margin": [
+      {
+        "label": "<2",
+        "recognized": 26,
+        "total": 42,
+        "rate": 0.6190476190476191,
+        "wilson_95_low": 0.46813768219996377,
+        "wilson_95_high": 0.7500047910121407
+      },
+      {
+        "label": "2-5",
+        "recognized": 16,
+        "total": 28,
+        "rate": 0.5714285714285714,
+        "wilson_95_low": 0.390704789856154,
+        "wilson_95_high": 0.7349170381926877
+      },
+      {
+        "label": "5-10",
+        "recognized": 22,
+        "total": 34,
+        "rate": 0.6470588235294118,
+        "wilson_95_low": 0.4791365883001342,
+        "wilson_95_high": 0.7851228510470394
+      },
+      {
+        "label": "10+",
+        "recognized": 12,
+        "total": 14,
+        "rate": 0.8571428571428571,
+        "wilson_95_low": 0.600580922361363,
+        "wilson_95_high": 0.9599069262620787
+      }
+    ],
+    "self_relative": {
+      "by_score_gap": [
+        {
+          "label": "<2",
+          "correct": 39,
+          "pair_count": 66,
+          "accuracy": 0.5909090909090909
+        },
+        {
+          "label": "2-5",
+          "correct": 39,
+          "pair_count": 59,
+          "accuracy": 0.6610169491525424
+        },
+        {
+          "label": "5-10",
+          "correct": 47,
+          "pair_count": 68,
+          "accuracy": 0.6911764705882353
+        },
+        {
+          "label": "10+",
+          "correct": 20,
+          "pair_count": 23,
+          "accuracy": 0.8695652173913043
+        }
+      ],
+      "superior_recognition_by_minimum_gap": [
+        {
+          "label": ">0 points",
+          "recognized": 76,
+          "total": 118,
+          "rate": 0.6440677966101694
+        },
+        {
+          "label": "2+ points",
+          "recognized": 50,
+          "total": 76,
+          "rate": 0.6578947368421053
+        },
+        {
+          "label": "5+ points",
+          "recognized": 34,
+          "total": 48,
+          "rate": 0.7083333333333334
+        },
+        {
+          "label": "10+ points",
+          "recognized": 12,
+          "total": 14,
+          "rate": 0.8571428571428571
+        }
+      ]
+    },
+    "adaptive_improved_count": 10,
+    "adaptive_unchanged_count": 11,
+    "adaptive_worsened_count": 9,
+    "model_calls": 2075,
+    "reported_cost_usd": 95.00950802297,
+    "unavailable_answer_count": 7,
+    "candidate_answer_count": 1345,
+    "structured_repair_count": 14,
+    "visible_text_retry_count": 4
+  },
+  "judges": [
+    {
+      "judge_model": "openai/gpt-5.6-sol",
+      "judge_short_name": "Sol 5.6",
+      "judge_external_score": 58.889831189723,
+      "condition_count": 3,
+      "superior_recognized": 1,
+      "superior_total": 3,
+      "opening_superior_recognized": 1,
+      "opening_superior_total": 3,
+      "unique_superior_models": 1,
+      "opening_pairs": {
+        "correct": 57,
+        "pair_count": 78,
+        "accuracy": 0.7307692307692307
+      },
+      "final_pairs": {
+        "correct": 58,
+        "pair_count": 78,
+        "accuracy": 0.7435897435897436
+      },
+      "opening_both_above_pairs": {
+        "correct": 0,
+        "pair_count": 0,
+        "accuracy": null
+      },
+      "final_both_above_pairs": {
+        "correct": 0,
+        "pair_count": 0,
+        "accuracy": null
+      },
+      "adaptive_improved_count": 1,
+      "unavailable_answer_count": 1,
+      "candidate_answer_count": 127
+    },
+    {
+      "judge_model": "x-ai/grok-4.5",
+      "judge_short_name": "Grok 4.5",
+      "judge_external_score": 53.8265951657731,
+      "condition_count": 3,
+      "superior_recognized": 14,
+      "superior_total": 15,
+      "opening_superior_recognized": 14,
+      "opening_superior_total": 15,
+      "unique_superior_models": 6,
+      "opening_pairs": {
+        "correct": 79,
+        "pair_count": 108,
+        "accuracy": 0.7314814814814815
+      },
+      "final_pairs": {
+        "correct": 78,
+        "pair_count": 108,
+        "accuracy": 0.7222222222222222
+      },
+      "opening_both_above_pairs": {
+        "correct": 20,
+        "pair_count": 30,
+        "accuracy": 0.6666666666666666
+      },
+      "final_both_above_pairs": {
+        "correct": 19,
+        "pair_count": 30,
+        "accuracy": 0.6333333333333333
+      },
+      "adaptive_improved_count": 0,
+      "unavailable_answer_count": 1,
+      "candidate_answer_count": 147
+    },
+    {
+      "judge_model": "google/gemini-3.5-flash",
+      "judge_short_name": "Gemini 3.5 Flash",
+      "judge_external_score": 50.2034858842254,
+      "condition_count": 3,
+      "superior_recognized": 9,
+      "superior_total": 11,
+      "opening_superior_recognized": 10,
+      "opening_superior_total": 11,
+      "unique_superior_models": 7,
+      "opening_pairs": {
+        "correct": 63,
+        "pair_count": 78,
+        "accuracy": 0.8076923076923077
+      },
+      "final_pairs": {
+        "correct": 61,
+        "pair_count": 78,
+        "accuracy": 0.782051282051282
+      },
+      "opening_both_above_pairs": {
+        "correct": 14,
+        "pair_count": 16,
+        "accuracy": 0.875
+      },
+      "final_both_above_pairs": {
+        "correct": 14,
+        "pair_count": 16,
+        "accuracy": 0.875
+      },
+      "adaptive_improved_count": 2,
+      "unavailable_answer_count": 2,
+      "candidate_answer_count": 127
+    },
+    {
+      "judge_model": "qwen/qwen3.7-max",
+      "judge_short_name": "Qwen 3.7 Max",
+      "judge_external_score": 45.9937184770221,
+      "condition_count": 3,
+      "superior_recognized": 8,
+      "superior_total": 11,
+      "opening_superior_recognized": 8,
+      "opening_superior_total": 11,
+      "unique_superior_models": 7,
+      "opening_pairs": {
+        "correct": 55,
+        "pair_count": 78,
+        "accuracy": 0.7051282051282052
+      },
+      "final_pairs": {
+        "correct": 53,
+        "pair_count": 78,
+        "accuracy": 0.6794871794871795
+      },
+      "opening_both_above_pairs": {
+        "correct": 8,
+        "pair_count": 16,
+        "accuracy": 0.5
+      },
+      "final_both_above_pairs": {
+        "correct": 7,
+        "pair_count": 16,
+        "accuracy": 0.4375
+      },
+      "adaptive_improved_count": 0,
+      "unavailable_answer_count": 2,
+      "candidate_answer_count": 127
+    },
+    {
+      "judge_model": "deepseek/deepseek-v4-pro",
+      "judge_short_name": "DeepSeek V4 Pro",
+      "judge_external_score": 44.2735554261611,
+      "condition_count": 3,
+      "superior_recognized": 9,
+      "superior_total": 15,
+      "opening_superior_recognized": 9,
+      "opening_superior_total": 15,
+      "unique_superior_models": 9,
+      "opening_pairs": {
+        "correct": 84,
+        "pair_count": 108,
+        "accuracy": 0.7777777777777778
+      },
+      "final_pairs": {
+        "correct": 85,
+        "pair_count": 108,
+        "accuracy": 0.7870370370370371
+      },
+      "opening_both_above_pairs": {
+        "correct": 26,
+        "pair_count": 30,
+        "accuracy": 0.8666666666666667
+      },
+      "final_both_above_pairs": {
+        "correct": 26,
+        "pair_count": 30,
+        "accuracy": 0.8666666666666667
+      },
+      "adaptive_improved_count": 1,
+      "unavailable_answer_count": 0,
+      "candidate_answer_count": 147
+    },
+    {
+      "judge_model": "minimax/minimax-m2.7",
+      "judge_short_name": "MiniMax M2.7",
+      "judge_external_score": 38.1344947250387,
+      "condition_count": 3,
+      "superior_recognized": 8,
+      "superior_total": 11,
+      "opening_superior_recognized": 7,
+      "opening_superior_total": 11,
+      "unique_superior_models": 9,
+      "opening_pairs": {
+        "correct": 58,
+        "pair_count": 78,
+        "accuracy": 0.7435897435897436
+      },
+      "final_pairs": {
+        "correct": 64,
+        "pair_count": 78,
+        "accuracy": 0.8205128205128205
+      },
+      "opening_both_above_pairs": {
+        "correct": 13,
+        "pair_count": 16,
+        "accuracy": 0.8125
+      },
+      "final_both_above_pairs": {
+        "correct": 13,
+        "pair_count": 16,
+        "accuracy": 0.8125
+      },
+      "adaptive_improved_count": 2,
+      "unavailable_answer_count": 0,
+      "candidate_answer_count": 127
+    },
+    {
+      "judge_model": "moonshotai/kimi-k2-thinking",
+      "judge_short_name": "Kimi K2 Thinking",
+      "judge_external_score": 32.7026871189548,
+      "condition_count": 3,
+      "superior_recognized": 4,
+      "superior_total": 15,
+      "opening_superior_recognized": 7,
+      "opening_superior_total": 15,
+      "unique_superior_models": 12,
+      "opening_pairs": {
+        "correct": 64,
+        "pair_count": 108,
+        "accuracy": 0.5925925925925926
+      },
+      "final_pairs": {
+        "correct": 61,
+        "pair_count": 108,
+        "accuracy": 0.5648148148148148
+      },
+      "opening_both_above_pairs": {
+        "correct": 15,
+        "pair_count": 30,
+        "accuracy": 0.5
+      },
+      "final_both_above_pairs": {
+        "correct": 15,
+        "pair_count": 30,
+        "accuracy": 0.5
+      },
+      "adaptive_improved_count": 0,
+      "unavailable_answer_count": 0,
+      "candidate_answer_count": 147
+    },
+    {
+      "judge_model": "anthropic/claude-haiku-4.5",
+      "judge_short_name": "Claude Haiku 4.5",
+      "judge_external_score": 29.5762345971708,
+      "condition_count": 3,
+      "superior_recognized": 4,
+      "superior_total": 11,
+      "opening_superior_recognized": 3,
+      "opening_superior_total": 11,
+      "unique_superior_models": 8,
+      "opening_pairs": {
+        "correct": 55,
+        "pair_count": 78,
+        "accuracy": 0.7051282051282052
+      },
+      "final_pairs": {
+        "correct": 56,
+        "pair_count": 78,
+        "accuracy": 0.717948717948718
+      },
+      "opening_both_above_pairs": {
+        "correct": 14,
+        "pair_count": 16,
+        "accuracy": 0.875
+      },
+      "final_both_above_pairs": {
+        "correct": 13,
+        "pair_count": 16,
+        "accuracy": 0.8125
+      },
+      "adaptive_improved_count": 2,
+      "unavailable_answer_count": 1,
+      "candidate_answer_count": 126
+    },
+    {
+      "judge_model": "mistralai/mistral-large-2512",
+      "judge_short_name": "Mistral Large 3",
+      "judge_external_score": 15.9300825619952,
+      "condition_count": 3,
+      "superior_recognized": 5,
+      "superior_total": 11,
+      "opening_superior_recognized": 4,
+      "opening_superior_total": 11,
+      "unique_superior_models": 6,
+      "opening_pairs": {
+        "correct": 58,
+        "pair_count": 78,
+        "accuracy": 0.7435897435897436
+      },
+      "final_pairs": {
+        "correct": 60,
+        "pair_count": 78,
+        "accuracy": 0.7692307692307693
+      },
+      "opening_both_above_pairs": {
+        "correct": 8,
+        "pair_count": 16,
+        "accuracy": 0.5
+      },
+      "final_both_above_pairs": {
+        "correct": 10,
+        "pair_count": 16,
+        "accuracy": 0.625
+      },
+      "adaptive_improved_count": 1,
+      "unavailable_answer_count": 0,
+      "candidate_answer_count": 127
+    },
+    {
+      "judge_model": "meta-llama/llama-4-maverick",
+      "judge_short_name": "Llama 4 Maverick",
+      "judge_external_score": 14.2657978659374,
+      "condition_count": 3,
+      "superior_recognized": 14,
+      "superior_total": 15,
+      "opening_superior_recognized": 14,
+      "opening_superior_total": 15,
+      "unique_superior_models": 12,
+      "opening_pairs": {
+        "correct": 72,
+        "pair_count": 108,
+        "accuracy": 0.6666666666666666
+      },
+      "final_pairs": {
+        "correct": 71,
+        "pair_count": 108,
+        "accuracy": 0.6574074074074074
+      },
+      "opening_both_above_pairs": {
+        "correct": 11,
+        "pair_count": 30,
+        "accuracy": 0.36666666666666664
+      },
+      "final_both_above_pairs": {
+        "correct": 11,
+        "pair_count": 30,
+        "accuracy": 0.36666666666666664
+      },
+      "adaptive_improved_count": 1,
+      "unavailable_answer_count": 0,
+      "candidate_answer_count": 143
+    }
+  ]
+}

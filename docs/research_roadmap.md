@@ -20,8 +20,8 @@ invent their own criteria and probes.
 | 4. Independent-judge ladder | Complete, including order replay and answer scoring | Sol and Fable independently rank the same 50 anonymous candidates, followed by a shared-evidence cross-over | Can capable models recover a broad external capability ordering? |
 | 5. Selective adaptivity | Five-probe 50-model replication complete | Opening batteries, direct per-probe comparison, cumulative evidence dossiers, bounded common follow-ups, and adaptive-decision traces | Can extra evidence resolve the difficult part of a ranking efficiently? |
 | 5b. Probe-budget ablation | Initial pilot complete | Fresh evidence cards and rankings using only the first 2, 4, or 6 probes from one shared run | How much does additional probe evidence improve ranking accuracy? |
-| 6. Oversight frontier | Three waves, ten judges, answer repair, and pooled analysis complete | Judges above, near, and below small candidate panels, with candidates on both sides of the judge's capability | Can a model recognize a system more capable than itself? |
-| 7. Judge-strategy scaling | First systematic ten-judge comparison and two-judge catalog deep dive complete | Probe-type, difficulty, adaptation, and answer-quality comparisons across judge capability | Do stronger judges ask systematically different or more diagnostic questions? |
+| 6. Oversight frontier | Four waves, 30 panels, ten judges, and matched relative-gap extension complete | Judges above, near, and below small candidate panels, with candidates on both sides of the judge's capability | Can a model recognize a system more capable than itself? |
+| 7. Judge-strategy scaling | 108-probe comparison and exact-evidence crossed control complete | Probe-type, difficulty, adaptation, and same-evidence comparisons across judge capability | Do stronger judges ask systematically different or more diagnostic questions? |
 | 8. Free vs. structured | Later exploratory study | Paired runs with the same roster, budgets, and external prior | What does round-robin structure improve or suppress? |
 | 9. Publication figures | Catalog results, fixed-scale heatmap, references, and audit sample generated | Auditable plots, tables, taxonomy, model provenance, and compact human-review samples | Which findings are robust, interpretable, and worth communicating? |
 | 10. Scale beyond 50 | Paused | Extend the archived-answer and panel machinery only if a research question requires it | Can the method rank a much larger catalog tractably? |
@@ -340,29 +340,54 @@ explicitly evaluated extensions. See
 
 ## Probe-Evolution Study
 
-The fixed-protocol comparison now covers 60 probes from ten judges. Stronger
-judges did not cover substantially more topical families and were not more
-accurate on pairs they explicitly separated. They did use more ties on
-saturated probes and articulated a broader set of adaptive intentions. The
-single adaptive probe improved three rankings, left four unchanged, and
-worsened three.
+The fixed-protocol comparison now covers 108 probes across 18 runs from ten
+judges. Stronger judges did not cover more topical families and were only
+slightly more accurate on pairs they explicitly separated. They did use many
+more ties and articulated somewhat broader adaptive intentions. Across the full
+30-panel study, one adaptive probe improved ten rankings, left eleven
+unchanged, and worsened nine.
 
 The separate 50-model deep dive adds 14 Sol and Fable probes. Thirteen were
 marked informative, but the adaptive probes did not improve either global
-ranking materially. See `docs/pilot_analysis_probe_evolution_20260727.md`.
+ranking materially.
+
+The exact-evidence cross-over is also complete. Sol and Llama re-evaluated
+unchanged answers to four batteries. Their aggregate five-probe accuracy
+differed by only 1.4 points, while which evaluator led changed with the battery.
+Battery means ranged from 56.9% to 73.6%. One battery per author is not enough
+to infer stable probe-writing ability. See
+`docs/pilot_analysis_probe_evolution_20260727.md` and
+`docs/pilot_analysis_probe_design_cross_20260727.md`.
+
+## Matched Oversight Extension
+
+Two new matched panels for Grok, DeepSeek, Kimi, and Llama bring the pooled
+oversight study to 30 panels. After five probes, judges placed 77 of 118
+externally stronger candidates above anonymous self (65.3%), nearly identical
+to 51 of 78 (65.4%) before the extension. Recognition rose to 13 of 14 for
+leads above ten external-score points, while all smaller margin bins remained
+between 57% and 65%.
+
+Upper-third judges performed better descriptively on the observed
+candidate-versus-self comparisons, but panel variation remains large. Kimi's
+opening pair accuracy moved from 80.6% to 33.3% across two matched panels. The
+next frontier study therefore needs repeated shared or closely matched evidence,
+not just more one-off judges. See
+`docs/pilot_analysis_oversight_matched_20260727.md`.
 
 ## Immediate Next Steps
 
-1. Run repeated matched oversight panels focused on candidate-versus-judge
-   comparisons above self. Share exact candidate evidence where possible so
-   judge behavior is not confounded with different probe answers.
-2. Cross probe design and evidence interpretation: have judges at several
-   capability levels evaluate the same archived answers to probes authored by
-   stronger and weaker judges.
-3. Predeclare the five-probe opening as the primary catalog endpoint and treat
-   each adaptive checkpoint as a separate secondary analysis.
-4. Investigate explicit ties as a calibration behavior using matched panels;
-   do not assume either that forced ordering is better or that caution implies
-   superior judgment.
-5. Keep structured-versus-free councils as later exploratory work. Do not scale
-   beyond 50 candidates unless the substantive research question requires it.
+1. Run a sharper oversight-threshold study on repeated small panels, with
+   several near and moderately stronger candidates per judge. Reuse shared
+   evidence where possible and treat candidate-versus-self ordering as the
+   preregistered endpoint.
+2. Test whether explicit ties are calibrated by comparing tie probability with
+   actual error under matched evidence. Do not assume that caution is either
+   superior judgment or a failure to discriminate.
+3. Replicate the crossed probe-design control with multiple batteries per
+   author before estimating author or evaluator effects.
+4. Keep the five-probe opening as the primary catalog endpoint and every
+   adaptive checkpoint as a separate secondary analysis.
+5. Compare structured and free councils later with a small, highly capable
+   roster. Do not scale beyond 50 candidates unless a substantive question
+   requires it.

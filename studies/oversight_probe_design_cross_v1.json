@@ -1,0 +1,74 @@
+{
+  "name": "oversight_probe_design_cross_v1",
+  "status": "completed",
+  "results": "data/oversight_probe_design_cross_v1_results.json",
+  "report": "runs/report_cards/oversight_probe_design_cross_v1/report_card.html",
+  "research_question": "When candidate evidence is held exactly fixed, how much ranking quality is attributable to the model that designed the probes versus the model that interprets the answers?",
+  "catalog": "data/model_catalog.openrouter.json",
+  "protocol": {
+    "source_schedule": [5, 1],
+    "evidence_reuse": "exact probes, targets, and candidate answers",
+    "comparison_order": "matched within probe-author battery",
+    "candidate_identity": "anonymous",
+    "primary_endpoint": "pairwise accuracy after five opening probes",
+    "secondary_endpoint": "pairwise accuracy after the archived follow-up"
+  },
+  "conditions": [
+    {
+      "id": "grok_sol",
+      "source_run": "runs/20260727T074956Z_oversight_frontier_v4_matched_extension_grok_b_evidence_repaired",
+      "probe_author_model": "x-ai/grok-4.5",
+      "evaluator_model": "openai/gpt-5.6-sol",
+      "comparison_seed": 20263101
+    },
+    {
+      "id": "grok_llama",
+      "source_run": "runs/20260727T074956Z_oversight_frontier_v4_matched_extension_grok_b_evidence_repaired",
+      "probe_author_model": "x-ai/grok-4.5",
+      "evaluator_model": "meta-llama/llama-4-maverick",
+      "comparison_seed": 20263101
+    },
+    {
+      "id": "deepseek_sol",
+      "source_run": "runs/20260727T081708Z_oversight_frontier_v4_matched_extension_deepseek_b_adaptive_resumed",
+      "probe_author_model": "deepseek/deepseek-v4-pro",
+      "evaluator_model": "openai/gpt-5.6-sol",
+      "comparison_seed": 20263102
+    },
+    {
+      "id": "deepseek_llama",
+      "source_run": "runs/20260727T081708Z_oversight_frontier_v4_matched_extension_deepseek_b_adaptive_resumed",
+      "probe_author_model": "deepseek/deepseek-v4-pro",
+      "evaluator_model": "meta-llama/llama-4-maverick",
+      "comparison_seed": 20263102
+    },
+    {
+      "id": "kimi_sol",
+      "source_run": "runs/20260727T074957Z_oversight_frontier_v4_matched_extension_kimi_b_evidence_repaired",
+      "probe_author_model": "moonshotai/kimi-k2-thinking",
+      "evaluator_model": "openai/gpt-5.6-sol",
+      "comparison_seed": 20263103
+    },
+    {
+      "id": "kimi_llama",
+      "source_run": "runs/20260727T074957Z_oversight_frontier_v4_matched_extension_kimi_b_evidence_repaired",
+      "probe_author_model": "moonshotai/kimi-k2-thinking",
+      "evaluator_model": "meta-llama/llama-4-maverick",
+      "comparison_seed": 20263103
+    },
+    {
+      "id": "llama_sol",
+      "source_run": "runs/20260727T064958Z_oversight_frontier_v4_matched_extension_llama_b",
+      "probe_author_model": "meta-llama/llama-4-maverick",
+      "evaluator_model": "openai/gpt-5.6-sol",
+      "comparison_seed": 20263104
+    },
+    {
+      "id": "llama_llama",
+      "source_run": "runs/20260727T064958Z_oversight_frontier_v4_matched_extension_llama_b",
+      "probe_author_model": "meta-llama/llama-4-maverick",
+      "evaluator_model": "meta-llama/llama-4-maverick",
+      "comparison_seed": 20263104
+    }
+  ]
+}

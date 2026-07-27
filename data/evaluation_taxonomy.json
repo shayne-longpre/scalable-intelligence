@@ -1,6 +1,6 @@
 {
   "name": "machine_society_evaluation_taxonomy",
-  "version": "2026-07-27.1",
+  "version": "2026-07-27.2",
   "description": "A compact, evolving taxonomy for coding how AI participants evaluate intelligence in machine-society experiments. Tags are intentionally behavioral and observable rather than claims about internal state.",
   "basis": [
     "Human cognitive assessment families: verbal comprehension, fluid reasoning, quantitative reasoning, working memory, processing speed, visual-spatial reasoning, crystallized knowledge, and social judgment.",
@@ -89,7 +89,7 @@
       "description": "Asks for similarities, definitions, analogies, conceptual distinctions, or abstract verbal relationships.",
       "human_basis": ["WAIS/WISC Similarities", "Vocabulary", "verbal comprehension"],
       "ai_basis": ["natural-language understanding", "analogy and abstraction tasks"],
-      "indicators": ["similarity", "similarities", "definition", "define the term", "give a definition", "analogy", "analogical reasoning", "metaphor", "conceptual distinction", "abstract relationship", "underlying principle", "syntactic ambiguity", "structural interpretation", "different parse trees"]
+      "indicators": ["similarity", "similarities", "definition", "define the term", "give a definition", "analogy", "analogical reasoning", "metaphor", "conceptual distinction", "abstract relationship", "underlying principle", "structural isomorphism", "structural mapping", "syntactic ambiguity", "structural interpretation", "different parse trees"]
     },
     {
       "id": "linguistic_rule_induction",
@@ -129,7 +129,7 @@
       "description": "Asks for arithmetic, algebra, probability, combinatorics, optimization, formal proof, or quantitative modeling.",
       "human_basis": ["WAIS Arithmetic", "Figure Weights", "GRE Quantitative Reasoning"],
       "ai_basis": ["GSM8K", "MATH", "AIME-style math"],
-      "indicators": ["math", "arithmetic", "algebra", "probability", "combinatorics", "calculate", "equation", "prove", "proof", "counting bound", "lower bound", "lower-bound", "modulo", "optimize", "expected value", "quantitative", "correlation coefficient", "confidence interval", "statistical uncertainty", "bootstrap"]
+      "indicators": ["math", "arithmetic", "algebra", "probability puzzle", "compute probability", "calculate probability", "what is the probability", "probability that", "probability of", "conditional probability", "posterior probability", "probability distribution", "combinatorics", "calculate", "equation", "prove", "proof", "minimum possible", "counting bound", "lower bound", "lower-bound", "modulo", "optimize", "expected value", "equilibrium condition", "closed-form expression", "quantitative", "correlation coefficient", "confidence interval", "statistical uncertainty", "bootstrap"]
     },
     {
       "id": "dimensional_unit_reasoning",
@@ -225,7 +225,7 @@
       "description": "Asks for goal-directed plans, tradeoffs, scenario analysis, policy choices, or strategic prioritization.",
       "human_basis": ["executive function", "practical judgment"],
       "ai_basis": ["agent planning", "decision-making benchmarks"],
-      "indicators": ["plan", "strategy", "tradeoff", "make a decision", "decision under uncertainty", "decision rule", "optimal policy", "choose whether", "choose between", "optimal path", "shortest path", "route planning", "path forward", "prioritize", "allocation policy", "adaptive policy", "risk management", "triage"]
+      "indicators": ["plan", "strategic plan", "decision strategy", "negotiation strategy", "develop a strategy", "propose a strategy", "tradeoff", "benefits and drawbacks", "make a decision", "decision under uncertainty", "decision rule", "allocation rule", "optimal policy", "choose whether", "choose between", "selected programs", "discard order", "portfolio choice", "resource allocation", "optimal path", "shortest path", "route planning", "path forward", "prioritize", "allocation policy", "adaptive policy", "risk management", "triage"]
     },
     {
       "id": "social_moral_practical_judgment",
@@ -249,7 +249,7 @@
       "description": "Asks the respondent to estimate confidence, identify uncertainty, assess its own limits, or update beliefs.",
       "human_basis": ["metacognition and calibration tasks"],
       "ai_basis": ["calibration", "self-knowledge and uncertainty benchmarks"],
-      "indicators": ["state your confidence", "estimate your confidence", "how confident", "confidence would change", "how sure", "calibrate", "self-assess", "self-criticism", "self-correction", "question your own assumptions", "revised solution", "uncertainty in your answer", "your own weakness", "update your belief", "what would change your mind"]
+      "indicators": ["state your confidence", "estimate your confidence", "how confident", "confidence would change", "how sure", "calibrate", "self-assess", "self-criticism", "self-correction", "critically evaluate your own", "reflect on your own thought process", "identify potential biases", "limitations in your reasoning", "question your own assumptions", "revised solution", "uncertainty in your answer", "your own weakness", "update your belief", "what would change your mind"]
     },
     {
       "id": "recursive_self_bias_probe",
@@ -289,7 +289,7 @@
       "description": "Tests language transfer, translation, cross-lingual understanding, or cultural context.",
       "human_basis": ["foreign language aptitude", "verbal comprehension"],
       "ai_basis": ["multilingual benchmarks", "translation benchmarks"],
-      "indicators": ["translate", "translation", "bilingual", "multilingual", "cross-lingual", "cultural context", "foreign language"]
+      "indicators": ["translate this sentence", "translate the sentence", "translate this paragraph", "translation into", "translation from", "translation between languages", "translation quality", "machine translation", "bilingual translation", "multilingual translation", "multilingual reasoning", "compare translations", "translate between", "cross-lingual", "cultural context", "foreign language"]
     },
     {
       "id": "tool_use_external_action",

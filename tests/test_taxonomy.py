@@ -285,6 +285,82 @@ class TaxonomyTests(unittest.TestCase):
         self.assertIn("linguistic_rule_induction", question_types)
         self.assertNotIn("multilingual_translation_culture", question_types)
 
+    def test_negated_and_incidental_terms_do_not_define_probe_type(self) -> None:
+        taxonomy = load_taxonomy()
+        entry = {
+            "content": (
+                "Select three research programs under uncertainty. Do not use "
+                "welfare arithmetic across persons. Success probabilities and "
+                "timelines are unknown. One option is a multilingual foundation "
+                "model released with weights. List the selected programs and "
+                "give a discard order for the rest."
+            )
+        }
+
+        hits = taxonomy_hits_for_entry(entry, taxonomy)
+        question_types = {
+            hit["tag"] for hit in hits if hit["dimension"] == "question_type"
+        }
+
+        self.assertNotIn("quantitative_math_reasoning", question_types)
+        self.assertNotIn("multilingual_translation_culture", question_types)
+        self.assertIn("planning_decision_strategy", question_types)
+
+    def test_negation_does_not_hide_a_separate_math_requirement(self) -> None:
+        taxonomy = load_taxonomy()
+        hits = taxonomy_hits_for_entry(
+            {
+                "content": (
+                    "Do not calculate decimal approximations. Prove the lower "
+                    "bound and give a matching construction."
+                )
+            },
+            taxonomy,
+        )
+
+        question_types = {
+            hit["tag"] for hit in hits if hit["dimension"] == "question_type"
+        }
+        self.assertIn("quantitative_math_reasoning", question_types)
+
+    def test_structural_translation_is_not_language_or_planning(self) -> None:
+        taxonomy = load_taxonomy()
+        hits = taxonomy_hits_for_entry(
+            {
+                "content": (
+                    "Construct a structural isomorphism between two feedback "
+                    "systems. Evaluate whether one is a stable evolutionary "
+                    "strategy, then translate the mechanism into an algorithm."
+                )
+            },
+            taxonomy,
+        )
+
+        question_types = {
+            hit["tag"] for hit in hits if hit["dimension"] == "question_type"
+        }
+        self.assertIn("verbal_abstraction_similarity", question_types)
+        self.assertNotIn("planning_decision_strategy", question_types)
+        self.assertNotIn("multilingual_translation_culture", question_types)
+
+    def test_genuine_translation_and_self_critique_remain_covered(self) -> None:
+        taxonomy = load_taxonomy()
+        hits = taxonomy_hits_for_entry(
+            {
+                "content": (
+                    "Translate this paragraph into French, then critically "
+                    "evaluate your own reasoning and identify potential biases."
+                )
+            },
+            taxonomy,
+        )
+
+        question_types = {
+            hit["tag"] for hit in hits if hit["dimension"] == "question_type"
+        }
+        self.assertIn("multilingual_translation_culture", question_types)
+        self.assertIn("metacognitive_calibration_probe", question_types)
+
     def test_taxonomy_hits_include_source_and_unit_verification(self) -> None:
         taxonomy = load_taxonomy()
         entry = {

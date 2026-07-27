@@ -10,12 +10,15 @@ from ai_council.config import ConfigError, ExperimentConfig, load_experiment_con
 from ai_council.experiment_builders import (
     AdaptiveJudgeConfigSpec,
     build_adaptive_judge_config,
+    build_exact_evidence_cross_judge_config,
     build_exact_evidence_order_replay_config,
     candidate_model,
     expected_model_calls,
     judge_model_params,
 )
 from scripts.build_adaptive_judge_study import build_study_configs
+from scripts.build_adaptive_judge_study import validate_relative_gap_requirements
+from scripts.build_cross_judge_study import validate_exact_evidence_source
 from scripts.build_partial_resume_config import build_partial_resume_config
 from scripts.build_replay_repair_config import build_replay_repair_config
 
@@ -325,6 +328,107 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual(phase.probe_schedule, [5, 1])
                 self.assertEqual(phase.max_adaptive_candidates, 4)
 
+    def test_matched_frontier_extension_enforces_relative_gap_bands(self) -> None:
+        study_path = (
+            ROOT / "studies" / "oversight_frontier_v4_matched_extension.json"
+        )
+        study = json.loads(study_path.read_text())
+
+        self.assertEqual(len(study["conditions"]), 8)
+        self.assertEqual(study["protocol"]["probe_schedule"], [5, 1])
+        with tempfile.TemporaryDirectory() as temp_dir:
+            index = build_study_configs(study_path, Path(temp_dir))
+
+        self.assertEqual(len(index["configs"]), 8)
+        for built in index["configs"]:
+            self.assertEqual(
+                built["relative_gap_counts"],
+                {
+                    "near above": 2,
+                    "moderate above": 1,
+                    "far above": 2,
+                    "near below": 1,
+                    "moderate below": 1,
+                    "far below": 1,
+                },
+            )
+
+    def test_relative_gap_validation_rejects_an_unmatched_panel(self) -> None:
+        catalog = {
+            "judge": {"intelligence_score": 10.0},
+            "near": {"intelligence_score": 11.0},
+            "far": {"intelligence_score": 20.0},
+        }
+
+        with self.assertRaisesRegex(ValueError, "requires 2 near above"):
+            validate_relative_gap_requirements(
+                condition_id="test",
+                judge_model="judge",
+                candidate_models=["judge", "near", "far"],
+                catalog_by_route=catalog,
+                requirements=[
+                    {
+                        "label": "near above",
+                        "side": "above",
+                        "min_gap": 0,
+                        "max_gap": 2,
+                        "minimum": 2,
+                    }
+                ],
+            )
+
+    def test_relative_gap_validation_rejects_ambiguous_requirements(self) -> None:
+        catalog = {
+            "judge": {"intelligence_score": 10.0},
+            "candidate": {"intelligence_score": 11.0},
+        }
+        base = {
+            "label": "near above",
+            "side": "above",
+            "min_gap": 0,
+            "max_gap": 2,
+            "minimum": 1,
+        }
+
+        with self.assertRaisesRegex(ValueError, "repeats gap requirement label"):
+            validate_relative_gap_requirements(
+                condition_id="test",
+                judge_model="judge",
+                candidate_models=["judge", "candidate"],
+                catalog_by_route=catalog,
+                requirements=[base, base],
+            )
+
+        with self.assertRaisesRegex(ValueError, "minimum must be an integer"):
+            validate_relative_gap_requirements(
+                condition_id="test",
+                judge_model="judge",
+                candidate_models=["judge", "candidate"],
+                catalog_by_route=catalog,
+                requirements=[{**base, "minimum": 1.5}],
+            )
+
+    def test_relative_gap_validation_requires_catalog_scores(self) -> None:
+        with self.assertRaisesRegex(ValueError, "candidate candidate has no"):
+            validate_relative_gap_requirements(
+                condition_id="test",
+                judge_model="judge",
+                candidate_models=["judge", "candidate"],
+                catalog_by_route={
+                    "judge": {"intelligence_score": 10.0},
+                    "candidate": {},
+                },
+                requirements=[
+                    {
+                        "label": "near above",
+                        "side": "above",
+                        "min_gap": 0,
+                        "max_gap": 2,
+                        "minimum": 1,
+                    }
+                ],
+            )
+
     def test_exact_order_replay_reuses_answers_but_regenerates_judgments(self) -> None:
         source = {
             "name": "source",
@@ -374,6 +478,105 @@ class ConfigTests(unittest.TestCase):
                 source_run="runs/source",
                 comparison_seed=10,
                 study_condition="sol_order",
+            )
+
+    def test_cross_judge_replay_changes_only_the_evaluator(self) -> None:
+        catalog = json.loads(
+            (ROOT / "data" / "model_catalog.openrouter.json").read_text()
+        )
+        source = {
+            "name": "source",
+            "models": [
+                {
+                    "name": "candidate_p01",
+                    "provider": "openrouter_candidates",
+                    "model": "meta-llama/llama-4-maverick",
+                    "params": {"max_tokens": 1000},
+                },
+                {
+                    "name": "judge_primary",
+                    "provider": "openrouter_judge",
+                    "model": "meta-llama/llama-4-maverick",
+                    "params": {"max_tokens": 1000},
+                },
+            ],
+            "judges": [{"id": "J1", "model": "judge_primary"}],
+            "protocol": {
+                "phases": [
+                    {
+                        "kind": "independent_judge_ranking",
+                        "comparison_order": "seeded_shuffle",
+                        "comparison_seed": 10,
+                    }
+                ]
+            },
+            "metadata": {"study_condition": "source"},
+        }
+
+        replay = build_exact_evidence_cross_judge_config(
+            source,
+            source_run="runs/source",
+            comparison_seed=20,
+            study_condition="source_sol",
+            judge_model="openai/gpt-5.6-sol",
+            catalog=catalog,
+        )
+
+        candidate = next(
+            row for row in replay["models"] if row["name"] == "candidate_p01"
+        )
+        judge = next(
+            row for row in replay["models"] if row["name"] == "judge_primary"
+        )
+        phase = replay["protocol"]["phases"][0]
+        self.assertEqual(candidate["model"], "meta-llama/llama-4-maverick")
+        self.assertEqual(judge["model"], "openai/gpt-5.6-sol")
+        self.assertEqual(
+            phase["preauthored_probe_file"],
+            "runs/source/transcript.jsonl",
+        )
+        self.assertEqual(phase["preauthored_answer_file"], "runs/source")
+        self.assertTrue(phase["replay_source_targets"])
+        self.assertEqual(
+            replay["metadata"]["source_judge_model"],
+            "meta-llama/llama-4-maverick",
+        )
+        self.assertEqual(
+            replay["metadata"]["cross_judge_model"],
+            "openai/gpt-5.6-sol",
+        )
+        self.assertEqual(replay["metadata"]["study_condition"], "source_sol")
+        self.assertEqual(replay["metadata"]["source_study_condition"], "source")
+
+    def test_cross_judge_source_must_be_complete_and_have_all_answers(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            run_dir = Path(temp_dir)
+            (run_dir / "config.json").write_text("{}")
+            (run_dir / "transcript.jsonl").write_text(
+                json.dumps(
+                    {
+                        "metadata": {
+                            "answer_unavailable": True,
+                        }
+                    }
+                )
+                + "\n"
+            )
+            (run_dir / "run_summary.json").write_text(
+                json.dumps({"status": "completed"})
+            )
+
+            with self.assertRaisesRegex(ValueError, "1 unavailable"):
+                validate_exact_evidence_source(
+                    run_dir,
+                    condition_id="cell",
+                )
+            validate_exact_evidence_source(
+                run_dir,
+                condition_id="cell",
+                allow_unavailable=True,
             )
 
     def test_replay_repair_reuses_evidence_but_recomputes_comparisons(self) -> None:
@@ -472,6 +675,17 @@ class ConfigTests(unittest.TestCase):
             source_run.mkdir()
             source_config = {
                 "name": "partial",
+                "models": [
+                    {
+                        "name": "judge_model",
+                        "params": {"reasoning": {"effort": "xhigh"}},
+                        "recovery_params": {
+                            "reasoning": {"effort": "low"},
+                            "max_tokens": 8000,
+                        },
+                    }
+                ],
+                "judges": [{"id": "J1", "model": "judge_model"}],
                 "protocol": {
                     "phases": [
                         {
@@ -484,7 +698,10 @@ class ConfigTests(unittest.TestCase):
             }
             (source_run / "config.json").write_text(json.dumps(source_config))
 
-            resumed = build_partial_resume_config(source_run)
+            resumed = build_partial_resume_config(
+                source_run,
+                use_judge_recovery_params=True,
+            )
 
         phase = resumed["protocol"]["phases"][0]
         transcript = str(source_run / "transcript.jsonl")
@@ -496,6 +713,16 @@ class ConfigTests(unittest.TestCase):
         self.assertFalse(phase["replay_source_targets"])
         self.assertEqual(phase["retry_unavailable_rounds"], [])
         self.assertEqual(resumed["metadata"]["resume_source_run"], str(source_run))
+        self.assertTrue(
+            resumed["metadata"]["resume_judge_uses_recovery_params"]
+        )
+        self.assertEqual(
+            resumed["models"][0]["params"],
+            {
+                "reasoning": {"effort": "low"},
+                "max_tokens": 8000,
+            },
+        )
 
     def test_independent_judge_phase_requires_judge_roster(self) -> None:
         data = _minimal_config_dict()

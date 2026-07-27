@@ -29,7 +29,7 @@ DEFAULT_SCORE_SUMMARY = (
 )
 DEFAULT_OVERSIGHT_SUMMARY = ROOT / "data" / "oversight_frontier_results.json"
 DEFAULT_OVERSIGHT_SYNTHESIS = (
-    ROOT / "data" / "oversight_frontier_synthesis_repaired_results.json"
+    ROOT / "data" / "oversight_frontier_synthesis_matched_results.json"
 )
 ORDER_REPLAY_RUN = (
     ROOT
@@ -448,15 +448,16 @@ def article(
   <section id="method" class="prose ruled">
     <p class="section-kicker">Method in 30 seconds</p>
     <h2>Anonymous candidates, independent judges</h2>
-    <p>Two frontier judges independently wrote four opening probes and sent each
-    probe unchanged to 50 anonymous models. The judge compared all answers to a
-    probe, then combined the evidence into a ranking. It could ask two later
-    follow-ups of the ten candidates it found hardest to separate. Candidate
-    names and external scores were hidden throughout.</p>
+    <p>Two frontier judges independently wrote an opening battery and sent each
+    probe unchanged to 50 anonymous models. The original run used four probes;
+    a fresh replication used five. Each judge compared all answers to a probe,
+    combined the evidence into a ranking, and could ask two later follow-ups of
+    the ten candidates it found hardest to separate. Candidate names and
+    external scores were hidden throughout.</p>
     <div class="method-grid">
       <div><strong>50</strong><span>candidate models</span></div>
       <div><strong>2</strong><span>independent judges</span></div>
-      <div><strong>4 + 2</strong><span>opening + adaptive probes</span></div>
+      <div><strong>4–5 + 2</strong><span>opening + adaptive probes</span></div>
       <div><strong>{direct_scores}</strong><span>direct external scores</span></div>
     </div>
     <p class="note">The external Artificial Analysis Intelligence Index is a
@@ -607,11 +608,13 @@ def _oversight_section(summary: dict | None) -> str:
     <h2>The oversight frontier</h2>
     <p>Across {pooled['condition_count']} panels and
     {pooled['judge_count']} distinct judges, models ordered
-    {pooled['final_pairs']['accuracy']:.1%} of candidate pairs in line with the
-    external index and placed {pooled['superior_recognized']} of
-    {pooled['superior_total']} externally stronger candidates above their own
-    anonymous selves. Results are reported by the candidate's capability margin
-    over the judge.</p>
+    {pooled['opening_pairs']['accuracy']:.1%} of candidate pairs in line with
+    the external index after five opening probes. They placed
+    {pooled['opening_superior_recognized']} of
+    {pooled['opening_superior_total']} externally stronger candidates above
+    their own anonymous selves. Results are reported by the candidate's
+    capability margin over the judge; the adaptive follow-up is a separate
+    secondary analysis.</p>
     <p><a class="text-link" href="oversight.html">Explore the full oversight
     scorecard, margin analysis, and judge coverage →</a></p>
   </section>"""
