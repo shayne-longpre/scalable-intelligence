@@ -1,11 +1,11 @@
 {
   "schema_version": "probe-evolution-study-v1",
-  "generated_at": "2026-07-27T09:13:44.783277+00:00",
+  "generated_at": "2026-07-27T20:17:34.234405+00:00",
   "catalog_file": "data/model_catalog.openrouter.json",
   "taxonomy_file": "data/evaluation_taxonomy.json",
   "taxonomy_version": "2026-07-27.2",
-  "run_count": 20,
-  "probe_count": 122,
+  "run_count": 25,
+  "probe_count": 147,
   "cohorts": {
     "catalog_deep_dive": {
       "run_count": 2,
@@ -149,6 +149,205 @@
           "adaptive_ranking_delta": -0.0106122448979592,
           "adaptive_plan_action_count": 9,
           "adaptive_intent_breadth": 2
+        }
+      ]
+    },
+    "ceiling_extension": {
+      "run_count": 5,
+      "probe_count": 25,
+      "judge_score_min": 14.2657978659374,
+      "judge_score_max": 58.889831189723,
+      "question_type_counts": {
+        "logical_paradox_consistency": 2,
+        "creative_generation_divergent": 1,
+        "recursive_self_bias_probe": 2,
+        "stem_scientific_reasoning": 5,
+        "planning_decision_strategy": 2,
+        "quantitative_math_reasoning": 16,
+        "spatial_visual_perceptual": 1,
+        "linguistic_rule_induction": 1,
+        "fluid_abstract_reasoning": 1,
+        "reading_argument_comprehension": 1,
+        "coding_algorithmic_reasoning": 1,
+        "dimensional_unit_reasoning": 1
+      },
+      "strategy_counts": {
+        "criterion_negotiation": 6,
+        "direct_task_probe": 22,
+        "uncertainty_calibration": 1,
+        "adversarial_edge_case": 3
+      },
+      "transition_counts": {
+        "preplanned_progression": 9,
+        "preplanned_broadening": 5,
+        "preplanned_same_area": 11
+      },
+      "validity_counts": {
+        "informative": 23,
+        "limited": 2
+      },
+      "adaptive_intent_counts": {},
+      "question_types_by_score_band": {
+        "lower third": {
+          "logical_paradox_consistency": 1,
+          "creative_generation_divergent": 1,
+          "recursive_self_bias_probe": 2,
+          "stem_scientific_reasoning": 2,
+          "planning_decision_strategy": 2,
+          "quantitative_math_reasoning": 4,
+          "spatial_visual_perceptual": 1,
+          "linguistic_rule_induction": 1,
+          "fluid_abstract_reasoning": 1
+        },
+        "middle third": {
+          "quantitative_math_reasoning": 7,
+          "logical_paradox_consistency": 1,
+          "reading_argument_comprehension": 1,
+          "stem_scientific_reasoning": 2
+        },
+        "upper third": {
+          "quantitative_math_reasoning": 5,
+          "coding_algorithmic_reasoning": 1,
+          "dimensional_unit_reasoning": 1,
+          "stem_scientific_reasoning": 1
+        }
+      },
+      "correlations": {
+        "opening_type_breadth": {
+          "spearman_rho": -0.6,
+          "n": 5
+        },
+        "opening_probe_pair_accuracy": {
+          "spearman_rho": 0.7,
+          "n": 5
+        },
+        "opening_decided_pair_accuracy": {
+          "spearman_rho": 0.7,
+          "n": 5
+        },
+        "opening_tie_pair_rate": {
+          "spearman_rho": 0.4472135954999579,
+          "n": 5
+        },
+        "informative_probe_rate": {
+          "spearman_rho": -0.28867513459481287,
+          "n": 5
+        },
+        "adaptive_probe_pair_accuracy": {
+          "spearman_rho": null,
+          "n": 0
+        },
+        "adaptive_decided_pair_accuracy": {
+          "spearman_rho": null,
+          "n": 0
+        },
+        "adaptive_tie_pair_rate": {
+          "spearman_rho": null,
+          "n": 0
+        },
+        "adaptive_ranking_delta": {
+          "spearman_rho": null,
+          "n": 5
+        },
+        "adaptive_plan_action_count": {
+          "spearman_rho": null,
+          "n": 5
+        },
+        "adaptive_intent_breadth": {
+          "spearman_rho": null,
+          "n": 5
+        }
+      },
+      "runs": [
+        {
+          "run_dir": "runs/20260727T191000Z_oversight_frontier_v4_matched_extension_llama_b_probe_ceiling_extension_v1_llama_b",
+          "judge_model": "meta-llama/llama-4-maverick",
+          "judge_name": "Meta: Llama 4 Maverick",
+          "judge_score": 14.2657978659374,
+          "score_band": "lower third",
+          "opening_type_breadth": 5,
+          "opening_probe_pair_accuracy": 0.45348837209302323,
+          "opening_decided_pair_accuracy": 0.45348837209302323,
+          "opening_tie_pair_rate": 0.0,
+          "informative_probe_rate": 1.0,
+          "adaptive_probe_pair_accuracy": null,
+          "adaptive_decided_pair_accuracy": null,
+          "adaptive_tie_pair_rate": null,
+          "adaptive_ranking_delta": 0.0,
+          "adaptive_plan_action_count": 0,
+          "adaptive_intent_breadth": 0
+        },
+        {
+          "run_dir": "runs/20260727T191135Z_oversight_frontier_v4_matched_extension_kimi_b_evidence_repaired_probe_ceiling_extension_v1_kimi_b",
+          "judge_model": "moonshotai/kimi-k2-thinking",
+          "judge_name": "MoonshotAI: Kimi K2 Thinking",
+          "judge_score": 32.7026871189548,
+          "score_band": "lower third",
+          "opening_type_breadth": 7,
+          "opening_probe_pair_accuracy": 0.5348837209302325,
+          "opening_decided_pair_accuracy": 0.5348837209302325,
+          "opening_tie_pair_rate": 0.0,
+          "informative_probe_rate": 1.0,
+          "adaptive_probe_pair_accuracy": null,
+          "adaptive_decided_pair_accuracy": null,
+          "adaptive_tie_pair_rate": null,
+          "adaptive_ranking_delta": 0.0,
+          "adaptive_plan_action_count": 0,
+          "adaptive_intent_breadth": 0
+        },
+        {
+          "run_dir": "runs/20260727T191249Z_oversight_frontier_v4_matched_extension_deepseek_b_adaptive_resumed_probe_ceiling_extension_v1_deepseek_b",
+          "judge_model": "deepseek/deepseek-v4-pro",
+          "judge_name": "DeepSeek: DeepSeek V4 Pro",
+          "judge_score": 44.2735554261611,
+          "score_band": "middle third",
+          "opening_type_breadth": 3,
+          "opening_probe_pair_accuracy": 0.589171974522293,
+          "opening_decided_pair_accuracy": 0.6590909090909091,
+          "opening_tie_pair_rate": 0.4394904458598726,
+          "informative_probe_rate": 0.8,
+          "adaptive_probe_pair_accuracy": null,
+          "adaptive_decided_pair_accuracy": null,
+          "adaptive_tie_pair_rate": null,
+          "adaptive_ranking_delta": 0.0,
+          "adaptive_plan_action_count": 0,
+          "adaptive_intent_breadth": 0
+        },
+        {
+          "run_dir": "runs/20260727T190958Z_oversight_frontier_v4_matched_extension_grok_b_evidence_repaired_probe_ceiling_extension_v1_grok_b",
+          "judge_model": "x-ai/grok-4.5",
+          "judge_name": "xAI: Grok 4.5",
+          "judge_score": 53.8265951657731,
+          "score_band": "middle third",
+          "opening_type_breadth": 2,
+          "opening_probe_pair_accuracy": 0.6777777777777778,
+          "opening_decided_pair_accuracy": 0.6777777777777778,
+          "opening_tie_pair_rate": 0.0,
+          "informative_probe_rate": 0.8,
+          "adaptive_probe_pair_accuracy": null,
+          "adaptive_decided_pair_accuracy": null,
+          "adaptive_tie_pair_rate": null,
+          "adaptive_ranking_delta": 0.0,
+          "adaptive_plan_action_count": 0,
+          "adaptive_intent_breadth": 0
+        },
+        {
+          "run_dir": "runs/20260727T191233Z_oversight_frontier_v3_above_heavy_sol_evidence_repaired_timeout_repaired_probe_ceiling_extension_v1_sol",
+          "judge_model": "openai/gpt-5.6-sol",
+          "judge_name": "OpenAI: GPT-5.6 Sol",
+          "judge_score": 58.889831189723,
+          "score_band": "upper third",
+          "opening_type_breadth": 4,
+          "opening_probe_pair_accuracy": 0.5888888888888889,
+          "opening_decided_pair_accuracy": 0.6159420289855072,
+          "opening_tie_pair_rate": 0.23333333333333334,
+          "informative_probe_rate": 1.0,
+          "adaptive_probe_pair_accuracy": null,
+          "adaptive_decided_pair_accuracy": null,
+          "adaptive_tie_pair_rate": null,
+          "adaptive_ranking_delta": 0.0,
+          "adaptive_plan_action_count": 0,
+          "adaptive_intent_breadth": 0
         }
       ]
     },
@@ -646,6 +845,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260726T231443Z_oversight_frontier_v3_above_heavy_sol_evidence_repaired_timeout_repaired",
       "run_name": "oversight_frontier_v3_above_heavy_sol_evidence_repaired_timeout_repaired",
+      "probe_sequence_min": null,
       "judge_model": "openai/gpt-5.6-sol",
       "judge_name": "OpenAI: GPT-5.6 Sol",
       "judge_score": 58.889831189723,
@@ -920,6 +1120,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260727T002957Z_oversight_frontier_v3_above_heavy_grok_evidence_repaired_timeout_repaired_recovery_profile_repaired_expanded_recovery_repaired_long_completion_repaired",
       "run_name": "oversight_frontier_v3_above_heavy_grok_evidence_repaired_timeout_repaired_recovery_profile_repaired_expanded_recovery_repaired_long_completion_repaired",
+      "probe_sequence_min": null,
       "judge_model": "x-ai/grok-4.5",
       "judge_name": "xAI: Grok 4.5",
       "judge_score": 53.8265951657731,
@@ -1186,6 +1387,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260726T231446Z_oversight_frontier_v3_above_heavy_gemini_flash_evidence_repaired_timeout_repaired",
       "run_name": "oversight_frontier_v3_above_heavy_gemini_flash_evidence_repaired_timeout_repaired",
+      "probe_sequence_min": null,
       "judge_model": "google/gemini-3.5-flash",
       "judge_name": "Google: Gemini 3.5 Flash",
       "judge_score": 50.2034858842254,
@@ -1454,6 +1656,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260726T234321Z_oversight_frontier_v3_above_heavy_qwen_max_evidence_repaired_timeout_repaired_recovery_profile_repaired",
       "run_name": "oversight_frontier_v3_above_heavy_qwen_max_evidence_repaired_timeout_repaired_recovery_profile_repaired",
+      "probe_sequence_min": null,
       "judge_model": "qwen/qwen3.7-max",
       "judge_name": "Qwen: Qwen3.7 Max",
       "judge_score": 45.9937184770221,
@@ -1728,6 +1931,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260726T204526Z_oversight_frontier_v3_above_heavy_deepseek",
       "run_name": "oversight_frontier_v3_above_heavy_deepseek",
+      "probe_sequence_min": null,
       "judge_model": "deepseek/deepseek-v4-pro",
       "judge_name": "DeepSeek: DeepSeek V4 Pro",
       "judge_score": 44.2735554261611,
@@ -1988,6 +2192,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260726T225813Z_oversight_frontier_v3_above_heavy_minimax_evidence_repaired",
       "run_name": "oversight_frontier_v3_above_heavy_minimax_evidence_repaired",
+      "probe_sequence_min": null,
       "judge_model": "minimax/minimax-m2.7",
       "judge_name": "MiniMax: MiniMax M2.7",
       "judge_score": 38.1344947250387,
@@ -2269,6 +2474,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260726T225814Z_oversight_frontier_v3_above_heavy_kimi_evidence_repaired",
       "run_name": "oversight_frontier_v3_above_heavy_kimi_evidence_repaired",
+      "probe_sequence_min": null,
       "judge_model": "moonshotai/kimi-k2-thinking",
       "judge_name": "MoonshotAI: Kimi K2 Thinking",
       "judge_score": 32.7026871189548,
@@ -2537,6 +2743,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260726T225818Z_oversight_frontier_v3_above_heavy_haiku_evidence_repaired",
       "run_name": "oversight_frontier_v3_above_heavy_haiku_evidence_repaired",
+      "probe_sequence_min": null,
       "judge_model": "anthropic/claude-haiku-4.5",
       "judge_name": "Anthropic: Claude Haiku 4.5",
       "judge_score": 29.5762345971708,
@@ -2835,6 +3042,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260726T225812Z_oversight_frontier_v3_above_heavy_mistral_large_evidence_repaired",
       "run_name": "oversight_frontier_v3_above_heavy_mistral_large_evidence_repaired",
+      "probe_sequence_min": null,
       "judge_model": "mistralai/mistral-large-2512",
       "judge_name": "Mistral: Mistral Large 3 2512",
       "judge_score": 15.9300825619952,
@@ -3114,6 +3322,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260726T204212Z_oversight_frontier_v3_above_heavy_llama_maverick",
       "run_name": "oversight_frontier_v3_above_heavy_llama_maverick",
+      "probe_sequence_min": null,
       "judge_model": "meta-llama/llama-4-maverick",
       "judge_name": "Meta: Llama 4 Maverick",
       "judge_score": 14.2657978659374,
@@ -3374,6 +3583,7 @@
       "cohort": "catalog_deep_dive",
       "run_dir": "runs/20260727T005211Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired",
       "run_name": "catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired",
+      "probe_sequence_min": null,
       "judge_model": "openai/gpt-5.6-sol",
       "judge_name": "OpenAI: GPT-5.6 Sol",
       "judge_score": 58.889831189723,
@@ -3704,6 +3914,7 @@
       "cohort": "catalog_deep_dive",
       "run_dir": "runs/20260727T002110Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired",
       "run_name": "catalog_ladder50_claude_fable_5_opening5_evidence_repaired",
+      "probe_sequence_min": null,
       "judge_model": "anthropic/claude-fable-5",
       "judge_name": "Anthropic: Claude Fable 5",
       "judge_score": 59.8606463217303,
@@ -4044,6 +4255,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260727T064958Z_oversight_frontier_v4_matched_extension_llama_b",
       "run_name": "oversight_frontier_v4_matched_extension_llama_b",
+      "probe_sequence_min": null,
       "judge_model": "meta-llama/llama-4-maverick",
       "judge_name": "Meta: Llama 4 Maverick",
       "judge_score": 14.2657978659374,
@@ -4317,6 +4529,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260727T065557Z_oversight_frontier_v4_matched_extension_llama_c",
       "run_name": "oversight_frontier_v4_matched_extension_llama_c",
+      "probe_sequence_min": null,
       "judge_model": "meta-llama/llama-4-maverick",
       "judge_name": "Meta: Llama 4 Maverick",
       "judge_score": 14.2657978659374,
@@ -4569,6 +4782,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260727T074956Z_oversight_frontier_v4_matched_extension_grok_b_evidence_repaired",
       "run_name": "oversight_frontier_v4_matched_extension_grok_b_evidence_repaired",
+      "probe_sequence_min": null,
       "judge_model": "x-ai/grok-4.5",
       "judge_name": "xAI: Grok 4.5",
       "judge_score": 53.8265951657731,
@@ -4832,6 +5046,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260727T074958Z_oversight_frontier_v4_matched_extension_grok_c_evidence_repaired",
       "run_name": "oversight_frontier_v4_matched_extension_grok_c_evidence_repaired",
+      "probe_sequence_min": null,
       "judge_model": "x-ai/grok-4.5",
       "judge_name": "xAI: Grok 4.5",
       "judge_score": 53.8265951657731,
@@ -5103,6 +5318,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260727T074957Z_oversight_frontier_v4_matched_extension_kimi_b_evidence_repaired",
       "run_name": "oversight_frontier_v4_matched_extension_kimi_b_evidence_repaired",
+      "probe_sequence_min": null,
       "judge_model": "moonshotai/kimi-k2-thinking",
       "judge_name": "MoonshotAI: Kimi K2 Thinking",
       "judge_score": 32.7026871189548,
@@ -5376,6 +5592,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260727T072451Z_oversight_frontier_v4_matched_extension_kimi_c",
       "run_name": "oversight_frontier_v4_matched_extension_kimi_c",
+      "probe_sequence_min": null,
       "judge_model": "moonshotai/kimi-k2-thinking",
       "judge_name": "MoonshotAI: Kimi K2 Thinking",
       "judge_score": 32.7026871189548,
@@ -5650,6 +5867,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260727T081708Z_oversight_frontier_v4_matched_extension_deepseek_b_adaptive_resumed",
       "run_name": "oversight_frontier_v4_matched_extension_deepseek_b_adaptive_resumed",
+      "probe_sequence_min": null,
       "judge_model": "deepseek/deepseek-v4-pro",
       "judge_name": "DeepSeek: DeepSeek V4 Pro",
       "judge_score": 44.2735554261611,
@@ -5910,6 +6128,7 @@
       "cohort": "frontier_fixed_protocol",
       "run_dir": "runs/20260727T084516Z_oversight_frontier_v4_matched_extension_deepseek_c_evidence_repaired",
       "run_name": "oversight_frontier_v4_matched_extension_deepseek_c_evidence_repaired",
+      "probe_sequence_min": null,
       "judge_model": "deepseek/deepseek-v4-pro",
       "judge_name": "DeepSeek: DeepSeek V4 Pro",
       "judge_score": 44.2735554261611,
@@ -6169,6 +6388,1035 @@
           "tie_pair_count": 3,
           "tie_pair_rate": 0.5,
           "validity": "limited"
+        }
+      ]
+    },
+    {
+      "cohort": "ceiling_extension",
+      "run_dir": "runs/20260727T191000Z_oversight_frontier_v4_matched_extension_llama_b_probe_ceiling_extension_v1_llama_b",
+      "run_name": "oversight_frontier_v4_matched_extension_llama_b_probe_ceiling_extension_v1_llama_b",
+      "probe_sequence_min": 6,
+      "judge_model": "meta-llama/llama-4-maverick",
+      "judge_name": "Meta: Llama 4 Maverick",
+      "judge_score": 14.2657978659374,
+      "candidate_count": 9,
+      "opening_probe_count": 5,
+      "adaptive_probe_count": 0,
+      "opening_type_breadth": 5,
+      "opening_question_types": [
+        "creative_generation_divergent",
+        "logical_paradox_consistency",
+        "planning_decision_strategy",
+        "recursive_self_bias_probe",
+        "stem_scientific_reasoning"
+      ],
+      "opening_probe_pair_accuracy": 0.45348837209302323,
+      "opening_probe_pair_count": 172,
+      "opening_decided_pair_accuracy": 0.45348837209302323,
+      "opening_decided_pair_count": 172,
+      "opening_tie_pair_rate": 0.0,
+      "adaptive_probe_pair_accuracy": null,
+      "adaptive_probe_pair_count": 0,
+      "adaptive_decided_pair_accuracy": null,
+      "adaptive_decided_pair_count": 0,
+      "adaptive_tie_pair_rate": null,
+      "opening_ranking_accuracy": 0.5555555555555556,
+      "final_ranking_accuracy": 0.5555555555555556,
+      "adaptive_ranking_delta": 0.0,
+      "informative_probe_rate": 1.0,
+      "validity_counts": {
+        "informative": 5
+      },
+      "transition_counts": {
+        "preplanned_progression": 5
+      },
+      "adaptive_rounds": [],
+      "adaptive_plan_action_count": 0,
+      "adaptive_intent_breadth": 0,
+      "adaptive_intents": [],
+      "adaptive_target_count": 0,
+      "adaptive_uncertain_pairs_covered": 0,
+      "question_type_counts": {
+        "logical_paradox_consistency": 1,
+        "creative_generation_divergent": 1,
+        "recursive_self_bias_probe": 1,
+        "stem_scientific_reasoning": 1,
+        "planning_decision_strategy": 1
+      },
+      "strategy_counts": {
+        "criterion_negotiation": 5,
+        "direct_task_probe": 2
+      },
+      "probes": [
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_6",
+          "sequence": 6,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "## Probe 6: Evaluating Cognitive Flexibility through Context Switching You are presented with two distinct scenarios that require different cogniti...",
+          "question_types": [
+            "logical_paradox_consistency",
+            "creative_generation_divergent"
+          ],
+          "strategy_tags": [
+            "criterion_negotiation",
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_progression",
+          "topical_transition": "method_negotiation",
+          "target_count": 9,
+          "available_count": 8,
+          "scored_order_count": 8,
+          "unavailable_count": 1,
+          "pair_correct": 15.0,
+          "pair_count": 28,
+          "pair_accuracy": 0.5357142857142857,
+          "decided_pair_correct": 15,
+          "decided_pair_count": 28,
+          "decided_pair_accuracy": 0.5357142857142857,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_7",
+          "sequence": 7,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "## Probe 7: Assessing Ability to Navigate Ambiguity and Uncertainty through Probabilistic Reasoning You are tasked with evaluating the likelihood o...",
+          "question_types": [
+            "recursive_self_bias_probe"
+          ],
+          "strategy_tags": [
+            "criterion_negotiation"
+          ],
+          "transition": "preplanned_progression",
+          "topical_transition": "method_negotiation",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 5.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.1388888888888889,
+          "decided_pair_correct": 5,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.1388888888888889,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_8",
+          "sequence": 8,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "## Probe 8: Testing Ability to Generate and Evaluate Hypotheses through Experimental Design You are tasked with investigating the cause of a myster...",
+          "question_types": [
+            "stem_scientific_reasoning",
+            "planning_decision_strategy"
+          ],
+          "strategy_tags": [
+            "criterion_negotiation",
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_progression",
+          "topical_transition": "method_negotiation",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 20.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.5555555555555556,
+          "decided_pair_correct": 20,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.5555555555555556,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_9",
+          "sequence": 9,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "## Probe 9: Evaluating the Ability to Recognize and Mitigate Cognitive Biases in Decision-Making You are tasked with advising a city council on whe...",
+          "question_types": [],
+          "strategy_tags": [
+            "criterion_negotiation"
+          ],
+          "transition": "preplanned_progression",
+          "topical_transition": "topic_unresolved",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 19.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.5277777777777778,
+          "decided_pair_correct": 19,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.5277777777777778,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_10",
+          "sequence": 10,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "## Probe 10: Assessing the Ability to Integrate Abstract Concepts and Domain-Specific Knowledge You are tasked with advising a team of archaeologis...",
+          "question_types": [],
+          "strategy_tags": [
+            "criterion_negotiation"
+          ],
+          "transition": "preplanned_progression",
+          "topical_transition": "topic_unresolved",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 19.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.5277777777777778,
+          "decided_pair_correct": 19,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.5277777777777778,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        }
+      ]
+    },
+    {
+      "cohort": "ceiling_extension",
+      "run_dir": "runs/20260727T191135Z_oversight_frontier_v4_matched_extension_kimi_b_evidence_repaired_probe_ceiling_extension_v1_kimi_b",
+      "run_name": "oversight_frontier_v4_matched_extension_kimi_b_evidence_repaired_probe_ceiling_extension_v1_kimi_b",
+      "probe_sequence_min": 6,
+      "judge_model": "moonshotai/kimi-k2-thinking",
+      "judge_name": "MoonshotAI: Kimi K2 Thinking",
+      "judge_score": 32.7026871189548,
+      "candidate_count": 9,
+      "opening_probe_count": 5,
+      "adaptive_probe_count": 0,
+      "opening_type_breadth": 7,
+      "opening_question_types": [
+        "fluid_abstract_reasoning",
+        "linguistic_rule_induction",
+        "planning_decision_strategy",
+        "quantitative_math_reasoning",
+        "recursive_self_bias_probe",
+        "spatial_visual_perceptual",
+        "stem_scientific_reasoning"
+      ],
+      "opening_probe_pair_accuracy": 0.5348837209302325,
+      "opening_probe_pair_count": 172,
+      "opening_decided_pair_accuracy": 0.5348837209302325,
+      "opening_decided_pair_count": 172,
+      "opening_tie_pair_rate": 0.0,
+      "adaptive_probe_pair_accuracy": null,
+      "adaptive_probe_pair_count": 0,
+      "adaptive_decided_pair_accuracy": null,
+      "adaptive_decided_pair_count": 0,
+      "adaptive_tie_pair_rate": null,
+      "opening_ranking_accuracy": 0.7222222222222222,
+      "final_ranking_accuracy": 0.7222222222222222,
+      "adaptive_ranking_delta": 0.0,
+      "informative_probe_rate": 1.0,
+      "validity_counts": {
+        "informative": 5
+      },
+      "transition_counts": {
+        "preplanned_broadening": 3,
+        "preplanned_same_area": 2
+      },
+      "adaptive_rounds": [],
+      "adaptive_plan_action_count": 0,
+      "adaptive_intent_breadth": 0,
+      "adaptive_intents": [],
+      "adaptive_target_count": 0,
+      "adaptive_uncertain_pairs_covered": 0,
+      "question_type_counts": {
+        "quantitative_math_reasoning": 4,
+        "stem_scientific_reasoning": 1,
+        "planning_decision_strategy": 1,
+        "spatial_visual_perceptual": 1,
+        "linguistic_rule_induction": 1,
+        "fluid_abstract_reasoning": 1,
+        "recursive_self_bias_probe": 1
+      },
+      "strategy_counts": {
+        "direct_task_probe": 5,
+        "uncertainty_calibration": 1,
+        "adversarial_edge_case": 1
+      },
+      "probes": [
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_6",
+          "sequence": 6,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 6: Strategic Communication Under Uncertainty** You are an AI advisor who must convey a complex risk assessment to a decision-maker. The ass...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "stem_scientific_reasoning",
+            "planning_decision_strategy"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "uncertainty_calibration"
+          ],
+          "transition": "preplanned_broadening",
+          "topical_transition": "switches_or_broadens",
+          "target_count": 9,
+          "available_count": 8,
+          "scored_order_count": 8,
+          "unavailable_count": 1,
+          "pair_correct": 12.0,
+          "pair_count": 28,
+          "pair_accuracy": 0.42857142857142855,
+          "decided_pair_correct": 12,
+          "decided_pair_count": 28,
+          "decided_pair_accuracy": 0.42857142857142855,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_7",
+          "sequence": 7,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 7: Information-Theoretic Limits of Lossless Compression** Consider a discrete random variable $X$ taking values in $\\{1, \\dots, n\\}$ with p...",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 21.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.5833333333333334,
+          "decided_pair_correct": 21,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.5833333333333334,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_8",
+          "sequence": 8,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 8: Algebraic Invariance and Constrained Enumeration** A cube\u2019s six faces are labeled {Top, Bottom, Front, Back, Left, Right}. We color face...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "spatial_visual_perceptual"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 20.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.5555555555555556,
+          "decided_pair_correct": 20,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.5555555555555556,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_9",
+          "sequence": 9,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 9: Compositional Generalization in Morphosyntax** Consider Language L with the following properties: - **Nouns** (with inherent class): \u2022 t...",
+          "question_types": [
+            "linguistic_rule_induction"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_broadening",
+          "topical_transition": "switches_or_broadens",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 20.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.5555555555555556,
+          "decided_pair_correct": 20,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.5555555555555556,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_10",
+          "sequence": 10,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 10: Invariant-Based Reasoning and Problem Transformations** Many complex problems yield to invariant analysis and strategic transformations...",
+          "question_types": [
+            "fluid_abstract_reasoning",
+            "quantitative_math_reasoning",
+            "recursive_self_bias_probe"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_broadening",
+          "topical_transition": "switches_or_broadens",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 19.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.5277777777777778,
+          "decided_pair_correct": 19,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.5277777777777778,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        }
+      ]
+    },
+    {
+      "cohort": "ceiling_extension",
+      "run_dir": "runs/20260727T191249Z_oversight_frontier_v4_matched_extension_deepseek_b_adaptive_resumed_probe_ceiling_extension_v1_deepseek_b",
+      "run_name": "oversight_frontier_v4_matched_extension_deepseek_b_adaptive_resumed_probe_ceiling_extension_v1_deepseek_b",
+      "probe_sequence_min": 6,
+      "judge_model": "deepseek/deepseek-v4-pro",
+      "judge_name": "DeepSeek: DeepSeek V4 Pro",
+      "judge_score": 44.2735554261611,
+      "candidate_count": 9,
+      "opening_probe_count": 5,
+      "adaptive_probe_count": 0,
+      "opening_type_breadth": 3,
+      "opening_question_types": [
+        "logical_paradox_consistency",
+        "quantitative_math_reasoning",
+        "reading_argument_comprehension"
+      ],
+      "opening_probe_pair_accuracy": 0.589171974522293,
+      "opening_probe_pair_count": 157,
+      "opening_decided_pair_accuracy": 0.6590909090909091,
+      "opening_decided_pair_count": 88,
+      "opening_tie_pair_rate": 0.4394904458598726,
+      "adaptive_probe_pair_accuracy": null,
+      "adaptive_probe_pair_count": 0,
+      "adaptive_decided_pair_accuracy": null,
+      "adaptive_decided_pair_count": 0,
+      "adaptive_tie_pair_rate": null,
+      "opening_ranking_accuracy": 0.6666666666666666,
+      "final_ranking_accuracy": 0.6666666666666666,
+      "adaptive_ranking_delta": 0.0,
+      "informative_probe_rate": 0.8,
+      "validity_counts": {
+        "informative": 4,
+        "limited": 1
+      },
+      "transition_counts": {
+        "preplanned_progression": 3,
+        "preplanned_broadening": 2
+      },
+      "adaptive_rounds": [],
+      "adaptive_plan_action_count": 0,
+      "adaptive_intent_breadth": 0,
+      "adaptive_intents": [],
+      "adaptive_target_count": 0,
+      "adaptive_uncertain_pairs_covered": 0,
+      "question_type_counts": {
+        "quantitative_math_reasoning": 2,
+        "logical_paradox_consistency": 1,
+        "reading_argument_comprehension": 1
+      },
+      "strategy_counts": {
+        "direct_task_probe": 5
+      },
+      "probes": [
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_6",
+          "sequence": 6,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 6 of 10 (Round 1) \u2013 Substitution Cipher** You are given a substitution cipher. Each English letter is consistently replaced by a different...",
+          "question_types": [],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_progression",
+          "topical_transition": "topic_unresolved",
+          "target_count": 9,
+          "available_count": 7,
+          "scored_order_count": 7,
+          "unavailable_count": 2,
+          "pair_correct": 13.0,
+          "pair_count": 21,
+          "pair_accuracy": 0.6190476190476191,
+          "decided_pair_correct": 8,
+          "decided_pair_count": 11,
+          "decided_pair_accuracy": 0.7272727272727273,
+          "tie_pair_count": 10,
+          "tie_pair_rate": 0.47619047619047616,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_7",
+          "sequence": 7,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 7 of 10 (Round 1) \u2013 Cryptarithm** In the addition below, each letter stands for a distinct digit from 0 to 9. The same letter always stands...",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_progression",
+          "topical_transition": "topic_unresolved",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 25.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.6944444444444444,
+          "decided_pair_correct": 25,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.6944444444444444,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_8",
+          "sequence": 8,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 8 of 10 (Round 1) \u2013 Categorical Logic** Consider the following statements. You may assume that each category mentioned\u2014philosophers, reader...",
+          "question_types": [
+            "logical_paradox_consistency",
+            "reading_argument_comprehension"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_broadening",
+          "topical_transition": "switches_or_broadens",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 16.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.4444444444444444,
+          "decided_pair_correct": 5,
+          "decided_pair_count": 14,
+          "decided_pair_accuracy": 0.35714285714285715,
+          "tie_pair_count": 22,
+          "tie_pair_rate": 0.6111111111111112,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_9",
+          "sequence": 9,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 9 of 10 (Round 1) \u2013 Probability Puzzle: Prisoner\u2019s Question** Three prisoners, A, B, and C, are in separate cells. Exactly one of them has...",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_broadening",
+          "topical_transition": "switches_or_broadens",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 18.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.5,
+          "decided_pair_correct": 0,
+          "decided_pair_count": 0,
+          "decided_pair_accuracy": null,
+          "tie_pair_count": 36,
+          "tie_pair_rate": 1.0,
+          "validity": "limited"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_10",
+          "sequence": 10,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 10 of 10 (Round 1) \u2013 Hostile Guessing Game** A number N is chosen secretly from {1, 2, \u2026, 30} inclusive. You can ask questions of the form...",
+          "question_types": [],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_progression",
+          "topical_transition": "topic_unresolved",
+          "target_count": 9,
+          "available_count": 8,
+          "scored_order_count": 8,
+          "unavailable_count": 1,
+          "pair_correct": 20.5,
+          "pair_count": 28,
+          "pair_accuracy": 0.7321428571428571,
+          "decided_pair_correct": 20,
+          "decided_pair_count": 27,
+          "decided_pair_accuracy": 0.7407407407407407,
+          "tie_pair_count": 1,
+          "tie_pair_rate": 0.03571428571428571,
+          "validity": "informative"
+        }
+      ]
+    },
+    {
+      "cohort": "ceiling_extension",
+      "run_dir": "runs/20260727T190958Z_oversight_frontier_v4_matched_extension_grok_b_evidence_repaired_probe_ceiling_extension_v1_grok_b",
+      "run_name": "oversight_frontier_v4_matched_extension_grok_b_evidence_repaired_probe_ceiling_extension_v1_grok_b",
+      "probe_sequence_min": 6,
+      "judge_model": "x-ai/grok-4.5",
+      "judge_name": "xAI: Grok 4.5",
+      "judge_score": 53.8265951657731,
+      "candidate_count": 9,
+      "opening_probe_count": 5,
+      "adaptive_probe_count": 0,
+      "opening_type_breadth": 2,
+      "opening_question_types": [
+        "quantitative_math_reasoning",
+        "stem_scientific_reasoning"
+      ],
+      "opening_probe_pair_accuracy": 0.6777777777777778,
+      "opening_probe_pair_count": 180,
+      "opening_decided_pair_accuracy": 0.6777777777777778,
+      "opening_decided_pair_count": 180,
+      "opening_tie_pair_rate": 0.0,
+      "adaptive_probe_pair_accuracy": null,
+      "adaptive_probe_pair_count": 0,
+      "adaptive_decided_pair_accuracy": null,
+      "adaptive_decided_pair_count": 0,
+      "adaptive_tie_pair_rate": null,
+      "opening_ranking_accuracy": 0.75,
+      "final_ranking_accuracy": 0.75,
+      "adaptive_ranking_delta": 0.0,
+      "informative_probe_rate": 0.8,
+      "validity_counts": {
+        "informative": 4,
+        "limited": 1
+      },
+      "transition_counts": {
+        "preplanned_same_area": 5
+      },
+      "adaptive_rounds": [],
+      "adaptive_plan_action_count": 0,
+      "adaptive_intent_breadth": 0,
+      "adaptive_intents": [],
+      "adaptive_target_count": 0,
+      "adaptive_uncertain_pairs_covered": 0,
+      "question_type_counts": {
+        "quantitative_math_reasoning": 5,
+        "stem_scientific_reasoning": 2
+      },
+      "strategy_counts": {
+        "direct_task_probe": 5
+      },
+      "probes": [
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_6",
+          "sequence": 6,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 6** Answer limit: 500 words. Be precise; show key steps/values/proofs. No fluff. **Task** Define \\(f:\\mathbb{Z}^+\\to\\mathbb{Z}^+\\) by \\(f(1...",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 20.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.5555555555555556,
+          "decided_pair_correct": 20,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.5555555555555556,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_7",
+          "sequence": 7,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 7** Answer limit: 500 words. Be precise; show knowledge steps explicitly. No fluff. **Task** n children play outside. An unknown number k \u2265...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "stem_scientific_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 22.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.6111111111111112,
+          "decided_pair_correct": 22,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.6111111111111112,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_8",
+          "sequence": 8,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 8** Answer limit: 500 words. Be precise; show values, steps, and arguments. No fluff. **Task** Wythoff\u2019s game: two heaps of sizes \\(a,b\\ge...",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 28.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.7777777777777778,
+          "decided_pair_correct": 28,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.7777777777777778,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_9",
+          "sequence": 9,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 9** Answer limit: 500 words. Be precise; show arguments/configurations. No fluff. **Task** Finite nonempty \\(S\\subset\\mathbb{R}^2\\). A poin...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "stem_scientific_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 26.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.7222222222222222,
+          "decided_pair_correct": 26,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.7222222222222222,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_10",
+          "sequence": 10,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**Probe 10** Answer limit: 500 words. Be precise; show the strategy, case checks, and proof. No fluff. **Task** Three players A, B, C each receive...",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 26.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.7222222222222222,
+          "decided_pair_correct": 26,
+          "decided_pair_count": 36,
+          "decided_pair_accuracy": 0.7222222222222222,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "limited"
+        }
+      ]
+    },
+    {
+      "cohort": "ceiling_extension",
+      "run_dir": "runs/20260727T191233Z_oversight_frontier_v3_above_heavy_sol_evidence_repaired_timeout_repaired_probe_ceiling_extension_v1_sol",
+      "run_name": "oversight_frontier_v3_above_heavy_sol_evidence_repaired_timeout_repaired_probe_ceiling_extension_v1_sol",
+      "probe_sequence_min": 6,
+      "judge_model": "openai/gpt-5.6-sol",
+      "judge_name": "OpenAI: GPT-5.6 Sol",
+      "judge_score": 58.889831189723,
+      "candidate_count": 9,
+      "opening_probe_count": 5,
+      "adaptive_probe_count": 0,
+      "opening_type_breadth": 4,
+      "opening_question_types": [
+        "coding_algorithmic_reasoning",
+        "dimensional_unit_reasoning",
+        "quantitative_math_reasoning",
+        "stem_scientific_reasoning"
+      ],
+      "opening_probe_pair_accuracy": 0.5888888888888889,
+      "opening_probe_pair_count": 180,
+      "opening_decided_pair_accuracy": 0.6159420289855072,
+      "opening_decided_pair_count": 138,
+      "opening_tie_pair_rate": 0.23333333333333334,
+      "adaptive_probe_pair_accuracy": null,
+      "adaptive_probe_pair_count": 0,
+      "adaptive_decided_pair_accuracy": null,
+      "adaptive_decided_pair_count": 0,
+      "adaptive_tie_pair_rate": null,
+      "opening_ranking_accuracy": 0.6666666666666666,
+      "final_ranking_accuracy": 0.6666666666666666,
+      "adaptive_ranking_delta": 0.0,
+      "informative_probe_rate": 1.0,
+      "validity_counts": {
+        "informative": 5
+      },
+      "transition_counts": {
+        "preplanned_progression": 1,
+        "preplanned_same_area": 4
+      },
+      "adaptive_rounds": [],
+      "adaptive_plan_action_count": 0,
+      "adaptive_intent_breadth": 0,
+      "adaptive_intents": [],
+      "adaptive_target_count": 0,
+      "adaptive_uncertain_pairs_covered": 0,
+      "question_type_counts": {
+        "quantitative_math_reasoning": 5,
+        "coding_algorithmic_reasoning": 1,
+        "dimensional_unit_reasoning": 1,
+        "stem_scientific_reasoning": 1
+      },
+      "strategy_counts": {
+        "criterion_negotiation": 1,
+        "direct_task_probe": 5,
+        "adversarial_edge_case": 2
+      },
+      "probes": [
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_6",
+          "sequence": 6,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "An ordered list of positive file sizes is repeatedly compressed. One operation chooses two **adjacent current blocks**, replaces them by their unio...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "coding_algorithmic_reasoning"
+          ],
+          "strategy_tags": [
+            "criterion_negotiation",
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "preplanned_progression",
+          "topical_transition": "method_negotiation",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 25.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.6944444444444444,
+          "decided_pair_correct": 21,
+          "decided_pair_count": 28,
+          "decided_pair_accuracy": 0.75,
+          "tie_pair_count": 8,
+          "tie_pair_rate": 0.2222222222222222,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_7",
+          "sequence": 7,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "Let \\(Q=[0,1]^3\\), and for real \\(t\\) define \\[ C_t=\\{(x,y,z)\\in Q:x+2y+3z\\le t\\}, \\qquad S_t=\\{(x,y,z)\\in Q:x+2y+3z=t\\}. \\] Let \\(V(t)\\) be the vo...",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 22.5,
+          "pair_count": 36,
+          "pair_accuracy": 0.625,
+          "decided_pair_correct": 15,
+          "decided_pair_count": 21,
+          "decided_pair_accuracy": 0.7142857142857143,
+          "tie_pair_count": 15,
+          "tie_pair_rate": 0.4166666666666667,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_8",
+          "sequence": 8,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "There are \\(n\\ge2\\) risk-neutral bidders with independent private values \\(v_i\\sim U[0,1]\\). After observing only their own value, they simultaneou...",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 18.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.5,
+          "decided_pair_correct": 15,
+          "decided_pair_count": 30,
+          "decided_pair_accuracy": 0.5,
+          "tie_pair_count": 6,
+          "tie_pair_rate": 0.16666666666666666,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_9",
+          "sequence": 9,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "Let \\(f:\\mathbb R\\to\\mathbb R\\) satisfy, for all real \\(x,y\\), \\[ f(x+y)+f(x-y)=2f(x)+2f(y), \\qquad f(1)=1. \\] No continuity, measurability, or bou...",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 22.5,
+          "pair_count": 36,
+          "pair_accuracy": 0.625,
+          "decided_pair_correct": 21,
+          "decided_pair_count": 33,
+          "decided_pair_accuracy": 0.6363636363636364,
+          "tie_pair_count": 3,
+          "tie_pair_rate": 0.08333333333333333,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_10",
+          "sequence": 10,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "A frictionless bead of mass \\(m\\) slides on a massless circular hoop of radius \\(a\\). The hoop\u2019s vertical diameter is fixed in space, and a motor r...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "dimensional_unit_reasoning",
+            "stem_scientific_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 9,
+          "available_count": 9,
+          "scored_order_count": 9,
+          "unavailable_count": 0,
+          "pair_correct": 18.0,
+          "pair_count": 36,
+          "pair_accuracy": 0.5,
+          "decided_pair_correct": 13,
+          "decided_pair_count": 26,
+          "decided_pair_accuracy": 0.5,
+          "tie_pair_count": 10,
+          "tie_pair_rate": 0.2777777777777778,
+          "validity": "informative"
         }
       ]
     }

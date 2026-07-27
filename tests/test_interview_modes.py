@@ -1282,6 +1282,76 @@ class InterviewModeTests(unittest.TestCase):
             )
         )
 
+    def test_adaptive_probe_extension_sees_replayed_probes_and_guidance(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            source_config = _parallel_judge_config(
+                max_parallel_calls=4,
+                probe_schedule=[1],
+            )
+            source_store = RunStore.create(tmpdir, source_config)
+            CouncilRunner(
+                source_config,
+                build_clients(source_config),
+                source_store,
+            ).run()
+            replay_config = _parallel_judge_config(
+                max_parallel_calls=4,
+                probe_schedule=[2],
+                preauthored_probe_file=str(source_store.transcript_path),
+                preauthored_answer_file=str(source_store.transcript_path),
+                preauthored_evidence_file=str(source_store.transcript_path),
+                probe_generation_guidance="Seek evidence above your own ceiling.",
+            )
+            replay_store = RunStore.create(tmpdir, replay_config)
+            client = ConcurrencyTrackingMockClient(
+                replay_config.providers["mock"]
+            )
+            CouncilRunner(
+                replay_config,
+                {"mock": client},
+                replay_store,
+            ).run()
+            entries = load_jsonl(replay_store.transcript_path)
+
+        questions = [
+            entry
+            for entry in entries
+            if entry["metadata"].get("interaction_role") == "question"
+        ]
+        self.assertEqual(len(questions), 2)
+        self.assertTrue(questions[0]["metadata"]["preauthored_probe"])
+        self.assertFalse(questions[1]["metadata"].get("preauthored_probe", False))
+        fresh_request = next(
+            request
+            for request in client.requests
+            if request.metadata.get("interaction_role") == "question"
+        )
+        prompt = fresh_request.messages[-1]["content"]
+        self.assertIn("Additional study guidance:", prompt)
+        self.assertIn("Seek evidence above your own ceiling.", prompt)
+        self.assertIn("Probes already chosen for this round", prompt)
+        self.assertIn(questions[0]["content"], prompt)
+
+    def test_adaptive_probe_omits_empty_study_guidance_block(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            config = _parallel_judge_config(
+                max_parallel_calls=2,
+                probe_schedule=[1],
+            )
+            store = RunStore.create(tmpdir, config)
+            client = ConcurrencyTrackingMockClient(config.providers["mock"])
+            CouncilRunner(config, {"mock": client}, store).run()
+
+        request = next(
+            request
+            for request in client.requests
+            if request.metadata.get("interaction_role") == "question"
+        )
+        self.assertNotIn(
+            "Additional study guidance",
+            request.messages[-1]["content"],
+        )
+
     def test_adaptive_probe_replay_survives_fresh_later_stage_outputs(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             source_config = _parallel_judge_config(
@@ -2186,6 +2256,7 @@ def _parallel_judge_config(
     preauthored_evidence_file: str | None = None,
     preauthored_ranking_file: str | None = None,
     replay_source_targets: bool = False,
+    probe_generation_guidance: str = "",
 ) -> ExperimentConfig:
     run = {
         "max_parallel_calls": max_parallel_calls,
@@ -2263,6 +2334,15 @@ def _parallel_judge_config(
                         **(
                             {"replay_source_targets": True}
                             if replay_source_targets
+                            else {}
+                        ),
+                        **(
+                            {
+                                "probe_generation_guidance": (
+                                    probe_generation_guidance
+                                )
+                            }
+                            if probe_generation_guidance
                             else {}
                         ),
                         "visibility": "private",

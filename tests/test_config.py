@@ -19,6 +19,7 @@ from ai_council.experiment_builders import (
 from scripts.build_adaptive_judge_study import build_study_configs
 from scripts.build_adaptive_judge_study import validate_relative_gap_requirements
 from scripts.build_cross_judge_study import validate_exact_evidence_source
+from scripts.build_ceiling_probe_extension import build_ceiling_extension_config
 from scripts.build_partial_resume_config import build_partial_resume_config
 from scripts.build_replay_repair_config import build_replay_repair_config
 
@@ -27,6 +28,152 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class ConfigTests(unittest.TestCase):
+    def test_ceiling_extension_replays_opening_evidence_and_adds_probe_budget(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            source_run = Path(tmpdir)
+            source = {
+                "name": "source",
+                "run": {"max_model_calls": 20},
+                "models": {
+                    "judge": {
+                        "name": "judge",
+                        "provider": "mock",
+                        "model": "mock:judge",
+                    }
+                },
+                "participants": [{"id": "P1"}, {"id": "P2"}],
+                "judges": [{"id": "J1", "model": "judge"}],
+                "protocol": {
+                    "phases": [
+                        {
+                            "kind": "independent_judge_ranking",
+                            "probe_schedule": [5, 1],
+                        }
+                    ]
+                },
+                "metadata": {},
+            }
+            (source_run / "config.json").write_text(json.dumps(source))
+            turns = []
+            turn_id = 1
+            for probe_number in range(1, 6):
+                probe_id = f"judge_ranking:J1:round_1:probe_{probe_number}"
+                turns.append(
+                    {
+                        "turn_id": turn_id,
+                        "round_index": 1,
+                        "speaker": "J1",
+                        "content": f"Probe {probe_number}",
+                        "metadata": {
+                            "interaction_role": "question",
+                            "probe_id": probe_id,
+                            "probe_number": probe_number,
+                        },
+                    }
+                )
+                turn_id += 1
+                for participant_id in ("P1", "P2"):
+                    turns.append(
+                        {
+                            "turn_id": turn_id,
+                            "round_index": 1,
+                            "speaker": participant_id,
+                            "content": "Answer",
+                            "metadata": {
+                                "interaction_role": "answer",
+                                "probe_id": probe_id,
+                            },
+                        }
+                    )
+                    turn_id += 1
+                turns.append(
+                    {
+                        "turn_id": turn_id,
+                        "round_index": 1,
+                        "speaker": "J1",
+                        "content": "{}",
+                        "metadata": {
+                            "interaction_role": "probe_comparison",
+                            "probe_id": probe_id,
+                        },
+                    }
+                )
+                turn_id += 1
+            (source_run / "transcript.jsonl").write_text(
+                "".join(json.dumps(turn) + "\n" for turn in turns)
+            )
+            (source_run / "run_summary.json").write_text(
+                json.dumps({"status": "completed"})
+            )
+
+            extended = build_ceiling_extension_config(
+                source_run,
+                additional_probes=5,
+                guidance="Seek evidence above your own ceiling.",
+            )
+            turns[1]["content"] = ""
+            turns[1]["metadata"]["answer_unavailable"] = True
+            (source_run / "transcript.jsonl").write_text(
+                "".join(json.dumps(turn) + "\n" for turn in turns)
+            )
+            with self.assertRaisesRegex(ValueError, "answers are incomplete"):
+                build_ceiling_extension_config(source_run)
+
+        phase = extended["protocol"]["phases"][0]
+        self.assertEqual(phase["probe_schedule"], [10])
+        self.assertEqual(phase["rounds"], 1)
+        self.assertEqual(
+            phase["preauthored_probe_file"],
+            str(source_run / "transcript.jsonl"),
+        )
+        self.assertEqual(phase["preauthored_answer_file"], str(source_run))
+        self.assertEqual(
+            phase["preauthored_evidence_file"],
+            str(source_run / "transcript.jsonl"),
+        )
+        self.assertIsNone(phase["preauthored_ranking_file"])
+        self.assertEqual(
+            phase["probe_generation_guidance"],
+            "Seek evidence above your own ceiling.",
+        )
+        self.assertEqual(extended["run"]["max_model_calls"], 41)
+
+    def test_ceiling_extension_rejects_incomplete_opening_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            source_run = Path(tmpdir)
+            (source_run / "config.json").write_text(
+                json.dumps(
+                    {
+                        "name": "source",
+                        "participants": [{"id": "P1"}],
+                        "judges": [{"id": "J1", "model": "judge"}],
+                        "models": {
+                            "judge": {
+                                "name": "judge",
+                                "model": "mock:judge",
+                            }
+                        },
+                        "protocol": {
+                            "phases": [
+                                {
+                                    "kind": "independent_judge_ranking",
+                                    "probe_schedule": [1],
+                                }
+                            ]
+                        },
+                    }
+                )
+            )
+            (source_run / "transcript.jsonl").write_text("")
+            (source_run / "run_summary.json").write_text(
+                json.dumps({"status": "completed"})
+            )
+
+            with self.assertRaisesRegex(ValueError, "probes are incomplete"):
+                build_ceiling_extension_config(source_run)
+
     def test_catalog_ladder_call_budget_scales_with_roster_and_schedule(self) -> None:
         self.assertEqual(
             expected_model_calls(

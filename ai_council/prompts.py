@@ -4,7 +4,7 @@ from collections import ChainMap
 from dataclasses import dataclass
 
 
-PROMPT_SET_VERSION = "2026-07-20-adaptive-waves-v4"
+PROMPT_SET_VERSION = "2026-07-27-probe-guidance-v6"
 
 
 DEFAULT_PROMPTS: dict[str, str] = {
@@ -78,6 +78,8 @@ only to test a specific unresolved weakness or whether a prior signal
 generalizes. Treat the answer limit as a real constraint: request only as many
 deliverables as a careful, complete solution can fit within it. Do not assume
 candidates are weaker than you.
+
+{probe_generation_guidance}
 
 Do not rank candidates or write private commentary in this turn. Keep the
 complete probe under 350 words and include a candidate answer limit no greater

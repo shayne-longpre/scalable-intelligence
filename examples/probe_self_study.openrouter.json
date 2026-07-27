@@ -1,0 +1,37 @@
+{
+  "name": "accepted_probe_self_study_v1",
+  "catalog_file": "data/probe_catalog.json",
+  "provider": {
+    "name": "openrouter",
+    "kind": "openrouter",
+    "api_key_env": "OPENROUTER_API_KEY",
+    "headers": {
+      "HTTP-Referer": "https://github.com/shayne-longpre/scalable-intelligence",
+      "X-Title": "Scalable Intelligence Probe Study"
+    },
+    "timeout_seconds": 900,
+    "request_retries": 1
+  },
+  "reference_evaluator": {
+    "id": "sol",
+    "model": "openai/gpt-5.6-sol",
+    "params": {
+      "max_tokens": 30000,
+      "reasoning": {
+        "effort": "xhigh"
+      }
+    },
+    "recovery_params": {
+      "max_tokens": 16000,
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "output_dir": "runs/probe_self_study/accepted_probes_v1",
+  "published_json_file": "data/probe_self_study_results.json",
+  "max_parallel_calls": 8,
+  "structured_json_retries": 1,
+  "comparison_seed": 20260727,
+  "max_reported_cost_usd": 100
+}

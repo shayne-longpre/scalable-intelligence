@@ -148,6 +148,7 @@ class PhaseSpec:
     reuse_unavailable_answers: bool = False
     retry_unavailable_rounds: list[int] = field(default_factory=list)
     replay_source_targets: bool = False
+    probe_generation_guidance: str = ""
     preauthored_probe_file: str | None = None
     preauthored_answer_file: str | None = None
     preauthored_answer_participants: list[str] = field(default_factory=list)
@@ -198,6 +199,10 @@ class PhaseSpec:
             replay_source_targets=_as_bool(
                 data.get("replay_source_targets", False),
                 "phase.replay_source_targets",
+            ),
+            probe_generation_guidance=_as_optional_string(
+                data.get("probe_generation_guidance"),
+                "phase.probe_generation_guidance",
             ),
             preauthored_probe_file=data.get("preauthored_probe_file"),
             preauthored_answer_file=data.get("preauthored_answer_file"),
@@ -604,3 +609,11 @@ def _as_bool(value: Any, field_name: str) -> bool:
     if isinstance(value, bool):
         return value
     raise ConfigError(f"{field_name} must be a boolean")
+
+
+def _as_optional_string(value: Any, field_name: str) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value.strip()
+    raise ConfigError(f"{field_name} must be a string")

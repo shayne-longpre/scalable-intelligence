@@ -79,7 +79,7 @@ ADAPTIVE_INTENT_INDICATORS = {
 
 def build_probe_study(
     *,
-    run_specs: Sequence[Mapping[str, str]],
+    run_specs: Sequence[Mapping[str, Any]],
     catalog_path: str | Path,
     output_dir: str | Path,
     published_json_path: str | Path | None = None,
@@ -98,6 +98,7 @@ def build_probe_study(
             cohort=spec["cohort"],
             catalog_rows=catalog_rows,
             taxonomy=taxonomy,
+            probe_sequence_min=spec.get("probe_sequence_min"),
         )
         for spec in run_specs
     ]
@@ -142,6 +143,7 @@ def analyze_probe_run(
     cohort: str,
     catalog_rows: Mapping[str, Mapping[str, Any]],
     taxonomy: Mapping[str, Any],
+    probe_sequence_min: int | None = None,
 ) -> dict[str, Any]:
     config = _load_json(run_dir / "config.json")
     extraction = _load_json(run_dir / "posthoc_extraction.json")
@@ -184,6 +186,7 @@ def analyze_probe_run(
         )
         for event in harmonized_events
     ]
+    probes = filter_probes_by_sequence(probes, probe_sequence_min)
     opening = [probe for probe in probes if probe["stage"] == "baseline_battery"]
     adaptive = [probe for probe in probes if probe["stage"] == "adaptive_followup"]
     opening_accuracy, opening_pairs = _pooled_probe_accuracy(opening)
@@ -234,6 +237,7 @@ def analyze_probe_run(
         "cohort": cohort,
         "run_dir": str(run_dir),
         "run_name": config["name"],
+        "probe_sequence_min": probe_sequence_min,
         "judge_model": judge_model,
         "judge_name": catalog_row.get("display_name") or _short_name(judge_model),
         "judge_score": float(judge_score),
@@ -365,6 +369,19 @@ def summarize_cohort(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             for row, band in zip(ordered, bands, strict=True)
         ],
     }
+
+
+def filter_probes_by_sequence(
+    probes: Sequence[Mapping[str, Any]],
+    sequence_min: int | None,
+) -> list[Mapping[str, Any]]:
+    if sequence_min is None:
+        return list(probes)
+    return [
+        probe
+        for probe in probes
+        if int(probe.get("sequence") or 0) >= sequence_min
+    ]
 
 
 def assign_score_bands(records: Sequence[Mapping[str, Any]]) -> list[str]:

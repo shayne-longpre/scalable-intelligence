@@ -213,6 +213,54 @@ experiment or replace the judge's holistic ranking. The journaled, resumable
 example is `examples/catalog_ladder50_probe_scoring.openrouter.json`; its
 sanitized versioned output is `data/catalog_ladder50_probe_scores.json`.
 
+Probe effectiveness is studied separately from the live judge's own
+assessment. `data/probe_catalog.json` deduplicates every probe in the accepted
+study set by normalized text and author model while preserving run, turn,
+taxonomy, roster, and answer provenance. The resumable
+`ai_council.probe_self_study` pipeline then runs three isolated stages per
+probe:
+
+1. The author model solves its probe in a fresh context without being told it
+   wrote the probe.
+2. In a separate context, the author assesses whether the probe is valid and
+   checkable, what capability level it targets, and how well it expects to
+   solve it. This call cannot see the fresh solution or candidate answers.
+3. A fixed reference evaluator jointly scores the fresh author solution and
+   the archived candidate answers under randomized anonymous labels.
+
+A probe is labeled **beyond author** only when the reference evaluator finds it
+valid, scores the author's fresh solution below substantially correct
+(`0–2`), and scores at least one candidate with a strictly higher external
+intelligence score as substantially or fully correct (`3–4`). This is an
+operational result about one fresh solution and a noisy reference ordering, not
+a claim that the author model could never solve the task.
+
+Probe-study results can be extended without rebuilding the accepted run list by
+passing the prior result to `scripts/analyze_probe_study.py --base-summary`.
+Use `--extension-run COHORT=RUN_DIR` for a run that replays an archived opening:
+the analyzer reads `archived_opening_probe_count` and admits only its new probes
+to taxonomy totals, preventing duplicated opening questions from biasing the
+study.
+
+The ceiling-aware extension is a controlled addition to an archived battery,
+not a fresh tournament. It replays five original probes, answers, and
+comparisons; shows the judge only those probe texts; asks for five complementary
+probes with headroom for candidates more capable than the judge; calls
+candidates only on those additions; and regenerates one ten-probe ranking.
+`probe_generation_guidance` is an optional phase field, so later studies can
+change this instruction without adding a protocol mode. The frozen manifest is
+`studies/probe_ceiling_extension_v1.json`.
+
+The completed pilot found that five ceiling-aware additions changed probe style
+far more than ranking quality: mean pairwise ranking accuracy rose by 1.1
+percentage points, with two judges improving, two worsening, and one unchanged.
+Across the full 147-probe author audit, 23 probes met the strict beyond-author
+definition, while all three probes authors explicitly called unsolvable were
+also judged invalid by their authors. See
+`docs/pilot_analysis_probe_ceiling_20260727.md` and the versioned summaries
+`data/probe_ceiling_extension_results.json` and
+`data/probe_self_study_results.json`.
+
 The main scale controls stay in config:
 
 ```json
@@ -220,7 +268,8 @@ The main scale controls stay in config:
   "kind": "independent_judge_ranking",
   "probe_schedule": [5, 1, 1],
   "adaptive_targeting": "judge_selected",
-  "max_adaptive_candidates": 10
+  "max_adaptive_candidates": 10,
+  "probe_generation_guidance": ""
 }
 ```
 
@@ -335,6 +384,12 @@ The repository includes config examples that map onto the two modes:
 - `studies/oversight_frontier_v1_order_replay.json`: exact probes and answers
   from three v1 conditions under new seeded presentation orders. It makes no
   candidate calls and regenerates only comparative judgments.
+- `studies/probe_ceiling_extension_v1.json`: five archived oversight panels
+  extended from five unguided opening probes to ten total probes. Only the five
+  ceiling-aware additions and the new comparisons and ranking are called live.
+- `examples/probe_self_study.openrouter.json`: blind author solves, separate
+  author self-assessments, and fixed-reference scoring for the accepted probe
+  catalog. The append-only job journal supports exact resumption.
 - `examples/independent_judges_pilot.openrouter.json`: legacy fixed-battery
   control with candidate evidence cards and optional probe-prefix ablations.
 - `examples/separate_interviews_compact.openrouter.json`: N-participant isolated

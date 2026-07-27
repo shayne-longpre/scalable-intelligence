@@ -83,6 +83,8 @@ experiment config
   cards, or legacy rankings. Replayed turns retain source run/turn IDs and
   register no new model usage. This is intended for resuming an otherwise
   unchanged run, not mixing evidence across protocol variants.
+  `probe_generation_guidance` adds a study-specific instruction only to
+  freshly generated probes; replayed probes are unchanged.
 
 - `ai_council.transcript`
   Maintains public and private transcript views. Public turns are visible to all
@@ -155,6 +157,34 @@ experiment config
   parameters are derived from catalog metadata, while judge parameters may be
   frozen explicitly. Generated configs live under `runs/`; the manifest remains
   the source of truth.
+
+- `ai_council.probe_catalog`
+  Builds stable probe IDs from normalized text and author model. It keeps every
+  accepted occurrence and links to source question and answer turns without
+  copying full transcripts.
+
+- `ai_council.probe_self_study`
+  Runs blind author solutions, separate author self-assessments, and
+  fixed-reference answer scoring. Calls are journaled by stage and probe ID,
+  resumable, costed, and anonymous at the reference-scoring boundary. Stage
+  waves preserve dependencies, and the cost limit stops new submissions while
+  allowing already in-flight calls to finish.
+
+- `ai_council.probe_self_analysis`
+  Converts completed probe self-study jobs into calibrated author, question-type,
+  diagnosticity, and beyond-author summaries and renders the audit report. It
+  contains no provider calls.
+
+- `ai_council.ceiling_probe_analysis`
+  Compares archived opening and adaptive rankings with ceiling-aware
+  extensions. It reports ranking accuracy, churn, per-probe discrimination,
+  validity, taxonomy labels, and incremental spend.
+
+`scripts/analyze_probe_study.py --base-summary ... --extension-run ...` extends
+an accepted study without re-listing prior runs. Extension runs automatically
+exclude replayed opening probes from taxonomy counts using
+`archived_opening_probe_count`; the complete extended transcript remains
+available for ranking analysis.
 
 - `ai_council.oversight_analysis`
   Analyzes oversight-frontier studies across judge conditions. It separates

@@ -6,6 +6,7 @@ from ai_council.probe_study import (
     adaptive_decision_records,
     adaptive_intents,
     assign_score_bands,
+    filter_probes_by_sequence,
     score_tied_ordering,
     spearman,
     summarize_cohort,
@@ -62,6 +63,17 @@ class ProbeStudyTests(unittest.TestCase):
         )
         with self.assertRaises(ValueError):
             _parse_run_spec("runs/example")
+
+    def test_probe_sequence_filter_excludes_replayed_opening(self) -> None:
+        probes = [{"sequence": index} for index in range(1, 11)]
+        self.assertEqual(
+            [row["sequence"] for row in filter_probes_by_sequence(probes, 6)],
+            [6, 7, 8, 9, 10],
+        )
+        self.assertEqual(
+            filter_probes_by_sequence(probes, None),
+            probes,
+        )
 
     def test_adaptive_intents_code_explicit_plan_language(self) -> None:
         labels = adaptive_intents(

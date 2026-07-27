@@ -828,6 +828,11 @@ class CouncilRunner:
                                 "probe_evidence_rule": _adaptive_probe_evidence_rule(
                                     round_index
                                 ),
+                                "probe_generation_guidance": (
+                                    _format_probe_generation_guidance(
+                                        phase.probe_generation_guidance
+                                    )
+                                ),
                             },
                             extra_context=_format_adaptive_judge_probe_context(
                                 judge.spec.id,
@@ -3207,6 +3212,13 @@ def _adaptive_probe_evidence_rule(round_index: int) -> str:
         "Use the prior cumulative judgment below. The same probe must be useful for "
         "comparing every listed candidate; do not tailor hidden variants by candidate."
     )
+
+
+def _format_probe_generation_guidance(guidance: str) -> str:
+    guidance = guidance.strip()
+    if not guidance:
+        return ""
+    return f"Additional study guidance:\n{guidance}\n"
 
 
 def _format_adaptive_judge_probe_context(

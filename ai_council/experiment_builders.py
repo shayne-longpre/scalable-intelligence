@@ -25,6 +25,7 @@ class AdaptiveJudgeConfigSpec:
     reuse_unavailable_answers: bool = False
     replay_source_targets: bool = False
     retry_unavailable_rounds: tuple[int, ...] = ()
+    probe_generation_guidance: str = ""
     preauthored_files: Mapping[str, str] = field(default_factory=dict)
 
 
@@ -106,6 +107,7 @@ def build_adaptive_judge_config(
         "comparison_seed": spec.comparison_seed,
         "incomplete_answer_policy": spec.incomplete_answer_policy,
         "reuse_unavailable_answers": spec.reuse_unavailable_answers,
+        "probe_generation_guidance": spec.probe_generation_guidance,
         "visibility": "private",
     }
     if spec.replay_source_targets:
