@@ -29,7 +29,7 @@ DEFAULT_SCORE_SUMMARY = (
 )
 DEFAULT_OVERSIGHT_SUMMARY = ROOT / "data" / "oversight_frontier_results.json"
 DEFAULT_OVERSIGHT_SYNTHESIS = (
-    ROOT / "data" / "oversight_frontier_synthesis_results.json"
+    ROOT / "data" / "oversight_frontier_synthesis_repaired_results.json"
 )
 ORDER_REPLAY_RUN = (
     ROOT

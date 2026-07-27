@@ -11,12 +11,33 @@ from ai_council.report_card import (
     _highlight_candidates,
     _judge_condition_summary,
     _probe_budget_results,
+    _repair_metadata,
     build_report_card,
 )
 from ai_council.storage import RunStore
 
 
 class ReportCardTests(unittest.TestCase):
+    def test_repair_metadata_flags_runtime_sensitive_overrides(self) -> None:
+        repair = _repair_metadata(
+            {
+                "metadata": {
+                    "repair_source_run": "runs/source",
+                    "repair_uses_recovery_params": False,
+                    "repair_parameter_overrides": {
+                        "provider/model": {"max_tokens": 12000}
+                    },
+                }
+            }
+        )
+
+        self.assertTrue(repair["is_repair"])
+        self.assertTrue(repair["runtime_sensitive"])
+        self.assertEqual(
+            repair["parameter_overrides"]["provider/model"]["max_tokens"],
+            12000,
+        )
+
     def test_judge_condition_summary_compares_final_rankings_across_runs(self) -> None:
         cards = [
             {

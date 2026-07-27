@@ -114,6 +114,15 @@ and the six-probe ranking measures the marginal value of a second adaptive
 round. This avoids selecting the most favorable stopping point after seeing
 results.
 
+### Five-Opening-Probe Replication
+
+The replication keeps the roster, anonymous IDs, answer-order seed, candidate
+settings, and two independent judges fixed, but uses `[5, 1, 1]`. It therefore
+provides fresh rankings after five, six, and seven cumulative probes. This is a
+probe-budget replication, not a replacement for the original `[4, 1, 1]`
+condition; old-new rank agreement and changes in external pairwise accuracy are
+reported directly.
+
 ## Shared-Evidence Cross-Over
 
 After both independent ladders finish, run a crossed control without purchasing
@@ -137,14 +146,23 @@ also replayed as missing evidence, so no candidate is called again.
 
 ## Scale And Cost Shape
 
-With 50 candidates, four opening probes, and two adaptive rounds targeting at
-most ten candidates:
+With 50 candidates and two adaptive rounds targeting at most ten candidates,
+the original four-opening-probe condition requires:
 
 - Opening candidate calls: `2 judges x 4 probes x 50 = 400`.
 - Maximum adaptive candidate calls: `2 judges x 2 probes x 10 = 40`.
 - Primary candidate-call budget: 440, plus bounded retries.
 - Crossed judgments reuse saved probes and answers, adding judge calls but no
   candidate calls.
+
+The five-opening-probe replication uses 500 opening candidate calls across the
+two judges and at most 40 adaptive candidate calls. Successful answers are
+journaled immediately, so a repair retries only explicitly unavailable cells
+and then recomputes comparisons and rankings from the completed evidence. The
+repair preserves the realized adaptive probes and target sets rather than
+inventing a counterfactual branch after seeing repaired opening answers. Thus
+the five-probe opening endpoint is fully repaired; later checkpoints remain
+auditable realized-path sensitivity analyses.
 
 The main methodological risk is whether a judge can reliably compare 50 long
 answers without position effects or attention loss. The primary run therefore
@@ -155,7 +173,8 @@ the batch finishes, canonical transcript order is deterministic, and a replay
 calls only candidates whose valid answer is still missing.
 
 Candidate and judge calls use separate provider profiles even when both route
-through OpenRouter. Candidate calls have a five-minute deadline; global judge
+through OpenRouter. The original pilot used a five-minute candidate deadline;
+the replication uses ten minutes after the slow-route audit. Global judge
 comparisons have a fifteen-minute deadline because they read all 50 answers and
 produce 50 evidence summaries. This changes transport limits, not model access
 or evidence.

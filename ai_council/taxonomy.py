@@ -32,6 +32,14 @@ def _hits_for_dimension(
     hits = []
     for tag in tags:
         indicators = [indicator.lower() for indicator in tag.get("indicators", [])]
+        negative_indicators = [
+            indicator.lower() for indicator in tag.get("negative_indicators", [])
+        ]
+        if any(
+            _indicator_matches(indicator, text)
+            for indicator in negative_indicators
+        ):
+            continue
         matched = [indicator for indicator in indicators if _indicator_matches(indicator, text)]
         if not matched:
             continue

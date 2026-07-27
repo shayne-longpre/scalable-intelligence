@@ -63,6 +63,12 @@ These plots should retain links to source turns, probes, answers, per-probe
 comparisons, cumulative evidence summaries, and rankings so aggregate patterns
 remain auditable.
 
+Probe-level diagnosticity gives half credit to an explicit tie. This treats a
+probe that honestly fails to separate two candidates differently from one that
+orders them incorrectly, while still withholding full credit for the tie.
+Decided-pair accuracy is reported beside it so calibration and discrimination
+are not collapsed into one number.
+
 Implementation and study progress are tracked in
 [`docs/research_roadmap.md`](docs/research_roadmap.md).
 
@@ -84,6 +90,9 @@ The seeded answer-order replay and fixed-scale scoring analysis are in
 [`docs/pilot_analysis_catalog_order_20260725.md`](docs/pilot_analysis_catalog_order_20260725.md)
 and
 [`docs/pilot_analysis_probe_scoring_20260725.md`](docs/pilot_analysis_probe_scoring_20260725.md).
+The fresh five-opening-probe replication and its direct stability comparison
+are in
+[`docs/pilot_analysis_catalog_ladder50_opening5_20260727.md`](docs/pilot_analysis_catalog_ladder50_opening5_20260727.md).
 The oversight-frontier study is specified in
 [`docs/oversight_frontier_design.md`](docs/oversight_frontier_design.md), with
 the first-panel results in
@@ -92,6 +101,8 @@ and the new-panel replication plus exact-evidence answer-order audit in
 [`docs/pilot_analysis_oversight_frontier_replication_20260726.md`](docs/pilot_analysis_oversight_frontier_replication_20260726.md).
 The ten-judge, above-heavy extension and pooled 22-panel analysis are in
 [`docs/pilot_analysis_oversight_frontier_above_heavy_20260726.md`](docs/pilot_analysis_oversight_frontier_above_heavy_20260726.md).
+The matched analysis of all 60 judge-authored probes is in
+[`docs/pilot_analysis_probe_evolution_20260727.md`](docs/pilot_analysis_probe_evolution_20260727.md).
 The combined reader-facing
 [`oversight report`](docs/site/oversight.html) links back to machine-readable
 study results and versioned probe audits.
@@ -160,7 +171,7 @@ another judge's questions or conclusions.
 The default study uses **adaptive probe rounds**:
 
 1. Before seeing any answers, the judge writes several complementary opening
-   probes. With `probe_schedule: [4, 1, 1]`, Round 1 has four probes and the next
+   probes. With `probe_schedule: [5, 1, 1]`, Round 1 has five probes and the next
    two rounds have one probe each.
 2. Each probe is sent unchanged, in a fresh context, to every candidate in its
    comparison set.
@@ -202,9 +213,9 @@ The main scale controls stay in config:
 ```json
 {
   "kind": "independent_judge_ranking",
-  "probe_schedule": [4, 1, 1, 1],
+  "probe_schedule": [5, 1, 1],
   "adaptive_targeting": "judge_selected",
-  "max_adaptive_candidates": 4
+  "max_adaptive_candidates": 10
 }
 ```
 
@@ -215,11 +226,11 @@ the substantive probe, answer, comparison, and cumulative-judgment instructions.
 See [`docs/adaptive_judge_protocol.md`](docs/adaptive_judge_protocol.md) for the
 same flow without implementation detail.
 
-Five-round stress runs use `[4, 1, 1, 1, 1]` so every cumulative probe count
+Historical five-round stress runs use `[4, 1, 1, 1, 1]` so every cumulative probe count
 from four through eight can be inspected. Current pilots support
-`[4, 1, 1, 1]` as the default diagnostic schedule for close rosters, with five
-cumulative probes preregistered as the primary endpoint and later rounds treated
-as adaptive extensions. Across the first three replicated close-roster runs,
+`[5, 1, 1]` as the catalog schedule, with the five-probe opening preregistered
+as the primary endpoint and later rounds treated as adaptive extensions. Across
+the first three replicated close-roster runs,
 accuracy was not monotonic in probe count, so there is not yet an automatic
 stopping rule. Broadly separated rosters often need only the opening battery and
 one confirmation round. The judgment at every round remains a valid analysis
@@ -301,6 +312,10 @@ The repository includes config examples that map onto the two modes:
   Per-probe comparisons and cumulative dossiers replace required isolated
   ability scores. The medium- and Sol-judge configs retain five rounds as
   stress-test fixtures.
+- `examples/catalog_ladder50_sol_opening5.openrouter.json` and
+  `examples/catalog_ladder50_fable_opening5.openrouter.json`: independent
+  five-opening-probe replications of the frozen 50-model ladder, followed by
+  two selective adaptive probes.
 - `studies/oversight_frontier_v1.json`: the six-level oversight-frontier study.
   Each judge evaluates seven anonymous candidates with five opening probes and
   one adaptive tie-breaker. Resolved configs are generated into `runs/` with
@@ -406,7 +421,9 @@ comparisons, cumulative judgments, legacy evidence cards, and rankings from an
 earlier transcript. Replayed rows retain their source run and turn IDs and count
 as zero new calls or spend. Replay is an operational checkpoint, not a change
 to the experimental condition: use it only while the roster, prompts, routing,
-and upstream evidence are unchanged.
+and upstream evidence are unchanged. A repair that uses recovery parameters or
+a model-specific generation override is recorded as a runtime sensitivity and
+must be reported separately.
 
 ## Model Catalog
 
@@ -624,7 +641,7 @@ Primary measurements should focus on the emergent evaluation process:
 The current exploratory coding frame is in `docs/evaluation_taxonomy.md`, with
 machine-readable tags in `data/evaluation_taxonomy.json`. The analysis pipeline
 reports candidate behavioral signals and question-type families for review, not
-as definitive labels. Current post-hoc version `2026-07-21.6` includes
+as definitive labels. Current post-hoc version `2026-07-27.1` includes
 precision and coverage regressions derived from real pilot probes.
 
 The taxonomy has two dimensions:

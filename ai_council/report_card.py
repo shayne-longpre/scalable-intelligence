@@ -911,6 +911,7 @@ def _card_for_run(run_dir: Path, *, prior_ranking_file: str | Path | None) -> di
         "incremental_reported_cost_usd": run_summary.get("reported_cost_usd"),
         "spend_run_count": cumulative_spend.get("run_count", 1),
         "spend_lineage_complete": cumulative_spend.get("complete", True),
+        "repair": _repair_metadata(config),
         "model_spend": cumulative_spend.get(
             "model_spend",
             summary.get("model_spend", {}),
@@ -950,6 +951,23 @@ def _card_for_run(run_dir: Path, *, prior_ranking_file: str | Path | None) -> di
         "highlights": _highlight_candidates(extraction, run_metrics),
         "quality_gates": {"summary": behavior_audit.get("summary", {})},
         "audit_findings": behavior_audit.get("findings", []),
+    }
+
+
+def _repair_metadata(config: dict[str, Any]) -> dict[str, Any]:
+    metadata = config.get("metadata", {})
+    overrides = metadata.get("repair_parameter_overrides", {})
+    if not isinstance(overrides, dict):
+        overrides = {}
+    is_repair = bool(metadata.get("repair_source_run"))
+    uses_recovery_params = bool(metadata.get("repair_uses_recovery_params"))
+    return {
+        "is_repair": is_repair,
+        "uses_recovery_params": uses_recovery_params,
+        "parameter_overrides": overrides,
+        "runtime_sensitive": bool(
+            is_repair and (uses_recovery_params or overrides)
+        ),
     }
 
 

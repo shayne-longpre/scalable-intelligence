@@ -1,6 +1,6 @@
 {
   "name": "machine_society_evaluation_taxonomy",
-  "version": "2026-07-21.6",
+  "version": "2026-07-27.1",
   "description": "A compact, evolving taxonomy for coding how AI participants evaluate intelligence in machine-society experiments. Tags are intentionally behavioral and observable rather than claims about internal state.",
   "basis": [
     "Human cognitive assessment families: verbal comprehension, fluid reasoning, quantitative reasoning, working memory, processing speed, visual-spatial reasoning, crystallized knowledge, and social judgment.",
@@ -89,7 +89,7 @@
       "description": "Asks for similarities, definitions, analogies, conceptual distinctions, or abstract verbal relationships.",
       "human_basis": ["WAIS/WISC Similarities", "Vocabulary", "verbal comprehension"],
       "ai_basis": ["natural-language understanding", "analogy and abstraction tasks"],
-      "indicators": ["similarity", "similarities", "definition", "define the term", "give a definition", "analogy", "analogical reasoning", "metaphor", "conceptual distinction", "abstract relationship", "underlying principle"]
+      "indicators": ["similarity", "similarities", "definition", "define the term", "give a definition", "analogy", "analogical reasoning", "metaphor", "conceptual distinction", "abstract relationship", "underlying principle", "syntactic ambiguity", "structural interpretation", "different parse trees"]
     },
     {
       "id": "linguistic_rule_induction",
@@ -129,7 +129,7 @@
       "description": "Asks for arithmetic, algebra, probability, combinatorics, optimization, formal proof, or quantitative modeling.",
       "human_basis": ["WAIS Arithmetic", "Figure Weights", "GRE Quantitative Reasoning"],
       "ai_basis": ["GSM8K", "MATH", "AIME-style math"],
-      "indicators": ["math", "arithmetic", "algebra", "probability", "combinatorics", "calculate", "equation", "prove", "proof", "counting bound", "lower bound", "lower-bound", "modulo", "optimize", "expected value", "quantitative"]
+      "indicators": ["math", "arithmetic", "algebra", "probability", "combinatorics", "calculate", "equation", "prove", "proof", "counting bound", "lower bound", "lower-bound", "modulo", "optimize", "expected value", "quantitative", "correlation coefficient", "confidence interval", "statistical uncertainty", "bootstrap"]
     },
     {
       "id": "dimensional_unit_reasoning",
@@ -145,7 +145,7 @@
       "description": "Tests causal models, experimental design, hypothesis evaluation, physics/biology/chemistry reasoning, or evidence interpretation.",
       "human_basis": ["PISA science", "scientific reasoning"],
       "ai_basis": ["GPQA-style science QA", "scientific reasoning benchmarks"],
-      "indicators": ["experiment", "hypothesis", "causal inference", "causal model", "causal estimate", "causal effect", "mechanism", "physics", "inertial frame", "moment of inertia", "momentum-flux", "frictionless", "force-free", "chemistry", "biology", "scientific", "control group", "randomized trial", "potential outcomes", "treatment effect", "empirical", "study design", "follow-up study"]
+      "indicators": ["experiment", "hypothesis", "causal inference", "causal reasoning", "causal chain", "causal model", "causal estimate", "causal effect", "mechanism", "physics", "gravitational constant", "inertial frame", "moment of inertia", "momentum-flux", "frictionless", "force-free", "chemistry", "biology", "ecosystem", "scientific", "control group", "randomized trial", "potential outcomes", "treatment effect", "empirical", "study design", "follow-up study"]
     },
     {
       "id": "source_citation_verification",
@@ -161,7 +161,7 @@
       "description": "Asks for code, algorithms, debugging, complexity analysis, data structures, or program synthesis.",
       "human_basis": ["programming contest problems", "computer science exams"],
       "ai_basis": ["HumanEval", "MBPP", "APPS", "Codeforces-style benchmarks"],
-      "indicators": ["write code", "source code", "code snippet", "python code", "python function", "design an algorithm", "algorithmic complexity", "dynamic programming", "dynamic-programming", "time complexity", "space complexity", "complexity analysis", "BFS", "Dijkstra", "shortest-path solver", "state-space search", "debug", "bug", "data structure", "pseudocode", "program", "unit test"]
+      "indicators": ["write code", "source code", "code snippet", "python code", "python function", "design an algorithm", "decision algorithm", "algorithmic complexity", "dynamic programming", "dynamic-programming", "time complexity", "space complexity", "complexity analysis", "BFS", "Dijkstra", "shortest-path solver", "state-space search", "debug", "bug", "data structure", "pseudocode", "computer program", "program execution", "program output", "program semantics", "execution model", "unit test"]
     },
     {
       "id": "computer_systems_reasoning",
@@ -201,7 +201,7 @@
       "description": "Uses visual patterns, diagrams, spatial transformations, scene understanding, or perceptual detail.",
       "human_basis": ["WAIS Block Design", "Visual Puzzles", "visual processing"],
       "ai_basis": ["VLM perception and reasoning benchmarks"],
-      "indicators": ["diagram", "image", "visual", "spatial", "rotate", "shape", "ASCII grid", "coordinates", "pattern in the image", "figure", "scene", "perception"]
+      "indicators": ["diagram", "image", "visual", "spatial", "rotate", "rotation", "cube net", "shape", "ASCII grid", "coordinates", "pattern in the image", "figure", "scene", "perception"]
     },
     {
       "id": "reading_argument_comprehension",
@@ -249,7 +249,7 @@
       "description": "Asks the respondent to estimate confidence, identify uncertainty, assess its own limits, or update beliefs.",
       "human_basis": ["metacognition and calibration tasks"],
       "ai_basis": ["calibration", "self-knowledge and uncertainty benchmarks"],
-      "indicators": ["state your confidence", "estimate your confidence", "how confident", "confidence would change", "how sure", "calibrate", "self-assess", "uncertainty in your answer", "your own weakness", "update your belief", "what would change your mind"]
+      "indicators": ["state your confidence", "estimate your confidence", "how confident", "confidence would change", "how sure", "calibrate", "self-assess", "self-criticism", "self-correction", "question your own assumptions", "revised solution", "uncertainty in your answer", "your own weakness", "update your belief", "what would change your mind"]
     },
     {
       "id": "recursive_self_bias_probe",
@@ -297,6 +297,7 @@
       "description": "Requires choosing or using tools, APIs, search, execution, verification, or environment interaction.",
       "human_basis": ["practical problem solving", "work-sample tasks"],
       "ai_basis": ["tool-use and agent benchmarks", "web/task automation evaluations"],
+      "negative_indicators": ["no tool use", "without tool use", "do not use tools", "no tools"],
       "indicators": ["tool", "tool call", "use an API", "call the API", "API request", "web search", "search the web", "execute a command", "run the command", "verify with", "browser", "command line", "shell", "external resource"]
     }
   ]

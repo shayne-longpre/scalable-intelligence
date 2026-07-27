@@ -18,10 +18,10 @@ invent their own criteria and probes.
 | 2. Conversation dynamics | Complete | Separate preplanned battery progression from evidence-conditioned follow-up and topical change | Do evaluators deepen, broaden, or adapt as evidence accumulates? |
 | 3. Baseline freeze | Complete | Versioned adaptive-wave prompts, taxonomy, config, analysis schema, and three accepted replications | Can later experiments be compared without silent protocol drift? |
 | 4. Independent-judge ladder | Complete, including order replay and answer scoring | Sol and Fable independently rank the same 50 anonymous candidates, followed by a shared-evidence cross-over | Can capable models recover a broad external capability ordering? |
-| 5. Selective adaptivity | Three stress pilots complete | Four opening probes, direct per-probe comparison, cumulative evidence dossiers, bounded common follow-ups, and adaptive-decision traces | Can extra evidence resolve the difficult part of a ranking efficiently? |
+| 5. Selective adaptivity | Five-probe 50-model replication complete | Opening batteries, direct per-probe comparison, cumulative evidence dossiers, bounded common follow-ups, and adaptive-decision traces | Can extra evidence resolve the difficult part of a ranking efficiently? |
 | 5b. Probe-budget ablation | Initial pilot complete | Fresh evidence cards and rankings using only the first 2, 4, or 6 probes from one shared run | How much does additional probe evidence improve ranking accuracy? |
-| 6. Oversight frontier | Two six-judge panels and a three-judge exact-evidence order audit complete | Judges above, near, and below small candidate panels, with candidates on both sides of the judge's capability | Can a model recognize a system more capable than itself? |
-| 7. Judge-strategy scaling | Fixed-scale catalog scoring and two six-judge probe audits complete; systematic judge-capability comparison pending | Probe-type, difficulty, adaptation, and answer-quality comparisons across judge capability | Do stronger judges ask systematically different or more diagnostic questions? |
+| 6. Oversight frontier | Three waves, ten judges, answer repair, and pooled analysis complete | Judges above, near, and below small candidate panels, with candidates on both sides of the judge's capability | Can a model recognize a system more capable than itself? |
+| 7. Judge-strategy scaling | First systematic ten-judge comparison and two-judge catalog deep dive complete | Probe-type, difficulty, adaptation, and answer-quality comparisons across judge capability | Do stronger judges ask systematically different or more diagnostic questions? |
 | 8. Free vs. structured | Later exploratory study | Paired runs with the same roster, budgets, and external prior | What does round-robin structure improve or suppress? |
 | 9. Publication figures | Catalog results, fixed-scale heatmap, references, and audit sample generated | Auditable plots, tables, taxonomy, model provenance, and compact human-review samples | Which findings are robust, interpretable, and worth communicating? |
 | 10. Scale beyond 50 | Paused | Extend the archived-answer and panel machinery only if a research question requires it | Can the method rank a much larger catalog tractably? |
@@ -164,7 +164,8 @@ not intelligence judgments.
 
 The current baseline is one explainable loop:
 
-1. The judge authors four complementary probes before seeing answers.
+1. The judge authors several complementary probes before seeing answers. The
+   current catalog baseline uses five.
 2. Each probe goes unchanged to every candidate in the selected comparison set.
 3. The judge compares all answers to one probe and preserves concrete strengths,
    errors, implementation details, uncertainty, and a within-probe ordering.
@@ -309,29 +310,59 @@ links are in
 
 The third wave expands the study to ten judges and uses nine-candidate panels
 that contain five candidates above the judge wherever the catalog permits.
-Across all three waves, 22 panels ordered 466 of 612 candidate pairs correctly
-and placed 50 of 78 externally stronger candidates above anonymous self.
-Recognition reached 75% for candidates more than ten external-score points above
-the judge, but margin-bin intervals overlap and judge behavior is highly
-heterogeneous. There is no supported universal oversight threshold yet.
+The repaired pooled analysis orders 469 of 612 candidate pairs correctly
+(76.6%) and places 50 of 78 externally stronger candidates above anonymous
+self (64.1%). Symmetric candidate-versus-self accuracy is 109 of 152 (71.7%).
+Recognition is highest for margins above ten external-score points, but
+margin-bin intervals overlap and judge behavior remains heterogeneous. There is
+no supported universal oversight threshold yet.
 
-The third wave cost $32.07 across 621 model calls. Nineteen of 488 candidate
-answers were unavailable after bounded retries; each was a single-probe gap,
-none affected anonymous self, and every affected candidate retained at least
-four opening answers. The results and protocol caveats are in
+Eighteen of the third wave's 19 unavailable answers were recovered without
+changing model settings. One Fable answer remains unavailable because the
+provider repeatedly filtered the unchanged prompt. Raw and repaired outcomes
+are reported separately. The repaired pooled lineage cost $78.68 across 1,518
+model calls. Results and protocol caveats are in
 `docs/pilot_analysis_oversight_frontier_above_heavy_20260726.md`.
+
+## Five-Probe Catalog Replication
+
+The fresh Sol and Fable runs use five opening probes followed by two selective
+adaptive probes. Mean final pairwise accuracy remained stable, moving from
+81.9% to 82.3%, but the judges moved in opposite directions. Old-new rank
+agreement was 0.69 for Sol and 0.65 for Fable. Both fresh runs remained above
+92% on model pairs separated by at least ten external-score points.
+
+Neither judge improved materially after the five-probe checkpoint. Sol moved
+from 80.9% to 81.1%; Fable moved from 84.6% to 83.4%. This supports treating
+the opening battery as the clean primary endpoint and adaptive rounds as
+explicitly evaluated extensions. See
+`docs/pilot_analysis_catalog_ladder50_opening5_20260727.md`.
+
+## Probe-Evolution Study
+
+The fixed-protocol comparison now covers 60 probes from ten judges. Stronger
+judges did not cover substantially more topical families and were not more
+accurate on pairs they explicitly separated. They did use more ties on
+saturated probes and articulated a broader set of adaptive intentions. The
+single adaptive probe improved three rankings, left four unchanged, and
+worsened three.
+
+The separate 50-model deep dive adds 14 Sol and Fable probes. Thirteen were
+marked informative, but the adaptive probes did not improve either global
+ranking materially. See `docs/pilot_analysis_probe_evolution_20260727.md`.
 
 ## Immediate Next Steps
 
-1. If archived-evidence replay is approved, retry only the 19 unavailable
-   third-wave answer cells and publish raw and repaired protocol-health results
-   separately.
-2. Rerun the Sol and Fable 50-model catalog openings with five probes, preserving
-   every answer for evidence-budget and cross-judge analysis.
-3. Compare probe repertoire, validity, difficulty, adaptation, and self-placement
-   behavior across all completed judge runs.
-4. Add oversight panels only where they increase independent support for
-   above-judge recognition; do not fit a smooth frontier to heterogeneous local
-   panels yet.
+1. Run repeated matched oversight panels focused on candidate-versus-judge
+   comparisons above self. Share exact candidate evidence where possible so
+   judge behavior is not confounded with different probe answers.
+2. Cross probe design and evidence interpretation: have judges at several
+   capability levels evaluate the same archived answers to probes authored by
+   stronger and weaker judges.
+3. Predeclare the five-probe opening as the primary catalog endpoint and treat
+   each adaptive checkpoint as a separate secondary analysis.
+4. Investigate explicit ties as a calibration behavior using matched panels;
+   do not assume either that forced ordering is better or that caution implies
+   superior judgment.
 5. Keep structured-versus-free councils as later exploratory work. Do not scale
    beyond 50 candidates unless the substantive research question requires it.

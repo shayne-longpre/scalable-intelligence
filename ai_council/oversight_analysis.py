@@ -56,6 +56,8 @@ def discover_study_attempts(
         except (OSError, json.JSONDecodeError):
             continue
         metadata = config.get("metadata", {})
+        if metadata.get("exclude_from_study_analysis"):
+            continue
         condition_id = metadata.get("study_condition")
         if condition_id not in matches:
             continue
@@ -169,6 +171,8 @@ def pair_observations(
     observations = []
     for left_index, left in enumerate(participants):
         for right in participants[left_index + 1 :]:
+            if scores[left] == scores[right]:
+                continue
             score_gap = abs(scores[left] - scores[right])
             correct = (scores[left] > scores[right]) == (
                 positions[left] < positions[right]
@@ -392,7 +396,10 @@ def render_oversight_report(summary: Mapping[str, Any]) -> str:
   {aggregate['structured_repair_count']} structured-JSON repairs,
   {aggregate['visible_text_retry_count']} visible-text retries, and
   {aggregate['unavailable_answer_count']} recorded unavailable answers. Failed
-  attempts are included in the ${aggregate['reported_cost_usd']:.2f} total.</p>
+  attempts are included in the ${aggregate['reported_cost_usd']:.2f} total.
+  {aggregate['selected_repair_count']} selected condition runs replayed missing
+  evidence; {aggregate['runtime_sensitive_repair_count']} used recovery parameters
+  or a recorded model-specific override.</p>
 
   <h2>Interpretation</h2>
   <p class="note">{escape(caveat)}</p>
@@ -440,6 +447,7 @@ def _analyze_condition(
     analysis = _load_json(analysis_path)
     extraction = _load_json(run_dir / "posthoc_extraction.json")
     run_summary = _load_json(run_dir / "run_summary.json")
+    run_config = _load_json(run_dir / "config.json")
     transcript = _load_jsonl(run_dir / "transcript.jsonl")
     prior = analysis["prior_agreement"]
     participant_models = prior["participant_model_ids"]
@@ -502,6 +510,7 @@ def _analyze_condition(
         bool(row.get("metadata", {}).get("answer_unavailable"))
         for row in transcript
     )
+    repair_metadata = repair_runtime_metadata(run_config)
     return {
         "id": condition["id"],
         "judge_model": judge_model,
@@ -538,8 +547,26 @@ def _analyze_condition(
         "structured_repair_count": structured_repairs,
         "visible_text_retry_count": visible_retries,
         "unavailable_answer_count": unavailable_answers,
+        **repair_metadata,
         "run_model_calls": int(run_summary.get("model_calls", 0)),
         "model_calls": total_model_calls,
+    }
+
+
+def repair_runtime_metadata(config: Mapping[str, Any]) -> dict[str, Any]:
+    metadata = config.get("metadata", {})
+    is_repair = bool(metadata.get("repair_source_run"))
+    uses_recovery_params = bool(metadata.get("repair_uses_recovery_params"))
+    parameter_overrides = metadata.get("repair_parameter_overrides", {})
+    if not isinstance(parameter_overrides, Mapping):
+        parameter_overrides = {}
+    return {
+        "selected_run_is_repair": is_repair,
+        "repair_uses_recovery_params": uses_recovery_params,
+        "repair_parameter_overrides": dict(parameter_overrides),
+        "runtime_sensitive_repair": bool(
+            is_repair and (uses_recovery_params or parameter_overrides)
+        ),
     }
 
 
@@ -703,6 +730,12 @@ def _aggregate(conditions: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         "unavailable_answer_count": sum(
             condition["unavailable_answer_count"] for condition in conditions
         ),
+        "selected_repair_count": sum(
+            condition["selected_run_is_repair"] for condition in conditions
+        ),
+        "runtime_sensitive_repair_count": sum(
+            condition["runtime_sensitive_repair"] for condition in conditions
+        ),
         "model_calls": sum(condition["model_calls"] for condition in conditions),
     }
 
@@ -743,6 +776,8 @@ def _judge_row(condition: Mapping[str, Any]) -> str:
         recovery.append(f"{condition['visible_text_retry_count']} text retry")
     if condition["unavailable_answer_count"]:
         recovery.append(f"{condition['unavailable_answer_count']} unavailable")
+    if condition["runtime_sensitive_repair"]:
+        recovery.append("runtime-sensitive repair")
     recovery_text = " · ".join(recovery) if recovery else "none"
     return (
         "<tr>"

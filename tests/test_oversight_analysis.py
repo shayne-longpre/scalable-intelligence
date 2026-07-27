@@ -9,6 +9,7 @@ from ai_council.oversight_analysis import (
     discover_study_runs,
     judgment_metrics,
     pair_observations,
+    repair_runtime_metadata,
     summarize_pair_observations,
     visible_text_retry_count,
 )
@@ -88,6 +89,16 @@ class OversightAnalysisTests(unittest.TestCase):
             [1, 2, 0, 3],
         )
 
+    def test_pair_observations_ignore_external_score_ties(self) -> None:
+        observations = pair_observations(
+            ["a", "b", "c"],
+            {"a": 2.0, "b": 2.0, "c": 1.0},
+            judge_score=0.0,
+        )
+
+        self.assertEqual(len(observations), 2)
+        self.assertTrue(all(row["score_gap"] == 1.0 for row in observations))
+
     def test_self_demotion_does_not_count_as_correct_self_relative_oversight(self) -> None:
         scores = {
             "strong_a": 60.0,
@@ -126,6 +137,37 @@ class OversightAnalysisTests(unittest.TestCase):
             1,
         )
         self.assertEqual(visible_text_retry_count({}), 0)
+
+    def test_repair_runtime_metadata_distinguishes_timeout_only_replay(self) -> None:
+        timeout_only = repair_runtime_metadata(
+            {
+                "metadata": {
+                    "repair_source_run": "source",
+                    "repair_uses_recovery_params": False,
+                }
+            }
+        )
+        runtime_changed = repair_runtime_metadata(
+            {
+                "metadata": {
+                    "repair_source_run": "source",
+                    "repair_uses_recovery_params": True,
+                    "repair_parameter_overrides": {
+                        "candidate_p16": {"max_tokens": 40000}
+                    },
+                }
+            }
+        )
+
+        self.assertTrue(timeout_only["selected_run_is_repair"])
+        self.assertFalse(timeout_only["runtime_sensitive_repair"])
+        self.assertTrue(runtime_changed["runtime_sensitive_repair"])
+        self.assertEqual(
+            runtime_changed["repair_parameter_overrides"]["candidate_p16"][
+                "max_tokens"
+            ],
+            40000,
+        )
 
     def test_discovery_prefers_repairs_only_when_they_reduce_missing_evidence(self) -> None:
         study = {"conditions": [{"id": "alpha"}, {"id": "beta"}]}
@@ -179,6 +221,14 @@ class OversightAnalysisTests(unittest.TestCase):
                 "completed",
                 study_file="studies/new.json",
             )
+            excluded = root / "20260100_excluded"
+            _write_run(
+                excluded,
+                "shared",
+                "completed",
+                study_file="studies/new.json",
+                exclude_from_analysis=True,
+            )
 
             discovered = discover_study_runs(
                 study,
@@ -197,6 +247,7 @@ def _write_run(
     unavailable_answers: int = 0,
     is_repair: bool = False,
     study_file: str | None = None,
+    exclude_from_analysis: bool = False,
 ) -> None:
     path.mkdir()
     metadata = {"study_condition": condition_id}
@@ -204,6 +255,8 @@ def _write_run(
         metadata["repair_source_run"] = "source"
     if study_file:
         metadata["study_file"] = study_file
+    if exclude_from_analysis:
+        metadata["exclude_from_study_analysis"] = True
     (path / "config.json").write_text(
         json.dumps({"metadata": metadata}),
         encoding="utf-8",

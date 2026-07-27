@@ -49,6 +49,47 @@ class TaxonomyTests(unittest.TestCase):
         self.assertNotIn("crystallized_knowledge_recall", question_types)
         self.assertNotIn("tool_use_external_action", question_types)
 
+    def test_question_types_respect_explicit_exclusions(self) -> None:
+        taxonomy = load_taxonomy()
+        entry = {
+            "content": (
+                "Rank the written answers alone. Use no tools, browser, or "
+                "external benchmarks."
+            )
+        }
+        hits = taxonomy_hits_for_entry(entry, taxonomy)
+        question_types = {
+            hit["tag"] for hit in hits if hit["dimension"] == "question_type"
+        }
+        self.assertNotIn("tool_use_external_action", question_types)
+
+    def test_policy_program_is_not_mislabeled_as_coding(self) -> None:
+        taxonomy = load_taxonomy()
+        entry = {
+            "content": (
+                "Estimate the causal effect of a randomized training program "
+                "and report a confidence interval."
+            )
+        }
+        hits = taxonomy_hits_for_entry(entry, taxonomy)
+        question_types = {
+            hit["tag"] for hit in hits if hit["dimension"] == "question_type"
+        }
+        self.assertIn("stem_scientific_reasoning", question_types)
+        self.assertIn("quantitative_math_reasoning", question_types)
+        self.assertNotIn("coding_algorithmic_reasoning", question_types)
+
+    def test_cube_rotation_is_spatial_reasoning(self) -> None:
+        taxonomy = load_taxonomy()
+        hits = taxonomy_hits_for_entry(
+            {"content": "Fold this cube net and infer the face after a rotation."},
+            taxonomy,
+        )
+        question_types = {
+            hit["tag"] for hit in hits if hit["dimension"] == "question_type"
+        }
+        self.assertIn("spatial_visual_perceptual", question_types)
+
     def test_question_types_ignore_ambiguous_domain_words(self) -> None:
         taxonomy = load_taxonomy()
         examples = [
@@ -209,6 +250,24 @@ class TaxonomyTests(unittest.TestCase):
         hits = taxonomy_hits_for_entry(entry, taxonomy)
         question_types = {hit["tag"] for hit in hits if hit["dimension"] == "question_type"}
         self.assertIn("philosophical_conceptual_analysis", question_types)
+
+    def test_taxonomy_covers_observed_probe_wording(self) -> None:
+        taxonomy = load_taxonomy()
+        cases = {
+            "Construct a sentence with three distinct syntactic ambiguity parse trees.": (
+                "verbal_abstraction_similarity"
+            ),
+            "Use self-criticism, question your own assumptions, and give a revised solution.": (
+                "metacognitive_calibration_probe"
+            ),
+            "Trace the causal chain after changing the gravitational constant.": (
+                "stem_scientific_reasoning"
+            ),
+        }
+
+        for content, expected in cases.items():
+            hits = taxonomy_hits_for_entry({"content": content}, taxonomy)
+            self.assertIn(expected, {hit["tag"] for hit in hits})
 
     def test_taxonomy_distinguishes_language_induction_from_multilinguality(self) -> None:
         taxonomy = load_taxonomy()

@@ -88,9 +88,31 @@ class ConfigTests(unittest.TestCase):
             for model in catalog["models"]
         }
 
-        for filename, judge_route in [
-            ("catalog_ladder50_sol.openrouter.json", "openai/gpt-5.6-sol"),
-            ("catalog_ladder50_fable.openrouter.json", "anthropic/claude-fable-5"),
+        for filename, judge_route, schedule, timeout in [
+            (
+                "catalog_ladder50_sol.openrouter.json",
+                "openai/gpt-5.6-sol",
+                [4, 1, 1],
+                300,
+            ),
+            (
+                "catalog_ladder50_fable.openrouter.json",
+                "anthropic/claude-fable-5",
+                [4, 1, 1],
+                300,
+            ),
+            (
+                "catalog_ladder50_sol_opening5.openrouter.json",
+                "openai/gpt-5.6-sol",
+                [5, 1, 1],
+                600,
+            ),
+            (
+                "catalog_ladder50_fable_opening5.openrouter.json",
+                "anthropic/claude-fable-5",
+                [5, 1, 1],
+                600,
+            ),
         ]:
             with self.subTest(filename=filename):
                 config = load_experiment_config(ROOT / "examples" / filename)
@@ -110,13 +132,13 @@ class ConfigTests(unittest.TestCase):
                     route_limit = route_limits[model.model]
                     expected_limit = min(40000, route_limit) if route_limit else 40000
                     self.assertEqual(model.params.get("max_tokens"), expected_limit)
-                self.assertEqual(phase.probe_schedule, [4, 1, 1])
+                self.assertEqual(phase.probe_schedule, schedule)
                 self.assertEqual(phase.comparison_order, "seeded_shuffle")
                 self.assertEqual(phase.incomplete_answer_policy, "record_unavailable")
                 self.assertTrue(config.run.continue_batch_on_call_error)
                 self.assertEqual(
                     config.providers["openrouter_candidates"].timeout_seconds,
-                    300,
+                    timeout,
                 )
                 self.assertEqual(config.providers["openrouter_judge"].timeout_seconds, 900)
                 self.assertTrue(
@@ -370,10 +392,25 @@ class ConfigTests(unittest.TestCase):
             phase["preauthored_evidence_file"] = "old-comparisons.jsonl"
             phase["preauthored_ranking_file"] = "old-rankings.jsonl"
             (source_run / "config.json").write_text(json.dumps(source_config))
+            participant_ref = source_config["participants"][0]["model"]
+            participant_route = next(
+                model["model"]
+                for model in source_config["models"]
+                if model["name"] == participant_ref
+            )
+            parameter_override = {
+                "max_tokens": 12000,
+                "chat_template_kwargs": {"enable_thinking": False},
+            }
 
             repaired = build_replay_repair_config(
                 source_run,
                 retry_unavailable_rounds=[2, 1, 2],
+                candidate_timeout_seconds=900,
+                use_recovery_params=True,
+                model_parameter_overrides={
+                    participant_route: parameter_override
+                },
             )
             source_config["providers"] = {
                 provider["name"]: provider for provider in source_config["providers"]
@@ -383,6 +420,14 @@ class ConfigTests(unittest.TestCase):
                 source_run,
                 retry_unavailable_rounds=[2],
             )
+            with self.assertRaisesRegex(ValueError, "did not match"):
+                build_replay_repair_config(
+                    source_run,
+                    retry_unavailable_rounds=[1],
+                    model_parameter_overrides={
+                        "provider/missing": {"max_tokens": 10}
+                    },
+                )
 
         phase = repaired["protocol"]["phases"][0]
         self.assertEqual(
@@ -400,6 +445,20 @@ class ConfigTests(unittest.TestCase):
             if provider["name"] == "openrouter_candidates"
         )
         self.assertEqual(candidate_provider["request_retries"], 1)
+        self.assertEqual(candidate_provider["timeout_seconds"], 900)
+        participant_ref = repaired["participants"][0]["model"]
+        participant_model = next(
+            model
+            for model in repaired["models"]
+            if model["name"] == participant_ref
+        )
+        self.assertEqual(participant_model["params"], participant_model["recovery_params"])
+        self.assertEqual(participant_model["params"], parameter_override)
+        self.assertTrue(repaired["metadata"]["repair_uses_recovery_params"])
+        self.assertEqual(
+            repaired["metadata"]["repair_parameter_overrides"],
+            {participant_route: parameter_override},
+        )
         self.assertEqual(
             repaired_from_resolved_config["providers"]["openrouter_candidates"][
                 "request_retries"
