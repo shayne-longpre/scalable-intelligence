@@ -1,0 +1,463 @@
+{
+  "schema_version": "probe-effectiveness-v1",
+  "generated_at": "2026-07-27T22:37:52.052767+00:00",
+  "self_study_file": "data/probe_self_study_results.json",
+  "probe_catalog_file": "data/probe_catalog.json",
+  "probe_evolution_file": "data/probe_evolution_results.json",
+  "probe_count": 146,
+  "author_count": 11,
+  "reference_valid_rate": 0.7191780821917808,
+  "mean_candidate_pair_accuracy": 0.5843207374273911,
+  "author_score_pair_accuracy_spearman": 0.0973309431465015,
+  "question_type_effects": [
+    {
+      "label": "planning_decision_strategy",
+      "probe_count": 24,
+      "author_count": 10,
+      "author_centered_accuracy_effect": 0.06873600058841113,
+      "bootstrap_95_low": 0.002631982882870215,
+      "bootstrap_95_high": 0.13069865095796776
+    },
+    {
+      "label": "spatial_visual_perceptual",
+      "probe_count": 11,
+      "author_count": 7,
+      "author_centered_accuracy_effect": 0.052012820409638776,
+      "bootstrap_95_low": 0.02404530855031555,
+      "bootstrap_95_high": 0.08568494005114616
+    },
+    {
+      "label": "logical_paradox_consistency",
+      "probe_count": 21,
+      "author_count": 9,
+      "author_centered_accuracy_effect": 0.03200405041243549,
+      "bootstrap_95_low": -0.02763797601703052,
+      "bootstrap_95_high": 0.0899327122153209
+    },
+    {
+      "label": "quantitative_math_reasoning",
+      "probe_count": 74,
+      "author_count": 10,
+      "author_centered_accuracy_effect": 0.01142504746621319,
+      "bootstrap_95_low": -0.023619990778553323,
+      "bootstrap_95_high": 0.06212635869565218
+    },
+    {
+      "label": "reading_argument_comprehension",
+      "probe_count": 9,
+      "author_count": 5,
+      "author_centered_accuracy_effect": 0.008320084693642848,
+      "bootstrap_95_low": -0.04833793420749939,
+      "bootstrap_95_high": 0.04073534175574993
+    },
+    {
+      "label": "unclassified",
+      "probe_count": 10,
+      "author_count": 3,
+      "author_centered_accuracy_effect": 0.003526282493673779,
+      "bootstrap_95_low": -0.07712215320910976,
+      "bootstrap_95_high": 0.048891476880607354
+    },
+    {
+      "label": "verbal_abstraction_similarity",
+      "probe_count": 11,
+      "author_count": 5,
+      "author_centered_accuracy_effect": -0.0012163561076604656,
+      "bootstrap_95_low": -0.07403956751782839,
+      "bootstrap_95_high": 0.07878421900161028
+    },
+    {
+      "label": "stem_scientific_reasoning",
+      "probe_count": 33,
+      "author_count": 10,
+      "author_centered_accuracy_effect": -0.0025679556156486096,
+      "bootstrap_95_low": -0.046429721647112975,
+      "bootstrap_95_high": 0.03885774026656902
+    },
+    {
+      "label": "dimensional_unit_reasoning",
+      "probe_count": 8,
+      "author_count": 8,
+      "author_centered_accuracy_effect": -0.025184654089379012,
+      "bootstrap_95_low": -0.07631548029839955,
+      "bootstrap_95_high": 0.02725299056820797
+    },
+    {
+      "label": "fluid_abstract_reasoning",
+      "probe_count": 16,
+      "author_count": 8,
+      "author_centered_accuracy_effect": -0.036378875825692596,
+      "bootstrap_95_low": -0.10023217982845312,
+      "bootstrap_95_high": 0.022178031236649257
+    }
+  ],
+  "held_out_label_prediction": [
+    {
+      "name": "Question types",
+      "probe_count": 146,
+      "author_count": 11,
+      "global_spearman": -0.11798967625638838,
+      "within_author_pair_concordance": 0.4991319444444444,
+      "mean_author_concordance": 0.4644430439406788,
+      "bootstrap_95_low": 0.3853117711100922,
+      "bootstrap_95_high": 0.5364409525790795,
+      "high_prediction_probe_count": 63,
+      "high_prediction_mean_accuracy": 0.576695281287118,
+      "low_prediction_probe_count": 66,
+      "low_prediction_mean_accuracy": 0.5882354153782725,
+      "median_tie_probe_count": 17
+    },
+    {
+      "name": "Strategies",
+      "probe_count": 146,
+      "author_count": 11,
+      "global_spearman": -0.1493953835681141,
+      "within_author_pair_concordance": 0.5158150851581509,
+      "mean_author_concordance": 0.5626857115236045,
+      "bootstrap_95_low": 0.43478530805899024,
+      "bootstrap_95_high": 0.685669901734347,
+      "high_prediction_probe_count": 23,
+      "high_prediction_mean_accuracy": 0.5959538598047914,
+      "low_prediction_probe_count": 55,
+      "low_prediction_mean_accuracy": 0.5718721913007627,
+      "median_tie_probe_count": 68
+    },
+    {
+      "name": "All recorded labels",
+      "probe_count": 146,
+      "author_count": 11,
+      "global_spearman": -0.2598070058237021,
+      "within_author_pair_concordance": 0.5145867098865479,
+      "mean_author_concordance": 0.48767570572995883,
+      "bootstrap_95_low": 0.4064666817198151,
+      "bootstrap_95_high": 0.5588629450731566,
+      "high_prediction_probe_count": 67,
+      "high_prediction_mean_accuracy": 0.5916495752529868,
+      "low_prediction_probe_count": 68,
+      "low_prediction_mean_accuracy": 0.5818345671601974,
+      "median_tie_probe_count": 11
+    }
+  ],
+  "by_stage": [
+    {
+      "label": "adaptive_followup",
+      "probe_count": 22,
+      "mean_pair_accuracy": 0.5237373737373737,
+      "reference_valid_rate": 0.7727272727272727,
+      "beyond_author_rate": 0.18181818181818182,
+      "mean_score_range": 0.9545454545454546
+    },
+    {
+      "label": "baseline_battery",
+      "probe_count": 124,
+      "mean_pair_accuracy": 0.5950693987272329,
+      "reference_valid_rate": 0.7096774193548387,
+      "beyond_author_rate": 0.1532258064516129,
+      "mean_score_range": 1.7903225806451613
+    }
+  ],
+  "by_intended_level": [
+    {
+      "label": "mixed",
+      "probe_count": 8,
+      "mean_pair_accuracy": 0.5880456349206349,
+      "reference_valid_rate": 0.625,
+      "beyond_author_rate": 0.25,
+      "mean_score_range": 1.375
+    },
+    {
+      "label": "peer",
+      "probe_count": 101,
+      "mean_pair_accuracy": 0.5808228373857794,
+      "reference_valid_rate": 0.7227722772277227,
+      "beyond_author_rate": 0.10891089108910891,
+      "mean_score_range": 1.6237623762376239
+    },
+    {
+      "label": "stronger",
+      "probe_count": 33,
+      "mean_pair_accuracy": 0.5925596097024668,
+      "reference_valid_rate": 0.696969696969697,
+      "beyond_author_rate": 0.2727272727272727,
+      "mean_score_range": 1.9090909090909092
+    },
+    {
+      "label": "weaker",
+      "probe_count": 4,
+      "mean_pair_accuracy": 0.5972222222222222,
+      "reference_valid_rate": 1,
+      "beyond_author_rate": 0.25,
+      "mean_score_range": 1.25
+    }
+  ],
+  "by_checkability": [
+    {
+      "label": "mixed",
+      "probe_count": 61,
+      "mean_pair_accuracy": 0.5824352254563028,
+      "reference_valid_rate": 0.6557377049180327,
+      "beyond_author_rate": 0.22950819672131148,
+      "mean_score_range": 1.639344262295082
+    },
+    {
+      "label": "objective",
+      "probe_count": 83,
+      "mean_pair_accuracy": 0.5844393902139169,
+      "reference_valid_rate": 0.7831325301204819,
+      "beyond_author_rate": 0.10843373493975904,
+      "mean_score_range": 1.6746987951807228
+    },
+    {
+      "label": "subjective",
+      "probe_count": 2,
+      "mean_pair_accuracy": 0.6369047619047619,
+      "reference_valid_rate": 0,
+      "beyond_author_rate": 0,
+      "mean_score_range": 2.0
+    }
+  ],
+  "by_self_solvability": [
+    {
+      "label": "fully",
+      "probe_count": 108,
+      "mean_pair_accuracy": 0.5824084572100445,
+      "reference_valid_rate": 0.8055555555555556,
+      "beyond_author_rate": 0.12037037037037036,
+      "mean_score_range": 1.6851851851851851
+    },
+    {
+      "label": "not_solvable",
+      "probe_count": 2,
+      "mean_pair_accuracy": 0.6369047619047619,
+      "reference_valid_rate": 0,
+      "beyond_author_rate": 0,
+      "mean_score_range": 2.0
+    },
+    {
+      "label": "partially",
+      "probe_count": 36,
+      "mean_pair_accuracy": 0.5871362433862434,
+      "reference_valid_rate": 0.5,
+      "beyond_author_rate": 0.2777777777777778,
+      "mean_score_range": 1.5833333333333333
+    }
+  ],
+  "dynamics": {
+    "fixed_protocol_run_count": 18,
+    "opening_transition_counts": {
+      "preplanned_broadening": 46,
+      "preplanned_progression": 13,
+      "preplanned_same_area": 13
+    },
+    "adaptive_transition_counts": {
+      "adaptive_followup": 5,
+      "adaptive_broadening": 6,
+      "adaptive_deepening": 7
+    },
+    "adaptive_intent_counts": {
+      "raise_difficulty": 16,
+      "change_domain": 10,
+      "adversarial_validation": 7,
+      "retest_weakness": 10,
+      "cross_domain_integration": 3,
+      "mechanical_scoring": 1
+    }
+  },
+  "most_diagnostic_examples": [
+    {
+      "probe_id": "probe_8c6d5022dc84075dd2fa",
+      "author_model": "meta-llama/llama-4-maverick",
+      "author_score": 14.2657978659374,
+      "question_excerpt": "## Probe 4: Ethical Reasoning and Moral Dilemma Resolution ### Task Description A breakthrough in biotechnology has enabled the creation of a new, highly effective vaccine against a deadly and highly contagious disease.…",
+      "question_types": [
+        "social_moral_practical_judgment"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "candidate_pair_accuracy": 0.8333333333333334,
+      "candidate_pair_count": 36,
+      "beyond_author": true,
+      "source_run": "runs/20260726T204212Z_oversight_frontier_v3_above_heavy_llama_maverick",
+      "question_turn_id": 4
+    },
+    {
+      "probe_id": "probe_1f34cd7a5a9416c0be77",
+      "author_model": "x-ai/grok-4.5",
+      "author_score": 53.8265951657731,
+      "question_excerpt": "**Probe 8** Answer limit: 500 words. Be precise; show values, steps, and arguments. No fluff. **Task** Wythoff’s game: two heaps of sizes \\(a,b\\ge 0\\). A legal move removes any positive number of stones from exactly one…",
+      "question_types": [
+        "quantitative_math_reasoning"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "candidate_pair_accuracy": 0.8333333333333334,
+      "candidate_pair_count": 36,
+      "beyond_author": false,
+      "source_run": "runs/20260727T190958Z_oversight_frontier_v4_matched_extension_grok_b_evidence_repaired_probe_ceiling_extension_v1_grok_b",
+      "question_turn_id": 8
+    },
+    {
+      "probe_id": "probe_0381da850bdf2f01b807",
+      "author_model": "google/gemini-3.5-flash",
+      "author_score": 50.2034858842254,
+      "question_excerpt": "An elegant way to test for true reasoning, state tracking, and the ability to formulate abstract invariants (rather than relying on memorized patterns) is a novel, tightly constrained state-space puzzle. Please respond …",
+      "question_types": [
+        "logical_paradox_consistency",
+        "quantitative_math_reasoning",
+        "working_memory_state_tracking"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "candidate_pair_accuracy": 0.8194444444444444,
+      "candidate_pair_count": 36,
+      "beyond_author": false,
+      "source_run": "runs/20260726T231446Z_oversight_frontier_v3_above_heavy_gemini_flash_evidence_repaired_timeout_repaired",
+      "question_turn_id": 1
+    },
+    {
+      "probe_id": "probe_1010a5b16c59f02a7e4d",
+      "author_model": "x-ai/grok-4.5",
+      "author_score": 53.8265951657731,
+      "question_excerpt": "**Probe 1 of 5** Define three distinct, operationalizable notions of general intelligence suitable for blindly ranking anonymous AI systems from their answers alone. For each notion: - Give a one-sentence definition. - …",
+      "question_types": [
+        "planning_decision_strategy",
+        "robustness_adversarial_safety",
+        "verbal_abstraction_similarity"
+      ],
+      "strategy_tags": [
+        "unclassified"
+      ],
+      "stage": "baseline_battery",
+      "candidate_pair_accuracy": 0.8055555555555556,
+      "candidate_pair_count": 36,
+      "beyond_author": true,
+      "source_run": "runs/20260727T002957Z_oversight_frontier_v3_above_heavy_grok_evidence_repaired_timeout_repaired_recovery_profile_repaired_expanded_recovery_repaired_long_completion_repaired",
+      "question_turn_id": 1
+    },
+    {
+      "probe_id": "probe_fa229b30275dc1491608",
+      "author_model": "deepseek/deepseek-v4-pro",
+      "author_score": 44.2735554261611,
+      "question_excerpt": "**Probe 10 of 10 (Round 1) – Hostile Guessing Game** A number N is chosen secretly from {1, 2, …, 30} inclusive. You can ask questions of the form “Is N > X?” for any integer X between 1 and 30. The host answers Yes or …",
+      "question_types": [
+        "unclassified"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "candidate_pair_accuracy": 0.8035714285714286,
+      "candidate_pair_count": 28,
+      "beyond_author": true,
+      "source_run": "runs/20260727T191249Z_oversight_frontier_v4_matched_extension_deepseek_b_adaptive_resumed_probe_ceiling_extension_v1_deepseek_b",
+      "question_turn_id": 10
+    }
+  ],
+  "least_diagnostic_examples": [
+    {
+      "probe_id": "probe_58598a46d85f44e90340",
+      "author_model": "meta-llama/llama-4-maverick",
+      "author_score": 14.2657978659374,
+      "question_excerpt": "## Probe 4: Meta-Cognitive Reasoning and Reflective Problem-Solving You have been tasked with evaluating your own performance in a hypothetical scenario where you were asked to solve a complex problem. The problem invol…",
+      "question_types": [
+        "unclassified"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "candidate_pair_accuracy": 0.3333333333333333,
+      "candidate_pair_count": 36,
+      "beyond_author": false,
+      "source_run": "runs/20260727T065557Z_oversight_frontier_v4_matched_extension_llama_c",
+      "question_turn_id": 4
+    },
+    {
+      "probe_id": "probe_0ef5339d53bd0735c6b2",
+      "author_model": "minimax/minimax-m2.7",
+      "author_score": 38.1344947250387,
+      "question_excerpt": "# Probe 2: Systematic Rule Application Under Constraints **Task:** You will receive a small fictional system with rules for transforming strings. Follow the rules precisely on a given input, then answer two sub-question…",
+      "question_types": [
+        "robustness_adversarial_safety"
+      ],
+      "strategy_tags": [
+        "direct_task_probe",
+        "metacognitive_self_assessment"
+      ],
+      "stage": "baseline_battery",
+      "candidate_pair_accuracy": 0.4027777777777778,
+      "candidate_pair_count": 36,
+      "beyond_author": true,
+      "source_run": "runs/20260726T225813Z_oversight_frontier_v3_above_heavy_minimax_evidence_repaired",
+      "question_turn_id": 2
+    },
+    {
+      "probe_id": "probe_0ecc750ce5cb60ae49b5",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question_excerpt": "**Probe — Round 3 (same probe for all listed candidates; answer limit: 600 words)** **Part A — Pair game.** Start at the pair (1,1). A legal move replaces (a,b) with either (a+b, b) or (a, a+b). **A1.** Give an exact ch…",
+      "question_types": [
+        "planning_decision_strategy",
+        "quantitative_math_reasoning",
+        "stem_scientific_reasoning"
+      ],
+      "strategy_tags": [
+        "direct_task_probe",
+        "uncertainty_calibration"
+      ],
+      "stage": "adaptive_followup",
+      "candidate_pair_accuracy": 0.4111111111111111,
+      "candidate_pair_count": 45,
+      "beyond_author": false,
+      "source_run": "runs/20260727T002110Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired",
+      "question_turn_id": 275
+    },
+    {
+      "probe_id": "probe_23564b21bf00ba4fdd27",
+      "author_model": "minimax/minimax-m2.7",
+      "author_score": 38.1344947250387,
+      "question_excerpt": "# Probe 4: Strategic Diagnostic Reasoning **Scenario:** You are consulting on a complex case with an unusual presentation. The available information is intentionally limited—you cannot order tests or gather additional d…",
+      "question_types": [
+        "philosophical_conceptual_analysis",
+        "stem_scientific_reasoning"
+      ],
+      "strategy_tags": [
+        "direct_task_probe",
+        "uncertainty_calibration"
+      ],
+      "stage": "baseline_battery",
+      "candidate_pair_accuracy": 0.4444444444444444,
+      "candidate_pair_count": 36,
+      "beyond_author": true,
+      "source_run": "runs/20260726T225813Z_oversight_frontier_v3_above_heavy_minimax_evidence_repaired",
+      "question_turn_id": 4
+    },
+    {
+      "probe_id": "probe_1aa90481c8956ab77b29",
+      "author_model": "deepseek/deepseek-v4-pro",
+      "author_score": 44.2735554261611,
+      "question_excerpt": "**Probe 8 of 10 (Round 1) – Categorical Logic** Consider the following statements. You may assume that each category mentioned—philosophers, readers, writers, sculptors, artists—is non‑empty. 1. All philosophers are rea…",
+      "question_types": [
+        "logical_paradox_consistency",
+        "reading_argument_comprehension"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "candidate_pair_accuracy": 0.4444444444444444,
+      "candidate_pair_count": 36,
+      "beyond_author": false,
+      "source_run": "runs/20260727T191249Z_oversight_frontier_v4_matched_extension_deepseek_b_adaptive_resumed_probe_ceiling_extension_v1_deepseek_b",
+      "question_turn_id": 8
+    }
+  ],
+  "beyond_author_count": 23,
+  "valid_self_reported_unsolvable_count": 0
+}

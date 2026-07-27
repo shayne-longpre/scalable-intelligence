@@ -31,6 +31,12 @@ DEFAULT_OVERSIGHT_SUMMARY = ROOT / "data" / "oversight_frontier_results.json"
 DEFAULT_OVERSIGHT_SYNTHESIS = (
     ROOT / "data" / "oversight_frontier_synthesis_matched_results.json"
 )
+DEFAULT_RESEARCH_SYNTHESIS = (
+    ROOT / "data" / "research_question_synthesis.json"
+)
+DEFAULT_PROBE_EFFECTIVENESS = (
+    ROOT / "data" / "probe_effectiveness_results.json"
+)
 ORDER_REPLAY_RUN = (
     ROOT
     / "runs"
@@ -344,6 +350,8 @@ def article(
     taxonomy: dict,
     score_summary: dict | None,
     oversight_summary: dict | None,
+    research_summary: dict,
+    probe_effectiveness: dict,
 ) -> str:
     runs = report["runs"]
     best_run = next(
@@ -354,32 +362,24 @@ def article(
         for checkpoint in best_run["probe_budget_results"]
         if checkpoint["probe_count"] == 4
     )
-    participants = {
-        item["id"]: item["provider_model_id"] for item in best_run["participants"]
-    }
     catalog_by_id = {item["provider_model_id"]: item for item in catalog["models"]}
-    external_order = sorted(
-        best_run["prior_participant_scores"],
-        key=lambda item: (-best_run["prior_participant_scores"][item], item),
-    )
-    external_rank = {
-        participant_id: rank
-        for rank, participant_id in enumerate(external_order, start=1)
-    }
+    rq1 = research_summary["rq1_catalog_ranking"]
+    primary_ranking = rq1["primary_ranking"]
     ranking_rows = []
-    for judged_rank, participant_id in enumerate(best_checkpoint["ranking"], start=1):
-        provider_id = participants[participant_id]
+    for row in primary_ranking:
+        judged_rank = int(row["judged_rank"])
+        provider_id = row["provider_model_id"]
         model = catalog_by_id[provider_id]
-        score = best_run["prior_participant_scores"][participant_id]
-        estimated = model.get("intelligence_score_is_estimated", True)
-        delta = judged_rank - external_rank[participant_id]
+        score = float(row["external_score"])
+        estimated = bool(row["external_score_is_estimated"])
+        delta = int(row["rank_error"])
         ranking_rows.append(
             "<tr>"
             f"<td class=\"number\">{judged_rank}</td>"
             f"<td><strong>{escape(model['display_name'])}</strong>"
             f"<span class=\"subcell\">{escape(provider_id)}</span></td>"
             f"<td class=\"number\">{score:.1f}{' *' if estimated else ''}</td>"
-            f"<td class=\"number\">{external_rank[participant_id]}</td>"
+            f"<td class=\"number\">{row['external_rank']}</td>"
             f"<td class=\"number {'down' if delta > 0 else 'up' if delta < 0 else ''}\">"
             f"{delta:+d}</td>"
             f"<td>{escape(model.get('release_date') or 'Unknown')}</td>"
@@ -391,14 +391,7 @@ def article(
         runs, catalog_by_id, score_summary=score_summary
     )
     order_audit = presentation_order_replay(best_checkpoint["ranking"])
-    source_pair = report["judge_condition_summary"]["final_interjudge_pairs"]
-    same_evidence = [
-        item["kendall_tau"]
-        for item in source_pair
-        if evidence_author(item["left_run"]) == evidence_author(item["right_run"])
-    ]
-    mean_same_evidence = mean(same_evidence)
-    direct_scores = len(best_run["prior_reported_score_participants"])
+    direct_scores = rq1["reported_score_candidate_count"]
     strategy_count = len(taxonomy["tags"])
     question_count = len(taxonomy["question_types"])
     heatmap_method = (
@@ -412,7 +405,28 @@ def article(
         if score_summary
         else "These are relative positions, not absolute difficulty scores."
     )
-    oversight_section = _oversight_section(oversight_summary).strip()
+    oversight_section = _oversight_section(
+        oversight_summary,
+        research_summary,
+    ).strip()
+    probe_effectiveness_section = _probe_effectiveness_section(
+        probe_effectiveness
+    ).strip()
+    catalog_mean_accuracy = rq1["mean_pairwise_accuracy"]
+    catalog_gap_rows = {
+        row["label"]: row
+        for row in rq1["pairwise_accuracy_by_score_gap"]
+    }
+    close_accuracy = (
+        catalog_gap_rows["<2"]["accuracy"]
+        if "<2" in catalog_gap_rows
+        else None
+    )
+    large_gap_accuracy = (
+        catalog_gap_rows["10+"]["accuracy"]
+        if "10+" in catalog_gap_rows
+        else None
+    )
 
     return f"""
 <article>
@@ -424,10 +438,10 @@ def article(
     interrogate anonymous peers, and decide for themselves what counts as
     convincing evidence of intelligence.</p>
     <div class="key-result">
-      <span>First catalog result</span>
-      <strong>{best_checkpoint['pairwise_accuracy']:.1%}</strong>
+      <span>Independent replication</span>
+      <strong>{catalog_mean_accuracy:.1%}</strong>
       <p>of comparable model pairs were ordered consistently with an external
-      intelligence index in the best observed condition.</p>
+      intelligence index, averaged across two independent five-probe judges.</p>
     </div>
   </section>
 
@@ -448,16 +462,16 @@ def article(
   <section id="method" class="prose ruled">
     <p class="section-kicker">Method in 30 seconds</p>
     <h2>Anonymous candidates, independent judges</h2>
-    <p>Two frontier judges independently wrote an opening battery and sent each
-    probe unchanged to 50 anonymous models. The original run used four probes;
-    a fresh replication used five. Each judge compared all answers to a probe,
-    combined the evidence into a ranking, and could ask two later follow-ups of
-    the ten candidates it found hardest to separate. Candidate names and
-    external scores were hidden throughout.</p>
+    <p>Two frontier judges independently wrote five opening probes and sent each
+    probe unchanged to 50 anonymous models. Each judge compared all answers to
+    a probe, combined the evidence into a ranking, and could ask two later
+    follow-ups of the ten candidates it found hardest to separate. Candidate
+    names and external scores were hidden throughout. An earlier four-probe
+    run and crossed-evidence controls provide stability checks.</p>
     <div class="method-grid">
       <div><strong>50</strong><span>candidate models</span></div>
       <div><strong>2</strong><span>independent judges</span></div>
-      <div><strong>4–5 + 2</strong><span>opening + adaptive probes</span></div>
+      <div><strong>5 + 2</strong><span>opening + adaptive probes</span></div>
       <div><strong>{direct_scores}</strong><span>direct external scores</span></div>
     </div>
     <p class="note">The external Artificial Analysis Intelligence Index is a
@@ -471,12 +485,12 @@ def article(
   <section id="catalog-results" class="wide ruled">
     <p class="section-kicker">Research question 1</p>
     <h2>Can a strong judge reconstruct a 50-model capability ladder?</h2>
-    <p class="section-intro">Broadly, yes. Fine distinctions remain hard. The
-    best result came from Fable interpreting answers to Sol-authored probes,
-    which separated question design from answer interpretation.</p>
+    <p class="section-intro">Broadly, yes. Fine distinctions remain hard. In the
+    fresh independent replication, Sol ordered 80.9% and Fable 84.6% of
+    comparable pairs consistently with the external index.</p>
 
     <figure class="figure-wide">
-      <img src="../figures/catalog-ladder50/predicted-vs-external.svg"
+      <img src="../figures/catalog-ladder50-opening5/predicted-vs-external.svg"
            alt="Judged capability percentile plotted against external Intelligence Index for Sol and Fable.">
       <figcaption>Each point is an anonymous candidate. Both independent judges
       recovered the broad external ordering; the largest errors occur among
@@ -485,54 +499,52 @@ def article(
 
     <div class="figure-pair">
       <figure>
-        <img src="../figures/catalog-ladder50/discrimination-by-gap.svg"
+        <img src="../figures/catalog-ladder50-opening5/discrimination-by-gap.svg"
              alt="Pairwise accuracy increases with the external capability gap.">
         <figcaption>Large capability differences were much easier to recognize
         than small ones.</figcaption>
       </figure>
       <figure>
-        <img src="../figures/catalog-ladder50/crossed-judge-accuracy.svg"
-             alt="Accuracy for both judges on Sol-authored and Fable-authored evidence.">
-        <figcaption>Swapping judges while holding answers fixed revealed a
-        strong evidence-design effect.</figcaption>
+        <img src="../figures/catalog-ladder50-opening5/evidence-scaling.svg"
+             alt="Ranking accuracy after five opening probes and two follow-ups.">
+        <figcaption>Two adaptive follow-ups did not consistently improve either
+        independent ranking.</figcaption>
       </figure>
     </div>
 
-    <figure class="figure-wide compact-figure">
-      <img src="../figures/catalog-ladder50/evidence-scaling.svg"
-           alt="Ranking accuracy after four, five, and six probes.">
-      <figcaption>More evidence did not always improve external agreement. The
-      fifth and sixth probes changed rankings, but their value depended on the
-      judge and evidence battery.</figcaption>
-    </figure>
-
     <div class="finding-grid">
-      <div><strong>86.7%</strong><span>best pairwise accuracy</span></div>
-      <div><strong>{best_checkpoint['kendall_tau']:.2f}</strong><span>best Kendall rank correlation</span></div>
-      <div><strong>{mean_same_evidence:.2f}</strong><span>mean same-evidence judge agreement</span></div>
-      <div><strong>≈ chance</strong><span>for gaps under two index points</span></div>
+      <div><strong>{catalog_mean_accuracy:.1%}</strong><span>mean pairwise accuracy</span></div>
+      <div><strong>{large_gap_accuracy:.1%}</strong><span>for gaps of 10+ points</span></div>
+      <div><strong>{rq1['interjudge_kendall_tau']:.2f}</strong><span>interjudge Kendall agreement</span></div>
+      <div><strong>{rq1['interjudge_top5_overlap']}/5</strong><span>shared top-five models</span></div>
     </div>
 
     <aside class="background-note">
-      <strong>Stability checks.</strong> The shared-evidence cross-over showed
-      substantially greater agreement when judges saw the same answers than when
-      one judge saw different probe batteries. In a fresh shuffled-order replay
-      of the best four-probe condition, the two rankings agreed at Kendall
+      <strong>What is stable?</strong> Pairs separated by less than two index
+      points were only {close_accuracy:.1%} accurate, while gaps of ten or more
+      reached {large_gap_accuracy:.1%}. Across the earlier and fresh batteries,
+      mean rank agreement was Kendall {rq1['mean_rank_replication_tau']:.2f} and
+      mean top-five overlap was {rq1['mean_top5_replication_overlap']:.0%}.
+      The shared-evidence cross-over showed greater agreement when judges saw
+      the same answers than when they saw different probe batteries. In a
+      shuffled-order replay of its best four-probe condition, the two rankings
+      agreed at Kendall
       {order_audit['kendall_tau']:.2f}; their top three were unchanged and
       {order_audit['top10_overlap']} of the top ten overlapped. External pairwise
       accuracy moved from {best_checkpoint['pairwise_accuracy']:.1%} to
-      {order_audit['pairwise_accuracy']:.1%}. This is bounded but real order
-      sensitivity. Global comparison remains primary; panels would add anchoring
-      and merge assumptions without clear evidence of a net gain.
+      {order_audit['pairwise_accuracy']:.1%}. The broad ladder is reproducible;
+      a precise frontier league table is not.
     </aside>
   </section>
 
   <section id="best-ladder" class="wide ruled">
-    <p class="section-kicker">Best observed condition</p>
+    <p class="section-kicker">Primary five-probe ranking</p>
     <h2>The full judged ladder</h2>
-    <p class="section-intro">Fable judged the four Sol-authored opening probes.
+    <p class="section-intro">{rq1['primary_judge_name']} produced the more
+    accurate of the two independent replication rankings.
     “Δ rank” is judged rank minus external rank: positive values mean the judge
-    placed a model lower. Asterisks mark three estimated external anchors.</p>
+    placed a model lower. Asterisks mark three estimated external anchors. This
+    table is evidence to inspect, not a definitive new leaderboard.</p>
     <div class="table-tools">
       <label>Filter models <input type="search" data-table-filter="ladder-table"
       placeholder="Name or provider ID"></label>
@@ -547,8 +559,12 @@ def article(
     </div>
   </section>
 
+  {oversight_section}
+
+  {probe_effectiveness_section}
+
   <section id="probe-repertoire" class="wide ruled">
-    <p class="section-kicker">What did the judges ask?</p>
+    <p class="section-kicker">Probe examples</p>
     <h2>Not one IQ test, but a repertoire</h2>
     <p class="section-intro">Frontier judges favored questions with several
     independently checkable obligations: construct something, justify it, find
@@ -560,9 +576,11 @@ def article(
   <section id="answer-map" class="wide ruled">
     <p class="section-kicker">Answer-quality map</p>
     <h2>Different probes expose different capability profiles</h2>
-    <p class="section-intro">Rows follow the external ladder. {heatmap_method}.
-    The fixed scale runs from 0 (no usable answer) to 4 (fully correct,
-    complete, and rigorous).</p>
+    <p class="section-intro">This mechanism view uses the eight opening probes
+    from the earlier four-probe batteries, not the fresh five-probe rankings
+    reported above. Rows follow the external ladder. {heatmap_method}. The
+    fixed scale runs from 0 (no usable answer) to 4 (fully correct, complete,
+    and rigorous).</p>
     <div class="heat-legend"><span>0 · unusable</span>
       <i class="heat h1"></i><i class="heat h3"></i><i class="heat h5"></i>
       <i class="heat h7"></i><i class="heat h9"></i><span>4 · fully correct</span>
@@ -571,7 +589,6 @@ def article(
     <p class="note">{heatmap_stats}. {heatmap_caveat}</p>
   </section>
 
-  {oversight_section}
 </article>
 <script>
 for (const input of document.querySelectorAll("[data-table-filter]")) {{
@@ -587,7 +604,56 @@ for (const input of document.querySelectorAll("[data-table-filter]")) {{
 """
 
 
-def _oversight_section(summary: dict | None) -> str:
+def _oversight_section(
+    summary: dict | None,
+    research_summary: dict | None = None,
+) -> str:
+    if research_summary:
+        rq2 = research_summary["rq2_oversight_frontier"]
+        bands = {
+            row["label"]: row for row in rq2["judge_bands"]
+        }
+        lower = bands["lower third"]
+        upper = bands["upper third"]
+        margin_rows = {
+            row["label"]: row for row in rq2["superior_by_margin"]
+        }
+        return f"""
+  <section id="oversight-frontier" class="wide ruled">
+    <p class="section-kicker">Research question 2</p>
+    <h2>Can a judge recognize a model more capable than itself?</h2>
+    <p class="section-intro">Often, but not reliably. Across
+    {rq2['panel_count']} panels and {rq2['judge_count']} judges,
+    {rq2['superior_recognized']} of {rq2['superior_total']} stronger candidates
+    were placed above the judge's anonymous self.</p>
+    <figure class="figure-wide">
+      <img src="../figures/research-synthesis/oversight-frontier.svg"
+           alt="Recognition of stronger candidates by judge capability and candidate margin.">
+      <figcaption>Recognition by candidate lead and judge capability third.
+      Intervals treat candidate comparisons as binomial; the text below also
+      reports panel-bootstrap uncertainty.</figcaption>
+    </figure>
+    <div class="finding-grid">
+      <div><strong>{rq2['superior_recognition_rate']:.1%}</strong><span>stronger candidates recognized</span></div>
+      <div><strong>{margin_rows['10+']['rate']:.1%}</strong><span>recognized at 10+ point lead</span></div>
+      <div><strong>{lower['subten_standardized_rate']:.1%}</strong><span>lower-third judges, standardized</span></div>
+      <div><strong>{upper['subten_standardized_rate']:.1%}</strong><span>upper-third judges, standardized</span></div>
+    </div>
+    <aside class="background-note">
+      <strong>What this does and does not show.</strong> After standardizing the
+      three sub-ten-point margin bins, recognition rises from
+      {lower['subten_standardized_rate']:.1%} for lower-third judges to
+      {upper['subten_standardized_rate']:.1%} for upper-third judges. Their
+      panel-bootstrap intervals are
+      {lower['bootstrap_95_low']:.1%}-{lower['bootstrap_95_high']:.1%} and
+      {upper['bootstrap_95_low']:.1%}-{upper['bootstrap_95_high']:.1%}.
+      This suggests judge capability matters, but judge identity, provider,
+      probe battery, and panel are still entangled. Candidate leads below ten
+      points do not form a clean monotonic threshold.
+    </aside>
+    <p><a class="text-link" href="oversight.html">Explore every judge, panel,
+    margin bin, and adaptive result →</a></p>
+  </section>"""
     if not summary:
         return """
   <section id="oversight-frontier" class="prose ruled">
@@ -633,6 +699,81 @@ def _oversight_section(summary: dict | None) -> str:
     {aggregate['self_relative_total']} self-relative comparisons were correct.</p>
     <p><a class="text-link" href="oversight.html">Explore the full oversight
     scorecard, probe repertoire, and adaptive results →</a></p>
+  </section>"""
+
+
+def _probe_effectiveness_section(summary: dict | None) -> str:
+    if not summary:
+        return ""
+    held_out = {
+        row["name"]: row for row in summary["held_out_label_prediction"]
+    }
+    types = held_out["Question types"]
+    all_labels = held_out["All recorded labels"]
+    dynamics = summary["dynamics"]
+    opening = dynamics["opening_transition_counts"]
+    adaptive = dynamics["adaptive_transition_counts"]
+    stronger = next(
+        row
+        for row in summary["by_intended_level"]
+        if row["label"] == "stronger"
+    )
+    peer = next(
+        row
+        for row in summary["by_intended_level"]
+        if row["label"] == "peer"
+    )
+    return f"""
+  <section id="probe-effectiveness" class="wide ruled">
+    <p class="section-kicker">Research question 3</p>
+    <h2>What tests do judges invent, and which ones work?</h2>
+    <p class="section-intro">The repertoire is broad, but naming a probe's
+    subject does not tell us whether it will separate candidates. The analysis
+    scores {summary['probe_count']} probes from {summary['author_count']} authors
+    with one fixed evaluator, then tests taxonomy-derived predictions on an
+    excluded author.</p>
+    <div class="figure-pair">
+      <figure>
+        <img src="../figures/probe-effectiveness/question-type-effects.svg"
+             alt="Author-centered diagnostic accuracy by question type.">
+        <figcaption>Planning and spatial probes look promising within this
+        sample, but labels overlap and several intervals remain wide.</figcaption>
+      </figure>
+      <figure>
+        <img src="../figures/probe-effectiveness/held-out-labels.svg"
+             alt="Held-out prediction of probe effectiveness from taxonomy labels.">
+        <figcaption>When one author is held out, broad labels do not reliably
+        identify that author's better probes.</figcaption>
+      </figure>
+    </div>
+    <div class="finding-grid">
+      <div><strong>{summary['mean_candidate_pair_accuracy']:.1%}</strong><span>mean single-probe accuracy</span></div>
+      <div><strong>{summary['author_score_pair_accuracy_spearman']:.2f}</strong><span>author intelligence correlation</span></div>
+      <div><strong>{types['mean_author_concordance']:.1%}</strong><span>held-out type concordance</span></div>
+      <div><strong>{summary['beyond_author_count']}</strong><span>operational beyond-author probes</span></div>
+    </div>
+    <p class="section-intro">Opening batteries usually broadened:
+    {opening.get('preplanned_broadening', 0)} of
+    {sum(opening.values())} transitions changed capability area. Adaptive
+    follow-ups split between {adaptive.get('adaptive_broadening', 0)}
+    broadening, {adaptive.get('adaptive_deepening', 0)} deepening, and
+    {adaptive.get('adaptive_followup', 0)} generic continuations. Across the
+    oversight panels, follow-ups improved ten rankings, left eleven unchanged,
+    and worsened nine.</p>
+    <aside class="background-note">
+      <strong>The useful negative result.</strong> Question-type predictions
+      reached {types['mean_author_concordance']:.1%} author-level concordance;
+      the complete label set reached
+      {all_labels['mean_author_concordance']:.1%}. Both intervals include
+      chance. Probes intended for stronger systems were more often beyond their
+      author ({stronger['beyond_author_rate']:.1%}) than peer-targeted probes
+      ({peer['beyond_author_rate']:.1%}), but their overall discrimination was
+      similar. The taxonomy describes evaluation behavior; it is not yet a
+      validated recipe for choosing questions. One fixed evaluator scored all
+      answers, so evaluator-specific preferences may affect these results. A
+      single blind author attempt also cannot establish that a probe was truly
+      beyond the author's capability.
+    </aside>
   </section>"""
 
 
@@ -1386,6 +1527,18 @@ def build(output_dir: Path, report_path: Path) -> None:
             else None
         )
     )
+    required_analysis = (
+        DEFAULT_RESEARCH_SYNTHESIS,
+        DEFAULT_PROBE_EFFECTIVENESS,
+    )
+    missing_analysis = [path for path in required_analysis if not path.exists()]
+    if missing_analysis:
+        missing = ", ".join(str(path.relative_to(ROOT)) for path in missing_analysis)
+        raise FileNotFoundError(
+            f"publication analysis is incomplete; generate: {missing}"
+        )
+    research_summary = load_json(DEFAULT_RESEARCH_SYNTHESIS)
+    probe_effectiveness = load_json(DEFAULT_PROBE_EFFECTIVENESS)
     selected_ids = selection["provider_model_ids"]
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -1393,7 +1546,15 @@ def build(output_dir: Path, report_path: Path) -> None:
         "index.html": page(
             "Can AI systems recognize intelligence?",
             "Results from a 50-model experiment in AI-authored intelligence evaluation.",
-            article(report, catalog, taxonomy, score_summary, oversight_summary),
+            article(
+                report,
+                catalog,
+                taxonomy,
+                score_summary,
+                oversight_summary,
+                research_summary,
+                probe_effectiveness,
+            ),
             "results",
         ),
         "taxonomy.html": page(

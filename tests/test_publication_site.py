@@ -4,6 +4,7 @@ import unittest
 
 from scripts.build_publication_site import (
     _oversight_section,
+    _probe_effectiveness_section,
     kendall_order,
     pairwise_accuracy,
     partial_spearman,
@@ -83,3 +84,31 @@ class PublicationSiteTests(unittest.TestCase):
             "../../../data/oversight_frontier_synthesis_matched_results.json",
             html,
         )
+
+    def test_oversight_section_reports_synthesis_with_uncertainty(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        summary = json.loads(
+            (root / "data" / "research_question_synthesis.json").read_text()
+        )
+
+        html = _oversight_section(None, summary)
+
+        self.assertIn("77 of 118", html)
+        self.assertIn("panel-bootstrap intervals", html)
+        self.assertIn("suggests judge capability matters", html)
+        self.assertIn("oversight-frontier.svg", html)
+
+    def test_probe_effectiveness_section_preserves_key_caveats(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        summary = json.loads(
+            (root / "data" / "probe_effectiveness_results.json").read_text()
+        )
+
+        html = _probe_effectiveness_section(summary)
+
+        self.assertIn("146 probes", html)
+        self.assertIn("not yet a", html)
+        self.assertIn("validated recipe", html)
+        self.assertIn("One fixed evaluator", html)
+        self.assertIn("cannot establish", html)
+        self.assertIn("held-out-labels.svg", html)

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+viewBox="0 0 1040 390" role="img"
+aria-label="Held-out prediction of probe effectiveness from taxonomy labels">
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="42" y="45" font-family="Georgia,serif" font-size="29"
+fill="#182026">Taxonomy labels did not reliably select better probes</text>
+<text x="42" y="75" font-family="system-ui,sans-serif" font-size="14"
+fill="#5e6a71">Labels learned from other authors; ability to order a held-out author's probes. Chance is 50%.</text>
+<line x1='361.7' y1='95' x2='361.7' y2='305' stroke='#e2e6e8'/><text x='361.7' y='333' text-anchor='middle' font-size='12' fill='#5e6a71'>40%</text><line x1='585.0' y1='95' x2='585.0' y2='305' stroke='#88949a'/><text x='585.0' y='333' text-anchor='middle' font-size='12' fill='#5e6a71'>50%</text><line x1='808.3' y1='95' x2='808.3' y2='305' stroke='#e2e6e8'/><text x='808.3' y='333' text-anchor='middle' font-size='12' fill='#5e6a71'>60%</text><text x='232' y='150' text-anchor='end' font-size='14' fill='#182026'>Question types</text><line x1='328.9' y1='145' x2='666.4' y2='145' stroke='#2364aa' stroke-width='3' opacity='.6'/><circle cx='505.6' cy='145' r='7' fill='#2364aa'/><text x='519.6' y='150' font-size='12' fill='#182026'>46.4%</text><text x='232' y='208' text-anchor='end' font-size='14' fill='#182026'>Strategies</text><line x1='439.4' y1='203' x2='999.7' y2='203' stroke='#2364aa' stroke-width='3' opacity='.6'/><circle cx='725.0' cy='203' r='7' fill='#2364aa'/><text x='739.0' y='208' font-size='12' fill='#182026'>56.3%</text><text x='232' y='266' text-anchor='end' font-size='14' fill='#182026'>All recorded labels</text><line x1='376.1' y1='261' x2='716.5' y2='261' stroke='#2364aa' stroke-width='3' opacity='.6'/><circle cx='557.5' cy='261' r='7' fill='#2364aa'/><text x='571.5' y='266' font-size='12' fill='#182026'>48.8%</text>
+</svg>

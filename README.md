@@ -71,6 +71,9 @@ are not collapsed into one number.
 
 Implementation and study progress are tracked in
 [`docs/research_roadmap.md`](docs/research_roadmap.md).
+Publication claims, their supporting artifacts, and the threshold for approving
+new runs are tracked in
+[`docs/claim_evidence_matrix.md`](docs/claim_evidence_matrix.md).
 
 The evolving reader-facing overview is
 [`docs/site/index.html`](docs/site/index.html). Its linked taxonomy, model table,
@@ -111,6 +114,14 @@ interpretation is in
 The combined reader-facing
 [`oversight report`](docs/site/oversight.html) links back to machine-readable
 study results and versioned probe audits.
+
+The cross-study synthesis used for the current article is versioned in
+[`data/research_question_synthesis.json`](data/research_question_synthesis.json).
+The held-out analysis of which probe types actually discriminate is summarized
+in
+[`docs/pilot_analysis_probe_effectiveness_20260728.md`](docs/pilot_analysis_probe_effectiveness_20260728.md)
+and versioned in
+[`data/probe_effectiveness_results.json`](data/probe_effectiveness_results.json).
 
 ## Core Methodology
 

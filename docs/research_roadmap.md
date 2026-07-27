@@ -375,19 +375,36 @@ next frontier study therefore needs repeated shared or closely matched evidence,
 not just more one-off judges. See
 `docs/pilot_analysis_oversight_matched_20260727.md`.
 
+## Publication Synthesis
+
+The first three primary questions now have a versioned evidence synthesis:
+
+1. Two independent five-probe frontier judges recover 82.7% of the comparable
+   50-model pairs in the reference ordering. Accuracy reaches 92.3% for gaps of
+   ten points or more, while the exact top five remains unstable.
+2. Across 30 oversight panels, judges place 65.3% of stronger anonymous
+   candidates above their own hidden responses. More capable judges do better
+   descriptively after margin standardization, but the design does not isolate
+   a causal judge-intelligence effect.
+3. Across 146 fixed-reference probes, the taxonomy captures a broad repertoire
+   but does not predict held-out probe effectiveness reliably. One adaptive
+   follow-up has mixed effects.
+
+The claim decisions and unresolved gaps are in
+`docs/claim_evidence_matrix.md`. Machine-readable results are in
+`data/research_question_synthesis.json` and
+`data/probe_effectiveness_results.json`.
+
 ## Immediate Next Steps
 
-1. Run a sharper oversight-threshold study on repeated small panels, with
-   several near and moderately stronger candidates per judge. Reuse shared
-   evidence where possible and treat candidate-versus-self ordering as the
-   preregistered endpoint.
-2. Test whether explicit ties are calibrated by comparing tie probability with
-   actual error under matched evidence. Do not assume that caution is either
-   superior judgment or a failure to discriminate.
-3. Replicate the crossed probe-design control with multiple batteries per
-   author before estimating author or evaluator effects.
-4. Keep the five-probe opening as the primary catalog endpoint and every
-   adaptive checkpoint as a separate secondary analysis.
-5. Compare structured and free councils later with a small, highly capable
-   roster. Do not scale beyond 50 candidates unless a substantive question
-   requires it.
+1. Freeze the current article as the descriptive baseline; only change headline
+   claims through the claim-to-evidence gate.
+2. Design a small matched verifier-oriented study: can judges create questions
+   that are easy for them to verify but difficult for more capable candidates
+   to answer fully?
+3. Reuse archived answers to test independent judge councils and deterministic
+   aggregation before purchasing new candidate responses.
+4. Compare verifier-oriented single judges with councils on the same candidate
+   panels, evidence budget, and preregistered pairwise endpoints.
+5. Keep free discussion as a later qualitative study of social dynamics, not
+   the primary scalable-ranking method.
