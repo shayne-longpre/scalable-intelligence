@@ -500,6 +500,71 @@ class ConfigTests(unittest.TestCase):
                 },
             )
 
+    def test_verifier_study_changes_only_probe_design_guidance(self) -> None:
+        study_path = ROOT / "studies" / "verifier_oriented_probes_v1.json"
+        study = json.loads(study_path.read_text())
+
+        self.assertEqual(study["protocol"]["probe_schedule"], [5])
+        self.assertEqual(len(study["conditions"]), 4)
+        with tempfile.TemporaryDirectory() as temp_dir:
+            index = build_study_configs(study_path, Path(temp_dir))
+            for built in index["configs"]:
+                config = load_experiment_config(built["config"])
+                phase = config.protocol.phases[0]
+                condition = next(
+                    row
+                    for row in study["conditions"]
+                    if row["id"] == built["condition_id"]
+                )
+                baseline = load_experiment_config(
+                    ROOT / condition["baseline_run"] / "config.json"
+                )
+                baseline_phase = baseline.protocol.phases[0]
+
+                self.assertEqual(phase.probe_schedule, [5])
+                self.assertEqual(
+                    phase.probe_generation_guidance,
+                    study["protocol"]["probe_generation_guidance"],
+                )
+                self.assertEqual(
+                    config.metadata["primary_endpoint"],
+                    study["protocol"]["primary_endpoint"],
+                )
+                self.assertEqual(
+                    [participant.id for participant in config.participants],
+                    [participant.id for participant in baseline.participants],
+                )
+                self.assertEqual(
+                    {
+                        participant.id: config.models[
+                            participant.model
+                        ].model
+                        for participant in config.participants
+                    },
+                    {
+                        participant.id: baseline.models[
+                            participant.model
+                        ].model
+                        for participant in baseline.participants
+                    },
+                )
+                self.assertEqual(
+                    phase.comparison_seed,
+                    baseline_phase.comparison_seed,
+                )
+                self.assertEqual(
+                    phase.comparison_order,
+                    baseline_phase.comparison_order,
+                )
+                self.assertEqual(
+                    phase.incomplete_answer_policy,
+                    baseline_phase.incomplete_answer_policy,
+                )
+                self.assertEqual(
+                    config.prompt_overrides,
+                    baseline.prompt_overrides,
+                )
+
     def test_relative_gap_validation_rejects_an_unmatched_panel(self) -> None:
         catalog = {
             "judge": {"intelligence_score": 10.0},
@@ -778,6 +843,27 @@ class ConfigTests(unittest.TestCase):
                         "provider/missing": {"max_tokens": 10}
                     },
                 )
+            (source_run / "transcript.jsonl").write_text(
+                json.dumps(
+                    {
+                        "round_index": 1,
+                        "metadata": {"answer_unavailable": True},
+                    }
+                )
+                + "\n"
+            )
+            with self.assertRaisesRegex(
+                ValueError,
+                "rounds have no unavailable answers: 2",
+            ):
+                build_replay_repair_config(
+                    source_run,
+                    retry_unavailable_rounds=[2],
+                )
+            build_replay_repair_config(
+                source_run,
+                retry_unavailable_rounds=[1],
+            )
 
         phase = repaired["protocol"]["phases"][0]
         self.assertEqual(

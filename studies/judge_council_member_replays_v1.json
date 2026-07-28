@@ -1,0 +1,200 @@
+{
+  "name": "judge_council_member_replays_v1",
+  "status": "completed",
+  "results": "data/verifier_council_matched_v1_results.json",
+  "catalog": "data/model_catalog.openrouter.json",
+  "research_question": "Does aggregating three independent evaluators improve rankings over the same strongest member acting alone?",
+  "protocol": {
+    "candidate_calls": 0,
+    "evidence_reuse": "exact probes and candidate answers",
+    "member_models": [
+      "openai/gpt-5.6-sol",
+      "meta-llama/llama-4-maverick",
+      "qwen/qwen3.7-max"
+    ],
+    "aggregation": "Pairwise majority is primary; mean ordinal rank provides a deterministic full ranking.",
+    "primary_endpoint": "Council pairwise-majority accuracy minus GPT-5.6 Sol pairwise accuracy on the same evidence."
+  },
+  "conditions": [
+    {
+      "id": "ordinary_grok_llama",
+      "battery": "ordinary",
+      "panel": "grok_b",
+      "source_run": "runs/20260727T074956Z_oversight_frontier_v4_matched_extension_grok_b_evidence_repaired",
+      "probe_author_model": "x-ai/grok-4.5",
+      "evaluator_model": "meta-llama/llama-4-maverick",
+      "comparison_seed": 20264101
+    },
+    {
+      "id": "ordinary_grok_qwen",
+      "battery": "ordinary",
+      "panel": "grok_b",
+      "source_run": "runs/20260727T074956Z_oversight_frontier_v4_matched_extension_grok_b_evidence_repaired",
+      "probe_author_model": "x-ai/grok-4.5",
+      "evaluator_model": "qwen/qwen3.7-max",
+      "comparison_seed": 20264201
+    },
+    {
+      "id": "ordinary_deepseek_llama",
+      "battery": "ordinary",
+      "panel": "deepseek_b",
+      "source_run": "runs/20260727T081708Z_oversight_frontier_v4_matched_extension_deepseek_b_adaptive_resumed",
+      "probe_author_model": "deepseek/deepseek-v4-pro",
+      "evaluator_model": "meta-llama/llama-4-maverick",
+      "comparison_seed": 20264102
+    },
+    {
+      "id": "ordinary_deepseek_qwen",
+      "battery": "ordinary",
+      "panel": "deepseek_b",
+      "source_run": "runs/20260727T081708Z_oversight_frontier_v4_matched_extension_deepseek_b_adaptive_resumed",
+      "probe_author_model": "deepseek/deepseek-v4-pro",
+      "evaluator_model": "qwen/qwen3.7-max",
+      "comparison_seed": 20264202
+    },
+    {
+      "id": "ordinary_kimi_llama",
+      "battery": "ordinary",
+      "panel": "kimi_b",
+      "source_run": "runs/20260727T074957Z_oversight_frontier_v4_matched_extension_kimi_b_evidence_repaired",
+      "probe_author_model": "moonshotai/kimi-k2-thinking",
+      "evaluator_model": "meta-llama/llama-4-maverick",
+      "comparison_seed": 20264103
+    },
+    {
+      "id": "ordinary_kimi_qwen",
+      "battery": "ordinary",
+      "panel": "kimi_b",
+      "source_run": "runs/20260727T074957Z_oversight_frontier_v4_matched_extension_kimi_b_evidence_repaired",
+      "probe_author_model": "moonshotai/kimi-k2-thinking",
+      "evaluator_model": "qwen/qwen3.7-max",
+      "comparison_seed": 20264203
+    },
+    {
+      "id": "ordinary_llama_llama",
+      "battery": "ordinary",
+      "panel": "llama_b",
+      "source_run": "runs/20260727T064958Z_oversight_frontier_v4_matched_extension_llama_b",
+      "probe_author_model": "meta-llama/llama-4-maverick",
+      "evaluator_model": "meta-llama/llama-4-maverick",
+      "comparison_seed": 20264104
+    },
+    {
+      "id": "ordinary_llama_qwen",
+      "battery": "ordinary",
+      "panel": "llama_b",
+      "source_run": "runs/20260727T064958Z_oversight_frontier_v4_matched_extension_llama_b",
+      "probe_author_model": "meta-llama/llama-4-maverick",
+      "evaluator_model": "qwen/qwen3.7-max",
+      "comparison_seed": 20264204
+    },
+    {
+      "id": "verifier_grok_sol",
+      "battery": "verifier",
+      "panel": "grok_b",
+      "source_run": "runs/20260727T233803Z_verifier_oriented_probes_v1_grok_b_evidence_repaired",
+      "probe_author_model": "x-ai/grok-4.5",
+      "evaluator_model": "openai/gpt-5.6-sol",
+      "comparison_seed": 20264301
+    },
+    {
+      "id": "verifier_grok_llama",
+      "battery": "verifier",
+      "panel": "grok_b",
+      "source_run": "runs/20260727T233803Z_verifier_oriented_probes_v1_grok_b_evidence_repaired",
+      "probe_author_model": "x-ai/grok-4.5",
+      "evaluator_model": "meta-llama/llama-4-maverick",
+      "comparison_seed": 20264401
+    },
+    {
+      "id": "verifier_grok_qwen",
+      "battery": "verifier",
+      "panel": "grok_b",
+      "source_run": "runs/20260727T233803Z_verifier_oriented_probes_v1_grok_b_evidence_repaired",
+      "probe_author_model": "x-ai/grok-4.5",
+      "evaluator_model": "qwen/qwen3.7-max",
+      "comparison_seed": 20264501
+    },
+    {
+      "id": "verifier_deepseek_sol",
+      "battery": "verifier",
+      "panel": "deepseek_b",
+      "source_run": "runs/20260727T225926Z_verifier_oriented_probes_v1_deepseek_b",
+      "probe_author_model": "deepseek/deepseek-v4-pro",
+      "evaluator_model": "openai/gpt-5.6-sol",
+      "comparison_seed": 20264302
+    },
+    {
+      "id": "verifier_deepseek_llama",
+      "battery": "verifier",
+      "panel": "deepseek_b",
+      "source_run": "runs/20260727T225926Z_verifier_oriented_probes_v1_deepseek_b",
+      "probe_author_model": "deepseek/deepseek-v4-pro",
+      "evaluator_model": "meta-llama/llama-4-maverick",
+      "comparison_seed": 20264402
+    },
+    {
+      "id": "verifier_deepseek_qwen",
+      "battery": "verifier",
+      "panel": "deepseek_b",
+      "source_run": "runs/20260727T225926Z_verifier_oriented_probes_v1_deepseek_b",
+      "probe_author_model": "deepseek/deepseek-v4-pro",
+      "evaluator_model": "qwen/qwen3.7-max",
+      "comparison_seed": 20264502
+    },
+    {
+      "id": "verifier_kimi_sol",
+      "battery": "verifier",
+      "panel": "kimi_b",
+      "source_run": "runs/20260728T001508Z_verifier_oriented_probes_v1_kimi_b_evidence_repaired_recovery_repaired_v2_gemini_repaired",
+      "probe_author_model": "moonshotai/kimi-k2-thinking",
+      "evaluator_model": "openai/gpt-5.6-sol",
+      "comparison_seed": 20264303
+    },
+    {
+      "id": "verifier_kimi_llama",
+      "battery": "verifier",
+      "panel": "kimi_b",
+      "source_run": "runs/20260728T001508Z_verifier_oriented_probes_v1_kimi_b_evidence_repaired_recovery_repaired_v2_gemini_repaired",
+      "probe_author_model": "moonshotai/kimi-k2-thinking",
+      "evaluator_model": "meta-llama/llama-4-maverick",
+      "comparison_seed": 20264403
+    },
+    {
+      "id": "verifier_kimi_qwen",
+      "battery": "verifier",
+      "panel": "kimi_b",
+      "source_run": "runs/20260728T001508Z_verifier_oriented_probes_v1_kimi_b_evidence_repaired_recovery_repaired_v2_gemini_repaired",
+      "probe_author_model": "moonshotai/kimi-k2-thinking",
+      "evaluator_model": "qwen/qwen3.7-max",
+      "comparison_seed": 20264503
+    },
+    {
+      "id": "verifier_llama_sol",
+      "battery": "verifier",
+      "panel": "llama_b",
+      "source_run": "runs/20260727T230930Z_verifier_oriented_probes_v1_llama_b",
+      "probe_author_model": "meta-llama/llama-4-maverick",
+      "evaluator_model": "openai/gpt-5.6-sol",
+      "comparison_seed": 20264304
+    },
+    {
+      "id": "verifier_llama_llama",
+      "battery": "verifier",
+      "panel": "llama_b",
+      "source_run": "runs/20260727T230930Z_verifier_oriented_probes_v1_llama_b",
+      "probe_author_model": "meta-llama/llama-4-maverick",
+      "evaluator_model": "meta-llama/llama-4-maverick",
+      "comparison_seed": 20264404
+    },
+    {
+      "id": "verifier_llama_qwen",
+      "battery": "verifier",
+      "panel": "llama_b",
+      "source_run": "runs/20260727T230930Z_verifier_oriented_probes_v1_llama_b",
+      "probe_author_model": "meta-llama/llama-4-maverick",
+      "evaluator_model": "qwen/qwen3.7-max",
+      "comparison_seed": 20264504
+    }
+  ]
+}

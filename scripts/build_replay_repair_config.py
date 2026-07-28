@@ -21,6 +21,15 @@ def build_replay_repair_config(
     rounds = sorted(set(int(round_index) for round_index in retry_unavailable_rounds))
     if not rounds or rounds[0] < 1:
         raise ValueError("retry-unavailable-rounds must contain positive integers")
+    transcript_path = source_run / "transcript.jsonl"
+    if transcript_path.exists():
+        unavailable_rounds = _unavailable_rounds(transcript_path)
+        unmatched_rounds = sorted(set(rounds) - unavailable_rounds)
+        if unmatched_rounds:
+            raise ValueError(
+                "requested repair rounds have no unavailable answers: "
+                + ", ".join(str(value) for value in unmatched_rounds)
+            )
 
     phases = config.get("protocol", {}).get("phases", [])
     if len(phases) != 1 or phases[0].get("kind") != "independent_judge_ranking":
@@ -163,6 +172,21 @@ def main() -> int:
 def _load_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def _unavailable_rounds(path: Path) -> set[int]:
+    rounds = set()
+    with path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            if not row.get("metadata", {}).get("answer_unavailable"):
+                continue
+            round_index = row.get("round_index")
+            if isinstance(round_index, int) and round_index > 0:
+                rounds.add(round_index)
+    return rounds
 
 
 if __name__ == "__main__":

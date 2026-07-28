@@ -57,6 +57,7 @@ subordinate to the study rather than accumulating decorative metrics.
 | **Evaluation repertoire** | Question-type and strategy distributions by judge and model capability | Which concepts and methods emerge, and do stronger evaluators use different ones? |
 | **Probe evolution** | Per-round transitions among broadening, deepening, correction, and adaptive follow-up | How does evaluation strategy change as evidence accumulates? |
 | **Belief trajectories** | Rank and confidence over rounds, annotated with decisive probes | How stable are judgments, and what evidence changes them? |
+| **Judging mechanisms** | Matched above-self recognition and pairwise accuracy under ordinary/verifier probes and single/council evaluators | Can verifiable questions or independent aggregation make above-level judgment more reliable? |
 | **Free vs. structured** | Paired differences in accuracy, taxonomy, depth, and inter-model dynamics for the same roster | What does structure improve or suppress? |
 
 These plots should retain links to source turns, probes, answers, per-probe
@@ -122,6 +123,13 @@ in
 [`docs/pilot_analysis_probe_effectiveness_20260728.md`](docs/pilot_analysis_probe_effectiveness_20260728.md)
 and versioned in
 [`data/probe_effectiveness_results.json`](data/probe_effectiveness_results.json).
+The matched verifier-oriented and independent-council mechanism pilot is
+specified in
+[`docs/verifier_council_design.md`](docs/verifier_council_design.md), analyzed
+in
+[`docs/pilot_analysis_verifier_council_20260727.md`](docs/pilot_analysis_verifier_council_20260727.md),
+and versioned in
+[`data/verifier_council_matched_v1_results.json`](data/verifier_council_matched_v1_results.json).
 
 ## Core Methodology
 
@@ -398,6 +406,14 @@ The repository includes config examples that map onto the two modes:
 - `studies/probe_ceiling_extension_v1.json`: five archived oversight panels
   extended from five unguided opening probes to ten total probes. Only the five
   ceiling-aware additions and the new comparisons and ranking are called live.
+- `studies/verifier_oriented_probes_v1.json`: four matched five-probe panels
+  where only the private probe-design guidance changes. The primary endpoint
+  is recognition of candidates above the judge's anonymous response.
+- `studies/judge_council_member_replays_v1.json`: three independent evaluators
+  rank identical archived evidence. Pairwise majority is primary; mean ordinal
+  rank supplies a complete display order without a model synthesizer.
+- `studies/verifier_council_matched_v1.json`: the frozen 2x2 analysis manifest
+  connecting ordinary/verifier batteries to single/council judgments.
 - `examples/probe_self_study.openrouter.json`: blind author solves, separate
   author self-assessments, and fixed-reference scoring for the accepted probe
   catalog. The append-only job journal supports exact resumption.

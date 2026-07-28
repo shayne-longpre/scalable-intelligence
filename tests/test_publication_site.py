@@ -3,6 +3,7 @@ from pathlib import Path
 import unittest
 
 from scripts.build_publication_site import (
+    _mechanism_section,
     _oversight_section,
     _probe_effectiveness_section,
     kendall_order,
@@ -112,3 +113,34 @@ class PublicationSiteTests(unittest.TestCase):
         self.assertIn("One fixed evaluator", html)
         self.assertIn("cannot establish", html)
         self.assertIn("held-out-labels.svg", html)
+
+    def test_mechanism_section_keeps_recognition_and_ranking_separate(
+        self,
+    ) -> None:
+        summary = {
+            "conditions": [
+                {
+                    "battery": "ordinary",
+                    "author_superior_recognition_rate": 0.6,
+                    "anchor_pairwise_accuracy": 0.65,
+                    "council_pairwise_accuracy": 0.7,
+                },
+                {
+                    "battery": "verifier",
+                    "author_superior_recognition_rate": 0.5,
+                    "anchor_pairwise_accuracy": 0.7,
+                    "council_pairwise_accuracy": 0.72,
+                },
+            ],
+            "matched_effects": {"mean_interaction": -0.03},
+        }
+
+        html = _mechanism_section(summary)
+        text = " ".join(html.split())
+
+        self.assertIn("60.0% to", text)
+        self.assertIn("50.0%", text)
+        self.assertIn("65.0% to", text)
+        self.assertIn("70.0%", text)
+        self.assertIn("broad ordering", text)
+        self.assertIn("externally stronger model", text)

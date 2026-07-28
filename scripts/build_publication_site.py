@@ -37,6 +37,9 @@ DEFAULT_RESEARCH_SYNTHESIS = (
 DEFAULT_PROBE_EFFECTIVENESS = (
     ROOT / "data" / "probe_effectiveness_results.json"
 )
+DEFAULT_VERIFIER_COUNCIL = (
+    ROOT / "data" / "verifier_council_matched_v1_results.json"
+)
 ORDER_REPLAY_RUN = (
     ROOT
     / "runs"
@@ -308,7 +311,7 @@ def page(title: str, description: str, body: str, active: str) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{escape(description, quote=True)}">
   <title>{escape(title)}</title>
-  <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="site.css?v=20260727-2">
 </head>
 <body>
   <header class="site-header">
@@ -352,6 +355,7 @@ def article(
     oversight_summary: dict | None,
     research_summary: dict,
     probe_effectiveness: dict,
+    verifier_council: dict | None,
 ) -> str:
     runs = report["runs"]
     best_run = next(
@@ -412,6 +416,7 @@ def article(
     probe_effectiveness_section = _probe_effectiveness_section(
         probe_effectiveness
     ).strip()
+    mechanism_section = _mechanism_section(verifier_council).strip()
     catalog_mean_accuracy = rq1["mean_pairwise_accuracy"]
     catalog_gap_rows = {
         row["label"]: row
@@ -562,6 +567,8 @@ def article(
   {oversight_section}
 
   {probe_effectiveness_section}
+
+  {mechanism_section}
 
   <section id="probe-repertoire" class="wide ruled">
     <p class="section-kicker">Probe examples</p>
@@ -773,6 +780,56 @@ def _probe_effectiveness_section(summary: dict | None) -> str:
       answers, so evaluator-specific preferences may affect these results. A
       single blind author attempt also cannot establish that a probe was truly
       beyond the author's capability.
+    </aside>
+  </section>"""
+
+
+def _mechanism_section(summary: dict | None) -> str:
+    if not summary:
+        return ""
+    conditions = {
+        row["battery"]: row for row in summary["conditions"]
+    }
+    ordinary = conditions["ordinary"]
+    verifier = conditions["verifier"]
+    effects = summary["matched_effects"]
+    return f"""
+  <section id="judging-mechanisms" class="wide ruled">
+    <p class="section-kicker">Research question 4 · mechanism pilot</p>
+    <h2>Can probe design or independent councils improve judgment?</h2>
+    <p class="section-intro">Neither intervention is a universal fix. Across
+    four matched nine-model panels, verifier-oriented instructions changed what
+    judges asked but moved above-self recognition from
+    {ordinary['author_superior_recognition_rate']:.1%} to
+    {verifier['author_superior_recognition_rate']:.1%}. Three independent
+    evaluators improved on Sol alone for the ordinary batteries, from
+    {ordinary['anchor_pairwise_accuracy']:.1%} to
+    {ordinary['council_pairwise_accuracy']:.1%} pairwise accuracy.</p>
+    <figure class="figure-wide">
+      <div class="mechanism-chart">
+        <img src="../figures/verifier-council/matched-results.svg"
+             alt="Matched comparison of verifier-oriented probes and an independent three-member judge council.">
+      </div>
+      <figcaption>Panel A measures the narrow scalable-oversight target. Panel B
+      measures overall ranking. All comparisons use the same candidates and
+      five-probe budget within panel; council members see identical archived
+      evidence independently.</figcaption>
+    </figure>
+    <div class="finding-grid">
+      <div><strong>{ordinary['author_superior_recognition_rate']:.1%}</strong><span>ordinary above-self recognition</span></div>
+      <div><strong>{verifier['author_superior_recognition_rate']:.1%}</strong><span>verifier above-self recognition</span></div>
+      <div><strong>{ordinary['council_pairwise_accuracy']:.1%}</strong><span>ordinary council accuracy</span></div>
+      <div><strong>{verifier['council_pairwise_accuracy']:.1%}</strong><span>verifier council accuracy</span></div>
+    </div>
+    <aside class="background-note">
+      <strong>Why keep both outcomes?</strong> A battery can improve the broad
+      ordering while making the judge less likely to put every externally
+      stronger model above itself. Four panels are enough to diagnose mechanisms
+      and failures, not to estimate a universal effect. Evaluator disagreement,
+      external-index noise, and model-family composition remain material. The
+      combined interventions showed no extra benefit: the council gain was
+      smaller with verifier batteries, an interaction of
+      {effects['mean_interaction']:+.1%}.
     </aside>
   </section>"""
 
@@ -1539,6 +1596,11 @@ def build(output_dir: Path, report_path: Path) -> None:
         )
     research_summary = load_json(DEFAULT_RESEARCH_SYNTHESIS)
     probe_effectiveness = load_json(DEFAULT_PROBE_EFFECTIVENESS)
+    verifier_council = (
+        load_json(DEFAULT_VERIFIER_COUNCIL)
+        if DEFAULT_VERIFIER_COUNCIL.exists()
+        else None
+    )
     selected_ids = selection["provider_model_ids"]
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -1554,6 +1616,7 @@ def build(output_dir: Path, report_path: Path) -> None:
                 oversight_summary,
                 research_summary,
                 probe_effectiveness,
+                verifier_council,
             ),
             "results",
         ),

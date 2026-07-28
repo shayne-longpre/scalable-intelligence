@@ -377,7 +377,7 @@ not just more one-off judges. See
 
 ## Publication Synthesis
 
-The first three primary questions now have a versioned evidence synthesis:
+The first four primary questions now have versioned evidence:
 
 1. Two independent five-probe frontier judges recover 82.7% of the comparable
    50-model pairs in the reference ordering. Accuracy reaches 92.3% for gaps of
@@ -389,22 +389,26 @@ The first three primary questions now have a versioned evidence synthesis:
 3. Across 146 fixed-reference probes, the taxonomy captures a broad repertoire
    but does not predict held-out probe effectiveness reliably. One adaptive
    follow-up has mixed effects.
+4. In four matched mechanism panels, verifier-oriented guidance does not improve
+   above-self recognition, while three independent evaluators improve ordinary
+   pairwise accuracy from 64.6% to 70.1%. The two interventions show no positive
+   interaction.
 
 The claim decisions and unresolved gaps are in
 `docs/claim_evidence_matrix.md`. Machine-readable results are in
 `data/research_question_synthesis.json` and
-`data/probe_effectiveness_results.json`.
+`data/probe_effectiveness_results.json`. Mechanism results are in
+`data/verifier_council_matched_v1_results.json`.
 
 ## Immediate Next Steps
 
-1. Freeze the current article as the descriptive baseline; only change headline
-   claims through the claim-to-evidence gate.
-2. Design a small matched verifier-oriented study: can judges create questions
-   that are easy for them to verify but difficult for more capable candidates
-   to answer fully?
-3. Reuse archived answers to test independent judge councils and deterministic
-   aggregation before purchasing new candidate responses.
-4. Compare verifier-oriented single judges with councils on the same candidate
-   panels, evidence budget, and preregistered pairwise endpoints.
-5. Keep free discussion as a later qualitative study of social dynamics, not
+1. Freeze the current article and four-question evidence synthesis; only change
+   headline claims through the claim-to-evidence gate.
+2. Audit the verifier batteries for concrete checkability, hidden
+   contradictions, and the evidence that changed rankings. This uses archived
+   transcripts and requires no model calls.
+3. Decide whether a follow-up mechanism study targets the observed failure:
+   better probe validation before routing, or diverse councils on held-out
+   panels. Preregister one intervention rather than combining both.
+4. Keep free discussion as a later qualitative study of social dynamics, not
    the primary scalable-ranking method.

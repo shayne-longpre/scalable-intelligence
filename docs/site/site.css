@@ -274,6 +274,10 @@ figcaption {
   margin-left: auto;
 }
 
+.mechanism-chart {
+  overflow-x: auto;
+}
+
 .background-note,
 .placeholder {
   margin-top: 34px;
@@ -731,6 +735,11 @@ footer p {
   .figure-pair,
   .probe-grid {
     grid-template-columns: 1fr;
+  }
+
+  .mechanism-chart img {
+    width: 780px;
+    max-width: none;
   }
 
   .table-tools,

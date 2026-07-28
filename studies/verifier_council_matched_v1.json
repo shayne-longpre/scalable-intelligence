@@ -1,0 +1,132 @@
+{
+  "name": "verifier_council_matched_v1",
+  "status": "completed",
+  "results": "data/verifier_council_matched_v1_results.json",
+  "catalog": "data/model_catalog.openrouter.json",
+  "research_questions": [
+    "Do verifier-oriented probes improve a judge's ranking and its recognition of candidates above itself?",
+    "Does an independent three-member council improve ranking over its strongest member on identical evidence?",
+    "Do verifier-oriented probes and council aggregation reinforce one another?"
+  ],
+  "design": {
+    "matched_panels": 4,
+    "candidates_per_panel": 9,
+    "probes_per_battery": 5,
+    "anchor_model": "openai/gpt-5.6-sol",
+    "council_members": [
+      "openai/gpt-5.6-sol",
+      "meta-llama/llama-4-maverick",
+      "qwen/qwen3.7-max"
+    ],
+    "primary_council_rule": "pairwise majority",
+    "display_ranking_rule": "mean ordinal rank",
+    "candidate_identity": "anonymous",
+    "candidate_evidence_reuse": "exact within each battery"
+  },
+  "panels": [
+    {
+      "id": "ordinary_grok_b",
+      "matched_panel": "grok_b",
+      "battery": "ordinary",
+      "author_model": "x-ai/grok-4.5",
+      "author_run": "runs/20260727T074956Z_oversight_frontier_v4_matched_extension_grok_b_evidence_repaired",
+      "anchor_model": "openai/gpt-5.6-sol",
+      "member_runs": {
+        "openai/gpt-5.6-sol": "runs/20260727T082334Z_oversight_probe_design_cross_v1_grok_sol",
+        "meta-llama/llama-4-maverick": "runs/20260727T230539Z_judge_council_member_replays_v1_ordinary_grok_llama",
+        "qwen/qwen3.7-max": "runs/20260727T230538Z_judge_council_member_replays_v1_ordinary_grok_qwen"
+      }
+    },
+    {
+      "id": "ordinary_deepseek_b",
+      "matched_panel": "deepseek_b",
+      "battery": "ordinary",
+      "author_model": "deepseek/deepseek-v4-pro",
+      "author_run": "runs/20260727T081708Z_oversight_frontier_v4_matched_extension_deepseek_b_adaptive_resumed",
+      "anchor_model": "openai/gpt-5.6-sol",
+      "member_runs": {
+        "openai/gpt-5.6-sol": "runs/20260727T082831Z_oversight_probe_design_cross_v1_deepseek_sol",
+        "meta-llama/llama-4-maverick": "runs/20260727T230538Z_judge_council_member_replays_v1_ordinary_deepseek_llama",
+        "qwen/qwen3.7-max": "runs/20260727T230541Z_judge_council_member_replays_v1_ordinary_deepseek_qwen"
+      }
+    },
+    {
+      "id": "ordinary_kimi_b",
+      "matched_panel": "kimi_b",
+      "battery": "ordinary",
+      "author_model": "moonshotai/kimi-k2-thinking",
+      "author_run": "runs/20260727T074957Z_oversight_frontier_v4_matched_extension_kimi_b_evidence_repaired",
+      "anchor_model": "openai/gpt-5.6-sol",
+      "member_runs": {
+        "openai/gpt-5.6-sol": "runs/20260727T080630Z_oversight_probe_design_cross_v1_kimi_sol",
+        "meta-llama/llama-4-maverick": "runs/20260727T230649Z_judge_council_member_replays_v1_ordinary_kimi_llama",
+        "qwen/qwen3.7-max": "runs/20260727T230652Z_judge_council_member_replays_v1_ordinary_kimi_qwen"
+      }
+    },
+    {
+      "id": "ordinary_llama_b",
+      "matched_panel": "llama_b",
+      "battery": "ordinary",
+      "author_model": "meta-llama/llama-4-maverick",
+      "author_run": "runs/20260727T064958Z_oversight_frontier_v4_matched_extension_llama_b",
+      "anchor_model": "openai/gpt-5.6-sol",
+      "member_runs": {
+        "openai/gpt-5.6-sol": "runs/20260727T075807Z_oversight_probe_design_cross_v1_llama_sol",
+        "meta-llama/llama-4-maverick": "runs/20260727T230649Z_judge_council_member_replays_v1_ordinary_llama_llama",
+        "qwen/qwen3.7-max": "runs/20260727T230649Z_judge_council_member_replays_v1_ordinary_llama_qwen"
+      }
+    },
+    {
+      "id": "verifier_grok_b",
+      "matched_panel": "grok_b",
+      "battery": "verifier",
+      "author_model": "x-ai/grok-4.5",
+      "author_run": "runs/20260727T233803Z_verifier_oriented_probes_v1_grok_b_evidence_repaired",
+      "anchor_model": "openai/gpt-5.6-sol",
+      "member_runs": {
+        "openai/gpt-5.6-sol": "runs/20260727T235720Z_judge_council_member_replays_v1_verifier_grok_sol",
+        "meta-llama/llama-4-maverick": "runs/20260727T235739Z_judge_council_member_replays_v1_verifier_grok_llama",
+        "qwen/qwen3.7-max": "runs/20260727T235749Z_judge_council_member_replays_v1_verifier_grok_qwen"
+      }
+    },
+    {
+      "id": "verifier_deepseek_b",
+      "matched_panel": "deepseek_b",
+      "battery": "verifier",
+      "author_model": "deepseek/deepseek-v4-pro",
+      "author_run": "runs/20260727T225926Z_verifier_oriented_probes_v1_deepseek_b",
+      "anchor_model": "openai/gpt-5.6-sol",
+      "member_runs": {
+        "openai/gpt-5.6-sol": "runs/20260727T233802Z_judge_council_member_replays_v1_verifier_deepseek_sol",
+        "meta-llama/llama-4-maverick": "runs/20260727T233803Z_judge_council_member_replays_v1_verifier_deepseek_llama",
+        "qwen/qwen3.7-max": "runs/20260727T233801Z_judge_council_member_replays_v1_verifier_deepseek_qwen"
+      }
+    },
+    {
+      "id": "verifier_kimi_b",
+      "matched_panel": "kimi_b",
+      "battery": "verifier",
+      "author_model": "moonshotai/kimi-k2-thinking",
+      "author_run": "runs/20260728T001508Z_verifier_oriented_probes_v1_kimi_b_evidence_repaired_recovery_repaired_v2_gemini_repaired",
+      "anchor_model": "openai/gpt-5.6-sol",
+      "member_runs": {
+        "openai/gpt-5.6-sol": "runs/20260728T002026Z_judge_council_member_replays_v1_verifier_kimi_sol",
+        "meta-llama/llama-4-maverick": "runs/20260728T002036Z_judge_council_member_replays_v1_verifier_kimi_llama",
+        "qwen/qwen3.7-max": "runs/20260728T002046Z_judge_council_member_replays_v1_verifier_kimi_qwen"
+      }
+    },
+    {
+      "id": "verifier_llama_b",
+      "matched_panel": "llama_b",
+      "battery": "verifier",
+      "author_model": "meta-llama/llama-4-maverick",
+      "author_run": "runs/20260727T230930Z_verifier_oriented_probes_v1_llama_b",
+      "anchor_model": "openai/gpt-5.6-sol",
+      "member_runs": {
+        "openai/gpt-5.6-sol": "runs/20260727T231523Z_judge_council_member_replays_v1_verifier_llama_sol",
+        "meta-llama/llama-4-maverick": "runs/20260727T231525Z_judge_council_member_replays_v1_verifier_llama_llama",
+        "qwen/qwen3.7-max": "runs/20260727T231526Z_judge_council_member_replays_v1_verifier_llama_qwen"
+      }
+    }
+  ]
+}

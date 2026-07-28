@@ -71,6 +71,9 @@ def build_study_configs(
                 incomplete_answer_policy=protocol.get(
                     "incomplete_answer_policy", "record_unavailable"
                 ),
+                probe_generation_guidance=str(
+                    protocol.get("probe_generation_guidance", "")
+                ),
             ),
             selected_model_ids=candidates,
             catalog=catalog,
@@ -80,6 +83,10 @@ def build_study_configs(
         config["metadata"]["study_file"] = str(study_path)
         config["metadata"]["study_condition"] = condition_id
         config["metadata"]["research_question"] = study["research_question"]
+        if protocol.get("primary_endpoint"):
+            config["metadata"]["primary_endpoint"] = protocol[
+                "primary_endpoint"
+            ]
 
         config_path = output_dir / f"{condition_id}.json"
         config_path.write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")

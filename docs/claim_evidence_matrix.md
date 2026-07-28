@@ -45,6 +45,19 @@ Primary artifacts:
 `data/probe_evolution_results.json`, and
 `docs/figures/probe-effectiveness/`.
 
+## RQ4: Can We Improve Above-Level Judgment?
+
+| Candidate claim | Best evidence | Current result | Strength | Remaining gap | Decision |
+| --- | --- | --- | --- | --- | --- |
+| Verifier-oriented probe guidance improves recognition above the judge's own capability. | Four matched nine-candidate panels; only private probe-design guidance changes. | Above-self recognition falls from 60% to 55%, while overall author accuracy rises from 63.9% to 66.0%. | Direct matched pilot evidence against the primary claim. | Four authors and one battery per condition cannot estimate a general effect. | Publish the null primary result and keep overall ranking separate. |
+| Independent councils improve ranking on fixed evidence. | Sol, Llama, and Qwen independently rank identical archived answers; pairwise majority is compared with Sol alone. | Ordinary accuracy rises from 64.6% to 70.1% on all four panels; verifier accuracy rises from 72.2% to 75.0%, with one panel worse. | Consistent ordinary-condition pilot evidence. | Council composition is fixed and includes correlated model families. | Publish as promising, not universal. |
+| Verifier guidance and councils reinforce one another. | Frozen 2x2 matched comparison. | The council gain is 5.6 points on ordinary evidence and 2.8 points on verifier evidence; mean interaction is -2.8 points. | Evidence against positive synergy in this pilot. | Interaction is noisy with four panels. | Do not claim complementarity. |
+
+Primary artifacts:
+`data/verifier_council_matched_v1_results.json`,
+`docs/pilot_analysis_verifier_council_20260727.md`, and
+`docs/figures/verifier-council/matched-results.svg`.
+
 ## Claims Not Ready
 
 - A precise intelligence distance at which scalable oversight fails.
@@ -67,18 +80,17 @@ Before purchasing another run:
 
 ## Publication Audit Outcome
 
-The current article can answer the three primary questions without another
+The current article can answer the four primary questions without another
 paid run:
 
 - **Retained:** strong judges recover broad capability differences; large
   differences are easier; judges often recognize clearly stronger candidates.
 - **Qualified:** exact top rankings are unstable; judge-capability effects are
   suggestive rather than causal; probe labels are descriptive rather than
-  prescriptive.
+  prescriptive; independent councils are promising but composition-specific.
 - **Removed:** claims of a precise oversight threshold, a universally best
-  question type, or a general benefit from one adaptive follow-up.
+  question type, a general benefit from one adaptive follow-up, or improved
+  above-self recognition from verifier-oriented prompting.
 
-The next paid study should test a new mechanism, not repeat a broad ranking.
-Two candidates are verifier-oriented probes, where judges seek questions whose
-answers they can check even if they cannot produce the best answer themselves,
-and independent judge councils operating on the same archived evidence.
+The next paid study should target one observed mechanism failure, not repeat a
+broad ranking or combine several interventions at once.

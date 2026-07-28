@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Results from a 50-model experiment in AI-authored intelligence evaluation.">
   <title>Can AI systems recognize intelligence?</title>
-  <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="site.css?v=20260727-2">
 </head>
 <body>
   <header class="site-header">
@@ -228,6 +228,45 @@
       answers, so evaluator-specific preferences may affect these results. A
       single blind author attempt also cannot establish that a probe was truly
       beyond the author's capability.
+    </aside>
+  </section>
+
+  <section id="judging-mechanisms" class="wide ruled">
+    <p class="section-kicker">Research question 4 · mechanism pilot</p>
+    <h2>Can probe design or independent councils improve judgment?</h2>
+    <p class="section-intro">Neither intervention is a universal fix. Across
+    four matched nine-model panels, verifier-oriented instructions changed what
+    judges asked but moved above-self recognition from
+    60.0% to
+    55.0%. Three independent
+    evaluators improved on Sol alone for the ordinary batteries, from
+    64.6% to
+    70.1% pairwise accuracy.</p>
+    <figure class="figure-wide">
+      <div class="mechanism-chart">
+        <img src="../figures/verifier-council/matched-results.svg"
+             alt="Matched comparison of verifier-oriented probes and an independent three-member judge council.">
+      </div>
+      <figcaption>Panel A measures the narrow scalable-oversight target. Panel B
+      measures overall ranking. All comparisons use the same candidates and
+      five-probe budget within panel; council members see identical archived
+      evidence independently.</figcaption>
+    </figure>
+    <div class="finding-grid">
+      <div><strong>60.0%</strong><span>ordinary above-self recognition</span></div>
+      <div><strong>55.0%</strong><span>verifier above-self recognition</span></div>
+      <div><strong>70.1%</strong><span>ordinary council accuracy</span></div>
+      <div><strong>75.0%</strong><span>verifier council accuracy</span></div>
+    </div>
+    <aside class="background-note">
+      <strong>Why keep both outcomes?</strong> A battery can improve the broad
+      ordering while making the judge less likely to put every externally
+      stronger model above itself. Four panels are enough to diagnose mechanisms
+      and failures, not to estimate a universal effect. Evaluator disagreement,
+      external-index noise, and model-family composition remain material. The
+      combined interventions showed no extra benefit: the council gain was
+      smaller with verifier batteries, an interaction of
+      -2.8%.
     </aside>
   </section>
 
