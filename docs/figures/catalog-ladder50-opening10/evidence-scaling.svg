@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img">
+  <style>
+        text { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; fill: #182026; letter-spacing: 0; }
+        .title { font-size: 27px; font-weight: 500; }
+        .subtitle { font-size: 15px; fill: #5E6A71; }
+        .panel-title { font-size: 19px; font-weight: 500; }
+        .panel-metric, .series-label { font-size: 14px; font-weight: 500; }
+        .tick, .point-label, .value-label { font-size: 12px; }
+        .tick-muted, .legend { font-size: 12px; fill: #5E6A71; }
+        .axis-label { font-size: 14px; fill: #38454B; }
+        .grid { stroke: #DCE2E5; stroke-width: 1; }
+        .axis { stroke: #879399; stroke-width: 1.2; }
+        .ideal-line { fill: none; stroke-dasharray: 5 5; stroke-width: 1.5; }
+        .chance-line { fill: none; stroke-dasharray: 4 5; stroke-width: 1.2; }
+        .series-line { fill: none; stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+    </style>
+  <title>Adaptive follow-ups did not improve the ten-probe ranking</title>
+  <desc>Overall pairwise accuracy at the opening checkpoint and after each targeted follow-up.</desc>
+  <text x="60.0" y="43.0" class="title" text-anchor="start">Adaptive follow-ups did not improve the ten-probe ranking</text>
+  <text x="60.0" y="71.0" class="subtitle" text-anchor="start">Overall pairwise accuracy at the opening checkpoint and after each targeted follow-up.</text>
+  <line x1="140.0" y1="460.0" x2="1000.0" y2="460.0" class="grid" />
+  <text x="128.0" y="464.0" class="tick" text-anchor="end">80%</text>
+  <line x1="140.0" y1="392.0" x2="1000.0" y2="392.0" class="grid" />
+  <text x="128.0" y="396.0" class="tick" text-anchor="end">82%</text>
+  <line x1="140.0" y1="324.0" x2="1000.0" y2="324.0" class="grid" />
+  <text x="128.0" y="328.0" class="tick" text-anchor="end">84%</text>
+  <line x1="140.0" y1="256.0" x2="1000.0" y2="256.0" class="grid" />
+  <text x="128.0" y="260.0" class="tick" text-anchor="end">86%</text>
+  <line x1="140.0" y1="188.0" x2="1000.0" y2="188.0" class="grid" />
+  <text x="128.0" y="192.0" class="tick" text-anchor="end">88%</text>
+  <line x1="140.0" y1="120.0" x2="1000.0" y2="120.0" class="grid" />
+  <text x="128.0" y="124.0" class="tick" text-anchor="end">90%</text>
+  <line x1="140.0" y1="460.0" x2="1000.0" y2="460.0" class="axis" />
+  <line x1="140.0" y1="120.0" x2="140.0" y2="460.0" class="axis" />
+  <text x="570.0" y="530.0" class="axis-label" text-anchor="middle">Cumulative probes</text>
+  <text x="74.0" y="290.0" class="axis-label" text-anchor="middle" transform="rotate(-90 74.0 290.0)">Correctly ordered pairs</text>
+  <text x="140.0" y="492.0" class="tick" text-anchor="middle">10</text>
+  <text x="140.0" y="512.0" class="tick-muted" text-anchor="middle">opening</text>
+  <text x="570.0" y="492.0" class="tick" text-anchor="middle">11</text>
+  <text x="570.0" y="512.0" class="tick-muted" text-anchor="middle">adaptive 1</text>
+  <text x="1000.0" y="492.0" class="tick" text-anchor="middle">12</text>
+  <text x="1000.0" y="512.0" class="tick-muted" text-anchor="middle">adaptive 2</text>
+  <polyline points="140.0,302.1 570.0,330.4 1000.0,321.0" stroke="#2364AA" class="series-line" />
+  <circle cx="140.0" cy="302.1" r="6.0" fill="#2364AA" stroke="#2364AA" stroke-width="1.5" />
+  <text x="140.0" y="288.1" class="value-label" text-anchor="middle">84.6%</text>
+  <circle cx="570.0" cy="330.4" r="6.0" fill="#2364AA" stroke="#2364AA" stroke-width="1.5" />
+  <text x="570.0" y="316.4" class="value-label" text-anchor="middle">83.8%</text>
+  <circle cx="1000.0" cy="321.0" r="6.0" fill="#2364AA" stroke="#2364AA" stroke-width="1.5" />
+  <text x="1000.0" y="307.0" class="value-label" text-anchor="middle">84.1%</text>
+  <text x="1022.0" y="341.0" class="series-label" text-anchor="start">Sol  -0.6 points</text>
+  <polyline points="140.0,182.6 570.0,195.2 1000.0,270.7" stroke="#C44536" class="series-line" />
+  <rect x="134.5" y="177.1" width="11.0" height="11.0" fill="#C44536" stroke="#C44536" stroke-width="1.5" />
+  <text x="140.0" y="168.6" class="value-label" text-anchor="middle">88.2%</text>
+  <rect x="564.5" y="189.7" width="11.0" height="11.0" fill="#C44536" stroke="#C44536" stroke-width="1.5" />
+  <text x="570.0" y="181.2" class="value-label" text-anchor="middle">87.8%</text>
+  <rect x="994.5" y="265.2" width="11.0" height="11.0" fill="#C44536" stroke="#C44536" stroke-width="1.5" />
+  <text x="1000.0" y="256.7" class="value-label" text-anchor="middle">85.6%</text>
+  <text x="1022.0" y="278.7" class="series-label" text-anchor="start">Fable  -2.6 points</text>
+</svg>

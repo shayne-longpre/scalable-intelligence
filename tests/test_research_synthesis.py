@@ -3,6 +3,7 @@ from __future__ import annotations
 import unittest
 
 from ai_council.research_synthesis import (
+    _catalog_judge_row,
     _standardized_rate,
     kendall_order,
     render_oversight_frontier_svg,
@@ -69,6 +70,41 @@ class ResearchSynthesisTests(unittest.TestCase):
         svg = render_oversight_frontier_svg(summary)
         self.assertIn("2/4", svg)
         self.assertIn("lower third", svg)
+
+    def test_catalog_judge_uses_first_checkpoint_as_opening(self) -> None:
+        run = {
+            "run_dir": "runs/example",
+            "participants": [
+                {"id": "P1", "provider_model_id": "model/a"},
+                {"id": "P2", "provider_model_id": "model/b"},
+            ],
+            "judges": [{"provider_model_id": "model/judge"}],
+            "prior_participant_scores": {"P1": 2.0, "P2": 1.0},
+            "prior_reported_score_participants": ["P1", "P2"],
+            "probe_budget_results": [
+                {
+                    "probe_count": 10,
+                    "ranking": ["P1", "P2"],
+                    "pairwise_accuracy": 1.0,
+                    "kendall_tau": 1.0,
+                    "spearman_rho": 1.0,
+                    "pairwise_accuracy_by_score_gap": [],
+                },
+                {
+                    "probe_count": 11,
+                    "ranking": ["P2", "P1"],
+                    "pairwise_accuracy": 0.0,
+                    "kendall_tau": -1.0,
+                    "spearman_rho": -1.0,
+                    "pairwise_accuracy_by_score_gap": [],
+                },
+            ],
+        }
+
+        row = _catalog_judge_row(run)
+
+        self.assertEqual(row["opening_probe_count"], 10)
+        self.assertEqual(row["ranking_models"], ["model/a", "model/b"])
 
 
 if __name__ == "__main__":

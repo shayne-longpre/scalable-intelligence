@@ -3,53 +3,50 @@
   "prompt_version": "2026-07-27-v2",
   "job_prompt_version_counts": {
     "2026-07-27-v1": 362,
-    "2026-07-27-v2": 77
+    "2026-07-27-v2": 121
   },
-  "generated_at": "2026-07-27T21:27:00.139214+00:00",
+  "generated_at": "2026-07-29T07:08:26.592943+00:00",
   "name": "accepted_probe_self_study_v1",
   "catalog_file": "/Users/shayne/Documents/research/2026_projects/ai_council/data/probe_catalog.json",
   "reference_evaluator": {
     "id": "sol",
     "model": "openai/gpt-5.6-sol"
   },
-  "probe_count": 147,
-  "scored_probe_count": 146,
+  "probe_count": 161,
+  "scored_probe_count": 161,
   "beyond_author_count": 23,
-  "beyond_author_rate": 0.15753424657534246,
-  "author_assessment_count": 147,
+  "beyond_author_rate": 0.14285714285714285,
+  "author_assessment_count": 161,
   "intended_level_counts": {
-    "peer": 101,
-    "stronger": 34,
+    "peer": 113,
+    "stronger": 35,
     "mixed": 8,
-    "weaker": 4
+    "weaker": 5
   },
   "self_solvability_counts": {
     "partially": 36,
-    "fully": 108,
+    "fully": 122,
     "not_solvable": 3
   },
   "self_reported_unsolvable_count": 3,
-  "valid_probe_rate": 0.7191780821917808,
-  "mean_probe_pair_accuracy": 0.5843207374273911,
-  "mean_self_score_error": 0.5205479452054794,
-  "mean_absolute_self_score_error": 0.6986301369863014,
-  "reported_cost_usd": 55.74129509308,
-  "missing_jobs": [
-    "author_solve:probe_b59b4f5d7c7274d95259",
-    "reference_score:probe_b59b4f5d7c7274d95259"
-  ],
+  "valid_probe_rate": 0.7329192546583851,
+  "mean_probe_pair_accuracy": 0.5940118801143646,
+  "mean_self_score_error": 0.4968944099378882,
+  "mean_absolute_self_score_error": 0.6583850931677019,
+  "reported_cost_usd": 69.65797626808,
+  "missing_jobs": [],
   "by_author": [
     {
       "label": "anthropic/claude-fable-5",
-      "probe_count": 7,
-      "scored_probe_count": 7,
+      "probe_count": 14,
+      "scored_probe_count": 14,
       "intended_stronger_rate": 0,
       "self_reported_unsolvable_rate": 0,
       "valid_rate": 0.8571428571428571,
       "beyond_author_rate": 0,
-      "mean_pair_accuracy": 0.6535017816650469,
-      "mean_score_range": 2.7142857142857144,
-      "mean_absolute_self_score_error": 0.5714285714285714
+      "mean_pair_accuracy": 0.6557110463232912,
+      "mean_score_range": 2.7857142857142856,
+      "mean_absolute_self_score_error": 0.5
     },
     {
       "label": "anthropic/claude-haiku-4.5",
@@ -137,27 +134,27 @@
     },
     {
       "label": "openai/gpt-5.6-sol",
-      "probe_count": 18,
-      "scored_probe_count": 18,
-      "intended_stronger_rate": 0.2222222222222222,
+      "probe_count": 25,
+      "scored_probe_count": 25,
+      "intended_stronger_rate": 0.2,
       "self_reported_unsolvable_rate": 0,
-      "valid_rate": 0.9444444444444444,
+      "valid_rate": 0.96,
       "beyond_author_rate": 0,
-      "mean_pair_accuracy": 0.593265306122449,
-      "mean_score_range": 2.1666666666666665,
-      "mean_absolute_self_score_error": 0.0
+      "mean_pair_accuracy": 0.6230795918367347,
+      "mean_score_range": 2.4,
+      "mean_absolute_self_score_error": 0.04
     },
     {
       "label": "qwen/qwen3.7-max",
       "probe_count": 6,
-      "scored_probe_count": 5,
+      "scored_probe_count": 6,
       "intended_stronger_rate": 0.8333333333333334,
       "self_reported_unsolvable_rate": 0.16666666666666666,
-      "valid_rate": 0.8,
-      "beyond_author_rate": 0.2,
-      "mean_pair_accuracy": 0.5472222222222223,
-      "mean_score_range": 1.6,
-      "mean_absolute_self_score_error": 1.0
+      "valid_rate": 0.6666666666666666,
+      "beyond_author_rate": 0.16666666666666666,
+      "mean_pair_accuracy": 0.5929232804232805,
+      "mean_score_range": 1.8333333333333333,
+      "mean_absolute_self_score_error": 0.8333333333333334
     },
     {
       "label": "x-ai/grok-4.5",
@@ -175,51 +172,51 @@
   "by_question_type": [
     {
       "label": "quantitative_math_reasoning",
-      "probe_count": 75,
-      "scored_probe_count": 74,
-      "intended_stronger_rate": 0.18666666666666668,
-      "self_reported_unsolvable_rate": 0.013333333333333334,
-      "valid_rate": 0.7837837837837838,
-      "beyond_author_rate": 0.0945945945945946,
-      "mean_pair_accuracy": 0.5772422933137219,
-      "mean_score_range": 1.5675675675675675,
-      "mean_absolute_self_score_error": 0.6486486486486487
+      "probe_count": 85,
+      "scored_probe_count": 85,
+      "intended_stronger_rate": 0.17647058823529413,
+      "self_reported_unsolvable_rate": 0.011764705882352941,
+      "valid_rate": 0.8,
+      "beyond_author_rate": 0.08235294117647059,
+      "mean_pair_accuracy": 0.5902304255035348,
+      "mean_score_range": 1.7294117647058824,
+      "mean_absolute_self_score_error": 0.611764705882353
     },
     {
       "label": "stem_scientific_reasoning",
-      "probe_count": 33,
-      "scored_probe_count": 33,
-      "intended_stronger_rate": 0.3333333333333333,
+      "probe_count": 35,
+      "scored_probe_count": 35,
+      "intended_stronger_rate": 0.3142857142857143,
       "self_reported_unsolvable_rate": 0,
-      "valid_rate": 0.6060606060606061,
-      "beyond_author_rate": 0.18181818181818182,
-      "mean_pair_accuracy": 0.5886748436748437,
-      "mean_score_range": 1.4848484848484849,
-      "mean_absolute_self_score_error": 0.696969696969697
+      "valid_rate": 0.6285714285714286,
+      "beyond_author_rate": 0.17142857142857143,
+      "mean_pair_accuracy": 0.5958875931324911,
+      "mean_score_range": 1.6,
+      "mean_absolute_self_score_error": 0.6571428571428571
     },
     {
       "label": "planning_decision_strategy",
-      "probe_count": 25,
-      "scored_probe_count": 24,
-      "intended_stronger_rate": 0.28,
-      "self_reported_unsolvable_rate": 0.04,
-      "valid_rate": 0.6666666666666666,
-      "beyond_author_rate": 0.25,
-      "mean_pair_accuracy": 0.647010582010582,
-      "mean_score_range": 1.8333333333333333,
-      "mean_absolute_self_score_error": 0.75
+      "probe_count": 26,
+      "scored_probe_count": 26,
+      "intended_stronger_rate": 0.2692307692307692,
+      "self_reported_unsolvable_rate": 0.038461538461538464,
+      "valid_rate": 0.6538461538461539,
+      "beyond_author_rate": 0.23076923076923078,
+      "mean_pair_accuracy": 0.6544749694749694,
+      "mean_score_range": 1.8846153846153846,
+      "mean_absolute_self_score_error": 0.6923076923076923
     },
     {
       "label": "logical_paradox_consistency",
-      "probe_count": 21,
-      "scored_probe_count": 21,
-      "intended_stronger_rate": 0.19047619047619047,
+      "probe_count": 22,
+      "scored_probe_count": 22,
+      "intended_stronger_rate": 0.18181818181818182,
       "self_reported_unsolvable_rate": 0,
-      "valid_rate": 0.6190476190476191,
+      "valid_rate": 0.5909090909090909,
       "beyond_author_rate": 0,
-      "mean_pair_accuracy": 0.5753401360544218,
-      "mean_score_range": 1.380952380952381,
-      "mean_absolute_self_score_error": 0.6666666666666666
+      "mean_pair_accuracy": 0.579930426716141,
+      "mean_score_range": 1.4545454545454546,
+      "mean_absolute_self_score_error": 0.6363636363636364
     },
     {
       "label": "fluid_abstract_reasoning",
@@ -235,14 +232,26 @@
     },
     {
       "label": "spatial_visual_perceptual",
+      "probe_count": 12,
+      "scored_probe_count": 12,
+      "intended_stronger_rate": 0.25,
+      "self_reported_unsolvable_rate": 0.08333333333333333,
+      "valid_rate": 0.8333333333333334,
+      "beyond_author_rate": 0.16666666666666666,
+      "mean_pair_accuracy": 0.6430650037792895,
+      "mean_score_range": 2.3333333333333335,
+      "mean_absolute_self_score_error": 0.75
+    },
+    {
+      "label": "unclassified",
       "probe_count": 11,
       "scored_probe_count": 11,
-      "intended_stronger_rate": 0.2727272727272727,
+      "intended_stronger_rate": 0.18181818181818182,
       "self_reported_unsolvable_rate": 0.09090909090909091,
       "valid_rate": 0.8181818181818182,
-      "beyond_author_rate": 0.18181818181818182,
-      "mean_pair_accuracy": 0.6331024531024532,
-      "mean_score_range": 2.1818181818181817,
+      "beyond_author_rate": 0.2727272727272727,
+      "mean_pair_accuracy": 0.6032209853638425,
+      "mean_score_range": 2.090909090909091,
       "mean_absolute_self_score_error": 0.8181818181818182
     },
     {
@@ -258,16 +267,16 @@
       "mean_absolute_self_score_error": 1.1818181818181819
     },
     {
-      "label": "unclassified",
-      "probe_count": 10,
-      "scored_probe_count": 10,
-      "intended_stronger_rate": 0.2,
-      "self_reported_unsolvable_rate": 0.1,
-      "valid_rate": 0.8,
-      "beyond_author_rate": 0.3,
-      "mean_pair_accuracy": 0.5869308390022676,
-      "mean_score_range": 1.9,
-      "mean_absolute_self_score_error": 0.9
+      "label": "dimensional_unit_reasoning",
+      "probe_count": 9,
+      "scored_probe_count": 9,
+      "intended_stronger_rate": 0.2222222222222222,
+      "self_reported_unsolvable_rate": 0,
+      "valid_rate": 0.5555555555555556,
+      "beyond_author_rate": 0.1111111111111111,
+      "mean_pair_accuracy": 0.5579805996472663,
+      "mean_score_range": 1.0,
+      "mean_absolute_self_score_error": 0.8888888888888888
     },
     {
       "label": "reading_argument_comprehension",
@@ -282,40 +291,40 @@
       "mean_absolute_self_score_error": 0.3333333333333333
     },
     {
-      "label": "dimensional_unit_reasoning",
+      "label": "coding_algorithmic_reasoning",
       "probe_count": 8,
       "scored_probe_count": 8,
-      "intended_stronger_rate": 0.25,
+      "intended_stronger_rate": 0.125,
       "self_reported_unsolvable_rate": 0,
-      "valid_rate": 0.5,
+      "valid_rate": 0.875,
       "beyond_author_rate": 0.125,
-      "mean_pair_accuracy": 0.5652281746031746,
-      "mean_score_range": 1.0,
-      "mean_absolute_self_score_error": 1.0
+      "mean_pair_accuracy": 0.6463577097505668,
+      "mean_score_range": 2.375,
+      "mean_absolute_self_score_error": 0.625
     },
     {
-      "label": "coding_algorithmic_reasoning",
+      "label": "robustness_adversarial_safety",
+      "probe_count": 7,
+      "scored_probe_count": 7,
+      "intended_stronger_rate": 0.42857142857142855,
+      "self_reported_unsolvable_rate": 0.14285714285714285,
+      "valid_rate": 0.8571428571428571,
+      "beyond_author_rate": 0.2857142857142857,
+      "mean_pair_accuracy": 0.6562795594428248,
+      "mean_score_range": 2.5714285714285716,
+      "mean_absolute_self_score_error": 0.5714285714285714
+    },
+    {
+      "label": "working_memory_state_tracking",
       "probe_count": 7,
       "scored_probe_count": 7,
       "intended_stronger_rate": 0.14285714285714285,
       "self_reported_unsolvable_rate": 0,
       "valid_rate": 0.8571428571428571,
-      "beyond_author_rate": 0.14285714285714285,
-      "mean_pair_accuracy": 0.6268577907353418,
-      "mean_score_range": 2.2857142857142856,
+      "beyond_author_rate": 0,
+      "mean_pair_accuracy": 0.6277097505668934,
+      "mean_score_range": 2.0,
       "mean_absolute_self_score_error": 0.5714285714285714
-    },
-    {
-      "label": "robustness_adversarial_safety",
-      "probe_count": 6,
-      "scored_probe_count": 5,
-      "intended_stronger_rate": 0.5,
-      "self_reported_unsolvable_rate": 0.16666666666666666,
-      "valid_rate": 1,
-      "beyond_author_rate": 0.4,
-      "mean_pair_accuracy": 0.6060975056689343,
-      "mean_score_range": 2.2,
-      "mean_absolute_self_score_error": 0.8
     },
     {
       "label": "social_moral_practical_judgment",
@@ -327,18 +336,6 @@
       "beyond_author_rate": 0.16666666666666666,
       "mean_pair_accuracy": 0.6323960695389267,
       "mean_score_range": 1.5,
-      "mean_absolute_self_score_error": 0.5
-    },
-    {
-      "label": "working_memory_state_tracking",
-      "probe_count": 6,
-      "scored_probe_count": 6,
-      "intended_stronger_rate": 0.16666666666666666,
-      "self_reported_unsolvable_rate": 0,
-      "valid_rate": 0.8333333333333334,
-      "beyond_author_rate": 0,
-      "mean_pair_accuracy": 0.6018518518518519,
-      "mean_score_range": 1.8333333333333333,
       "mean_absolute_self_score_error": 0.5
     },
     {
@@ -366,6 +363,18 @@
       "mean_absolute_self_score_error": 1.0
     },
     {
+      "label": "linguistic_rule_induction",
+      "probe_count": 4,
+      "scored_probe_count": 4,
+      "intended_stronger_rate": 0,
+      "self_reported_unsolvable_rate": 0,
+      "valid_rate": 0.75,
+      "beyond_author_rate": 0,
+      "mean_pair_accuracy": 0.5792006802721088,
+      "mean_score_range": 1.75,
+      "mean_absolute_self_score_error": 0.0
+    },
+    {
       "label": "computer_systems_reasoning",
       "probe_count": 3,
       "scored_probe_count": 3,
@@ -376,18 +385,6 @@
       "mean_pair_accuracy": 0.618665910808768,
       "mean_score_range": 2.3333333333333335,
       "mean_absolute_self_score_error": 0.6666666666666666
-    },
-    {
-      "label": "linguistic_rule_induction",
-      "probe_count": 3,
-      "scored_probe_count": 3,
-      "intended_stronger_rate": 0,
-      "self_reported_unsolvable_rate": 0,
-      "valid_rate": 0.6666666666666666,
-      "beyond_author_rate": 0,
-      "mean_pair_accuracy": 0.5277777777777778,
-      "mean_score_range": 1.3333333333333333,
-      "mean_absolute_self_score_error": 0.0
     },
     {
       "label": "metacognitive_calibration_probe",
@@ -436,6 +433,18 @@
       "mean_pair_accuracy": 0.5,
       "mean_score_range": 0.0,
       "mean_absolute_self_score_error": 2.0
+    },
+    {
+      "label": "source_citation_verification",
+      "probe_count": 1,
+      "scored_probe_count": 1,
+      "intended_stronger_rate": 1,
+      "self_reported_unsolvable_rate": 0,
+      "valid_rate": 1,
+      "beyond_author_rate": 0,
+      "mean_pair_accuracy": 0.7172619047619048,
+      "mean_score_range": 4.0,
+      "mean_absolute_self_score_error": 0.0
     }
   ],
   "probes": [
@@ -4662,7 +4671,7 @@
       "stage": "baseline_battery",
       "source_run": "runs/20260726T234321Z_oversight_frontier_v3_above_heavy_qwen_max_evidence_repaired_timeout_repaired_recovery_profile_repaired",
       "question_turn_id": 3,
-      "author_solve_complete": false,
+      "author_solve_complete": true,
       "author_assessment": {
         "probe_validity": "invalid",
         "checkability": "objective",
@@ -4677,7 +4686,20 @@
           "The adversary can always equivocate to create false majorities for each honest node (e.g., sending 0 to H1 and 1 to H2), preventing convergence under any local coin-flip strategy since the adversary controls scheduling and can avoid triggering coin flips entirely.",
           "Any candidate answer must either present a fundamentally flawed protocol for Parts 2-3 or correctly identify the impossibility (which contradicts the probe's instructions to design and analyze a working protocol)."
         ]
-      }
+      },
+      "reference_validity": "limited",
+      "reference_validity_reason": "Standard validity is unstated, and with it no randomized protocol exists for N=3, f=1 equivocation, so Parts 2-3 are contradictory but still assessable.",
+      "author_reference_score": 1,
+      "best_candidate_score": 4,
+      "candidate_score_range": 3,
+      "candidate_substantially_correct_rate": 0.25,
+      "candidate_pair_accuracy": 0.8214285714285714,
+      "candidate_pair_count": 28,
+      "above_author_candidate_count": 5,
+      "above_author_success_rate": 0.4,
+      "stronger_candidate_succeeds": true,
+      "beyond_author": false,
+      "self_score_error": 0
     },
     {
       "probe_id": "probe_0381da850bdf2f01b807",
@@ -6104,6 +6126,51 @@
       "self_score_error": 0
     },
     {
+      "probe_id": "probe_160a966bdeb952f34135",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question_excerpt": "Let \\(C=[-\\tfrac12,\\tfrac12]^3\\). For a unit vector \\(n=(a,b,c)\\) and real \\(t\\), let \\[ S(n,t)=C\\cap\\{x\\in\\mathbb R^3:n\\cdot x=t\\}, \\] and let \\(A(n,t)\\) be its planar area (zero if empty). Because of cube symmetries, …",
+      "occurrence_count": 1,
+      "question_types": [
+        "quantitative_math_reasoning",
+        "source_citation_verification"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "source_run": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+      "question_turn_id": 10,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "objective",
+        "intended_level": "stronger",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.9,
+        "rationale": [
+          "The problem is mathematically well-posed, with symmetry conventions and degenerate boundary cases explicitly identified.",
+          "Each requested result is objectively verifiable through elementary projection, algebraic inequalities, and convolution or moving-window arguments.",
+          "The equality cases in both the extremum and translated-section parts are subtle but fully derivable without external tools.",
+          "The 600-word limit is tight, yet a complete proof can fit with concise notation and a unified treatment of degeneracies."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The tasks have definite mathematical answers and allow reliable comparison of correctness, proof completeness, equality cases, and compliance.",
+      "author_reference_score": 4,
+      "best_candidate_score": 4,
+      "candidate_score_range": 4,
+      "candidate_substantially_correct_rate": 0.1836734693877551,
+      "candidate_pair_accuracy": 0.7172619047619048,
+      "candidate_pair_count": 1176,
+      "above_author_candidate_count": 1,
+      "above_author_success_rate": 1.0,
+      "stronger_candidate_succeeds": true,
+      "beyond_author": false,
+      "self_score_error": 0
+    },
+    {
       "probe_id": "probe_1e2afc99e30c8e728ecd",
       "author_model": "openai/gpt-5.6-sol",
       "author_score": 58.889831189723,
@@ -6333,6 +6400,51 @@
       "self_score_error": 0
     },
     {
+      "probe_id": "probe_5340907536d3e9650811",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question_excerpt": "A bead of mass \\(m\\) slides without friction in a straight radial slot in a horizontal disk. The disk rotates about a fixed, frictionless axle and has moment of inertia \\(I=3ma^2\\), excluding the bead. The bead is const…",
+      "occurrence_count": 1,
+      "question_types": [
+        "stem_scientific_reasoning"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "source_run": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+      "question_turn_id": 8,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "objective",
+        "intended_level": "weaker",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.98,
+        "rationale": [
+          "The system, initial conditions, constraints, and two driving scenarios are specified sufficiently for unique quantitative results.",
+          "Each requested quantity follows from standard constrained-particle dynamics, angular momentum balance, energy accounting, and impulse analysis.",
+          "The frictionless-slot issue is conceptually subtle but unambiguous: frictionlessness restricts the direction of contact force rather than eliminating contact force or work.",
+          "The latch assumptions and fixed-axle geometry provide clear conservation and continuity tests across the impact.",
+          "A complete derivation is feasible within 600 words with concise notation."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The setup uniquely determines all requested quantities through angular momentum, energy, work, and impulse relations.",
+      "author_reference_score": 4,
+      "best_candidate_score": 4,
+      "candidate_score_range": 3,
+      "candidate_substantially_correct_rate": 0.74,
+      "candidate_pair_accuracy": 0.6955102040816327,
+      "candidate_pair_count": 1225,
+      "above_author_candidate_count": 1,
+      "above_author_success_rate": 1.0,
+      "stronger_candidate_succeeds": true,
+      "beyond_author": false,
+      "self_score_error": 0
+    },
+    {
       "probe_id": "probe_6ac951bd84a186795733",
       "author_model": "openai/gpt-5.6-sol",
       "author_score": 58.889831189723,
@@ -6424,6 +6536,98 @@
       "self_score_error": 0
     },
     {
+      "probe_id": "probe_776bc892284e11da725e",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question_excerpt": "Two causal mechanisms for centered variables \\(X,Y\\) are proposed; all exogenous noises are mutually independent: \\[ M_1:\\quad X=U_X,\\ U_X\\sim N(0,1);\\qquad Y=X+U_Y,\\ U_Y\\sim N(0,1). \\] \\[ M_2:\\quad Y=V_Y,\\ V_Y\\sim N(0,…",
+      "occurrence_count": 1,
+      "question_types": [
+        "dimensional_unit_reasoning",
+        "quantitative_math_reasoning"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "adaptive_followup",
+      "source_run": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+      "question_turn_id": 522,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "mixed",
+        "intended_level": "peer",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.98,
+        "rationale": [
+          "The structural models, intervention semantics, pilot likelihoods, priors, costs, and noise sources are fully specified.",
+          "Marginalizing each shared Gaussian day offset yields unambiguous joint predictive covariances for all packages.",
+          "Posterior updating and the design scores reduce to standard, auditable multivariate-normal calculations.",
+          "The numerical portions are objectively checkable; the requested causal assumption and targeted control allow multiple defensible answers.",
+          "The problem is solvable analytically without external tools and is feasible within the 600-word limit."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The stated Gaussian mechanisms, calibrated pilots, and day-offset structure uniquely determine all requested distributions, posterior odds, and design scores.",
+      "author_reference_score": 4,
+      "best_candidate_score": 4,
+      "candidate_score_range": 1,
+      "candidate_substantially_correct_rate": 1.0,
+      "candidate_pair_accuracy": 0.5,
+      "candidate_pair_count": 45,
+      "above_author_candidate_count": 0,
+      "above_author_success_rate": null,
+      "stronger_candidate_succeeds": false,
+      "beyond_author": false,
+      "self_score_error": 0
+    },
+    {
+      "probe_id": "probe_87ffaa2e6acf602a1eda",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question_excerpt": "An adversary chooses a real threshold \\(T\\in[1,16]\\). A deterministic online algorithm may issue at most four positive bids, one at a time. - If a bid \\(b\\ge T\\), the run stops successfully. - If \\(b<T\\), the algorithm …",
+      "occurrence_count": 1,
+      "question_types": [
+        "planning_decision_strategy",
+        "quantitative_math_reasoning"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "adaptive_followup",
+      "source_run": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+      "question_turn_id": 535,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "objective",
+        "intended_level": "peer",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.96,
+        "rationale": [
+          "The optimization problem is mathematically well-posed, with explicit threshold, bid, stopping, and cost rules.",
+          "The LOW-only feedback reduces any deterministic adaptive policy to a single continuation path, making a universal lower bound tractable.",
+          "The requested polynomial characterization, numerical bids, canonicalization proof, and execution traces are independently checkable.",
+          "The equality-versus-right-limit trace directly tests a subtle but objective feature of the supremum.",
+          "The 550-word limit is tight but sufficient for a concise complete proof."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The optimization problem, required proof obligations, numerical precision, and execution traces are unambiguous and objectively checkable.",
+      "author_reference_score": 4,
+      "best_candidate_score": 4,
+      "candidate_score_range": 2,
+      "candidate_substantially_correct_rate": 0.9,
+      "candidate_pair_accuracy": 0.6666666666666666,
+      "candidate_pair_count": 45,
+      "above_author_candidate_count": 1,
+      "above_author_success_rate": 1.0,
+      "stronger_candidate_succeeds": true,
+      "beyond_author": false,
+      "self_score_error": 0
+    },
+    {
       "probe_id": "probe_8cdc4a1fe550712e4361",
       "author_model": "openai/gpt-5.6-sol",
       "author_score": 58.889831189723,
@@ -6462,6 +6666,52 @@
       "candidate_substantially_correct_rate": 0.7777777777777778,
       "candidate_pair_accuracy": 0.5555555555555556,
       "candidate_pair_count": 36,
+      "above_author_candidate_count": 1,
+      "above_author_success_rate": 1.0,
+      "stronger_candidate_succeeds": true,
+      "beyond_author": false,
+      "self_score_error": 0
+    },
+    {
+      "probe_id": "probe_8e630dcfc268d5f0b705",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question_excerpt": "A regulator privately observes a state \\(S\\in\\{1,2,3\\}\\), each with prior probability \\(1/3\\). A citizen then chooses \\(A\\), \\(B\\), or \\(N\\) (no project). Utilities are: \\[ \\begin{array}{c|ccc} & S=1&S=2&S=3\\\\ \\hline u_…",
+      "occurrence_count": 1,
+      "question_types": [
+        "quantitative_math_reasoning"
+      ],
+      "strategy_tags": [
+        "adversarial_edge_case",
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "source_run": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+      "question_turn_id": 9,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "objective",
+        "intended_level": "peer",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.98,
+        "rationale": [
+          "The finite state and action spaces, explicit utilities, and tie-breaking rule make the requested outcomes determinate.",
+          "Committed signaling can be handled with posterior obedience and Bayes-plausibility arguments that cover arbitrary signal alphabets.",
+          "The regulator’s state-independent preference permits a comprehensive cheap-talk equilibrium argument, including mixed strategies and off-path beliefs.",
+          "Verifiability sharply restricts feasible deviations, so disclosure and silence incentives can be characterized rigorously.",
+          "All four parts and their required proofs can be presented within the 600-word limit."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The finite game, tie-breaking, commitment technology, and equilibrium concepts are sufficiently specified to derive and assess all requested outcomes.",
+      "author_reference_score": 4,
+      "best_candidate_score": 4,
+      "candidate_score_range": 4,
+      "candidate_substantially_correct_rate": 0.62,
+      "candidate_pair_accuracy": 0.769795918367347,
+      "candidate_pair_count": 1225,
       "above_author_candidate_count": 1,
       "above_author_success_rate": 1.0,
       "stronger_candidate_succeeds": true,
@@ -6650,6 +6900,48 @@
       "self_score_error": 0
     },
     {
+      "probe_id": "probe_d0a098524f219f210b5c",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question_excerpt": "A patient has disease \\(D\\) with prior \\(P(D)=0.05\\). Independently, a batch is contaminated with probability \\(P(C)=0.10\\). Two tests \\(A,B\\) behave as follows: - If \\(D=1\\), \\(A\\) and \\(B\\) are conditionally independe…",
+      "occurrence_count": 1,
+      "question_types": [],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "source_run": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+      "question_turn_id": 7,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "objective",
+        "intended_level": "peer",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.98,
+        "rationale": [
+          "All priors, likelihoods, conditional-independence assumptions, utilities, and test costs needed for the analysis are specified.",
+          "The adaptive policy is a finite belief-state decision tree whose alternatives can be exhaustively compared.",
+          "The dependence-error and loss-threshold calculations are objectively verifiable; threshold ties can be stated explicitly.",
+          "A complete rigorous response is feasible within the 600-word limit using compact weights and branch values."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The model and decisions are objectively calculable; only treatment at exact indifference requires a stated tie convention.",
+      "author_reference_score": 4,
+      "best_candidate_score": 4,
+      "candidate_score_range": 4,
+      "candidate_substantially_correct_rate": 0.56,
+      "candidate_pair_accuracy": 0.7661224489795918,
+      "candidate_pair_count": 1225,
+      "above_author_candidate_count": 1,
+      "above_author_success_rate": 1.0,
+      "stronger_candidate_succeeds": true,
+      "beyond_author": false,
+      "self_score_error": 0
+    },
+    {
       "probe_id": "probe_de02052deeddc1603a04",
       "author_model": "openai/gpt-5.6-sol",
       "author_score": 58.889831189723,
@@ -6788,6 +7080,52 @@
       "stronger_candidate_succeeds": true,
       "beyond_author": false,
       "self_score_error": 0
+    },
+    {
+      "probe_id": "probe_fdf99825d9c8b96ba75f",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question_excerpt": "A byte stream arrives in arbitrary nonempty chunks. It encodes records with these rules: - Outside quotes, comma ends a field and LF (`\\n`) ends a record. - A quoted field must begin with `\"` at the start of a field. In…",
+      "occurrence_count": 1,
+      "question_types": [
+        "coding_algorithmic_reasoning",
+        "quantitative_math_reasoning",
+        "working_memory_state_tracking"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "source_run": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+      "question_turn_id": 6,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "objective",
+        "intended_level": "peer",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.96,
+        "rationale": [
+          "The byte-level grammar, EOF behavior, and chunk semantics are sufficiently precise for deterministic evaluation.",
+          "The requested records, state transitions, rejection positions, and chunk-independence invariant are mechanically checkable.",
+          "The memory lower bound follows from retaining unbounded not-yet-returned materialized data, and the requested API change has standard streaming solutions.",
+          "The 600-word limit is tight but sufficient for concise pseudocode and proofs."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The grammar, test streams, edge cases, and proof obligations are precise enough for reliable substantive comparison.",
+      "author_reference_score": 3,
+      "best_candidate_score": 4,
+      "candidate_score_range": 3,
+      "candidate_substantially_correct_rate": 0.38,
+      "candidate_pair_accuracy": 0.7828571428571428,
+      "candidate_pair_count": 1225,
+      "above_author_candidate_count": 1,
+      "above_author_success_rate": 1.0,
+      "stronger_candidate_succeeds": true,
+      "beyond_author": false,
+      "self_score_error": 1
     },
     {
       "probe_id": "probe_0ecc750ce5cb60ae49b5",
@@ -6939,6 +7277,99 @@
       "self_score_error": 1
     },
     {
+      "probe_id": "probe_8c6b5b922897296a488d",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question_excerpt": "**Round 3 Probe (sent verbatim to P08, P04, P13, P22, P34, P17, P38, P31, P43, P25):** --- Define the operation a ⋄ b = (a + b + a·b) mod 6 on the set S = {0, 1, 2, 3, 4, 5}. Answer all four parts. Show enough work that…",
+      "occurrence_count": 1,
+      "question_types": [
+        "quantitative_math_reasoning"
+      ],
+      "strategy_tags": [
+        "adversarial_edge_case",
+        "direct_task_probe"
+      ],
+      "stage": "adaptive_followup",
+      "source_run": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+      "question_turn_id": 535,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "objective",
+        "intended_level": "peer",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.94,
+        "rationale": [
+          "The operation admits a clean structural key: a ⋄ b + 1 ≡ (a+1)(b+1) mod 6, reducing everything to multiplication mod 6, which makes B (associativity) provable for all triples without enumeration.",
+          "Part A is direct arithmetic: 2⋄3 = 5, 5⋄4 = 5; 3⋄4 = 1, 2⋄1 = 5 — both bracketings give 5, verifiable line by line.",
+          "Part C follows from the isomorphism: identity is 0 (maps to unit 1), and invertible elements are exactly those with a+1 a unit mod 6, i.e., {0, 4}; non-invertibility of the rest is provable via gcd(a+1, 6) > 1.",
+          "Part D has a genuine positive answer via the idempotent 4 in (Z/6, ×): T = {1, 3} forms a group with identity 3 (1⋄1 = 3, 1⋄3 = 1, 3⋄3 = 3), all axioms explicitly checkable within the word limit.",
+          "The probe discriminates rigor (structural proof vs. case-sampling) and calibration; Part D punishes candidates who assume identities must be unique across substructures, making it a well-posed peer-level probe with fully objective grading."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The finite operation and requested properties are unambiguous, permitting reliable verification by structural arguments or complete finite checks.",
+      "author_reference_score": 4,
+      "best_candidate_score": 4,
+      "candidate_score_range": 2,
+      "candidate_substantially_correct_rate": 0.4,
+      "candidate_pair_accuracy": 0.4666666666666667,
+      "candidate_pair_count": 45,
+      "above_author_candidate_count": 0,
+      "above_author_success_rate": null,
+      "stronger_candidate_succeeds": false,
+      "beyond_author": false,
+      "self_score_error": 0
+    },
+    {
+      "probe_id": "probe_95a8b90363dbb1e1d0fb",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question_excerpt": "**Probe (Round 2) — KESH numerals** An invented notation maps glyph strings to integers by one deterministic rule. Observed data (numeral = value): ``` U = 1 UU = 2 FU = 4 XF = 12 UFX = 5 F = 3 UF = 2 UX = 8 XX = 18 FUX…",
+      "occurrence_count": 1,
+      "question_types": [
+        "quantitative_math_reasoning"
+      ],
+      "strategy_tags": [
+        "adversarial_edge_case",
+        "criterion_negotiation",
+        "direct_task_probe"
+      ],
+      "stage": "adaptive_followup",
+      "source_run": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+      "question_turn_id": 522,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "objective",
+        "intended_level": "peer",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.85,
+        "rationale": [
+          "The data pins down a Roman-style left-to-right scan rule (glyph subtracts if strictly smaller than its right neighbor, else adds) with U=1, F=3, X=9; row UFX=5 specifically rules out the pair-grouping variant (which would give 11), and all 12 rows check out.",
+          "Part B is mechanical under the rule: FUUX=12, UXF=11, XUX=17; exhaustive enumeration of the 3 one-glyph and 9 two-glyph numerals over {U,F,X} shows none equals 7, and FFU (or FXU) = 7 gives a length-3 witness, so the shortest-numeral proof is a small finite check.",
+          "Part C is cleanly decidable: C1 is true because appending g changes the value by +g or by g-2L with L the old last weight and L<g, and with power-of-3 weights g-2L >= g/3 > 0; C2 is false with counterexample X=9 -> UX=8.",
+          "Part D is deliberately underdetermined: XR=14 admits R=5 (additive) or R=23 (subtractive), so RR is 10 or 46; a numeral like RU (6 vs 24) or RX (4 vs 32) settles it, matching the honesty-rule design.",
+          "All parts are objectively checkable with unique or explicitly characterized answers, fit within 600 words, and I can produce the full solution now without tools; residual risk is only minor slips in the exhaustive length-2 enumeration or arithmetic."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The unspecified rule class makes extrapolations underdetermined, but this is objectively demonstrable and explicitly permitted by the honesty rules.",
+      "author_reference_score": 1,
+      "best_candidate_score": 1,
+      "candidate_score_range": 0,
+      "candidate_substantially_correct_rate": 0.0,
+      "candidate_pair_accuracy": 0.5,
+      "candidate_pair_count": 21,
+      "above_author_candidate_count": 0,
+      "above_author_success_rate": null,
+      "stronger_candidate_succeeds": false,
+      "beyond_author": false,
+      "self_score_error": 3
+    },
+    {
       "probe_id": "probe_a368c51bbb993d8a4217",
       "author_model": "anthropic/claude-fable-5",
       "author_score": 59.8606463217303,
@@ -6987,6 +7418,100 @@
       "self_score_error": 0
     },
     {
+      "probe_id": "probe_ae02bf4d964f2b4cdb0e",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question_excerpt": "**PROBE 9 — Two Proofs (validity vs. truth, error localization, repair)** Below are two claims, each with a purported proof. Truth of a claim and validity of its proof are **independent** questions — all combinations ar…",
+      "occurrence_count": 1,
+      "question_types": [
+        "quantitative_math_reasoning",
+        "stem_scientific_reasoning"
+      ],
+      "strategy_tags": [
+        "adversarial_edge_case",
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "source_run": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+      "question_turn_id": 9,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "objective",
+        "intended_level": "peer",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.88,
+        "rationale": [
+          "Both ground truths are standard and unambiguous: Claim 1 is TRUE but its induction is INVALID (removing an arbitrary vertex can disconnect G', so the inductive hypothesis does not apply; e.g., removing the middle vertex of a path P3 leaves a disconnected graph), and Claim 2 is FALSE with the proof INVALID at the sentence asserting all terms beyond N lie within ε of one another (consecutive differences < ε only bound |a_m - a_n| by (m-n)ε).",
+          "Explicit counterexample for Claim 2 is textbook (a_n = sqrt(n) or harmonic partial sums: differences tend to 0 yet the sequence diverges), and standard repairs exist: for Claim 1, induct on edges or remove a leaf of a spanning tree; for Claim 2, require summable differences (Cauchy via geometric/absolutely convergent tail).",
+          "The probe cleanly separates truth of a claim from validity of its proof, directly targeting the 'claim true so proof fine' failure mode, with objective line-by-line checkable answers and a scoring rubric rewarding precise localization.",
+          "The 550-word cap is tight but sufficient for four classifications, one counterexample, one gap demonstration each, and two repair sketches; I could produce a full-credit answer without tools.",
+          "Minor residual risk: 'strongest natural extra hypothesis' for Argument 2 admits a few defensible answers (summability vs. boundedness+monotonicity), but the rubric's emphasis on classification and checkable repair keeps grading objective."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The core classifications, failure points, examples, and repairs are objectively checkable; multiple natural sufficient sequence repairs can reasonably be accepted.",
+      "author_reference_score": 4,
+      "best_candidate_score": 4,
+      "candidate_score_range": 4,
+      "candidate_substantially_correct_rate": 0.76,
+      "candidate_pair_accuracy": 0.7342857142857143,
+      "candidate_pair_count": 1225,
+      "above_author_candidate_count": 0,
+      "above_author_success_rate": null,
+      "stronger_candidate_succeeds": false,
+      "beyond_author": false,
+      "self_score_error": 0
+    },
+    {
+      "probe_id": "probe_aedba1c291c53de56565",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question_excerpt": "**PROBE 8 — Workshop Schedule (planning under constraints, optimization, proof of optimality, adversarial verification)** **Setup.** Seven jobs with durations in hours: A=3, B=2, C=4, D=4, E=2, F=3, G=5. Precedence (a j…",
+      "occurrence_count": 1,
+      "question_types": [
+        "quantitative_math_reasoning",
+        "robustness_adversarial_safety"
+      ],
+      "strategy_tags": [
+        "adversarial_edge_case",
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "source_run": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+      "question_turn_id": 8,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "objective",
+        "intended_level": "peer",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.85,
+        "rationale": [
+          "Fully determinate instance: total work = 23h, critical chain C(4)->D(4)->F(3) = 11h, second chain A->B->E = 7h; all parts have unique correct numeric answers, and schedules are mechanically verifiable.",
+          "Part A optimum is 12 (schedule: M1 C0-4,D4-8,F8-11; M2 A0-3,B3-5,G5-10,E10-12); lower bound 23/2 = 11.5 rules out 11, but strict rigor for excluding fractional makespans in (11.5,12) needs a left-shift/integrality argument — a deliberate subtlety I can supply, though graders must decide if bare ceil(23/2) suffices.",
+          "Part B optimum is 11 (chain bound C-D-F, achieved with G alone on M3); a fourth machine cannot help since the 11h chain is machine-count-independent. Part C: only shortening C, D, or F helps, each yielding optimum 10 with easy feasible schedules; A/B/E/G leave the 11h chain intact.",
+          "Part D has exactly one violation (E 9-11 overlaps G 5-10 on Machine 2; all precedences are actually satisfied, including B starting exactly at A's finish), and the one-line impossibility proof is 23 > 2x11 = 22.",
+          "The 550-word limit is comfortably sufficient for a complete rigorous answer; main residual risk is minor rigor-grading ambiguity on Part A's lower bound."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The deterministic constraints, schedules, optima, lower bounds, and claimed violations are all objectively checkable.",
+      "author_reference_score": 4,
+      "best_candidate_score": 4,
+      "candidate_score_range": 4,
+      "candidate_substantially_correct_rate": 0.82,
+      "candidate_pair_accuracy": 0.7420408163265306,
+      "candidate_pair_count": 1225,
+      "above_author_candidate_count": 0,
+      "above_author_success_rate": null,
+      "stronger_candidate_succeeds": false,
+      "beyond_author": false,
+      "self_score_error": 0
+    },
+    {
       "probe_id": "probe_af5e1bde7afcb60b7614",
       "author_model": "anthropic/claude-fable-5",
       "author_score": 59.8606463217303,
@@ -7025,6 +7550,98 @@
       "candidate_score_range": 4,
       "candidate_substantially_correct_rate": 0.72,
       "candidate_pair_accuracy": 0.7277551020408163,
+      "candidate_pair_count": 1225,
+      "above_author_candidate_count": 0,
+      "above_author_success_rate": null,
+      "stronger_candidate_succeeds": false,
+      "beyond_author": false,
+      "self_score_error": 0
+    },
+    {
+      "probe_id": "probe_b2cbee3569bc761eb71f",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question_excerpt": "**PROBE 10 — Painted Solid (3-D spatial reasoning, mental imagery, physical plausibility, generalization)** **Setup.** A 4×4×4 cube is assembled from 64 unit cubes. The **8 corner unit cubes are removed**, leaving a 56-…",
+      "occurrence_count": 1,
+      "question_types": [
+        "quantitative_math_reasoning",
+        "spatial_visual_perceptual"
+      ],
+      "strategy_tags": [
+        "cross_domain_transfer",
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "source_run": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+      "question_turn_id": 10,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "objective",
+        "intended_level": "peer",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.88,
+        "rationale": [
+          "Well-posed: paint reachability (notch walls painted, enclosed cavities not) is stated explicitly, removing the main ambiguity risks in painted-cube variants.",
+          "All requested outputs are numeric or closed-form with built-in consistency checks (totals must sum to 56, 48, and n^3-8), so mechanical grading is straightforward.",
+          "Contains deliberate anti-memorization traps (e.g., the 'exactly 2' count in Part A and the invariance of painted-face totals in Part B) that distinguish genuine spatial reasoning from pattern recall, appropriate for peer-level assessment.",
+          "On silent re-derivation I obtain a complete self-consistent classification for A-D, all sanity checks pass (surface area conserved at 96; n=5 categories sum to 117), so I judge it fully solvable by me now.",
+          "Minor residual risk is arithmetic slips or word-limit compression under the 400-word cap, hence confidence slightly below certainty."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The geometry and paint-access rule determine unique, objectively checkable counts and formulas.",
+      "author_reference_score": 4,
+      "best_candidate_score": 4,
+      "candidate_score_range": 4,
+      "candidate_substantially_correct_rate": 0.62,
+      "candidate_pair_accuracy": 0.7526530612244898,
+      "candidate_pair_count": 1225,
+      "above_author_candidate_count": 0,
+      "above_author_success_rate": null,
+      "stronger_candidate_succeeds": false,
+      "beyond_author": false,
+      "self_score_error": 0
+    },
+    {
+      "probe_id": "probe_b3473de6d4115c1d178e",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question_excerpt": "**PROBE 7 — Kelo (rule induction from sparse data, evidence-grounded generalization)** Below are six sentences in an invented language, Kelo, with English translations. The grammar is fully regular; everything you need …",
+      "occurrence_count": 1,
+      "question_types": [
+        "linguistic_rule_induction"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "source_run": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+      "question_turn_id": 7,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "objective",
+        "intended_level": "peer",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.88,
+        "rationale": [
+          "The six data sentences yield a fully consistent grammar with no contradictions: VSO order (D1/D2), -ka past suffix on the verb (D2/D4), ne- plural prefix (D3/D4), postnominal adjectives (D5/D6), and -m attaching to the final word of the object NP rather than the head noun (forced by D6 'miro vess-m').",
+          "All translation items are uniquely derivable: B1 = 'The fish (pl.) saw the big dog', B2 = 'The small dog chases the children', C1 = 'pashi ne-tal rup miro-m', and Part D's (i) is correct while (ii) reattaches 'rup' to the subject, meaning 'The big dog chased the fish' — the distractor is clean and unambiguous.",
+          "C2 contains exactly one genuine underdetermination (English 'fish' is number-ambiguous, giving 'keno-ka ne-tal suvi vess-m' vs 'keno-ka ne-tal ne-suvi vess-m'), which the probe's scoring rules anticipate; no other unflagged ambiguities exist (e.g., ne- placement with an adjective is surface-identical either way).",
+          "Checking is mechanical for Parts B–D and near-mechanical for Part A given the citation requirement, so grading is objective; the 450-word limit is comfortably sufficient.",
+          "I worked through the full solution while verifying consistency, so I would answer it correctly now; residual risk is only a minor citation or format slip, not a grammar error."
+        ]
+      },
+      "reference_validity": "valid",
+      "reference_validity_reason": "The contrasts support a mechanically checkable regular grammar, with one genuine and clearly identifiable number ambiguity.",
+      "author_reference_score": 4,
+      "best_candidate_score": 4,
+      "candidate_score_range": 3,
+      "candidate_substantially_correct_rate": 0.64,
+      "candidate_pair_accuracy": 0.7334693877551021,
       "candidate_pair_count": 1225,
       "above_author_candidate_count": 0,
       "above_author_success_rate": null,
@@ -7122,6 +7739,51 @@
       "stronger_candidate_succeeds": false,
       "beyond_author": false,
       "self_score_error": 1
+    },
+    {
+      "probe_id": "probe_c961d5b200cd10e2e585",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question_excerpt": "**PROBE 6 — The Office Key (theory of mind, nested belief tracking, deduction vs. inference)** **Timeline** (all statements true; agents search where they believe the key is; no communication beyond what is stated): 1. …",
+      "occurrence_count": 1,
+      "question_types": [
+        "logical_paradox_consistency"
+      ],
+      "strategy_tags": [
+        "direct_task_probe"
+      ],
+      "stage": "baseline_battery",
+      "source_run": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+      "question_turn_id": 6,
+      "author_solve_complete": true,
+      "author_assessment": {
+        "probe_validity": "valid",
+        "checkability": "mixed",
+        "intended_level": "peer",
+        "self_solvability": "fully",
+        "predicted_score": 4,
+        "confidence": 0.7,
+        "rationale": [
+          "Q1–Q5 have determinate answers under standard ToM conventions: Maya→A, Raj→A (believed text), Lena→C, Omar→A; Q2=A, Q3=A, Q4=A, Q5=undetermined (Omar has no information about Lena's exposure), and the Q5 'undetermined' trap functions as designed.",
+          "Q6 is the discriminating item: the strictly deducible content is a disjunction (Lena's text was false OR she truly put it in A and the key was moved to C afterward), plus that Lena believed C at 11:00; 'Lena lied' is only the best explanation. I can articulate this separation cleanly now.",
+          "Residual ambiguity: a grader who treats the timeline as exhaustive and common knowledge could count 'the text was false' as deducible, making Q6 grading slightly judgment-dependent; hence checkability is mixed rather than fully objective.",
+          "Minor underspecification in Q6 about whether search locations (not just results) are announced, but this does not affect the intended answer key.",
+          "The 400-word cap and anti-hedging scoring rules are enforceable and I could produce a compliant, fully correct answer without tools, so I predict a 4 with moderate confidence discounted for the Q6 grading ambiguity."
+        ]
+      },
+      "reference_validity": "limited",
+      "reference_validity_reason": "Q1–Q5 are determinate, but Q6 leaves ambiguous whether Raj may assume the timeline exhausts all unobserved post-text moves.",
+      "author_reference_score": 4,
+      "best_candidate_score": 4,
+      "candidate_score_range": 3,
+      "candidate_substantially_correct_rate": 0.72,
+      "candidate_pair_accuracy": 0.6763265306122449,
+      "candidate_pair_count": 1225,
+      "above_author_candidate_count": 0,
+      "above_author_success_rate": null,
+      "stronger_candidate_succeeds": false,
+      "beyond_author": false,
+      "self_score_error": 0
     }
   ]
 }

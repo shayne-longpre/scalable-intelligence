@@ -1,12 +1,152 @@
 {
   "schema_version": "probe-evolution-study-v1",
-  "generated_at": "2026-07-27T20:17:34.234405+00:00",
+  "generated_at": "2026-07-29T06:39:44.697097+00:00",
   "catalog_file": "data/model_catalog.openrouter.json",
   "taxonomy_file": "data/evaluation_taxonomy.json",
   "taxonomy_version": "2026-07-27.2",
-  "run_count": 25,
-  "probe_count": 147,
+  "run_count": 27,
+  "probe_count": 161,
   "cohorts": {
+    "catalog": {
+      "run_count": 2,
+      "probe_count": 14,
+      "judge_score_min": 58.889831189723,
+      "judge_score_max": 59.8606463217303,
+      "question_type_counts": {
+        "quantitative_math_reasoning": 10,
+        "coding_algorithmic_reasoning": 1,
+        "working_memory_state_tracking": 1,
+        "stem_scientific_reasoning": 2,
+        "source_citation_verification": 1,
+        "dimensional_unit_reasoning": 1,
+        "planning_decision_strategy": 1,
+        "logical_paradox_consistency": 1,
+        "linguistic_rule_induction": 1,
+        "robustness_adversarial_safety": 1,
+        "spatial_visual_perceptual": 1
+      },
+      "strategy_counts": {
+        "direct_task_probe": 14,
+        "adversarial_edge_case": 5,
+        "cross_domain_transfer": 1,
+        "criterion_negotiation": 1
+      },
+      "transition_counts": {
+        "preplanned_same_area": 4,
+        "preplanned_progression": 2,
+        "preplanned_broadening": 4,
+        "adaptive_deepening": 4
+      },
+      "validity_counts": {
+        "informative": 14
+      },
+      "adaptive_intent_counts": {
+        "adversarial_validation": 1,
+        "change_domain": 2,
+        "cross_domain_integration": 1,
+        "raise_difficulty": 2,
+        "retest_weakness": 2
+      },
+      "question_types_by_score_band": {
+        "all": {
+          "quantitative_math_reasoning": 10,
+          "coding_algorithmic_reasoning": 1,
+          "working_memory_state_tracking": 1,
+          "stem_scientific_reasoning": 2,
+          "source_citation_verification": 1,
+          "dimensional_unit_reasoning": 1,
+          "planning_decision_strategy": 1,
+          "logical_paradox_consistency": 1,
+          "linguistic_rule_induction": 1,
+          "robustness_adversarial_safety": 1,
+          "spatial_visual_perceptual": 1
+        }
+      },
+      "correlations": {
+        "opening_type_breadth": {
+          "spearman_rho": null,
+          "n": 2
+        },
+        "opening_probe_pair_accuracy": {
+          "spearman_rho": null,
+          "n": 2
+        },
+        "opening_decided_pair_accuracy": {
+          "spearman_rho": null,
+          "n": 2
+        },
+        "opening_tie_pair_rate": {
+          "spearman_rho": null,
+          "n": 2
+        },
+        "informative_probe_rate": {
+          "spearman_rho": null,
+          "n": 2
+        },
+        "adaptive_probe_pair_accuracy": {
+          "spearman_rho": null,
+          "n": 2
+        },
+        "adaptive_decided_pair_accuracy": {
+          "spearman_rho": null,
+          "n": 2
+        },
+        "adaptive_tie_pair_rate": {
+          "spearman_rho": null,
+          "n": 2
+        },
+        "adaptive_ranking_delta": {
+          "spearman_rho": null,
+          "n": 2
+        },
+        "adaptive_plan_action_count": {
+          "spearman_rho": null,
+          "n": 2
+        },
+        "adaptive_intent_breadth": {
+          "spearman_rho": null,
+          "n": 2
+        }
+      },
+      "runs": [
+        {
+          "run_dir": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "judge_model": "openai/gpt-5.6-sol",
+          "judge_name": "OpenAI: GPT-5.6 Sol",
+          "judge_score": 58.889831189723,
+          "score_band": "all",
+          "opening_type_breadth": 5,
+          "opening_probe_pair_accuracy": 0.8011026991441738,
+          "opening_decided_pair_accuracy": 0.8404987902475339,
+          "opening_tie_pair_rate": 0.11570111915734035,
+          "informative_probe_rate": 1.0,
+          "adaptive_probe_pair_accuracy": 0.6944444444444444,
+          "adaptive_decided_pair_accuracy": 0.6966292134831461,
+          "adaptive_tie_pair_rate": 0.011111111111111112,
+          "adaptive_ranking_delta": -0.004897959183673528,
+          "adaptive_plan_action_count": 9,
+          "adaptive_intent_breadth": 5
+        },
+        {
+          "run_dir": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "judge_model": "anthropic/claude-fable-5",
+          "judge_name": "Anthropic: Claude Fable 5",
+          "judge_score": 59.8606463217303,
+          "score_band": "all",
+          "opening_type_breadth": 6,
+          "opening_probe_pair_accuracy": 0.7942857142857143,
+          "opening_decided_pair_accuracy": 0.8430066603235015,
+          "opening_tie_pair_rate": 0.14204081632653062,
+          "informative_probe_rate": 1.0,
+          "adaptive_probe_pair_accuracy": 0.5606060606060606,
+          "adaptive_decided_pair_accuracy": 0.5645161290322581,
+          "adaptive_tie_pair_rate": 0.06060606060606061,
+          "adaptive_ranking_delta": -0.022857142857142798,
+          "adaptive_plan_action_count": 8,
+          "adaptive_intent_breadth": 3
+        }
+      ]
+    },
     "catalog_deep_dive": {
       "run_count": 2,
       "probe_count": 14,
@@ -7416,6 +7556,659 @@
           "decided_pair_accuracy": 0.5,
           "tie_pair_count": 10,
           "tie_pair_rate": 0.2777777777777778,
+          "validity": "informative"
+        }
+      ]
+    },
+    {
+      "cohort": "catalog",
+      "run_dir": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+      "run_name": "catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+      "probe_sequence_min": 6,
+      "judge_model": "openai/gpt-5.6-sol",
+      "judge_name": "OpenAI: GPT-5.6 Sol",
+      "judge_score": 58.889831189723,
+      "candidate_count": 50,
+      "opening_probe_count": 5,
+      "adaptive_probe_count": 2,
+      "opening_type_breadth": 5,
+      "opening_question_types": [
+        "coding_algorithmic_reasoning",
+        "quantitative_math_reasoning",
+        "source_citation_verification",
+        "stem_scientific_reasoning",
+        "working_memory_state_tracking"
+      ],
+      "opening_probe_pair_accuracy": 0.8011026991441738,
+      "opening_probe_pair_count": 6076,
+      "opening_decided_pair_accuracy": 0.8404987902475339,
+      "opening_decided_pair_count": 5373,
+      "opening_tie_pair_rate": 0.11570111915734035,
+      "adaptive_probe_pair_accuracy": 0.6944444444444444,
+      "adaptive_probe_pair_count": 90,
+      "adaptive_decided_pair_accuracy": 0.6966292134831461,
+      "adaptive_decided_pair_count": 89,
+      "adaptive_tie_pair_rate": 0.011111111111111112,
+      "opening_ranking_accuracy": 0.8636734693877551,
+      "final_ranking_accuracy": 0.8587755102040816,
+      "adaptive_ranking_delta": -0.004897959183673528,
+      "informative_probe_rate": 1.0,
+      "validity_counts": {
+        "informative": 7
+      },
+      "transition_counts": {
+        "preplanned_same_area": 2,
+        "preplanned_progression": 2,
+        "preplanned_broadening": 1,
+        "adaptive_deepening": 2
+      },
+      "adaptive_rounds": [
+        {
+          "round_index": 2,
+          "probe_sequence_number": 11,
+          "target_count": 10,
+          "uncertain_pairs_covered": 0,
+          "planned_strategy": [
+            "Change domain to a self-contained scientific-model criticism and experiment-design problem.",
+            "Increase difficulty by combining underdetermination, noisy evidence, and a required falsifying prediction.",
+            "Require a concise derivation, one counterexample to an attractive shortcut, and a checkable decision rule.",
+            "Use hidden edge cases but avoid another familiar DP, Bayes-tree, or linear-kernel template.",
+            "Target the saturated leaders rather than replicating already stable lower-tier failures."
+          ],
+          "rationale": [
+            "These candidates occupy a largely saturated top region after ten broad probes.",
+            "A new probe could distinguish robust verification from localized arithmetic or implementation slips.",
+            "The comparison should especially test whether apparent perfection survives unfamiliar representation and ambiguity."
+          ],
+          "intents": [
+            "raise_difficulty",
+            "change_domain",
+            "cross_domain_integration",
+            "adversarial_validation"
+          ]
+        },
+        {
+          "round_index": 3,
+          "probe_sequence_number": 12,
+          "target_count": 10,
+          "uncertain_pairs_covered": 4,
+          "planned_strategy": [
+            "Change domain from Gaussian causal design to compact program-semantics verification with a hidden state bug.",
+            "Increase difficulty by requiring executable pseudocode, an invariant, a minimal counterexample, and a proof of repair.",
+            "Use one common probe for the selected leaders to remove the current evidence asymmetry.",
+            "Keep the response format short so correctness, not verbosity or rubric familiarity, drives separation."
+          ],
+          "rationale": [
+            "The top cohort remains close, and several leaders lacked the round-2 common probe.",
+            "Another shared task could separate robust verification from arithmetic slips and compressed proofs.",
+            "Including the newly promoted candidates tests whether their latest success generalizes."
+          ],
+          "intents": [
+            "raise_difficulty",
+            "change_domain",
+            "retest_weakness",
+            "adversarial_validation"
+          ]
+        }
+      ],
+      "adaptive_plan_action_count": 9,
+      "adaptive_intent_breadth": 5,
+      "adaptive_intents": [
+        "adversarial_validation",
+        "change_domain",
+        "cross_domain_integration",
+        "raise_difficulty",
+        "retest_weakness"
+      ],
+      "adaptive_target_count": 20,
+      "adaptive_uncertain_pairs_covered": 4,
+      "question_type_counts": {
+        "quantitative_math_reasoning": 5,
+        "coding_algorithmic_reasoning": 1,
+        "working_memory_state_tracking": 1,
+        "stem_scientific_reasoning": 1,
+        "source_citation_verification": 1,
+        "dimensional_unit_reasoning": 1,
+        "planning_decision_strategy": 1
+      },
+      "strategy_counts": {
+        "direct_task_probe": 7,
+        "adversarial_edge_case": 1
+      },
+      "probes": [
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_6",
+          "sequence": 6,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "A byte stream arrives in arbitrary nonempty chunks. It encodes records with these rules: - Outside quotes, comma ends a field and LF (`\\n`) ends a...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "coding_algorithmic_reasoning",
+            "working_memory_state_tracking"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 50,
+          "available_count": 50,
+          "scored_order_count": 50,
+          "unavailable_count": 0,
+          "pair_correct": 1021.0,
+          "pair_count": 1225,
+          "pair_accuracy": 0.833469387755102,
+          "decided_pair_correct": 993,
+          "decided_pair_count": 1169,
+          "decided_pair_accuracy": 0.8494439692044482,
+          "tie_pair_count": 56,
+          "tie_pair_rate": 0.045714285714285714,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_7",
+          "sequence": 7,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "A patient has disease \\(D\\) with prior \\(P(D)=0.05\\). Independently, a batch is contaminated with probability \\(P(C)=0.10\\). Two tests \\(A,B\\) beha...",
+          "question_types": [],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_progression",
+          "topical_transition": "topic_unresolved",
+          "target_count": 50,
+          "available_count": 50,
+          "scored_order_count": 50,
+          "unavailable_count": 0,
+          "pair_correct": 985.5,
+          "pair_count": 1225,
+          "pair_accuracy": 0.8044897959183673,
+          "decided_pair_correct": 933,
+          "decided_pair_count": 1120,
+          "decided_pair_accuracy": 0.8330357142857143,
+          "tie_pair_count": 105,
+          "tie_pair_rate": 0.08571428571428572,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_8",
+          "sequence": 8,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "A bead of mass \\(m\\) slides without friction in a straight radial slot in a horizontal disk. The disk rotates about a fixed, frictionless axle and...",
+          "question_types": [
+            "stem_scientific_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_progression",
+          "topical_transition": "topic_unresolved",
+          "target_count": 50,
+          "available_count": 50,
+          "scored_order_count": 50,
+          "unavailable_count": 0,
+          "pair_correct": 883.0,
+          "pair_count": 1225,
+          "pair_accuracy": 0.7208163265306122,
+          "decided_pair_correct": 635,
+          "decided_pair_count": 729,
+          "decided_pair_accuracy": 0.8710562414266118,
+          "tie_pair_count": 496,
+          "tie_pair_rate": 0.4048979591836735,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_9",
+          "sequence": 9,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "A regulator privately observes a state \\(S\\in\\{1,2,3\\}\\), each with prior probability \\(1/3\\). A citizen then chooses \\(A\\), \\(B\\), or \\(N\\) (no pr...",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "preplanned_broadening",
+          "topical_transition": "switches_or_broadens",
+          "target_count": 50,
+          "available_count": 50,
+          "scored_order_count": 50,
+          "unavailable_count": 0,
+          "pair_correct": 999.0,
+          "pair_count": 1225,
+          "pair_accuracy": 0.8155102040816327,
+          "decided_pair_correct": 976,
+          "decided_pair_count": 1179,
+          "decided_pair_accuracy": 0.8278201865988125,
+          "tie_pair_count": 46,
+          "tie_pair_rate": 0.037551020408163265,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_10",
+          "sequence": 10,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "Let \\(C=[-\\tfrac12,\\tfrac12]^3\\). For a unit vector \\(n=(a,b,c)\\) and real \\(t\\), let \\[ S(n,t)=C\\cap\\{x\\in\\mathbb R^3:n\\cdot x=t\\}, \\] and let \\(A...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "source_citation_verification"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 50,
+          "available_count": 49,
+          "scored_order_count": 49,
+          "unavailable_count": 1,
+          "pair_correct": 979.0,
+          "pair_count": 1176,
+          "pair_accuracy": 0.8324829931972789,
+          "decided_pair_correct": 979,
+          "decided_pair_count": 1176,
+          "decided_pair_accuracy": 0.8324829931972789,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_2:probe_1",
+          "sequence": 11,
+          "round_index": 2,
+          "stage": "adaptive_followup",
+          "stage_label": "adaptive",
+          "title": "Two causal mechanisms for centered variables \\(X,Y\\) are proposed; all exogenous noises are mutually independent: \\[ M_1:\\quad X=U_X,\\ U_X\\sim N(0,...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "dimensional_unit_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "adaptive_deepening",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 10,
+          "available_count": 10,
+          "scored_order_count": 10,
+          "unavailable_count": 0,
+          "pair_correct": 29.5,
+          "pair_count": 45,
+          "pair_accuracy": 0.6555555555555556,
+          "decided_pair_correct": 29,
+          "decided_pair_count": 44,
+          "decided_pair_accuracy": 0.6590909090909091,
+          "tie_pair_count": 1,
+          "tie_pair_rate": 0.022222222222222223,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_3:probe_1",
+          "sequence": 12,
+          "round_index": 3,
+          "stage": "adaptive_followup",
+          "stage_label": "adaptive",
+          "title": "An adversary chooses a real threshold \\(T\\in[1,16]\\). A deterministic online algorithm may issue at most four positive bids, one at a time. - If a...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "planning_decision_strategy"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "adaptive_deepening",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 10,
+          "available_count": 10,
+          "scored_order_count": 10,
+          "unavailable_count": 0,
+          "pair_correct": 33.0,
+          "pair_count": 45,
+          "pair_accuracy": 0.7333333333333333,
+          "decided_pair_correct": 33,
+          "decided_pair_count": 45,
+          "decided_pair_accuracy": 0.7333333333333333,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        }
+      ]
+    },
+    {
+      "cohort": "catalog",
+      "run_dir": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+      "run_name": "catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+      "probe_sequence_min": 6,
+      "judge_model": "anthropic/claude-fable-5",
+      "judge_name": "Anthropic: Claude Fable 5",
+      "judge_score": 59.8606463217303,
+      "candidate_count": 50,
+      "opening_probe_count": 5,
+      "adaptive_probe_count": 2,
+      "opening_type_breadth": 6,
+      "opening_question_types": [
+        "linguistic_rule_induction",
+        "logical_paradox_consistency",
+        "quantitative_math_reasoning",
+        "robustness_adversarial_safety",
+        "spatial_visual_perceptual",
+        "stem_scientific_reasoning"
+      ],
+      "opening_probe_pair_accuracy": 0.7942857142857143,
+      "opening_probe_pair_count": 6125,
+      "opening_decided_pair_accuracy": 0.8430066603235015,
+      "opening_decided_pair_count": 5255,
+      "opening_tie_pair_rate": 0.14204081632653062,
+      "adaptive_probe_pair_accuracy": 0.5606060606060606,
+      "adaptive_probe_pair_count": 66,
+      "adaptive_decided_pair_accuracy": 0.5645161290322581,
+      "adaptive_decided_pair_count": 62,
+      "adaptive_tie_pair_rate": 0.06060606060606061,
+      "opening_ranking_accuracy": 0.8946938775510204,
+      "final_ranking_accuracy": 0.8718367346938776,
+      "adaptive_ranking_delta": -0.022857142857142798,
+      "informative_probe_rate": 1.0,
+      "validity_counts": {
+        "informative": 7
+      },
+      "transition_counts": {
+        "preplanned_broadening": 3,
+        "preplanned_same_area": 2,
+        "adaptive_deepening": 2
+      },
+      "adaptive_rounds": [
+        {
+          "round_index": 2,
+          "probe_sequence_number": 11,
+          "target_count": 10,
+          "uncertain_pairs_covered": 1,
+          "planned_strategy": [
+            "Change domain: a novel-system induction task (invented notation/machine, not linguistics) to retest p7 failers without repeating the same puzzle type",
+            "Embed a deliberately unverifiable subclaim to test whether candidates flag it or falsely certify \u2014 targets the P08/P32/P07 audit-integrity split",
+            "Increase difficulty at the top: multi-constraint problem with a hidden inconsistency to separate P44/P48/P47/P18 beyond saturated correctness",
+            "Keep one determinate mid-difficulty component so bottom-band ordering (P19-P10) stays anchored"
+          ],
+          "rationale": [
+            "High-variance mid-band candidates (P08,P22,P34,P38) need a fresh-domain replication to see if peaks or collapses are representative",
+            "P25/P27-style single-domain p7 failures should be retested with a different novel-system induction task to check generalization",
+            "P04's execution slips vs P16's epistemic overreach distinguish carefulness from calibration; one probe stressing both would separate them",
+            "P13/P31/P17 look format-fluent but content-weak; a probe resistant to templated answers would confirm or refute"
+          ],
+          "intents": [
+            "raise_difficulty",
+            "change_domain",
+            "retest_weakness"
+          ]
+        },
+        {
+          "round_index": 3,
+          "probe_sequence_number": 12,
+          "target_count": 10,
+          "uncertain_pairs_covered": 2,
+          "planned_strategy": [
+            "Replicate the fresh-induction signal in a different domain (invented state machine or algebraic structure, not numerals) to test whether P43/P25/P17/P31 improvements generalize",
+            "Design so that false lemmas yield wrong final answers \u2014 directly targets the P34/P38 sound-vs-lucky distinction",
+            "Keep the probe short-output so truncation cannot mask completion ability (P22 case) and retest the three non-responders",
+            "Defer top-16 separation to a later round; a harder multi-constraint probe with a hidden inconsistency remains queued for P44/P48/P47/P18"
+          ],
+          "rationale": [
+            "P08/P04/P13 must be re-probed to replace missing data before their placements can be trusted",
+            "P22 needs a length-bounded probe to distinguish truncation from abandonment of final parts",
+            "P43/P25/P17/P31 gains need replication in a second fresh domain to confirm they were not probe-family luck",
+            "P34 and P38 need a probe where unsound lemmas produce wrong answers, not lucky right ones"
+          ],
+          "intents": [
+            "raise_difficulty",
+            "change_domain",
+            "retest_weakness"
+          ]
+        }
+      ],
+      "adaptive_plan_action_count": 8,
+      "adaptive_intent_breadth": 3,
+      "adaptive_intents": [
+        "change_domain",
+        "raise_difficulty",
+        "retest_weakness"
+      ],
+      "adaptive_target_count": 20,
+      "adaptive_uncertain_pairs_covered": 3,
+      "question_type_counts": {
+        "logical_paradox_consistency": 1,
+        "linguistic_rule_induction": 1,
+        "quantitative_math_reasoning": 5,
+        "robustness_adversarial_safety": 1,
+        "stem_scientific_reasoning": 1,
+        "spatial_visual_perceptual": 1
+      },
+      "strategy_counts": {
+        "direct_task_probe": 7,
+        "adversarial_edge_case": 4,
+        "cross_domain_transfer": 1,
+        "criterion_negotiation": 1
+      },
+      "probes": [
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_6",
+          "sequence": 6,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**PROBE 6 \u2014 The Office Key (theory of mind, nested belief tracking, deduction vs. inference)** **Timeline** (all statements true; agents search whe...",
+          "question_types": [
+            "logical_paradox_consistency"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_broadening",
+          "topical_transition": "switches_or_broadens",
+          "target_count": 50,
+          "available_count": 50,
+          "scored_order_count": 50,
+          "unavailable_count": 0,
+          "pair_correct": 964.0,
+          "pair_count": 1225,
+          "pair_accuracy": 0.7869387755102041,
+          "decided_pair_correct": 902,
+          "decided_pair_count": 1101,
+          "decided_pair_accuracy": 0.8192552225249773,
+          "tie_pair_count": 124,
+          "tie_pair_rate": 0.10122448979591837,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_7",
+          "sequence": 7,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**PROBE 7 \u2014 Kelo (rule induction from sparse data, evidence-grounded generalization)** Below are six sentences in an invented language, Kelo, with...",
+          "question_types": [
+            "linguistic_rule_induction"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_broadening",
+          "topical_transition": "switches_or_broadens",
+          "target_count": 50,
+          "available_count": 50,
+          "scored_order_count": 50,
+          "unavailable_count": 0,
+          "pair_correct": 902.0,
+          "pair_count": 1225,
+          "pair_accuracy": 0.7363265306122448,
+          "decided_pair_correct": 782,
+          "decided_pair_count": 985,
+          "decided_pair_accuracy": 0.7939086294416243,
+          "tie_pair_count": 240,
+          "tie_pair_rate": 0.19591836734693877,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_8",
+          "sequence": 8,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**PROBE 8 \u2014 Workshop Schedule (planning under constraints, optimization, proof of optimality, adversarial verification)** **Setup.** Seven jobs wit...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "robustness_adversarial_safety"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "preplanned_broadening",
+          "topical_transition": "switches_or_broadens",
+          "target_count": 50,
+          "available_count": 50,
+          "scored_order_count": 50,
+          "unavailable_count": 0,
+          "pair_correct": 1037.0,
+          "pair_count": 1225,
+          "pair_accuracy": 0.846530612244898,
+          "decided_pair_correct": 919,
+          "decided_pair_count": 989,
+          "decided_pair_accuracy": 0.9292214357937311,
+          "tie_pair_count": 236,
+          "tie_pair_rate": 0.1926530612244898,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_9",
+          "sequence": 9,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**PROBE 9 \u2014 Two Proofs (validity vs. truth, error localization, repair)** Below are two claims, each with a purported proof. Truth of a claim and v...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "stem_scientific_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 50,
+          "available_count": 50,
+          "scored_order_count": 50,
+          "unavailable_count": 0,
+          "pair_correct": 1022.5,
+          "pair_count": 1225,
+          "pair_accuracy": 0.8346938775510204,
+          "decided_pair_correct": 991,
+          "decided_pair_count": 1162,
+          "decided_pair_accuracy": 0.8528399311531841,
+          "tie_pair_count": 63,
+          "tie_pair_rate": 0.05142857142857143,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_1:probe_10",
+          "sequence": 10,
+          "round_index": 1,
+          "stage": "baseline_battery",
+          "stage_label": "opening",
+          "title": "**PROBE 10 \u2014 Painted Solid (3-D spatial reasoning, mental imagery, physical plausibility, generalization)** **Setup.** A 4\u00d74\u00d74 cube is assembled fr...",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "spatial_visual_perceptual"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "cross_domain_transfer"
+          ],
+          "transition": "preplanned_same_area",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 50,
+          "available_count": 50,
+          "scored_order_count": 50,
+          "unavailable_count": 0,
+          "pair_correct": 939.5,
+          "pair_count": 1225,
+          "pair_accuracy": 0.7669387755102041,
+          "decided_pair_correct": 836,
+          "decided_pair_count": 1018,
+          "decided_pair_accuracy": 0.8212180746561886,
+          "tie_pair_count": 207,
+          "tie_pair_rate": 0.1689795918367347,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_2:probe_1",
+          "sequence": 11,
+          "round_index": 2,
+          "stage": "adaptive_followup",
+          "stage_label": "adaptive",
+          "title": "**Probe (Round 2) \u2014 KESH numerals** An invented notation maps glyph strings to integers by one deterministic rule. Observed data (numeral = value):...",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "criterion_negotiation",
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "adaptive_deepening",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 10,
+          "available_count": 7,
+          "scored_order_count": 7,
+          "unavailable_count": 3,
+          "pair_correct": 14.0,
+          "pair_count": 21,
+          "pair_accuracy": 0.6666666666666666,
+          "decided_pair_correct": 14,
+          "decided_pair_count": 21,
+          "decided_pair_accuracy": 0.6666666666666666,
+          "tie_pair_count": 0,
+          "tie_pair_rate": 0.0,
+          "validity": "informative"
+        },
+        {
+          "probe_id": "judge_ranking:J1:round_3:probe_1",
+          "sequence": 12,
+          "round_index": 3,
+          "stage": "adaptive_followup",
+          "stage_label": "adaptive",
+          "title": "**Round 3 Probe (sent verbatim to P08, P04, P13, P22, P34, P17, P38, P31, P43, P25):** --- Define the operation a \u22c4 b = (a + b + a\u00b7b) mod 6 on the...",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "adaptive_deepening",
+          "topical_transition": "same_area_new_angle",
+          "target_count": 10,
+          "available_count": 10,
+          "scored_order_count": 10,
+          "unavailable_count": 0,
+          "pair_correct": 23.0,
+          "pair_count": 45,
+          "pair_accuracy": 0.5111111111111111,
+          "decided_pair_correct": 21,
+          "decided_pair_count": 41,
+          "decided_pair_accuracy": 0.5121951219512195,
+          "tie_pair_count": 4,
+          "tie_pair_rate": 0.08888888888888889,
           "validity": "informative"
         }
       ]

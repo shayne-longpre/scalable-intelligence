@@ -22,8 +22,10 @@ def build_replay_repair_config(
     if not rounds or rounds[0] < 1:
         raise ValueError("retry-unavailable-rounds must contain positive integers")
     transcript_path = source_run / "transcript.jsonl"
-    if transcript_path.exists():
-        unavailable_rounds = _unavailable_rounds(transcript_path)
+    if transcript_path.exists() or (
+        source_run / "pending_batch_entries.jsonl"
+    ).exists():
+        unavailable_rounds = _unavailable_rounds(source_run)
         unmatched_rounds = sorted(set(rounds) - unavailable_rounds)
         if unmatched_rounds:
             raise ValueError(
@@ -175,17 +177,30 @@ def _load_json(path: Path) -> dict[str, Any]:
 
 
 def _unavailable_rounds(path: Path) -> set[int]:
+    source_files = (
+        [
+            candidate
+            for candidate in (
+                path / "transcript.jsonl",
+                path / "pending_batch_entries.jsonl",
+            )
+            if candidate.exists()
+        ]
+        if path.is_dir()
+        else [path]
+    )
     rounds = set()
-    with path.open("r", encoding="utf-8") as handle:
-        for line in handle:
-            if not line.strip():
-                continue
-            row = json.loads(line)
-            if not row.get("metadata", {}).get("answer_unavailable"):
-                continue
-            round_index = row.get("round_index")
-            if isinstance(round_index, int) and round_index > 0:
-                rounds.add(round_index)
+    for source_file in source_files:
+        with source_file.open("r", encoding="utf-8") as handle:
+            for line in handle:
+                if not line.strip():
+                    continue
+                row = json.loads(line)
+                if not row.get("metadata", {}).get("answer_unavailable"):
+                    continue
+                round_index = row.get("round_index")
+                if isinstance(round_index, int) and round_index > 0:
+                    rounds.add(round_index)
     return rounds
 
 

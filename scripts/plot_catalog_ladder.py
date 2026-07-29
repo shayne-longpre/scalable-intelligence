@@ -66,8 +66,11 @@ def _run_data(run: dict, catalog_names: dict[str, str]) -> dict:
         }
         for item in run["participants"]
     }
-    final = run["probe_budget_results"][-1]
-    rank_by_id = {participant_id: index for index, participant_id in enumerate(final["ranking"], 1)}
+    opening = run["probe_budget_results"][0]
+    rank_by_id = {
+        participant_id: index
+        for index, participant_id in enumerate(opening["ranking"], 1)
+    }
     scores = run["prior_participant_scores"]
     reported = set(run.get("prior_reported_score_participants", []))
     ordered_ids = sorted(scores, key=lambda participant_id: (-scores[participant_id], participant_id))
@@ -104,7 +107,7 @@ def _evidence_author(run_name: str, judge_model: str) -> str:
 
 
 def _predicted_vs_external(runs: list[dict]) -> ET.Element:
-    height = 610
+    height = 640
     root = _svg_root(height)
     _heading(
         root,
@@ -122,7 +125,7 @@ def _predicted_vs_external(runs: list[dict]) -> ET.Element:
             root,
             panel_x + panel_width,
             105,
-            f"pairwise {run['checkpoints'][-1]['pairwise_accuracy']:.1%}",
+            f"pairwise {run['checkpoints'][0]['pairwise_accuracy']:.1%}",
             css_class="panel-metric",
             anchor="end",
         )
@@ -178,7 +181,11 @@ def _predicted_vs_external(runs: list[dict]) -> ET.Element:
                 f"judge rank {point['predicted_rank']} of {count}"
             )
             if point["name"] in label_names:
-                dx, dy, anchor = _label_offset(point["name"], biggest_miss["name"])
+                dx, dy, anchor = _label_offset(
+                    point["name"],
+                    biggest_miss["name"],
+                    percentile,
+                )
                 if point["name"] == biggest_miss["name"]:
                     ET.SubElement(
                         root,
@@ -200,13 +207,13 @@ def _predicted_vs_external(runs: list[dict]) -> ET.Element:
                     css_class="point-label",
                     anchor=anchor,
                 )
-    _text(root, 600, 548, "External Intelligence Index", css_class="axis-label", anchor="middle")
-    _line(root, 315, 580, 345, 580, stroke=IDEAL, css_class="ideal-line")
-    _text(root, 353, 584, "perfect ordering", css_class="legend")
-    _circle(root, 485, 580, 4.5, fill=INK, stroke=INK)
-    _text(root, 497, 584, "reported score", css_class="legend")
-    _circle(root, 625, 580, 5.5, fill="none", stroke=INK)
-    _text(root, 637, 584, "estimated weak anchor", css_class="legend")
+    _text(root, 600, 566, "External Intelligence Index", css_class="axis-label", anchor="middle")
+    _line(root, 315, 610, 345, 610, stroke=IDEAL, css_class="ideal-line")
+    _text(root, 353, 614, "perfect ordering", css_class="legend")
+    _circle(root, 485, 610, 4.5, fill=INK, stroke=INK)
+    _text(root, 497, 614, "reported score", css_class="legend")
+    _circle(root, 625, 610, 5.5, fill="none", stroke=INK)
+    _text(root, 637, 614, "estimated weak anchor", css_class="legend")
     return root
 
 
@@ -216,11 +223,21 @@ def _discrimination_by_gap(runs: list[dict]) -> ET.Element:
     _heading(
         root,
         "Large capability differences are easy; close calls are not",
-        "Final pairwise accuracy after six probes, using the 47 models with reported external scores.",
+        "Opening-battery accuracy using the 47 models with reported external scores.",
     )
     x0, y0, width, height_plot = 120, 120, 920, 360
-    labels = [item["label"] for item in runs[0]["checkpoints"][-1]["pairwise_accuracy_by_score_gap"]]
-    counts = [item["pair_count"] for item in runs[0]["checkpoints"][-1]["pairwise_accuracy_by_score_gap"]]
+    labels = [
+        item["label"]
+        for item in runs[0]["checkpoints"][0][
+            "pairwise_accuracy_by_score_gap"
+        ]
+    ]
+    counts = [
+        item["pair_count"]
+        for item in runs[0]["checkpoints"][0][
+            "pairwise_accuracy_by_score_gap"
+        ]
+    ]
     xs = [x0 + index * width / (len(labels) - 1) for index in range(len(labels))]
     _axes(
         root,
@@ -246,7 +263,7 @@ def _discrimination_by_gap(runs: list[dict]) -> ET.Element:
         color = SOL if run["judge"] == "Sol" else FABLE
         values = [
             item["accuracy"] * 100
-            for item in run["checkpoints"][-1]["pairwise_accuracy_by_score_gap"]
+            for item in run["checkpoints"][0]["pairwise_accuracy_by_score_gap"]
         ]
         points = [
             (x, _scale(value, 45, 100, y0 + height_plot, y0))
@@ -261,7 +278,7 @@ def _discrimination_by_gap(runs: list[dict]) -> ET.Element:
             _text(
                 root,
                 x,
-                y - 13 if run["judge"] == "Sol" else y + 24,
+                y + 24 if run["judge"] == "Sol" else y - 13,
                 f"{value:.0f}%",
                 css_class="value-label",
                 anchor="middle",
@@ -270,7 +287,7 @@ def _discrimination_by_gap(runs: list[dict]) -> ET.Element:
         _text(
             root,
             xs[-1] + 18,
-            end_y - 8 if run["judge"] == "Sol" else end_y + 20,
+            end_y + 20 if run["judge"] == "Sol" else end_y - 8,
             run["judge"],
             css_class="series-label",
         )
@@ -282,12 +299,20 @@ def _evidence_scaling(runs: list[dict]) -> ET.Element:
     root = _svg_root(height)
     _heading(
         root,
-        "More probing helped one judge, but not the other",
-        "Overall pairwise accuracy after the four-probe opening and each targeted adaptive follow-up.",
+        "Adaptive follow-ups did not improve the ten-probe ranking",
+        "Overall pairwise accuracy at the opening checkpoint and after each targeted follow-up.",
     )
     x0, y0, width, height_plot = 140, 120, 860, 340
     probe_counts = [item["probe_count"] for item in runs[0]["checkpoints"]]
     xs = [x0 + index * width / (len(probe_counts) - 1) for index in range(len(probe_counts))]
+    all_values = [
+        item["pairwise_accuracy"] * 100
+        for run in runs
+        for item in run["checkpoints"]
+    ]
+    y_min = 2 * int((min(all_values) - 2) // 2)
+    y_max = 2 * int((max(all_values) + 3) // 2)
+    y_ticks = list(range(y_min, y_max + 1, 2))
     _axes(
         root,
         x0,
@@ -295,9 +320,9 @@ def _evidence_scaling(runs: list[dict]) -> ET.Element:
         width,
         height_plot,
         x_ticks=[],
-        y_ticks=[78, 80, 82, 84, 86],
+        y_ticks=y_ticks,
         x_domain=(0, 1),
-        y_domain=(77, 86),
+        y_domain=(y_min, y_max),
         x_label="Cumulative probes",
         y_label="Correctly ordered pairs",
         y_percent=True,
@@ -310,7 +335,7 @@ def _evidence_scaling(runs: list[dict]) -> ET.Element:
         color = SOL if run["judge"] == "Sol" else FABLE
         values = [item["pairwise_accuracy"] * 100 for item in run["checkpoints"]]
         points = [
-            (x, _scale(value, 77, 86, y0 + height_plot, y0))
+            (x, _scale(value, y_min, y_max, y0 + height_plot, y0))
             for x, value in zip(xs, values, strict=True)
         ]
         _polyline(root, points, stroke=color, css_class="series-line")
@@ -588,12 +613,18 @@ def _square(
     )
 
 
-def _label_offset(name: str, biggest_miss: str) -> tuple[int, int, str]:
+def _label_offset(
+    name: str,
+    biggest_miss: str,
+    percentile: float,
+) -> tuple[int, int, str]:
     if name == biggest_miss:
         return (10, -10, "start")
+    if percentile >= 98:
+        return (-8, 38, "end")
     offsets = {
-        "Claude Fable 5": (-8, -12, "end"),
-        "GPT-5.6 Sol": (-8, 17, "end"),
+        "Claude Fable 5": (-8, -18, "end"),
+        "GPT-5.6 Sol": (-8, -18, "end"),
         "Kimi K3": (-8, 31, "end"),
     }
     return offsets.get(name, (9, -9, "start"))
@@ -606,6 +637,7 @@ def _short_name(name: str) -> str:
         "MoonshotAI: ": "",
         "Google: ": "",
         "Meta: ": "",
+        "MiniMax: ": "",
     }
     for prefix, replacement in replacements.items():
         name = name.replace(prefix, replacement)

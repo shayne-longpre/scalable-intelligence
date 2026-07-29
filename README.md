@@ -78,8 +78,14 @@ new runs are tracked in
 
 The evolving reader-facing overview is
 [`docs/site/index.html`](docs/site/index.html). Its linked taxonomy, model table,
-and compact audit sheet are generated directly from the versioned catalog and
-run artifacts by `scripts/build_publication_site.py`.
+robustness appendix, and compact audit sheet are generated directly from the
+versioned catalog and run artifacts. Publication-only synthesis and figures are
+built by `scripts/analyze_publication.py`, then assembled into the site by
+`scripts/build_publication_site.py`. The underlying derived values remain
+auditable in
+[`data/publication_analysis.json`](data/publication_analysis.json) and the
+compact Markdown appendix in
+[`docs/robustness_appendix.md`](docs/robustness_appendix.md).
 
 The first broad benchmark uses two independent judges and a frozen 50-model
 ladder. Its plain-language protocol is in
@@ -285,7 +291,7 @@ The main scale controls stay in config:
 ```json
 {
   "kind": "independent_judge_ranking",
-  "probe_schedule": [5, 1, 1],
+  "probe_schedule": [10, 1, 1],
   "adaptive_targeting": "judge_selected",
   "max_adaptive_candidates": 10,
   "probe_generation_guidance": ""
@@ -299,15 +305,30 @@ the substantive probe, answer, comparison, and cumulative-judgment instructions.
 See [`docs/adaptive_judge_protocol.md`](docs/adaptive_judge_protocol.md) for the
 same flow without implementation detail.
 
-Historical five-round stress runs use `[4, 1, 1, 1, 1]` so every cumulative probe count
-from four through eight can be inspected. Current pilots support
-`[5, 1, 1]` as the catalog schedule, with the five-probe opening preregistered
-as the primary endpoint and later rounds treated as adaptive extensions. Across
-the first three replicated close-roster runs,
+Historical five-round stress runs use `[4, 1, 1, 1, 1]` so every cumulative
+probe count from four through eight can be inspected. The working 50-model
+catalog default is `[10, 1, 1]`: ten shared opening probes are the primary
+endpoint, and two judge-selected follow-ups are exploratory sensitivity
+analyses. The matched extension from five to ten opening probes increased mean
+pairwise agreement with the reference ranking from 82.7% to 86.4% across the
+two independent judges. Both judges improved, and their mean Kendall agreement
+with the reference rose from 0.655 to 0.728. Across the first three replicated
+close-roster runs,
 accuracy was not monotonic in probe count, so there is not yet an automatic
 stopping rule. Broadly separated rosters often need only the opening battery and
 one confirmation round. The judgment at every round remains a valid analysis
 checkpoint.
+
+The matched 50-model probe-budget extension is
+`studies/catalog_ladder50_opening10_v1.json`. It holds each judge's first five
+probes and all corresponding answers fixed, adds five complementary opening
+probes before showing their answers, then runs two fresh adaptive rounds:
+`[10, 1, 1]`. An opening-only replay bundle excludes the earlier adaptive
+questions and judgments, so the new 10-, 11-, and 12-probe checkpoints cannot
+silently inherit stale follow-ups. `scripts/analyze_catalog_probe_extension.py`
+compares those checkpoints with the original five-probe result and reports
+gold agreement, rank churn, adaptive targets, unavailable cells, and complete
+repair/resume spend.
 
 The original stress run is analyzed in
 [`docs/pilot_analysis_adaptive_waves_20260720.md`](docs/pilot_analysis_adaptive_waves_20260720.md).
@@ -387,8 +408,10 @@ The repository includes config examples that map onto the two modes:
   stress-test fixtures.
 - `examples/catalog_ladder50_sol_opening5.openrouter.json` and
   `examples/catalog_ladder50_fable_opening5.openrouter.json`: independent
-  five-opening-probe replications of the frozen 50-model ladder, followed by
-  two selective adaptive probes.
+  five-opening-probe predecessors to the current catalog protocol.
+- `studies/catalog_ladder50_opening10_v1.json`: matched extensions of those
+  runs to ten opening probes, followed by two selective adaptive probes. The
+  ten-probe judgment is the primary catalog result.
 - `studies/oversight_frontier_v1.json`: the six-level oversight-frontier study.
   Each judge evaluates seven anonymous candidates with five opening probes and
   one adaptive tie-breaker. Resolved configs are generated into `runs/` with

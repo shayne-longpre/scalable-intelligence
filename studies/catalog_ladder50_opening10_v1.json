@@ -1,0 +1,17 @@
+{
+  "name": "catalog_ladder50_opening10_v1",
+  "research_question": "Does expanding each frontier judge's five-probe opening battery to ten complementary probes improve the stability and external alignment of the full 50-model ranking, and do two later targeted probes add further value?",
+  "additional_probes": 5,
+  "adaptive_probe_counts": [1, 1],
+  "probe_generation_guidance": "You have inherited five opening probes that were written before any candidate answers were visible. Add five genuinely complementary probes to complete a ten-probe opening portfolio. Candidates span a very wide capability range and some may be more capable than you. Cover important capabilities or failure modes the inherited battery does not already measure. Include enough accessible signal to expose weak systems and enough headroom to separate the strongest systems. Prefer well-posed tasks whose answer quality can be checked from reasoning, construction, proof, counterexample, internal consistency, or other evidence available in the response. Do not make all five probes variations on one technical specialty, and do not raise difficulty by adding impossible workloads, obscure trivia, brittle formatting constraints, or ambiguous premises.",
+  "conditions": [
+    {
+      "id": "sol",
+      "source_run": "runs/20260727T005211Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired"
+    },
+    {
+      "id": "fable",
+      "source_run": "runs/20260727T002110Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired"
+    }
+  ]
+}

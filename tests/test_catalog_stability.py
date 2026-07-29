@@ -21,7 +21,7 @@ class CatalogStabilityTests(unittest.TestCase):
         result = compare_judge_runs(baseline, replication)
 
         self.assertAlmostEqual(result["rank_replication_tau"], 1 / 3)
-        self.assertAlmostEqual(result["final_pairwise_accuracy_delta"], -0.1)
+        self.assertAlmostEqual(result["opening_pairwise_accuracy_delta"], -0.1)
         self.assertEqual(
             [row["model"] for row in result["rank_points"]],
             ["m/a", "m/b", "m/c"],
@@ -34,6 +34,25 @@ class CatalogStabilityTests(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "judge routes differ"):
             compare_judge_runs(baseline, replication)
+
+    def test_comparison_uses_opening_not_adaptive_checkpoint(self) -> None:
+        participants = {"P1": "m/a", "P2": "m/b", "P3": "m/c"}
+        baseline = _run(["P1", "P2", "P3"], participants, 0.8)
+        replication = _run(["P1", "P2", "P3"], participants, 0.9)
+        replication["probe_budget_results"].append(
+            {
+                "probe_count": 6,
+                "ranking": ["P3", "P2", "P1"],
+                "pairwise_accuracy": 0.1,
+                "kendall_tau": -0.8,
+                "pairwise_accuracy_by_score_gap": [],
+            }
+        )
+
+        result = compare_judge_runs(baseline, replication)
+
+        self.assertEqual(result["rank_replication_tau"], 1.0)
+        self.assertEqual(result["replication_opening_pairwise_accuracy"], 0.9)
 
 
 def _run(

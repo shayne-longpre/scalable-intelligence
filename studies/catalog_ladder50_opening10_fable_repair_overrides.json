@@ -1,0 +1,23 @@
+{
+  "deepseek/deepseek-v4-flash": {
+    "max_tokens": 20000,
+    "temperature": 0,
+    "reasoning": {
+      "effort": "low"
+    }
+  },
+  "google/gemini-2.5-pro": {
+    "max_tokens": 12000,
+    "temperature": 0,
+    "reasoning": {
+      "effort": "low"
+    }
+  },
+  "minimax/minimax-m3": {
+    "max_tokens": 12000,
+    "temperature": 0,
+    "reasoning": {
+      "effort": "low"
+    }
+  }
+}

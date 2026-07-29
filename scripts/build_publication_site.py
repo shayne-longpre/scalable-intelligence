@@ -11,6 +11,10 @@ from statistics import mean
 
 from ai_council.oversight_analysis import render_oversight_report
 from ai_council.oversight_synthesis import render_frontier_synthesis
+from ai_council.publication_analysis import (
+    kendall_order,
+    spearman,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,22 +44,12 @@ DEFAULT_PROBE_EFFECTIVENESS = (
 DEFAULT_VERIFIER_COUNCIL = (
     ROOT / "data" / "verifier_council_matched_v1_results.json"
 )
+DEFAULT_PUBLICATION_ANALYSIS = ROOT / "data" / "publication_analysis.json"
 ORDER_REPLAY_RUN = (
     ROOT
     / "runs"
     / "20260725T203344Z_catalog_ladder50_order_audit_fable_on_sol_seed_20260814"
 )
-
-PROBE_TITLES = [
-    ("Sol", "Pooled tests"),
-    ("Sol", "Mechanics"),
-    ("Sol", "Concurrency"),
-    ("Sol", "Causal ID"),
-    ("Fable", "Reachability"),
-    ("Fable", "Language"),
-    ("Fable", "Causal choice"),
-    ("Fable", "Proof audit"),
-]
 
 STRATEGY_PROVENANCE = {
     "criterion_negotiation": "Observed in pilots; related to rubric design and construct validity.",
@@ -189,38 +183,6 @@ def transcript_by_turn(run_dir: Path) -> dict[int, dict]:
     }
 
 
-def ranked(values: list[float]) -> list[float]:
-    order = sorted(range(len(values)), key=values.__getitem__)
-    result = [0.0] * len(values)
-    index = 0
-    while index < len(values):
-        end = index + 1
-        while end < len(values) and values[order[end]] == values[order[index]]:
-            end += 1
-        average_rank = (index + end + 1) / 2
-        for offset in range(index, end):
-            result[order[offset]] = average_rank
-        index = end
-    return result
-
-
-def spearman(left: list[float], right: list[float]) -> float:
-    if len(left) != len(right) or len(left) < 2:
-        return 0.0
-    x_values = ranked(left)
-    y_values = ranked(right)
-    x_mean = mean(x_values)
-    y_mean = mean(y_values)
-    numerator = sum(
-        (x_value - x_mean) * (y_value - y_mean)
-        for x_value, y_value in zip(x_values, y_values, strict=True)
-    )
-    x_variance = sum((value - x_mean) ** 2 for value in x_values)
-    y_variance = sum((value - y_mean) ** 2 for value in y_values)
-    denominator = math.sqrt(x_variance * y_variance)
-    return numerator / denominator if denominator else 0.0
-
-
 def partial_spearman(
     left: list[float], right: list[float], control: list[float]
 ) -> float:
@@ -237,66 +199,12 @@ def partial_spearman(
     )
 
 
-def pairwise_accuracy(ordering: list[str], scores: dict[str, float]) -> float:
-    position = {participant_id: rank for rank, participant_id in enumerate(ordering)}
-    comparable = [item for item in ordering if item in scores]
-    correct = 0
-    total = 0
-    for left_index, left in enumerate(comparable):
-        for right in comparable[left_index + 1 :]:
-            if scores[left] == scores[right]:
-                continue
-            total += 1
-            predicted = position[left] < position[right]
-            expected = scores[left] > scores[right]
-            correct += predicted == expected
-    return correct / total if total else 0.0
-
-
-def score_pairwise_accuracy(
-    predictions: dict[str, float], scores: dict[str, float]
-) -> float:
-    comparable = sorted(predictions.keys() & scores.keys())
-    correct = 0.0
-    total = 0
-    for left_index, left in enumerate(comparable):
-        for right in comparable[left_index + 1 :]:
-            if scores[left] == scores[right]:
-                continue
-            total += 1
-            if predictions[left] == predictions[right]:
-                correct += 0.5
-            elif (predictions[left] > predictions[right]) == (
-                scores[left] > scores[right]
-            ):
-                correct += 1
-    return correct / total if total else 0.0
-
-
-def kendall_order(left: list[str], right: list[str]) -> float:
-    if set(left) != set(right) or len(left) < 2:
-        return 0.0
-    left_position = {item: index for index, item in enumerate(left)}
-    right_position = {item: index for index, item in enumerate(right)}
-    concordant = 0
-    discordant = 0
-    for left_index, first in enumerate(left):
-        for second in left[left_index + 1 :]:
-            same_direction = (
-                left_position[first] - left_position[second]
-            ) * (
-                right_position[first] - right_position[second]
-            )
-            concordant += same_direction > 0
-            discordant += same_direction < 0
-    return (concordant - discordant) / (concordant + discordant)
-
-
 def page(title: str, description: str, body: str, active: str) -> str:
     nav_items = [
         ("Results", "index.html", "results"),
         ("Taxonomy", "taxonomy.html", "taxonomy"),
         ("Models", "models.html", "models"),
+        ("Robustness", "robustness.html", "robustness"),
         ("Audit sample", "audit.html", "audit"),
     ]
     nav = "".join(
@@ -311,7 +219,7 @@ def page(title: str, description: str, body: str, active: str) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{escape(description, quote=True)}">
   <title>{escape(title)}</title>
-  <link rel="stylesheet" href="site.css?v=20260727-2">
+  <link rel="stylesheet" href="site.css?v=20260728-1">
 </head>
 <body>
   <header class="site-header">
@@ -351,11 +259,11 @@ def article(
     report: dict,
     catalog: dict,
     taxonomy: dict,
-    score_summary: dict | None,
     oversight_summary: dict | None,
     research_summary: dict,
     probe_effectiveness: dict,
     verifier_council: dict | None,
+    publication_analysis: dict,
 ) -> str:
     runs = report["runs"]
     best_run = next(
@@ -368,6 +276,7 @@ def article(
     )
     catalog_by_id = {item["provider_model_id"]: item for item in catalog["models"]}
     rq1 = research_summary["rq1_catalog_ranking"]
+    opening_probe_count = int(rq1["opening_probe_count"])
     primary_ranking = rq1["primary_ranking"]
     ranking_rows = []
     for row in primary_ranking:
@@ -391,24 +300,14 @@ def article(
         )
 
     probe_cards = build_probe_cards(taxonomy)
-    heatmap, heatmap_stats = build_heatmap(
-        runs, catalog_by_id, score_summary=score_summary
-    )
     order_audit = presentation_order_replay(best_checkpoint["ranking"])
     direct_scores = rq1["reported_score_candidate_count"]
     strategy_count = len(taxonomy["tags"])
     question_count = len(taxonomy["question_types"])
-    heatmap_method = (
-        "Each cell is the mean anchored answer-quality score from Sol and Fable"
-        if score_summary
-        else "Each cell is the mean within-probe percentile from Sol and Fable"
-    )
-    heatmap_caveat = (
-        "Seven probes have both judges; the pooled-test column uses Sol alone "
-        "because Fable repeatedly returned an empty provider response."
-        if score_summary
-        else "These are relative positions, not absolute difficulty scores."
-    )
+    probe_author_section = _probe_author_section(
+        publication_analysis["probe_author_analysis"]
+    ).strip()
+    matrix_stats = publication_analysis["answer_matrix"]["stats"]
     oversight_section = _oversight_section(
         oversight_summary,
         research_summary,
@@ -418,6 +317,10 @@ def article(
     ).strip()
     mechanism_section = _mechanism_section(verifier_council).strip()
     catalog_mean_accuracy = rq1["mean_pairwise_accuracy"]
+    catalog_judge_results = "; ".join(
+        f"{row['judge_name']}: {row['pairwise_accuracy']:.1%}"
+        for row in rq1["judges"]
+    )
     catalog_gap_rows = {
         row["label"]: row
         for row in rq1["pairwise_accuracy_by_score_gap"]
@@ -446,7 +349,8 @@ def article(
       <span>Independent replication</span>
       <strong>{catalog_mean_accuracy:.1%}</strong>
       <p>of comparable model pairs were ordered consistently with an external
-      intelligence index, averaged across two independent five-probe judges.</p>
+      intelligence index, averaged across two independent
+      {opening_probe_count}-probe judges.</p>
     </div>
   </section>
 
@@ -467,16 +371,17 @@ def article(
   <section id="method" class="prose ruled">
     <p class="section-kicker">Method in 30 seconds</p>
     <h2>Anonymous candidates, independent judges</h2>
-    <p>Two frontier judges independently wrote five opening probes and sent each
-    probe unchanged to 50 anonymous models. Each judge compared all answers to
-    a probe, combined the evidence into a ranking, and could ask two later
-    follow-ups of the ten candidates it found hardest to separate. Candidate
-    names and external scores were hidden throughout. An earlier four-probe
-    run and crossed-evidence controls provide stability checks.</p>
+    <p>Two frontier judges independently wrote {opening_probe_count} opening
+    probes and sent each probe unchanged to 50 anonymous models. Each judge
+    compared all answers to a probe, combined the evidence into a ranking, and
+    could ask two later follow-ups of the ten candidates it found hardest to
+    separate. Candidate names and external scores were hidden throughout.
+    Earlier four- and five-probe runs and crossed-evidence controls provide
+    stability checks.</p>
     <div class="method-grid">
       <div><strong>50</strong><span>candidate models</span></div>
       <div><strong>2</strong><span>independent judges</span></div>
-      <div><strong>5 + 2</strong><span>opening + adaptive probes</span></div>
+      <div><strong>{opening_probe_count} + 2</strong><span>opening + adaptive probes</span></div>
       <div><strong>{direct_scores}</strong><span>direct external scores</span></div>
     </div>
     <p class="note">The external Artificial Analysis Intelligence Index is a
@@ -487,15 +392,32 @@ def article(
     taxonomy</a>, and the <a href="audit.html">small human audit sample</a>.</p>
   </section>
 
+  <section id="experiment-map" class="wide ruled">
+    <p class="section-kicker">Three complementary tests</p>
+    <h2>From a broad ladder to above-level oversight</h2>
+    <p class="section-intro">The experiments reuse one basic idea at different
+    scales: hide model identities, let a judge invent the evidence it wants,
+    and compare its resulting order with an external reference.</p>
+    <figure class="figure-wide">
+      <div class="wide-chart diagram-chart">
+        <img src="../figures/publication/experiment-designs.svg"
+             alt="Diagrams of the catalog ladder, oversight frontier, and independent council experiments.">
+      </div>
+      <figcaption>The catalog tests broad ranking, the frontier panels isolate
+      judgments around the evaluator's own level, and the council tests
+      independent aggregation on identical archived evidence.</figcaption>
+    </figure>
+  </section>
+
   <section id="catalog-results" class="wide ruled">
     <p class="section-kicker">Research question 1</p>
     <h2>Can a strong judge reconstruct a 50-model capability ladder?</h2>
     <p class="section-intro">Broadly, yes. Fine distinctions remain hard. In the
-    fresh independent replication, Sol ordered 80.9% and Fable 84.6% of
-    comparable pairs consistently with the external index.</p>
+    {opening_probe_count}-probe experiment, pairwise agreement with the external index was
+    {catalog_judge_results}.</p>
 
     <figure class="figure-wide">
-      <img src="../figures/catalog-ladder50-opening5/predicted-vs-external.svg"
+      <img src="../figures/catalog-ladder50-opening10/predicted-vs-external.svg"
            alt="Judged capability percentile plotted against external Intelligence Index for Sol and Fable.">
       <figcaption>Each point is an anonymous candidate. Both independent judges
       recovered the broad external ordering; the largest errors occur among
@@ -504,14 +426,14 @@ def article(
 
     <div class="figure-pair">
       <figure>
-        <img src="../figures/catalog-ladder50-opening5/discrimination-by-gap.svg"
+        <img src="../figures/catalog-ladder50-opening10/discrimination-by-gap.svg"
              alt="Pairwise accuracy increases with the external capability gap.">
         <figcaption>Large capability differences were much easier to recognize
         than small ones.</figcaption>
       </figure>
       <figure>
-        <img src="../figures/catalog-ladder50-opening5/evidence-scaling.svg"
-             alt="Ranking accuracy after five opening probes and two follow-ups.">
+        <img src="../figures/catalog-ladder50-opening10/evidence-scaling.svg"
+             alt="Ranking accuracy after ten opening probes and two follow-ups.">
         <figcaption>Two adaptive follow-ups did not consistently improve either
         independent ranking.</figcaption>
       </figure>
@@ -543,7 +465,7 @@ def article(
   </section>
 
   <section id="best-ladder" class="wide ruled">
-    <p class="section-kicker">Primary five-probe ranking</p>
+    <p class="section-kicker">Primary {opening_probe_count}-probe ranking</p>
     <h2>The full judged ladder</h2>
     <p class="section-intro">{rq1['primary_judge_name']} produced the more
     accurate of the two independent replication rankings.
@@ -566,9 +488,7 @@ def article(
 
   {oversight_section}
 
-  {probe_effectiveness_section}
-
-  {mechanism_section}
+  {probe_author_section}
 
   <section id="probe-repertoire" class="wide ruled">
     <p class="section-kicker">Probe examples</p>
@@ -581,20 +501,27 @@ def article(
   </section>
 
   <section id="answer-map" class="wide ruled">
-    <p class="section-kicker">Answer-quality map</p>
-    <h2>Different probes expose different capability profiles</h2>
+    <p class="section-kicker">Model-to-model solvability</p>
+    <h2>The same candidate can look different under different probes</h2>
     <p class="section-intro">This mechanism view uses the eight opening probes
-    from the earlier four-probe batteries, not the fresh five-probe rankings
-    reported above. Rows follow the external ladder. {heatmap_method}. The
-    fixed scale runs from 0 (no usable answer) to 4 (fully correct, complete,
-    and rigorous).</p>
-    <div class="heat-legend"><span>0 · unusable</span>
-      <i class="heat h1"></i><i class="heat h3"></i><i class="heat h5"></i>
-      <i class="heat h7"></i><i class="heat h9"></i><span>4 · fully correct</span>
-      <i class="heat missing"></i><span>Missing answer</span></div>
-    <div class="table-frame heat-frame">{heatmap}</div>
-    <p class="note">{heatmap_stats}. {heatmap_caveat}</p>
+    from the earlier four-probe batteries, not the primary ten-probe rankings
+    reported above. Sol and Fable scored every available answer on the same
+    anchored 0–4 scale; seven probes have both scorers and one has Sol alone.</p>
+    <figure class="figure-wide">
+      <div class="wide-chart matrix-chart">
+        <img src="../figures/publication/model-probe-solvability.svg"
+             alt="Fifty candidate models by eight model-authored probes, colored by answer quality from zero to four.">
+      </div>
+      <figcaption>Averaging across the eight probes reaches Spearman
+      {matrix_stats['score_spearman']:.2f} with the external index and
+      {matrix_stats['pairwise_accuracy']:.1%} pairwise accuracy. The uneven
+      columns show why a portfolio matters.</figcaption>
+    </figure>
   </section>
+
+  {probe_effectiveness_section}
+
+  {mechanism_section}
 
 </article>
 <script>
@@ -709,6 +636,55 @@ def _oversight_section(
   </section>"""
 
 
+def _probe_author_section(summary: dict) -> str:
+    bands = {row["label"]: row for row in summary["bands"]}
+    higher = bands["Higher-capability authors"]["metrics"]
+    lower = bands["Lower-capability authors"]["metrics"]
+    return f"""
+  <section id="probe-authors" class="wide ruled">
+    <p class="section-kicker">Research question 3</p>
+    <h2>Do stronger models ask different questions?</h2>
+    <p class="section-intro">Yes, descriptively, although not in the simple
+    sense that every question is better. Across {summary['probe_count']} probes
+    from {summary['author_count']} authors, the four higher-capability authors
+    concentrated heavily on quantitative stress tests. Lower-capability
+    authors spread more attention across verbal and fluid abstraction,
+    creative generation, and criteria-setting. Rates first average within
+    author, so a model that wrote 23 probes does not outweigh one that wrote
+    six.</p>
+    <figure class="figure-wide">
+      <div class="wide-chart taxonomy-chart">
+        <img src="../figures/publication/probe-types-by-capability.svg"
+             alt="Question-type frequencies for the four higher-capability and four lower-capability probe authors.">
+      </div>
+      <figcaption>All question types appearing in at least three probes are
+      shown. A probe may carry several labels, so rates do not sum to 100%.</figcaption>
+    </figure>
+    <figure class="figure-wide compact-figure">
+      <img src="../figures/publication/probe-design-by-capability.svg"
+           alt="Probe design and performance measures for higher, middle, and lower capability authors.">
+      <figcaption>Stronger authors more often wrote questions the fixed
+      evaluator considered valid and that the authors themselves considered
+      objectively checkable. Explicitly targeting a stronger model was not
+      more common.</figcaption>
+    </figure>
+    <div class="finding-grid">
+      <div><strong>{higher['reference_valid_rate']:.0%}</strong><span>reference-valid, higher band</span></div>
+      <div><strong>{lower['reference_valid_rate']:.0%}</strong><span>reference-valid, lower band</span></div>
+      <div><strong>{higher['objective_checkability_rate']:.0%}</strong><span>objective, higher band</span></div>
+      <div><strong>{lower['objective_checkability_rate']:.0%}</strong><span>objective, lower band</span></div>
+    </div>
+    <aside class="background-note">
+      <strong>The careful reading.</strong> Stronger authors produced more
+      checkable, reference-valid batteries in this sample, but author
+      intelligence had only a weak relationship with a probe's eventual
+      pairwise discrimination. Author, provider, panel, and prompt history are
+      observationally entangled. This is a map of an emerging repertoire, not
+      a causal claim that capability alone creates a particular test style.
+    </aside>
+  </section>"""
+
+
 def _probe_effectiveness_section(summary: dict | None) -> str:
     if not summary:
         return ""
@@ -732,13 +708,12 @@ def _probe_effectiveness_section(summary: dict | None) -> str:
     )
     return f"""
   <section id="probe-effectiveness" class="wide ruled">
-    <p class="section-kicker">Research question 3</p>
-    <h2>What tests do judges invent, and which ones work?</h2>
-    <p class="section-intro">The repertoire is broad, but naming a probe's
-    subject does not tell us whether it will separate candidates. The analysis
-    scores {summary['probe_count']} probes from {summary['author_count']} authors
-    with one fixed evaluator, then tests taxonomy-derived predictions on an
-    excluded author.</p>
+    <p class="section-kicker">Probe effectiveness</p>
+    <h2>A test's subject does not tell us whether it will work</h2>
+    <p class="section-intro">One fixed evaluator scored all
+    {summary['probe_count']} probes, and taxonomy-derived predictions were then
+    tested on an excluded author. Broad labels describe what happened, but did
+    not reliably identify the better questions in advance.</p>
     <div class="figure-pair">
       <figure>
         <img src="../figures/probe-effectiveness/question-type-effects.svg"
@@ -866,206 +841,6 @@ def build_probe_cards(taxonomy: dict) -> str:
 </article>"""
         )
     return "".join(cards)
-
-
-def build_heatmap(
-    runs: list[dict],
-    catalog_by_id: dict[str, dict],
-    score_summary: dict | None = None,
-) -> tuple[str, str]:
-    if score_summary is not None:
-        return build_score_heatmap(runs, catalog_by_id, score_summary)
-
-    run_by_name = {run["name"]: run for run in runs}
-    batteries = [
-        (
-            "Sol",
-            run_by_name["catalog_ladder50_gpt_5_6_sol"],
-            run_by_name[
-                "catalog_ladder50_cross_fable_judges_sol_evidence_complete"
-            ],
-            ["Pooled tests", "Physics", "Concurrency", "Causal ID"],
-        ),
-        (
-            "Fable",
-            run_by_name["catalog_ladder50_claude_fable_5"],
-            run_by_name[
-                "catalog_ladder50_cross_sol_judges_fable_evidence_complete"
-            ],
-            ["Reachability", "Language", "Causal choice", "Proof audit"],
-        ),
-    ]
-    source_run = batteries[0][1]
-    participants = {
-        item["id"]: item["provider_model_id"] for item in source_run["participants"]
-    }
-    scores = source_run["prior_participant_scores"]
-    reported = set(source_run["prior_reported_score_participants"])
-    external_order = sorted(scores, key=lambda item: (-scores[item], item))
-    columns: list[dict] = []
-    all_alignments = []
-    for author, original, crossed, titles in batteries:
-        for probe_index, title in enumerate(titles):
-            comparisons = [
-                original["probe_comparisons"][probe_index],
-                crossed["probe_comparisons"][probe_index],
-            ]
-            missing = {
-                participant_id
-                for participant_id, summary in comparisons[0]["parsed"]
-                .get("candidate_summaries", {})
-                .items()
-                if "unscorable" in summary.lower()
-                or "no complete visible answer" in summary.lower()
-                or "unavailable" in summary.lower()
-            }
-            percentiles: dict[str, float] = {}
-            for participant_id in external_order:
-                if participant_id in missing:
-                    continue
-                values = []
-                for comparison in comparisons:
-                    ordering = comparison["parsed"]["ordering"]
-                    position = ordering.index(participant_id)
-                    values.append(100 * (len(ordering) - 1 - position) / (len(ordering) - 1))
-                percentiles[participant_id] = mean(values)
-            direct_scores = {
-                participant_id: scores[participant_id]
-                for participant_id in reported
-                if participant_id in percentiles
-            }
-            averaged_order = sorted(
-                percentiles, key=lambda item: (-percentiles[item], item)
-            )
-            alignment = pairwise_accuracy(averaged_order, direct_scores)
-            all_alignments.append(alignment)
-            columns.append(
-                {
-                    "author": author,
-                    "title": title,
-                    "percentiles": percentiles,
-                    "alignment": alignment,
-                }
-            )
-
-    headers = "".join(
-        f'<th title="{escape(column["author"])} probe; '
-        f'{column["alignment"]:.0%} pairwise alignment with the external index">'
-        f'<span>{escape(column["author"])}</span>{escape(column["title"])}</th>'
-        for column in columns
-    )
-    rows = []
-    for external_rank, participant_id in enumerate(external_order, start=1):
-        provider_id = participants[participant_id]
-        name = catalog_by_id[provider_id]["display_name"].split(": ", 1)[-1]
-        cells = []
-        for column in columns:
-            value = column["percentiles"].get(participant_id)
-            if value is None:
-                cells.append('<td class="heat missing" title="Missing answer">—</td>')
-                continue
-            bucket = max(1, min(9, round(value / 12.5) + 1))
-            cells.append(
-                f'<td class="heat h{bucket}" title="{value:.0f}th within-probe '
-                f'percentile">{value:.0f}</td>'
-            )
-        rows.append(
-            f"<tr><th><span>{external_rank}</span>{escape(name)}"
-            f"<small>{scores[participant_id]:.1f}</small></th>{''.join(cells)}</tr>"
-        )
-    table = (
-        '<table class="heatmap"><thead><tr><th>External ladder</th>'
-        f"{headers}</tr></thead><tbody>{''.join(rows)}</tbody></table>"
-    )
-    stats = (
-        "Across the eight probes, mean pairwise alignment between the averaged "
-        f"within-probe order and the external index was {mean(all_alignments):.0%}; "
-        f"the range was {min(all_alignments):.0%}–{max(all_alignments):.0%}"
-    )
-    return table, stats
-
-
-def build_score_heatmap(
-    runs: list[dict],
-    catalog_by_id: dict[str, dict],
-    score_summary: dict,
-) -> tuple[str, str]:
-    run_by_name = {run["name"]: run for run in runs}
-    source_run = run_by_name["catalog_ladder50_gpt_5_6_sol"]
-    participants = {
-        item["id"]: item["provider_model_id"] for item in source_run["participants"]
-    }
-    scores = source_run["prior_participant_scores"]
-    reported = set(source_run["prior_reported_score_participants"])
-    external_order = sorted(scores, key=lambda item: (-scores[item], item))
-    probes = score_summary["probes"]
-    if len(probes) != len(PROBE_TITLES):
-        raise ValueError(
-            f"expected {len(PROBE_TITLES)} scored probes, found {len(probes)}"
-        )
-
-    headers = []
-    for probe, (author, title) in zip(probes, PROBE_TITLES, strict=True):
-        headers.append(
-            f'<th title="{escape(author)} probe; mean answer score '
-            f'{probe["mean_answer_score"]:.2f}; '
-            f'{probe["substantially_correct_rate"]:.0%} scored 3 or 4">'
-            f"<span>{escape(author)}</span>{escape(title)}"
-            f"<small>μ {probe['mean_answer_score']:.1f}</small></th>"
-        )
-
-    aggregate: dict[str, list[float]] = {}
-    rows = []
-    for external_rank, participant_id in enumerate(external_order, start=1):
-        provider_id = participants[participant_id]
-        name = catalog_by_id[provider_id]["display_name"].split(": ", 1)[-1]
-        cells = []
-        for probe in probes:
-            value = probe["mean_scores"].get(participant_id)
-            if value is None:
-                cells.append('<td class="heat missing" title="Missing answer">—</td>')
-                continue
-            aggregate.setdefault(participant_id, []).append(float(value))
-            bucket = max(1, min(9, round(float(value) * 2) + 1))
-            cells.append(
-                f'<td class="heat h{bucket}" title="{value:.1f} / 4; '
-                f'{probe["judge_count"]} scoring judge'
-                f'{"s" if probe["judge_count"] != 1 else ""}">{value:.1f}</td>'
-            )
-        rows.append(
-            f"<tr><th><span>{external_rank}</span>{escape(name)}"
-            f"<small>{scores[participant_id]:.1f}</small></th>{''.join(cells)}</tr>"
-        )
-
-    aggregate_means = {
-        participant_id: mean(values)
-        for participant_id, values in aggregate.items()
-        if participant_id in reported
-    }
-    direct_scores = {
-        participant_id: scores[participant_id] for participant_id in aggregate_means
-    }
-    correlation = spearman(
-        [aggregate_means[item] for item in aggregate_means],
-        [direct_scores[item] for item in aggregate_means],
-    )
-    alignment = score_pairwise_accuracy(aggregate_means, direct_scores)
-    disagreement = [
-        probe["mean_judge_score_range"]
-        for probe in probes
-        if probe["mean_judge_score_range"] is not None
-    ]
-    table = (
-        '<table class="heatmap"><thead><tr><th>External ladder</th>'
-        f"{''.join(headers)}</tr></thead><tbody>{''.join(rows)}</tbody></table>"
-    )
-    stats = (
-        "Averaging scores across probes produced Spearman "
-        f"{correlation:.2f} with the external index and {alignment:.1%} "
-        "pairwise alignment. Mean absolute judge disagreement across the seven "
-        f"jointly scored probes was {mean(disagreement):.2f} points"
-    )
-    return table, stats
 
 
 def presentation_order_replay(original_ranking: list[str]) -> dict[str, float | int]:
@@ -1282,6 +1057,202 @@ for (const input of document.querySelectorAll("[data-table-filter]")) {{
 </script>
 """
     return body
+
+
+def robustness_page(summary: dict) -> str:
+    anchor_rows = "".join(
+        "<tr>"
+        f"<td>{escape(row['judge'])}</td>"
+        f"<td class=\"number\">{row['direct_candidate_count']}</td>"
+        f"<td class=\"number\">{row['direct_accuracy']:.1%}</td>"
+        f"<td class=\"number\">{row['all_candidate_count']}</td>"
+        f"<td class=\"number\">{row['all_accuracy']:.1%}</td>"
+        "</tr>"
+        for row in summary["external_anchor_sensitivity"]
+    )
+    battery = summary["battery_replication"]
+    battery_rows = "".join(
+        "<tr>"
+        f"<td>{escape(row['judge'])}</td>"
+        f"<td class=\"number\">{row['baseline_accuracy']:.1%}</td>"
+        f"<td class=\"number\">{row['replication_accuracy']:.1%}</td>"
+        f"<td class=\"number\">{row['rank_tau']:.2f}</td>"
+        f"<td class=\"number\">{row['top5_overlap']:.0%}</td>"
+        "</tr>"
+        for row in battery["judges"]
+    )
+    order = summary["answer_order"]
+    evidence = summary["evidence_and_interpreter"]
+    budget = summary["probe_budget"]
+    budget_by_judge = {
+        row["judge"]: row["checkpoints"]
+        for row in budget["catalog_judges"]
+    }
+    uncertainty = summary["oversight_uncertainty"]
+    band_rows = "".join(
+        "<tr>"
+        f"<td>{escape(row['label'].title())}</td>"
+        f"<td class=\"number\">{row['subten_standardized_rate']:.1%}</td>"
+        f"<td class=\"number\">{row['bootstrap_95_low']:.1%}–"
+        f"{row['bootstrap_95_high']:.1%}</td>"
+        f"<td class=\"number\">{row['panel_count']}</td>"
+        "</tr>"
+        for row in uncertainty["judge_bands"]
+    )
+    missing = summary["missing_evidence"]
+    council = summary["council_scope"]
+    missing_rate = (
+        missing["pooled_oversight_missing_answers"]
+        / missing["pooled_oversight_expected_answers"]
+    )
+    primary_accuracy = summary["primary_catalog_pairwise_accuracy"]
+    return f"""
+<section class="page-head">
+  <p class="eyebrow">Methods appendix</p>
+  <h1>How stable are these results?</h1>
+  <p class="dek">The broad signal survives new probe batteries and answer
+  orders. Exact frontier ranks do not. This page collects the checks that keep
+  the headline claims narrow.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Reference sensitivity</p>
+  <h2>The weak estimated anchors make the result look slightly easier</h2>
+  <p class="section-intro">The primary endpoint excludes three estimated
+  lower-tail scores. Adding them raises accuracy by roughly two points because
+  they are easy to distinguish; they do not create the
+  {primary_accuracy:.1%} result.</p>
+  <div class="table-frame">
+    <table><thead><tr><th>Judge</th><th>Direct models</th>
+    <th>Direct accuracy</th><th>All models</th><th>With estimates</th></tr></thead>
+    <tbody>{anchor_rows}</tbody></table>
+  </div>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Replication</p>
+  <h2>Broad accuracy repeats; the top five moves</h2>
+  <div class="table-frame">
+    <table><thead><tr><th>Judge</th>
+    <th>Earlier {battery['baseline_probe_count']}-probe battery</th>
+    <th>Fresh {battery['replication_probe_count']}-probe battery</th>
+    <th>Rank tau</th><th>Top-five overlap</th></tr></thead>
+    <tbody>{battery_rows}</tbody></table>
+  </div>
+  <p class="section-intro appendix-note">Mean old-new rank agreement is Kendall
+  {battery['mean_rank_tau']:.2f}; mean top-five overlap is
+  {battery['mean_top5_overlap']:.0%}. This supports a capability ladder, not a
+  definitive frontier league table.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Answer order</p>
+  <h2>Changing presentation order moves individual models</h2>
+  <div class="finding-grid">
+    <div><strong>{order['catalog']['kendall_tau']:.2f}</strong><span>catalog replay agreement</span></div>
+    <div><strong>{order['catalog']['top10_overlap']}/10</strong><span>catalog top-ten overlap</span></div>
+    <div><strong>{order['oversight_panels']['mean_kendall_tau']:.2f}</strong><span>panel replay agreement</span></div>
+    <div><strong>{order['oversight_panels']['top_rank_stable_count']}/{order['oversight_panels']['condition_count']}</strong><span>panel winners unchanged</span></div>
+  </div>
+  <p class="section-intro">The catalog replay used identical probes and answers
+  in a new order. Accuracy moved from
+  {order['catalog']['source_accuracy']:.1%} to
+  {order['catalog']['replay_accuracy']:.1%}; median model displacement was
+  {order['catalog']['median_absolute_displacement']:.1f} places. A few models
+  moved much farther.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">What varies?</p>
+  <h2>The evidence battery matters more than the interpreter</h2>
+  <p class="section-intro">When both judges saw the same answers, their final
+  rankings agreed at Kendall {evidence['same_evidence'][0]['kendall_tau']:.2f}
+  and {evidence['same_evidence'][1]['kendall_tau']:.2f}. Holding the judge fixed
+  while changing its probe battery produced lower agreement:
+  {evidence['same_judge'][0]['kendall_tau']:.2f} for Sol and
+  {evidence['same_judge'][1]['kendall_tau']:.2f} for Fable. This crossed control
+  isolates question choice from evidence interpretation.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Evidence budget</p>
+  <h2>Follow-ups do not reliably improve the ranking</h2>
+  <div class="finding-grid">
+    <div><strong>{budget_by_judge['Sol'][0]['pairwise_accuracy']:.1%}</strong><span>Sol after {budget_by_judge['Sol'][0]['probe_count']} probes</span></div>
+    <div><strong>{budget_by_judge['Sol'][-1]['pairwise_accuracy']:.1%}</strong><span>Sol after two follow-ups</span></div>
+    <div><strong>{budget_by_judge['Fable'][0]['pairwise_accuracy']:.1%}</strong><span>Fable after {budget_by_judge['Fable'][0]['probe_count']} probes</span></div>
+    <div><strong>{budget_by_judge['Fable'][-1]['pairwise_accuracy']:.1%}</strong><span>Fable after two follow-ups</span></div>
+  </div>
+  <p class="section-intro">Across {uncertainty['panel_count']} oversight panels,
+  one follow-up improved
+  {budget['oversight_improved']} rankings, left
+  {budget['oversight_unchanged']} unchanged, and worsened
+  {budget['oversight_worsened']}. Extra evidence remains a checkpoint, not an
+  automatic improvement.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Uncertainty</p>
+  <h2>The apparent judge-capability effect is not causal</h2>
+  <div class="table-frame">
+    <table><thead><tr><th>Judge capability band</th><th>Standardized rate</th>
+    <th>Panel-bootstrap 95% interval</th><th>Panels</th></tr></thead>
+    <tbody>{band_rows}</tbody></table>
+  </div>
+  <p class="section-intro appendix-note">Recognition rises across the observed
+  bands, but judge identity, provider, panel, and probe battery remain
+  entangled. The intervals preserve panel-level variation rather than treating
+  every candidate comparison as independent.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Probe self-assessment</p>
+  <h2>Models usually wrote questions they believed they could answer</h2>
+  <figure class="figure-wide">
+    <div class="wide-chart solvability-chart">
+      <img src="../figures/publication/probe-self-solvability.svg"
+           alt="Self-reported solvability of probes by author model, ordered by external capability.">
+    </div>
+    <figcaption>“Surpassed” means a stronger candidate outscored the author's
+    blind solve under the operational rule. It does not prove the probe was
+    impossible for the author.</figcaption>
+  </figure>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Operational integrity</p>
+  <h2>Missing evidence is recorded, never scored as low intelligence</h2>
+  <p class="section-intro">The fresh catalog replication records
+  {missing['fresh_catalog_opening_missing_answers']} unavailable opening answer
+  out of {missing['fresh_catalog_opening_expected_answers']}, and
+  {missing['fresh_catalog_adaptive_missing_answers']} unavailable adaptive
+  answers out of {missing['fresh_catalog_adaptive_expected_answers']}. The
+  pooled oversight study retains
+  {missing['pooled_oversight_missing_answers']} unavailable cells out of
+  {missing['pooled_oversight_expected_answers']} ({missing_rate:.1%}); the
+  matched extension has none. Repairs reuse completed evidence and preserve
+  exact lineage.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Council scope</p>
+  <h2>The council result is promising and composition-specific</h2>
+  <p class="section-intro">A fixed three-member council improved ordinary
+  evidence from {council['ordinary_anchor_accuracy']:.1%} to
+  {council['ordinary_council_accuracy']:.1%}. On verifier-oriented evidence it
+  moved from {council['verifier_anchor_accuracy']:.1%} to
+  {council['verifier_council_accuracy']:.1%}. The interaction was
+  {council['mean_interaction']:+.1%}, offering no evidence that the two
+  interventions reinforce one another.</p>
+  <aside class="background-note">
+    <strong>Bottom line.</strong> The central result is coarse discrimination:
+    large capability gaps are visible. The exact top order, the benefit of
+    another probe, and the performance of any one panel are substantially less
+    stable. See the <a href="../robustness_appendix.md">generated Markdown
+    appendix</a> for the compact artifact record.
+  </aside>
+</section>
+"""
 
 
 def audit_page(report: dict) -> str:
@@ -1572,9 +1543,6 @@ def build(output_dir: Path, report_path: Path) -> None:
     catalog = load_json(ROOT / "data" / "model_catalog.openrouter.json")
     taxonomy = load_json(ROOT / "data" / "evaluation_taxonomy.json")
     selection = load_json(ROOT / "data" / "catalog_ladder_50.selection.json")
-    score_summary = (
-        load_json(DEFAULT_SCORE_SUMMARY) if DEFAULT_SCORE_SUMMARY.exists() else None
-    )
     oversight_summary = (
         load_json(DEFAULT_OVERSIGHT_SYNTHESIS)
         if DEFAULT_OVERSIGHT_SYNTHESIS.exists()
@@ -1587,6 +1555,7 @@ def build(output_dir: Path, report_path: Path) -> None:
     required_analysis = (
         DEFAULT_RESEARCH_SYNTHESIS,
         DEFAULT_PROBE_EFFECTIVENESS,
+        DEFAULT_PUBLICATION_ANALYSIS,
     )
     missing_analysis = [path for path in required_analysis if not path.exists()]
     if missing_analysis:
@@ -1596,6 +1565,7 @@ def build(output_dir: Path, report_path: Path) -> None:
         )
     research_summary = load_json(DEFAULT_RESEARCH_SYNTHESIS)
     probe_effectiveness = load_json(DEFAULT_PROBE_EFFECTIVENESS)
+    publication_analysis = load_json(DEFAULT_PUBLICATION_ANALYSIS)
     verifier_council = (
         load_json(DEFAULT_VERIFIER_COUNCIL)
         if DEFAULT_VERIFIER_COUNCIL.exists()
@@ -1612,13 +1582,19 @@ def build(output_dir: Path, report_path: Path) -> None:
                 report,
                 catalog,
                 taxonomy,
-                score_summary,
                 oversight_summary,
                 research_summary,
                 probe_effectiveness,
                 verifier_council,
+                publication_analysis,
             ),
             "results",
+        ),
+        "robustness.html": page(
+            "Robustness and sensitivity",
+            "Replications, order checks, uncertainty, missing evidence, and limitations.",
+            robustness_page(publication_analysis["robustness"]),
+            "robustness",
         ),
         "taxonomy.html": page(
             "Evaluation taxonomy",

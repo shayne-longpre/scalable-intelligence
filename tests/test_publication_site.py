@@ -2,16 +2,20 @@ import json
 from pathlib import Path
 import unittest
 
-from scripts.build_publication_site import (
-    _mechanism_section,
-    _oversight_section,
-    _probe_effectiveness_section,
+from ai_council.publication_analysis import (
     kendall_order,
     pairwise_accuracy,
-    partial_spearman,
     ranked,
     score_pairwise_accuracy,
     spearman,
+)
+from scripts.build_publication_site import (
+    _mechanism_section,
+    _oversight_section,
+    _probe_author_section,
+    _probe_effectiveness_section,
+    robustness_page,
+    partial_spearman,
 )
 
 
@@ -43,6 +47,8 @@ class PublicationSiteTests(unittest.TestCase):
         self.assertEqual(kendall_order(["a", "b", "c"], ["a", "b", "c"]), 1.0)
         self.assertEqual(kendall_order(["a", "b", "c"], ["c", "b", "a"]), -1.0)
         self.assertEqual(kendall_order(["a"], ["a"]), 0.0)
+        with self.assertRaisesRegex(ValueError, "duplicate"):
+            kendall_order(["a", "a"], ["a", "a"])
 
     def test_oversight_section_supports_pooled_synthesis(self) -> None:
         html = _oversight_section(
@@ -107,12 +113,45 @@ class PublicationSiteTests(unittest.TestCase):
 
         html = _probe_effectiveness_section(summary)
 
-        self.assertIn("146 probes", html)
+        self.assertIn(f"{summary['probe_count']} probes", html)
         self.assertIn("not yet a", html)
         self.assertIn("validated recipe", html)
         self.assertIn("One fixed evaluator", html)
         self.assertIn("cannot establish", html)
         self.assertIn("held-out-labels.svg", html)
+
+    def test_probe_author_section_preserves_weighting_and_causal_caveat(
+        self,
+    ) -> None:
+        summary = json.loads(
+            (Path(__file__).resolve().parents[1] / "data"
+             / "publication_analysis.json").read_text()
+        )["probe_author_analysis"]
+
+        html = _probe_author_section(summary)
+        text = " ".join(html.split())
+
+        self.assertIn("four higher-capability authors", text)
+        self.assertIn("Rates first average within author", text)
+        self.assertIn("observationally entangled", text)
+        self.assertIn("probe-types-by-capability.svg", html)
+        self.assertIn("probe-design-by-capability.svg", html)
+
+    def test_robustness_page_includes_all_primary_checks(self) -> None:
+        summary = json.loads(
+            (Path(__file__).resolve().parents[1] / "data"
+             / "publication_analysis.json").read_text()
+        )["robustness"]
+
+        html = robustness_page(summary)
+
+        self.assertIn("Reference sensitivity", html)
+        self.assertIn("Replication", html)
+        self.assertIn("Answer order", html)
+        self.assertIn("What varies?", html)
+        self.assertIn("Evidence budget", html)
+        self.assertIn("Missing evidence", html)
+        self.assertIn("probe-self-solvability.svg", html)
 
     def test_mechanism_section_keeps_recognition_and_ranking_separate(
         self,

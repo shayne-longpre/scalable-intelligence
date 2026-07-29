@@ -29,6 +29,9 @@ def build_catalog_stability_report(
         compare_judge_runs(baseline_runs[key], replication_runs[key])
         for key in sorted(baseline_runs)
     ]
+    replication_availability = [
+        _answer_availability(run) for run in replication_runs.values()
+    ]
     summary = {
         "schema_version": "catalog-ladder-stability-v1",
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -51,6 +54,15 @@ def build_catalog_stability_report(
             bool(run.get("repair", {}).get("runtime_sensitive"))
             for run in replication["runs"]
         ),
+        "replication_answer_availability": {
+            key: sum(row[key] for row in replication_availability)
+            for key in (
+                "opening_expected",
+                "opening_unavailable",
+                "adaptive_expected",
+                "adaptive_unavailable",
+            )
+        },
     }
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -94,11 +106,13 @@ def compare_judge_runs(
         raise ValueError("judge routes differ")
     baseline_models = _participant_models(baseline)
     replication_models = _participant_models(replication)
-    baseline_final = baseline["probe_budget_results"][-1]
-    replication_final = replication["probe_budget_results"][-1]
-    baseline_ranking = _model_ranking(baseline_final["ranking"], baseline_models)
+    baseline_opening = baseline["probe_budget_results"][0]
+    replication_opening = replication["probe_budget_results"][0]
+    baseline_ranking = _model_ranking(
+        baseline_opening["ranking"], baseline_models
+    )
     replication_ranking = _model_ranking(
-        replication_final["ranking"], replication_models
+        replication_opening["ranking"], replication_models
     )
     shared = set(baseline_ranking) & set(replication_ranking)
     reported_baseline = {
@@ -142,20 +156,26 @@ def compare_judge_runs(
             if reported
             else 0.0
         ),
-        "baseline_final_pairwise_accuracy": baseline_final["pairwise_accuracy"],
-        "replication_final_pairwise_accuracy": replication_final[
+        "baseline_opening_probe_count": int(baseline_opening["probe_count"]),
+        "replication_opening_probe_count": int(
+            replication_opening["probe_count"]
+        ),
+        "baseline_opening_pairwise_accuracy": baseline_opening[
             "pairwise_accuracy"
         ],
-        "final_pairwise_accuracy_delta": (
-            replication_final["pairwise_accuracy"]
-            - baseline_final["pairwise_accuracy"]
+        "replication_opening_pairwise_accuracy": replication_opening[
+            "pairwise_accuracy"
+        ],
+        "opening_pairwise_accuracy_delta": (
+            replication_opening["pairwise_accuracy"]
+            - baseline_opening["pairwise_accuracy"]
         ),
         "baseline_checkpoints": _checkpoint_rows(baseline),
         "replication_checkpoints": _checkpoint_rows(replication),
-        "baseline_final_gap_accuracy": baseline_final.get(
+        "baseline_opening_gap_accuracy": baseline_opening.get(
             "pairwise_accuracy_by_score_gap", []
         ),
-        "replication_final_gap_accuracy": replication_final.get(
+        "replication_opening_gap_accuracy": replication_opening.get(
             "pairwise_accuracy_by_score_gap", []
         ),
         "rank_points": [
@@ -177,14 +197,14 @@ def render_catalog_stability(
         f"<tr><td>{escape(row['judge_name'])}</td>"
         f"<td class='num'>{row['rank_replication_tau']:.3f}</td>"
         f"<td class='num'>{row['top5_overlap']:.0%}</td>"
-        f"<td class='num'>{row['baseline_final_pairwise_accuracy']:.1%}</td>"
-        f"<td class='num'>{row['replication_final_pairwise_accuracy']:.1%}</td>"
-        f"<td class='num'>{row['final_pairwise_accuracy_delta']:+.1%}</td></tr>"
+        f"<td class='num'>{row['baseline_opening_pairwise_accuracy']:.1%}</td>"
+        f"<td class='num'>{row['replication_opening_pairwise_accuracy']:.1%}</td>"
+        f"<td class='num'>{row['opening_pairwise_accuracy_delta']:+.1%}</td></tr>"
         for row in summary["judges"]
     )
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Five-probe catalog ladder stability</title><style>
+<title>Catalog ladder stability</title><style>
 :root{{--ink:#182026;--muted:#65727a;--line:#dce2e5}}*{{box-sizing:border-box}}
 body{{margin:0;color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif}}
 main{{max-width:1160px;margin:auto;padding:48px 28px 70px}}h1{{font:700 44px/1.08 Georgia,serif;
@@ -200,10 +220,10 @@ border-bottom:1px solid var(--line);
 text-align:left}}th{{font-size:12px;color:var(--muted)}}.num{{text-align:right;
 font-variant-numeric:tabular-nums}}@media(max-width:760px){{main{{padding:30px 16px}}
 .grid,.metrics{{grid-template-columns:1fr}}}}</style></head><body><main>
-<h1>Does the catalog ladder replicate with five opening probes?</h1>
-<p class="lede">The same two judges evaluated the same anonymous 50-model roster
-with a fresh five-probe opening battery. Stability is measured against the prior
-four-opening-probe run and the same external model index.</p>
+<h1>Does the catalog ladder persist with a larger opening battery?</h1>
+<p class="lede">The same two judges evaluated the same anonymous 50-model roster.
+The comparison uses each run's opening judgment, before adaptive follow-ups, and
+the same external model index.</p>
 <section class="metrics">
 <div class="metric"><strong>{summary['mean_rank_replication_tau']:.2f}</strong>
 <span>mean old-new Kendall tau</span></div>
@@ -213,11 +233,11 @@ four-opening-probe run and the same external model index.</p>
 <span>new provider-reported spend</span></div></section>
 <h2>Outcome stability</h2><div class="table-wrap"><table><thead><tr><th>Judge</th>
 <th class="num">Old-new tau</th><th class="num">Top-5 overlap</th>
-<th class="num">Old final accuracy</th><th class="num">New final accuracy</th>
+<th class="num">Old opening accuracy</th><th class="num">New opening accuracy</th>
 <th class="num">Change</th></tr></thead><tbody>{rows}</tbody></table></div>
 <figure><img src="{escape(figures['evidence_trajectory'].name)}" alt="Accuracy by probe count">
 <figcaption>Accuracy as each judge accumulates evidence. Dashed lines are the
-earlier four-probe opening; solid lines are the fresh five-probe opening.</figcaption></figure>
+earlier run; solid lines are the larger opening battery.</figcaption></figure>
 <div class="grid"><figure><img src="{escape(figures['rank_replication'].name)}"
 alt="Old rank versus new rank"><figcaption>Each point is one model with a directly
 reported external score. The diagonal is exact rank replication.</figcaption></figure>
@@ -316,13 +336,13 @@ def gap_stability_svg(comparisons: Sequence[Mapping[str, Any]]) -> str:
     parts.extend(_series_legend(365, 22))
     labels = [
         row["label"]
-        for row in comparisons[0]["baseline_final_gap_accuracy"]
+        for row in comparisons[0]["baseline_opening_gap_accuracy"]
     ]
     for row in comparisons:
         color = COLORS.get(row["judge_name"], "#39464d")
         for key, dashed in (
-            ("baseline_final_gap_accuracy", True),
-            ("replication_final_gap_accuracy", False),
+            ("baseline_opening_gap_accuracy", True),
+            ("replication_opening_gap_accuracy", False),
         ):
             points = []
             for index, item in enumerate(row[key]):
@@ -410,6 +430,29 @@ def _participant_models(run: Mapping[str, Any]) -> dict[str, str]:
     }
 
 
+def _answer_availability(run: Mapping[str, Any]) -> dict[str, int]:
+    rows = _jsonl(Path(run["run_dir"]) / "transcript.jsonl")
+    answers = [
+        row
+        for row in rows
+        if (row.get("metadata") or {}).get("interaction_role") == "answer"
+    ]
+    opening = [row for row in answers if int(row.get("round_index") or 0) == 1]
+    adaptive = [row for row in answers if int(row.get("round_index") or 0) > 1]
+    return {
+        "opening_expected": len(opening),
+        "opening_unavailable": sum(
+            (row.get("metadata") or {}).get("answer_unavailable") is True
+            for row in opening
+        ),
+        "adaptive_expected": len(adaptive),
+        "adaptive_unavailable": sum(
+            (row.get("metadata") or {}).get("answer_unavailable") is True
+            for row in adaptive
+        ),
+    }
+
+
 def _model_ranking(
     ranking: Sequence[str],
     participant_models: Mapping[str, str],
@@ -454,3 +497,11 @@ def _mean(values: Iterable[float]) -> float:
 def _load_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def _jsonl(path: Path) -> list[dict[str, Any]]:
+    return [
+        json.loads(line)
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]

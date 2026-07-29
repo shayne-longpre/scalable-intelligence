@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Results from a 50-model experiment in AI-authored intelligence evaluation.">
   <title>Can AI systems recognize intelligence?</title>
-  <link rel="stylesheet" href="site.css?v=20260727-2">
+  <link rel="stylesheet" href="site.css?v=20260728-1">
 </head>
 <body>
   <header class="site-header">
     <a class="wordmark" href="index.html">Machine Societies</a>
-    <nav aria-label="Primary"><a href="index.html" aria-current="page">Results</a><a href="taxonomy.html">Taxonomy</a><a href="models.html">Models</a><a href="audit.html">Audit sample</a></nav>
+    <nav aria-label="Primary"><a href="index.html" aria-current="page">Results</a><a href="taxonomy.html">Taxonomy</a><a href="models.html">Models</a><a href="robustness.html">Robustness</a><a href="audit.html">Audit sample</a></nav>
   </header>
   <main>
 <article>
@@ -23,9 +23,10 @@
     convincing evidence of intelligence.</p>
     <div class="key-result">
       <span>Independent replication</span>
-      <strong>82.7%</strong>
+      <strong>86.4%</strong>
       <p>of comparable model pairs were ordered consistently with an external
-      intelligence index, averaged across two independent five-probe judges.</p>
+      intelligence index, averaged across two independent
+      10-probe judges.</p>
     </div>
   </section>
 
@@ -46,16 +47,17 @@
   <section id="method" class="prose ruled">
     <p class="section-kicker">Method in 30 seconds</p>
     <h2>Anonymous candidates, independent judges</h2>
-    <p>Two frontier judges independently wrote five opening probes and sent each
-    probe unchanged to 50 anonymous models. Each judge compared all answers to
-    a probe, combined the evidence into a ranking, and could ask two later
-    follow-ups of the ten candidates it found hardest to separate. Candidate
-    names and external scores were hidden throughout. An earlier four-probe
-    run and crossed-evidence controls provide stability checks.</p>
+    <p>Two frontier judges independently wrote 10 opening
+    probes and sent each probe unchanged to 50 anonymous models. Each judge
+    compared all answers to a probe, combined the evidence into a ranking, and
+    could ask two later follow-ups of the ten candidates it found hardest to
+    separate. Candidate names and external scores were hidden throughout.
+    Earlier four- and five-probe runs and crossed-evidence controls provide
+    stability checks.</p>
     <div class="method-grid">
       <div><strong>50</strong><span>candidate models</span></div>
       <div><strong>2</strong><span>independent judges</span></div>
-      <div><strong>5 + 2</strong><span>opening + adaptive probes</span></div>
+      <div><strong>10 + 2</strong><span>opening + adaptive probes</span></div>
       <div><strong>47</strong><span>direct external scores</span></div>
     </div>
     <p class="note">The external Artificial Analysis Intelligence Index is a
@@ -66,15 +68,32 @@
     taxonomy</a>, and the <a href="audit.html">small human audit sample</a>.</p>
   </section>
 
+  <section id="experiment-map" class="wide ruled">
+    <p class="section-kicker">Three complementary tests</p>
+    <h2>From a broad ladder to above-level oversight</h2>
+    <p class="section-intro">The experiments reuse one basic idea at different
+    scales: hide model identities, let a judge invent the evidence it wants,
+    and compare its resulting order with an external reference.</p>
+    <figure class="figure-wide">
+      <div class="wide-chart diagram-chart">
+        <img src="../figures/publication/experiment-designs.svg"
+             alt="Diagrams of the catalog ladder, oversight frontier, and independent council experiments.">
+      </div>
+      <figcaption>The catalog tests broad ranking, the frontier panels isolate
+      judgments around the evaluator's own level, and the council tests
+      independent aggregation on identical archived evidence.</figcaption>
+    </figure>
+  </section>
+
   <section id="catalog-results" class="wide ruled">
     <p class="section-kicker">Research question 1</p>
     <h2>Can a strong judge reconstruct a 50-model capability ladder?</h2>
     <p class="section-intro">Broadly, yes. Fine distinctions remain hard. In the
-    fresh independent replication, Sol ordered 80.9% and Fable 84.6% of
-    comparable pairs consistently with the external index.</p>
+    10-probe experiment, pairwise agreement with the external index was
+    Sol: 84.6%; Fable: 88.2%.</p>
 
     <figure class="figure-wide">
-      <img src="../figures/catalog-ladder50-opening5/predicted-vs-external.svg"
+      <img src="../figures/catalog-ladder50-opening10/predicted-vs-external.svg"
            alt="Judged capability percentile plotted against external Intelligence Index for Sol and Fable.">
       <figcaption>Each point is an anonymous candidate. Both independent judges
       recovered the broad external ordering; the largest errors occur among
@@ -83,32 +102,32 @@
 
     <div class="figure-pair">
       <figure>
-        <img src="../figures/catalog-ladder50-opening5/discrimination-by-gap.svg"
+        <img src="../figures/catalog-ladder50-opening10/discrimination-by-gap.svg"
              alt="Pairwise accuracy increases with the external capability gap.">
         <figcaption>Large capability differences were much easier to recognize
         than small ones.</figcaption>
       </figure>
       <figure>
-        <img src="../figures/catalog-ladder50-opening5/evidence-scaling.svg"
-             alt="Ranking accuracy after five opening probes and two follow-ups.">
+        <img src="../figures/catalog-ladder50-opening10/evidence-scaling.svg"
+             alt="Ranking accuracy after ten opening probes and two follow-ups.">
         <figcaption>Two adaptive follow-ups did not consistently improve either
         independent ranking.</figcaption>
       </figure>
     </div>
 
     <div class="finding-grid">
-      <div><strong>82.7%</strong><span>mean pairwise accuracy</span></div>
-      <div><strong>92.3%</strong><span>for gaps of 10+ points</span></div>
-      <div><strong>0.74</strong><span>interjudge Kendall agreement</span></div>
-      <div><strong>1/5</strong><span>shared top-five models</span></div>
+      <div><strong>86.4%</strong><span>mean pairwise accuracy</span></div>
+      <div><strong>95.2%</strong><span>for gaps of 10+ points</span></div>
+      <div><strong>0.78</strong><span>interjudge Kendall agreement</span></div>
+      <div><strong>3/5</strong><span>shared top-five models</span></div>
     </div>
 
     <aside class="background-note">
       <strong>What is stable?</strong> Pairs separated by less than two index
-      points were only 54.3% accurate, while gaps of ten or more
-      reached 92.3%. Across the earlier and fresh batteries,
-      mean rank agreement was Kendall 0.67 and
-      mean top-five overlap was 60%.
+      points were only 61.1% accurate, while gaps of ten or more
+      reached 95.2%. Across the earlier and fresh batteries,
+      mean rank agreement was Kendall 0.81 and
+      mean top-five overlap was 70%.
       The shared-evidence cross-over showed greater agreement when judges saw
       the same answers than when they saw different probe batteries. In a
       shuffled-order replay of its best four-probe condition, the two rankings
@@ -122,7 +141,7 @@
   </section>
 
   <section id="best-ladder" class="wide ruled">
-    <p class="section-kicker">Primary five-probe ranking</p>
+    <p class="section-kicker">Primary 10-probe ranking</p>
     <h2>The full judged ladder</h2>
     <p class="section-intro">Fable produced the more
     accurate of the two independent replication rankings.
@@ -138,7 +157,7 @@
       <table id="ladder-table">
         <thead><tr><th>Judged</th><th>Model</th><th>Index</th>
         <th>External</th><th>Δ rank</th><th>Released</th></tr></thead>
-        <tbody><tr><td class="number">1</td><td><strong>Anthropic: Claude Fable 5</strong><span class="subcell">anthropic/claude-fable-5</span></td><td class="number">59.9</td><td class="number">1</td><td class="number ">+0</td><td>2026-06-09</td></tr><tr><td class="number">2</td><td><strong>MoonshotAI: Kimi K3</strong><span class="subcell">moonshotai/kimi-k3</span></td><td class="number">57.1</td><td class="number">3</td><td class="number up">-1</td><td>2026-07-16</td></tr><tr><td class="number">3</td><td><strong>Anthropic: Claude Opus 4.7</strong><span class="subcell">anthropic/claude-opus-4.7</span></td><td class="number">53.5</td><td class="number">8</td><td class="number up">-5</td><td>2026-04-16</td></tr><tr><td class="number">4</td><td><strong>Meta: Muse Spark 1.1</strong><span class="subcell">meta/muse-spark-1.1</span></td><td class="number">50.6</td><td class="number">13</td><td class="number up">-9</td><td>2026-07-09</td></tr><tr><td class="number">5</td><td><strong>Anthropic: Claude Opus 4.8</strong><span class="subcell">anthropic/claude-opus-4.8</span></td><td class="number">55.7</td><td class="number">4</td><td class="number down">+1</td><td>2026-05-28</td></tr><tr><td class="number">6</td><td><strong>OpenAI: GPT-5.6 Sol</strong><span class="subcell">openai/gpt-5.6-sol</span></td><td class="number">58.9</td><td class="number">2</td><td class="number down">+4</td><td>2026-07-09</td></tr><tr><td class="number">7</td><td><strong>OpenAI: GPT-5.6 Terra</strong><span class="subcell">openai/gpt-5.6-terra</span></td><td class="number">55.0</td><td class="number">5</td><td class="number down">+2</td><td>2026-07-09</td></tr><tr><td class="number">8</td><td><strong>OpenAI: GPT-5.4</strong><span class="subcell">openai/gpt-5.4</span></td><td class="number">51.4</td><td class="number">10</td><td class="number up">-2</td><td>2026-03-05</td></tr><tr><td class="number">9</td><td><strong>Anthropic: Claude Sonnet 5</strong><span class="subcell">anthropic/claude-sonnet-5</span></td><td class="number">53.4</td><td class="number">9</td><td class="number ">+0</td><td>2026-06-30</td></tr><tr><td class="number">10</td><td><strong>OpenAI: GPT-5</strong><span class="subcell">openai/gpt-5</span></td><td class="number">34.7</td><td class="number">33</td><td class="number up">-23</td><td>2025-08-07</td></tr><tr><td class="number">11</td><td><strong>OpenAI: GPT-5.6 Luna</strong><span class="subcell">openai/gpt-5.6-luna</span></td><td class="number">51.2</td><td class="number">11</td><td class="number ">+0</td><td>2026-07-09</td></tr><tr><td class="number">12</td><td><strong>Xiaomi: MiMo-V2.5-Pro</strong><span class="subcell">xiaomi/mimo-v2.5-pro</span></td><td class="number">42.2</td><td class="number">21</td><td class="number up">-9</td><td>2026-04-22</td></tr><tr><td class="number">13</td><td><strong>Anthropic: Claude Sonnet 4.6</strong><span class="subcell">anthropic/claude-sonnet-4.6</span></td><td class="number">47.2</td><td class="number">15</td><td class="number up">-2</td><td>2026-02-17</td></tr><tr><td class="number">14</td><td><strong>OpenAI: GPT-5.5</strong><span class="subcell">openai/gpt-5.5</span></td><td class="number">54.8</td><td class="number">6</td><td class="number down">+8</td><td>2026-04-23</td></tr><tr><td class="number">15</td><td><strong>MoonshotAI: Kimi K2.6</strong><span class="subcell">moonshotai/kimi-k2.6</span></td><td class="number">44.2</td><td class="number">20</td><td class="number up">-5</td><td>2026-04-20</td></tr><tr><td class="number">16</td><td><strong>Google: Gemini 3.5 Flash</strong><span class="subcell">google/gemini-3.5-flash</span></td><td class="number">50.2</td><td class="number">14</td><td class="number down">+2</td><td>2026-05-19</td></tr><tr><td class="number">17</td><td><strong>Z.ai: GLM 5.2</strong><span class="subcell">z-ai/glm-5.2</span></td><td class="number">51.1</td><td class="number">12</td><td class="number down">+5</td><td>2026-06-16</td></tr><tr><td class="number">18</td><td><strong>OpenAI: GPT-5.4 Mini</strong><span class="subcell">openai/gpt-5.4-mini</span></td><td class="number">40.0</td><td class="number">26</td><td class="number up">-8</td><td>2026-03-17</td></tr><tr><td class="number">19</td><td><strong>Google: Gemini 3.1 Pro Preview</strong><span class="subcell">google/gemini-3.1-pro-preview</span></td><td class="number">46.5</td><td class="number">16</td><td class="number down">+3</td><td>2026-02-19</td></tr><tr><td class="number">20</td><td><strong>DeepSeek: DeepSeek V4 Pro</strong><span class="subcell">deepseek/deepseek-v4-pro</span></td><td class="number">44.3</td><td class="number">19</td><td class="number down">+1</td><td>2026-04-24</td></tr><tr><td class="number">21</td><td><strong>DeepSeek: DeepSeek V4 Flash</strong><span class="subcell">deepseek/deepseek-v4-flash</span></td><td class="number">40.3</td><td class="number">25</td><td class="number up">-4</td><td>2026-04-24</td></tr><tr><td class="number">22</td><td><strong>Thinking Machines: Inkling</strong><span class="subcell">thinkingmachines/inkling</span></td><td class="number">40.7</td><td class="number">24</td><td class="number up">-2</td><td>2026-07-15</td></tr><tr><td class="number">23</td><td><strong>OpenAI: gpt-oss-120b</strong><span class="subcell">openai/gpt-oss-120b</span></td><td class="number">23.8</td><td class="number">40</td><td class="number up">-17</td><td>2025-08-05</td></tr><tr><td class="number">24</td><td><strong>Qwen: Qwen3.7 Plus</strong><span class="subcell">qwen/qwen3.7-plus</span></td><td class="number">39.0</td><td class="number">27</td><td class="number up">-3</td><td>2026-06-01</td></tr><tr><td class="number">25</td><td><strong>xAI: Grok 4.5</strong><span class="subcell">x-ai/grok-4.5</span></td><td class="number">53.8</td><td class="number">7</td><td class="number down">+18</td><td>2026-07-08</td></tr><tr><td class="number">26</td><td><strong>Tencent: Hy3</strong><span class="subcell">tencent/hy3</span></td><td class="number">41.2</td><td class="number">23</td><td class="number down">+3</td><td>2026-07-06</td></tr><tr><td class="number">27</td><td><strong>MoonshotAI: Kimi K2.7 Code</strong><span class="subcell">moonshotai/kimi-k2.7-code</span></td><td class="number">41.9</td><td class="number">22</td><td class="number down">+5</td><td>2026-06-12</td></tr><tr><td class="number">28</td><td><strong>Google: Gemini 2.5 Pro</strong><span class="subcell">google/gemini-2.5-pro</span></td><td class="number">25.8</td><td class="number">39</td><td class="number up">-11</td><td>2025-06-05</td></tr><tr><td class="number">29</td><td><strong>NVIDIA: Nemotron 3 Ultra</strong><span class="subcell">nvidia/nemotron-3-ultra-550b-a55b</span></td><td class="number">37.8</td><td class="number">29</td><td class="number ">+0</td><td>2026-06-04</td></tr><tr><td class="number">30</td><td><strong>DeepSeek: DeepSeek V3.2</strong><span class="subcell">deepseek/deepseek-v3.2</span></td><td class="number">32.0</td><td class="number">35</td><td class="number up">-5</td><td>2025-12-01</td></tr><tr><td class="number">31</td><td><strong>Qwen: Qwen3.7 Max</strong><span class="subcell">qwen/qwen3.7-max</span></td><td class="number">46.0</td><td class="number">17</td><td class="number down">+14</td><td>2026-05-19</td></tr><tr><td class="number">32</td><td><strong>MiniMax: MiniMax M3</strong><span class="subcell">minimax/minimax-m3</span></td><td class="number">44.4</td><td class="number">18</td><td class="number down">+14</td><td>2026-06-01</td></tr><tr><td class="number">33</td><td><strong>xAI: Grok 4.3</strong><span class="subcell">x-ai/grok-4.3</span></td><td class="number">37.6</td><td class="number">30</td><td class="number down">+3</td><td>2026-04-30</td></tr><tr><td class="number">34</td><td><strong>inclusionAI: Ring-2.6-1T</strong><span class="subcell">inclusionai/ring-2.6-1t</span></td><td class="number">30.6</td><td class="number">36</td><td class="number up">-2</td><td>2026-05-08</td></tr><tr><td class="number">35</td><td><strong>Qwen: Qwen3.6 27B</strong><span class="subcell">qwen/qwen3.6-27b</span></td><td class="number">37.1</td><td class="number">31</td><td class="number down">+4</td><td>2026-04-22</td></tr><tr><td class="number">36</td><td><strong>OpenAI: gpt-oss-20b</strong><span class="subcell">openai/gpt-oss-20b</span></td><td class="number">14.9</td><td class="number">44</td><td class="number up">-8</td><td>2025-08-05</td></tr><tr><td class="number">37</td><td><strong>Anthropic: Claude Sonnet 4.5</strong><span class="subcell">anthropic/claude-sonnet-4.5</span></td><td class="number">36.4</td><td class="number">32</td><td class="number down">+5</td><td>2025-09-29</td></tr><tr><td class="number">38</td><td><strong>Qwen: Qwen3.5 397B A17B</strong><span class="subcell">qwen/qwen3.5-397b-a17b</span></td><td class="number">33.7</td><td class="number">34</td><td class="number down">+4</td><td>2026-02-16</td></tr><tr><td class="number">39</td><td><strong>Qwen: Qwen3.5-9B</strong><span class="subcell">qwen/qwen3.5-9b</span></td><td class="number">21.4</td><td class="number">41</td><td class="number up">-2</td><td>2026-03-02</td></tr><tr><td class="number">40</td><td><strong>Anthropic: Claude Haiku 4.5</strong><span class="subcell">anthropic/claude-haiku-4.5</span></td><td class="number">29.6</td><td class="number">38</td><td class="number down">+2</td><td>2025-10-15</td></tr><tr><td class="number">41</td><td><strong>MiniMax: MiniMax M2.7</strong><span class="subcell">minimax/minimax-m2.7</span></td><td class="number">38.1</td><td class="number">28</td><td class="number down">+13</td><td>2026-03-18</td></tr><tr><td class="number">42</td><td><strong>Mistral: Mistral Small 4</strong><span class="subcell">mistralai/mistral-small-2603</span></td><td class="number">19.6</td><td class="number">42</td><td class="number ">+0</td><td>2026-03-16</td></tr><tr><td class="number">43</td><td><strong>Mistral: Mistral Medium 3.5</strong><span class="subcell">mistralai/mistral-medium-3-5</span></td><td class="number">29.9</td><td class="number">37</td><td class="number down">+6</td><td>2026-04-29</td></tr><tr><td class="number">44</td><td><strong>Meta: Llama 4 Maverick</strong><span class="subcell">meta-llama/llama-4-maverick</span></td><td class="number">14.3</td><td class="number">45</td><td class="number up">-1</td><td>2025-04-05</td></tr><tr><td class="number">45</td><td><strong>Mistral: Mistral Large 3 2512</strong><span class="subcell">mistralai/mistral-large-2512</span></td><td class="number">15.9</td><td class="number">43</td><td class="number down">+2</td><td>2025-12-02</td></tr><tr><td class="number">46</td><td><strong>Mistral: Ministral 3 14B 2512</strong><span class="subcell">mistralai/ministral-14b-2512</span></td><td class="number">11.1</td><td class="number">46</td><td class="number ">+0</td><td>2025-12-02</td></tr><tr><td class="number">47</td><td><strong>OpenAI: GPT-3.5 Turbo</strong><span class="subcell">openai/gpt-3.5-turbo</span></td><td class="number">3.6 *</td><td class="number">48</td><td class="number up">-1</td><td>2022-11-30</td></tr><tr><td class="number">48</td><td><strong>Meta: Llama 3.1 8B Instruct</strong><span class="subcell">meta-llama/llama-3.1-8b-instruct</span></td><td class="number">7.6</td><td class="number">47</td><td class="number down">+1</td><td>2024-07-23</td></tr><tr><td class="number">49</td><td><strong>Google: Gemma 3 4B</strong><span class="subcell">google/gemma-3-4b-it</span></td><td class="number">1.1 *</td><td class="number">49</td><td class="number ">+0</td><td>2025-03-12</td></tr><tr><td class="number">50</td><td><strong>Meta: Llama 3.2 1B Instruct</strong><span class="subcell">meta-llama/llama-3.2-1b-instruct</span></td><td class="number">1.1 *</td><td class="number">50</td><td class="number ">+0</td><td>2024-09-25</td></tr></tbody>
+        <tbody><tr><td class="number">1</td><td><strong>Anthropic: Claude Fable 5</strong><span class="subcell">anthropic/claude-fable-5</span></td><td class="number">59.9</td><td class="number">1</td><td class="number ">+0</td><td>2026-06-09</td></tr><tr><td class="number">2</td><td><strong>MoonshotAI: Kimi K3</strong><span class="subcell">moonshotai/kimi-k3</span></td><td class="number">57.1</td><td class="number">3</td><td class="number up">-1</td><td>2026-07-16</td></tr><tr><td class="number">3</td><td><strong>OpenAI: GPT-5.6 Sol</strong><span class="subcell">openai/gpt-5.6-sol</span></td><td class="number">58.9</td><td class="number">2</td><td class="number down">+1</td><td>2026-07-09</td></tr><tr><td class="number">4</td><td><strong>Anthropic: Claude Opus 4.8</strong><span class="subcell">anthropic/claude-opus-4.8</span></td><td class="number">55.7</td><td class="number">4</td><td class="number ">+0</td><td>2026-05-28</td></tr><tr><td class="number">5</td><td><strong>Anthropic: Claude Opus 4.7</strong><span class="subcell">anthropic/claude-opus-4.7</span></td><td class="number">53.5</td><td class="number">8</td><td class="number up">-3</td><td>2026-04-16</td></tr><tr><td class="number">6</td><td><strong>OpenAI: GPT-5.6 Terra</strong><span class="subcell">openai/gpt-5.6-terra</span></td><td class="number">55.0</td><td class="number">5</td><td class="number down">+1</td><td>2026-07-09</td></tr><tr><td class="number">7</td><td><strong>OpenAI: GPT-5.4</strong><span class="subcell">openai/gpt-5.4</span></td><td class="number">51.4</td><td class="number">10</td><td class="number up">-3</td><td>2026-03-05</td></tr><tr><td class="number">8</td><td><strong>OpenAI: GPT-5.5</strong><span class="subcell">openai/gpt-5.5</span></td><td class="number">54.8</td><td class="number">6</td><td class="number down">+2</td><td>2026-04-23</td></tr><tr><td class="number">9</td><td><strong>Meta: Muse Spark 1.1</strong><span class="subcell">meta/muse-spark-1.1</span></td><td class="number">50.6</td><td class="number">13</td><td class="number up">-4</td><td>2026-07-09</td></tr><tr><td class="number">10</td><td><strong>Anthropic: Claude Sonnet 5</strong><span class="subcell">anthropic/claude-sonnet-5</span></td><td class="number">53.4</td><td class="number">9</td><td class="number down">+1</td><td>2026-06-30</td></tr><tr><td class="number">11</td><td><strong>OpenAI: GPT-5.6 Luna</strong><span class="subcell">openai/gpt-5.6-luna</span></td><td class="number">51.2</td><td class="number">11</td><td class="number ">+0</td><td>2026-07-09</td></tr><tr><td class="number">12</td><td><strong>Anthropic: Claude Sonnet 4.6</strong><span class="subcell">anthropic/claude-sonnet-4.6</span></td><td class="number">47.2</td><td class="number">15</td><td class="number up">-3</td><td>2026-02-17</td></tr><tr><td class="number">13</td><td><strong>Thinking Machines: Inkling</strong><span class="subcell">thinkingmachines/inkling</span></td><td class="number">40.7</td><td class="number">24</td><td class="number up">-11</td><td>2026-07-15</td></tr><tr><td class="number">14</td><td><strong>OpenAI: GPT-5</strong><span class="subcell">openai/gpt-5</span></td><td class="number">34.7</td><td class="number">33</td><td class="number up">-19</td><td>2025-08-07</td></tr><tr><td class="number">15</td><td><strong>Z.ai: GLM 5.2</strong><span class="subcell">z-ai/glm-5.2</span></td><td class="number">51.1</td><td class="number">12</td><td class="number down">+3</td><td>2026-06-16</td></tr><tr><td class="number">16</td><td><strong>Google: Gemini 3.5 Flash</strong><span class="subcell">google/gemini-3.5-flash</span></td><td class="number">50.2</td><td class="number">14</td><td class="number down">+2</td><td>2026-05-19</td></tr><tr><td class="number">17</td><td><strong>Xiaomi: MiMo-V2.5-Pro</strong><span class="subcell">xiaomi/mimo-v2.5-pro</span></td><td class="number">42.2</td><td class="number">21</td><td class="number up">-4</td><td>2026-04-22</td></tr><tr><td class="number">18</td><td><strong>DeepSeek: DeepSeek V4 Pro</strong><span class="subcell">deepseek/deepseek-v4-pro</span></td><td class="number">44.3</td><td class="number">19</td><td class="number up">-1</td><td>2026-04-24</td></tr><tr><td class="number">19</td><td><strong>MoonshotAI: Kimi K2.6</strong><span class="subcell">moonshotai/kimi-k2.6</span></td><td class="number">44.2</td><td class="number">20</td><td class="number up">-1</td><td>2026-04-20</td></tr><tr><td class="number">20</td><td><strong>Google: Gemini 3.1 Pro Preview</strong><span class="subcell">google/gemini-3.1-pro-preview</span></td><td class="number">46.5</td><td class="number">16</td><td class="number down">+4</td><td>2026-02-19</td></tr><tr><td class="number">21</td><td><strong>xAI: Grok 4.5</strong><span class="subcell">x-ai/grok-4.5</span></td><td class="number">53.8</td><td class="number">7</td><td class="number down">+14</td><td>2026-07-08</td></tr><tr><td class="number">22</td><td><strong>MoonshotAI: Kimi K2.7 Code</strong><span class="subcell">moonshotai/kimi-k2.7-code</span></td><td class="number">41.9</td><td class="number">22</td><td class="number ">+0</td><td>2026-06-12</td></tr><tr><td class="number">23</td><td><strong>OpenAI: GPT-5.4 Mini</strong><span class="subcell">openai/gpt-5.4-mini</span></td><td class="number">40.0</td><td class="number">26</td><td class="number up">-3</td><td>2026-03-17</td></tr><tr><td class="number">24</td><td><strong>Qwen: Qwen3.7 Plus</strong><span class="subcell">qwen/qwen3.7-plus</span></td><td class="number">39.0</td><td class="number">27</td><td class="number up">-3</td><td>2026-06-01</td></tr><tr><td class="number">25</td><td><strong>DeepSeek: DeepSeek V4 Flash</strong><span class="subcell">deepseek/deepseek-v4-flash</span></td><td class="number">40.3</td><td class="number">25</td><td class="number ">+0</td><td>2026-04-24</td></tr><tr><td class="number">26</td><td><strong>inclusionAI: Ring-2.6-1T</strong><span class="subcell">inclusionai/ring-2.6-1t</span></td><td class="number">30.6</td><td class="number">36</td><td class="number up">-10</td><td>2026-05-08</td></tr><tr><td class="number">27</td><td><strong>DeepSeek: DeepSeek V3.2</strong><span class="subcell">deepseek/deepseek-v3.2</span></td><td class="number">32.0</td><td class="number">35</td><td class="number up">-8</td><td>2025-12-01</td></tr><tr><td class="number">28</td><td><strong>NVIDIA: Nemotron 3 Ultra</strong><span class="subcell">nvidia/nemotron-3-ultra-550b-a55b</span></td><td class="number">37.8</td><td class="number">29</td><td class="number up">-1</td><td>2026-06-04</td></tr><tr><td class="number">29</td><td><strong>Qwen: Qwen3.6 27B</strong><span class="subcell">qwen/qwen3.6-27b</span></td><td class="number">37.1</td><td class="number">31</td><td class="number up">-2</td><td>2026-04-22</td></tr><tr><td class="number">30</td><td><strong>Tencent: Hy3</strong><span class="subcell">tencent/hy3</span></td><td class="number">41.2</td><td class="number">23</td><td class="number down">+7</td><td>2026-07-06</td></tr><tr><td class="number">31</td><td><strong>Qwen: Qwen3.7 Max</strong><span class="subcell">qwen/qwen3.7-max</span></td><td class="number">46.0</td><td class="number">17</td><td class="number down">+14</td><td>2026-05-19</td></tr><tr><td class="number">32</td><td><strong>MiniMax: MiniMax M3</strong><span class="subcell">minimax/minimax-m3</span></td><td class="number">44.4</td><td class="number">18</td><td class="number down">+14</td><td>2026-06-01</td></tr><tr><td class="number">33</td><td><strong>xAI: Grok 4.3</strong><span class="subcell">x-ai/grok-4.3</span></td><td class="number">37.6</td><td class="number">30</td><td class="number down">+3</td><td>2026-04-30</td></tr><tr><td class="number">34</td><td><strong>OpenAI: gpt-oss-120b</strong><span class="subcell">openai/gpt-oss-120b</span></td><td class="number">23.8</td><td class="number">40</td><td class="number up">-6</td><td>2025-08-05</td></tr><tr><td class="number">35</td><td><strong>MiniMax: MiniMax M2.7</strong><span class="subcell">minimax/minimax-m2.7</span></td><td class="number">38.1</td><td class="number">28</td><td class="number down">+7</td><td>2026-03-18</td></tr><tr><td class="number">36</td><td><strong>Google: Gemini 2.5 Pro</strong><span class="subcell">google/gemini-2.5-pro</span></td><td class="number">25.8</td><td class="number">39</td><td class="number up">-3</td><td>2025-06-05</td></tr><tr><td class="number">37</td><td><strong>Qwen: Qwen3.5 397B A17B</strong><span class="subcell">qwen/qwen3.5-397b-a17b</span></td><td class="number">33.7</td><td class="number">34</td><td class="number down">+3</td><td>2026-02-16</td></tr><tr><td class="number">38</td><td><strong>Anthropic: Claude Sonnet 4.5</strong><span class="subcell">anthropic/claude-sonnet-4.5</span></td><td class="number">36.4</td><td class="number">32</td><td class="number down">+6</td><td>2025-09-29</td></tr><tr><td class="number">39</td><td><strong>OpenAI: gpt-oss-20b</strong><span class="subcell">openai/gpt-oss-20b</span></td><td class="number">14.9</td><td class="number">44</td><td class="number up">-5</td><td>2025-08-05</td></tr><tr><td class="number">40</td><td><strong>Qwen: Qwen3.5-9B</strong><span class="subcell">qwen/qwen3.5-9b</span></td><td class="number">21.4</td><td class="number">41</td><td class="number up">-1</td><td>2026-03-02</td></tr><tr><td class="number">41</td><td><strong>Anthropic: Claude Haiku 4.5</strong><span class="subcell">anthropic/claude-haiku-4.5</span></td><td class="number">29.6</td><td class="number">38</td><td class="number down">+3</td><td>2025-10-15</td></tr><tr><td class="number">42</td><td><strong>Mistral: Mistral Small 4</strong><span class="subcell">mistralai/mistral-small-2603</span></td><td class="number">19.6</td><td class="number">42</td><td class="number ">+0</td><td>2026-03-16</td></tr><tr><td class="number">43</td><td><strong>Mistral: Mistral Medium 3.5</strong><span class="subcell">mistralai/mistral-medium-3-5</span></td><td class="number">29.9</td><td class="number">37</td><td class="number down">+6</td><td>2026-04-29</td></tr><tr><td class="number">44</td><td><strong>Meta: Llama 4 Maverick</strong><span class="subcell">meta-llama/llama-4-maverick</span></td><td class="number">14.3</td><td class="number">45</td><td class="number up">-1</td><td>2025-04-05</td></tr><tr><td class="number">45</td><td><strong>Mistral: Mistral Large 3 2512</strong><span class="subcell">mistralai/mistral-large-2512</span></td><td class="number">15.9</td><td class="number">43</td><td class="number down">+2</td><td>2025-12-02</td></tr><tr><td class="number">46</td><td><strong>Mistral: Ministral 3 14B 2512</strong><span class="subcell">mistralai/ministral-14b-2512</span></td><td class="number">11.1</td><td class="number">46</td><td class="number ">+0</td><td>2025-12-02</td></tr><tr><td class="number">47</td><td><strong>OpenAI: GPT-3.5 Turbo</strong><span class="subcell">openai/gpt-3.5-turbo</span></td><td class="number">3.6 *</td><td class="number">48</td><td class="number up">-1</td><td>2022-11-30</td></tr><tr><td class="number">48</td><td><strong>Meta: Llama 3.1 8B Instruct</strong><span class="subcell">meta-llama/llama-3.1-8b-instruct</span></td><td class="number">7.6</td><td class="number">47</td><td class="number down">+1</td><td>2024-07-23</td></tr><tr><td class="number">49</td><td><strong>Google: Gemma 3 4B</strong><span class="subcell">google/gemma-3-4b-it</span></td><td class="number">1.1 *</td><td class="number">49</td><td class="number ">+0</td><td>2025-03-12</td></tr><tr><td class="number">50</td><td><strong>Meta: Llama 3.2 1B Instruct</strong><span class="subcell">meta-llama/llama-3.2-1b-instruct</span></td><td class="number">1.1 *</td><td class="number">50</td><td class="number ">+0</td><td>2024-09-25</td></tr></tbody>
       </table>
     </div>
   </section>
@@ -179,94 +198,46 @@
     margin bin, and adaptive result →</a></p>
   </section>
 
-  <section id="probe-effectiveness" class="wide ruled">
+  <section id="probe-authors" class="wide ruled">
     <p class="section-kicker">Research question 3</p>
-    <h2>What tests do judges invent, and which ones work?</h2>
-    <p class="section-intro">The repertoire is broad, but naming a probe's
-    subject does not tell us whether it will separate candidates. The analysis
-    scores 146 probes from 11 authors
-    with one fixed evaluator, then tests taxonomy-derived predictions on an
-    excluded author.</p>
-    <div class="figure-pair">
-      <figure>
-        <img src="../figures/probe-effectiveness/question-type-effects.svg"
-             alt="Author-centered diagnostic accuracy by question type.">
-        <figcaption>Planning and spatial probes look promising within this
-        sample, but labels overlap and several intervals remain wide.</figcaption>
-      </figure>
-      <figure>
-        <img src="../figures/probe-effectiveness/held-out-labels.svg"
-             alt="Held-out prediction of probe effectiveness from taxonomy labels.">
-        <figcaption>When one author is held out, broad labels do not reliably
-        identify that author's better probes.</figcaption>
-      </figure>
-    </div>
-    <div class="finding-grid">
-      <div><strong>58.4%</strong><span>mean single-probe accuracy</span></div>
-      <div><strong>0.10</strong><span>author intelligence correlation</span></div>
-      <div><strong>46.4%</strong><span>held-out type concordance</span></div>
-      <div><strong>23</strong><span>operational beyond-author probes</span></div>
-    </div>
-    <p class="section-intro">Opening batteries usually broadened:
-    46 of
-    72 transitions changed capability area. Adaptive
-    follow-ups split between 6
-    broadening, 7 deepening, and
-    5 generic continuations. Across the
-    oversight panels, follow-ups improved ten rankings, left eleven unchanged,
-    and worsened nine.</p>
-    <aside class="background-note">
-      <strong>The useful negative result.</strong> Question-type predictions
-      reached 46.4% author-level concordance;
-      the complete label set reached
-      48.8%. Both intervals include
-      chance. Probes intended for stronger systems were more often beyond their
-      author (27.3%) than peer-targeted probes
-      (10.9%), but their overall discrimination was
-      similar. The taxonomy describes evaluation behavior; it is not yet a
-      validated recipe for choosing questions. One fixed evaluator scored all
-      answers, so evaluator-specific preferences may affect these results. A
-      single blind author attempt also cannot establish that a probe was truly
-      beyond the author's capability.
-    </aside>
-  </section>
-
-  <section id="judging-mechanisms" class="wide ruled">
-    <p class="section-kicker">Research question 4 · mechanism pilot</p>
-    <h2>Can probe design or independent councils improve judgment?</h2>
-    <p class="section-intro">Neither intervention is a universal fix. Across
-    four matched nine-model panels, verifier-oriented instructions changed what
-    judges asked but moved above-self recognition from
-    60.0% to
-    55.0%. Three independent
-    evaluators improved on Sol alone for the ordinary batteries, from
-    64.6% to
-    70.1% pairwise accuracy.</p>
+    <h2>Do stronger models ask different questions?</h2>
+    <p class="section-intro">Yes, descriptively, although not in the simple
+    sense that every question is better. Across 161 probes
+    from 11 authors, the four higher-capability authors
+    concentrated heavily on quantitative stress tests. Lower-capability
+    authors spread more attention across verbal and fluid abstraction,
+    creative generation, and criteria-setting. Rates first average within
+    author, so a model that wrote 23 probes does not outweigh one that wrote
+    six.</p>
     <figure class="figure-wide">
-      <div class="mechanism-chart">
-        <img src="../figures/verifier-council/matched-results.svg"
-             alt="Matched comparison of verifier-oriented probes and an independent three-member judge council.">
+      <div class="wide-chart taxonomy-chart">
+        <img src="../figures/publication/probe-types-by-capability.svg"
+             alt="Question-type frequencies for the four higher-capability and four lower-capability probe authors.">
       </div>
-      <figcaption>Panel A measures the narrow scalable-oversight target. Panel B
-      measures overall ranking. All comparisons use the same candidates and
-      five-probe budget within panel; council members see identical archived
-      evidence independently.</figcaption>
+      <figcaption>All question types appearing in at least three probes are
+      shown. A probe may carry several labels, so rates do not sum to 100%.</figcaption>
+    </figure>
+    <figure class="figure-wide compact-figure">
+      <img src="../figures/publication/probe-design-by-capability.svg"
+           alt="Probe design and performance measures for higher, middle, and lower capability authors.">
+      <figcaption>Stronger authors more often wrote questions the fixed
+      evaluator considered valid and that the authors themselves considered
+      objectively checkable. Explicitly targeting a stronger model was not
+      more common.</figcaption>
     </figure>
     <div class="finding-grid">
-      <div><strong>60.0%</strong><span>ordinary above-self recognition</span></div>
-      <div><strong>55.0%</strong><span>verifier above-self recognition</span></div>
-      <div><strong>70.1%</strong><span>ordinary council accuracy</span></div>
-      <div><strong>75.0%</strong><span>verifier council accuracy</span></div>
+      <div><strong>88%</strong><span>reference-valid, higher band</span></div>
+      <div><strong>61%</strong><span>reference-valid, lower band</span></div>
+      <div><strong>82%</strong><span>objective, higher band</span></div>
+      <div><strong>30%</strong><span>objective, lower band</span></div>
     </div>
     <aside class="background-note">
-      <strong>Why keep both outcomes?</strong> A battery can improve the broad
-      ordering while making the judge less likely to put every externally
-      stronger model above itself. Four panels are enough to diagnose mechanisms
-      and failures, not to estimate a universal effect. Evaluator disagreement,
-      external-index noise, and model-family composition remain material. The
-      combined interventions showed no extra benefit: the council gain was
-      smaller with verifier batteries, an interaction of
-      -2.8%.
+      <strong>The careful reading.</strong> Stronger authors produced more
+      checkable, reference-valid batteries in this sample, but author
+      intelligence had only a weak relationship with a probe's eventual
+      pairwise discrimination. Author, provider, panel, and prompt history are
+      observationally entangled. This is a map of an emerging repertoire, not
+      a causal claim that capability alone creates a particular test style.
     </aside>
   </section>
 
@@ -344,19 +315,112 @@
   </section>
 
   <section id="answer-map" class="wide ruled">
-    <p class="section-kicker">Answer-quality map</p>
-    <h2>Different probes expose different capability profiles</h2>
+    <p class="section-kicker">Model-to-model solvability</p>
+    <h2>The same candidate can look different under different probes</h2>
     <p class="section-intro">This mechanism view uses the eight opening probes
-    from the earlier four-probe batteries, not the fresh five-probe rankings
-    reported above. Rows follow the external ladder. Each cell is the mean anchored answer-quality score from Sol and Fable. The
-    fixed scale runs from 0 (no usable answer) to 4 (fully correct, complete,
-    and rigorous).</p>
-    <div class="heat-legend"><span>0 · unusable</span>
-      <i class="heat h1"></i><i class="heat h3"></i><i class="heat h5"></i>
-      <i class="heat h7"></i><i class="heat h9"></i><span>4 · fully correct</span>
-      <i class="heat missing"></i><span>Missing answer</span></div>
-    <div class="table-frame heat-frame"><table class="heatmap"><thead><tr><th>External ladder</th><th title="Sol probe; mean answer score 2.15; 38% scored 3 or 4"><span>Sol</span>Pooled tests<small>μ 2.1</small></th><th title="Sol probe; mean answer score 3.25; 80% scored 3 or 4"><span>Sol</span>Mechanics<small>μ 3.2</small></th><th title="Sol probe; mean answer score 2.81; 68% scored 3 or 4"><span>Sol</span>Concurrency<small>μ 2.8</small></th><th title="Sol probe; mean answer score 3.07; 74% scored 3 or 4"><span>Sol</span>Causal ID<small>μ 3.1</small></th><th title="Fable probe; mean answer score 3.32; 82% scored 3 or 4"><span>Fable</span>Reachability<small>μ 3.3</small></th><th title="Fable probe; mean answer score 2.66; 56% scored 3 or 4"><span>Fable</span>Language<small>μ 2.7</small></th><th title="Fable probe; mean answer score 3.01; 78% scored 3 or 4"><span>Fable</span>Causal choice<small>μ 3.0</small></th><th title="Fable probe; mean answer score 2.92; 80% scored 3 or 4"><span>Fable</span>Proof audit<small>μ 2.9</small></th></tr></thead><tbody><tr><th><span>1</span>Claude Fable 5<small>59.9</small></th><td class="heat missing" title="Missing answer">—</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td></tr><tr><th><span>2</span>GPT-5.6 Sol<small>58.9</small></th><td class="heat h9" title="4.0 / 4; 1 scoring judge">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td></tr><tr><th><span>3</span>Kimi K3<small>57.1</small></th><td class="heat h9" title="4.0 / 4; 1 scoring judge">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>4</span>Claude Opus 4.8<small>55.7</small></th><td class="heat h9" title="4.0 / 4; 1 scoring judge">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td></tr><tr><th><span>5</span>GPT-5.6 Terra<small>55.0</small></th><td class="heat h3" title="1.0 / 4; 1 scoring judge">1.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td></tr><tr><th><span>6</span>GPT-5.5<small>54.8</small></th><td class="heat h9" title="4.0 / 4; 1 scoring judge">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td></tr><tr><th><span>7</span>Grok 4.5<small>53.8</small></th><td class="heat h7" title="3.0 / 4; 1 scoring judge">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td></tr><tr><th><span>8</span>Claude Opus 4.7<small>53.5</small></th><td class="heat h7" title="3.0 / 4; 1 scoring judge">3.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td></tr><tr><th><span>9</span>Claude Sonnet 5<small>53.4</small></th><td class="heat h9" title="4.0 / 4; 1 scoring judge">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>10</span>GPT-5.4<small>51.4</small></th><td class="heat h7" title="3.0 / 4; 1 scoring judge">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>11</span>GPT-5.6 Luna<small>51.2</small></th><td class="heat h9" title="4.0 / 4; 1 scoring judge">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>12</span>GLM 5.2<small>51.1</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>13</span>Muse Spark 1.1<small>50.6</small></th><td class="heat h9" title="4.0 / 4; 1 scoring judge">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td></tr><tr><th><span>14</span>Gemini 3.5 Flash<small>50.2</small></th><td class="heat h9" title="4.0 / 4; 1 scoring judge">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h6" title="2.5 / 4; 2 scoring judges">2.5</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h6" title="2.5 / 4; 2 scoring judges">2.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>15</span>Claude Sonnet 4.6<small>47.2</small></th><td class="heat h9" title="4.0 / 4; 1 scoring judge">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>16</span>Gemini 3.1 Pro Preview<small>46.5</small></th><td class="heat h9" title="4.0 / 4; 1 scoring judge">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td></tr><tr><th><span>17</span>Qwen3.7 Max<small>46.0</small></th><td class="heat h7" title="3.0 / 4; 1 scoring judge">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h4" title="1.5 / 4; 2 scoring judges">1.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td></tr><tr><th><span>18</span>MiniMax M3<small>44.4</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat missing" title="Missing answer">—</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>19</span>DeepSeek V4 Pro<small>44.3</small></th><td class="heat missing" title="Missing answer">—</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>20</span>Kimi K2.6<small>44.2</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat missing" title="Missing answer">—</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td></tr><tr><th><span>21</span>MiMo-V2.5-Pro<small>42.2</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h6" title="2.5 / 4; 2 scoring judges">2.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h4" title="1.5 / 4; 2 scoring judges">1.5</td></tr><tr><th><span>22</span>Kimi K2.7 Code<small>41.9</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td></tr><tr><th><span>23</span>Hy3<small>41.2</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td></tr><tr><th><span>24</span>Inkling<small>40.7</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>25</span>DeepSeek V4 Flash<small>40.3</small></th><td class="heat h9" title="4.0 / 4; 1 scoring judge">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>26</span>GPT-5.4 Mini<small>40.0</small></th><td class="heat h9" title="4.0 / 4; 1 scoring judge">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h6" title="2.5 / 4; 2 scoring judges">2.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>27</span>Qwen3.7 Plus<small>39.0</small></th><td class="heat h3" title="1.0 / 4; 1 scoring judge">1.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>28</span>MiniMax M2.7<small>38.1</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h4" title="1.5 / 4; 2 scoring judges">1.5</td><td class="heat h6" title="2.5 / 4; 2 scoring judges">2.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>29</span>Nemotron 3 Ultra<small>37.8</small></th><td class="heat h7" title="3.0 / 4; 1 scoring judge">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>30</span>Grok 4.3<small>37.6</small></th><td class="heat h3" title="1.0 / 4; 1 scoring judge">1.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>31</span>Qwen3.6 27B<small>37.1</small></th><td class="heat h3" title="1.0 / 4; 1 scoring judge">1.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td></tr><tr><th><span>32</span>Claude Sonnet 4.5<small>36.4</small></th><td class="heat h3" title="1.0 / 4; 1 scoring judge">1.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>33</span>GPT-5<small>34.7</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>34</span>Qwen3.5 397B A17B<small>33.7</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>35</span>DeepSeek V3.2<small>32.0</small></th><td class="heat missing" title="Missing answer">—</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td></tr><tr><th><span>36</span>Ring-2.6-1T<small>30.6</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>37</span>Mistral Medium 3.5<small>29.9</small></th><td class="heat h1" title="0.0 / 4; 1 scoring judge">0.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h4" title="1.5 / 4; 2 scoring judges">1.5</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h6" title="2.5 / 4; 2 scoring judges">2.5</td><td class="heat h6" title="2.5 / 4; 2 scoring judges">2.5</td></tr><tr><th><span>38</span>Claude Haiku 4.5<small>29.6</small></th><td class="heat h3" title="1.0 / 4; 1 scoring judge">1.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h6" title="2.5 / 4; 2 scoring judges">2.5</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h6" title="2.5 / 4; 2 scoring judges">2.5</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>39</span>Gemini 2.5 Pro<small>25.8</small></th><td class="heat h7" title="3.0 / 4; 1 scoring judge">3.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>40</span>gpt-oss-120b<small>23.8</small></th><td class="heat h3" title="1.0 / 4; 1 scoring judge">1.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h6" title="2.5 / 4; 2 scoring judges">2.5</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>41</span>Qwen3.5-9B<small>21.4</small></th><td class="heat h3" title="1.0 / 4; 1 scoring judge">1.0</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h4" title="1.5 / 4; 2 scoring judges">1.5</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>42</span>Mistral Small 4<small>19.6</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>43</span>Mistral Large 3 2512<small>15.9</small></th><td class="heat h1" title="0.0 / 4; 1 scoring judge">0.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td></tr><tr><th><span>44</span>gpt-oss-20b<small>14.9</small></th><td class="heat h5" title="2.0 / 4; 1 scoring judge">2.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h8" title="3.5 / 4; 2 scoring judges">3.5</td><td class="heat h9" title="4.0 / 4; 2 scoring judges">4.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td><td class="heat h7" title="3.0 / 4; 2 scoring judges">3.0</td></tr><tr><th><span>45</span>Llama 4 Maverick<small>14.3</small></th><td class="heat h1" title="0.0 / 4; 1 scoring judge">0.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h4" title="1.5 / 4; 2 scoring judges">1.5</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h6" title="2.5 / 4; 2 scoring judges">2.5</td><td class="heat h4" title="1.5 / 4; 2 scoring judges">1.5</td><td class="heat h6" title="2.5 / 4; 2 scoring judges">2.5</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td></tr><tr><th><span>46</span>Ministral 3 14B 2512<small>11.1</small></th><td class="heat h3" title="1.0 / 4; 1 scoring judge">1.0</td><td class="heat h5" title="2.0 / 4; 2 scoring judges">2.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h4" title="1.5 / 4; 2 scoring judges">1.5</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h4" title="1.5 / 4; 2 scoring judges">1.5</td></tr><tr><th><span>47</span>Llama 3.1 8B Instruct<small>7.6</small></th><td class="heat h1" title="0.0 / 4; 1 scoring judge">0.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h2" title="0.5 / 4; 2 scoring judges">0.5</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h2" title="0.5 / 4; 2 scoring judges">0.5</td></tr><tr><th><span>48</span>GPT-3.5 Turbo<small>3.6</small></th><td class="heat h1" title="0.0 / 4; 1 scoring judge">0.0</td><td class="heat h2" title="0.5 / 4; 2 scoring judges">0.5</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h2" title="0.5 / 4; 2 scoring judges">0.5</td></tr><tr><th><span>49</span>Gemma 3 4B<small>1.1</small></th><td class="heat h1" title="0.0 / 4; 1 scoring judge">0.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h2" title="0.5 / 4; 2 scoring judges">0.5</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td><td class="heat missing" title="Missing answer">—</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td></tr><tr><th><span>50</span>Llama 3.2 1B Instruct<small>1.1</small></th><td class="heat h1" title="0.0 / 4; 1 scoring judge">0.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h1" title="0.0 / 4; 2 scoring judges">0.0</td><td class="heat h3" title="1.0 / 4; 2 scoring judges">1.0</td></tr></tbody></table></div>
-    <p class="note">Averaging scores across probes produced Spearman 0.87 with the external index and 84.8% pairwise alignment. Mean absolute judge disagreement across the seven jointly scored probes was 0.34 points. Seven probes have both judges; the pooled-test column uses Sol alone because Fable repeatedly returned an empty provider response.</p>
+    from the earlier four-probe batteries, not the primary ten-probe rankings
+    reported above. Sol and Fable scored every available answer on the same
+    anchored 0–4 scale; seven probes have both scorers and one has Sol alone.</p>
+    <figure class="figure-wide">
+      <div class="wide-chart matrix-chart">
+        <img src="../figures/publication/model-probe-solvability.svg"
+             alt="Fifty candidate models by eight model-authored probes, colored by answer quality from zero to four.">
+      </div>
+      <figcaption>Averaging across the eight probes reaches Spearman
+      0.87 with the external index and
+      84.8% pairwise accuracy. The uneven
+      columns show why a portfolio matters.</figcaption>
+    </figure>
+  </section>
+
+  <section id="probe-effectiveness" class="wide ruled">
+    <p class="section-kicker">Probe effectiveness</p>
+    <h2>A test's subject does not tell us whether it will work</h2>
+    <p class="section-intro">One fixed evaluator scored all
+    161 probes, and taxonomy-derived predictions were then
+    tested on an excluded author. Broad labels describe what happened, but did
+    not reliably identify the better questions in advance.</p>
+    <div class="figure-pair">
+      <figure>
+        <img src="../figures/probe-effectiveness/question-type-effects.svg"
+             alt="Author-centered diagnostic accuracy by question type.">
+        <figcaption>Planning and spatial probes look promising within this
+        sample, but labels overlap and several intervals remain wide.</figcaption>
+      </figure>
+      <figure>
+        <img src="../figures/probe-effectiveness/held-out-labels.svg"
+             alt="Held-out prediction of probe effectiveness from taxonomy labels.">
+        <figcaption>When one author is held out, broad labels do not reliably
+        identify that author's better probes.</figcaption>
+      </figure>
+    </div>
+    <div class="finding-grid">
+      <div><strong>59.4%</strong><span>mean single-probe accuracy</span></div>
+      <div><strong>0.17</strong><span>author intelligence correlation</span></div>
+      <div><strong>50.0%</strong><span>held-out type concordance</span></div>
+      <div><strong>23</strong><span>operational beyond-author probes</span></div>
+    </div>
+    <p class="section-intro">Opening batteries usually broadened:
+    46 of
+    72 transitions changed capability area. Adaptive
+    follow-ups split between 6
+    broadening, 7 deepening, and
+    5 generic continuations. Across the
+    oversight panels, follow-ups improved ten rankings, left eleven unchanged,
+    and worsened nine.</p>
+    <aside class="background-note">
+      <strong>The useful negative result.</strong> Question-type predictions
+      reached 50.0% author-level concordance;
+      the complete label set reached
+      52.4%. Both intervals include
+      chance. Probes intended for stronger systems were more often beyond their
+      author (25.7%) than peer-targeted probes
+      (9.7%), but their overall discrimination was
+      similar. The taxonomy describes evaluation behavior; it is not yet a
+      validated recipe for choosing questions. One fixed evaluator scored all
+      answers, so evaluator-specific preferences may affect these results. A
+      single blind author attempt also cannot establish that a probe was truly
+      beyond the author's capability.
+    </aside>
+  </section>
+
+  <section id="judging-mechanisms" class="wide ruled">
+    <p class="section-kicker">Research question 4 · mechanism pilot</p>
+    <h2>Can probe design or independent councils improve judgment?</h2>
+    <p class="section-intro">Neither intervention is a universal fix. Across
+    four matched nine-model panels, verifier-oriented instructions changed what
+    judges asked but moved above-self recognition from
+    60.0% to
+    55.0%. Three independent
+    evaluators improved on Sol alone for the ordinary batteries, from
+    64.6% to
+    70.1% pairwise accuracy.</p>
+    <figure class="figure-wide">
+      <div class="mechanism-chart">
+        <img src="../figures/verifier-council/matched-results.svg"
+             alt="Matched comparison of verifier-oriented probes and an independent three-member judge council.">
+      </div>
+      <figcaption>Panel A measures the narrow scalable-oversight target. Panel B
+      measures overall ranking. All comparisons use the same candidates and
+      five-probe budget within panel; council members see identical archived
+      evidence independently.</figcaption>
+    </figure>
+    <div class="finding-grid">
+      <div><strong>60.0%</strong><span>ordinary above-self recognition</span></div>
+      <div><strong>55.0%</strong><span>verifier above-self recognition</span></div>
+      <div><strong>70.1%</strong><span>ordinary council accuracy</span></div>
+      <div><strong>75.0%</strong><span>verifier council accuracy</span></div>
+    </div>
+    <aside class="background-note">
+      <strong>Why keep both outcomes?</strong> A battery can improve the broad
+      ordering while making the judge less likely to put every externally
+      stronger model above itself. Four panels are enough to diagnose mechanisms
+      and failures, not to estimate a universal effect. Evaluator disagreement,
+      external-index noise, and model-family composition remain material. The
+      combined interventions showed no extra benefit: the council gain was
+      smaller with verifier batteries, an interaction of
+      -2.8%.
+    </aside>
   </section>
 
 </article>
@@ -374,7 +438,7 @@ for (const input of document.querySelectorAll("[data-table-filter]")) {
 </main>
   <footer>
     <p>Exploratory results. External intelligence scores are reference measurements, not ground truth.</p>
-    <p>Generated from versioned run artifacts on 2026-07-27.</p>
+    <p>Generated from versioned run artifacts on 2026-07-29.</p>
   </footer>
 </body>
 </html>

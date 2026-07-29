@@ -112,7 +112,7 @@ h1 {
   max-width: 820px;
   margin-bottom: 24px;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(42px, 7vw, 76px);
+  font-size: 72px;
   font-weight: 500;
   line-height: 1.03;
   letter-spacing: 0;
@@ -250,6 +250,17 @@ h3 {
   margin: 38px 0;
 }
 
+.figure-wide > img,
+.wide-chart > img,
+.figure-pair img {
+  width: 100%;
+  height: auto;
+}
+
+.wide-chart {
+  overflow-x: auto;
+}
+
 .figure-pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -266,6 +277,10 @@ figcaption {
   color: var(--muted);
   font-size: 13px;
   text-align: center;
+}
+
+.appendix-note {
+  margin-top: 24px;
 }
 
 .compact-figure {
@@ -450,100 +465,6 @@ blockquote {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 14px;
 }
-
-.heat-legend {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 12px;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-.heat-legend .heat {
-  width: 22px;
-  height: 18px;
-  padding: 0;
-  border: 0;
-}
-
-.heat-frame {
-  max-height: 740px;
-}
-
-.heatmap {
-  min-width: 980px;
-  table-layout: fixed;
-}
-
-.heatmap thead th {
-  height: 92px;
-  padding: 9px 5px;
-  vertical-align: bottom;
-  white-space: normal;
-}
-
-.heatmap thead th:first-child {
-  left: 0;
-  z-index: 5;
-  width: 230px;
-}
-
-.heatmap thead th span {
-  display: block;
-  color: var(--red);
-}
-
-.heatmap thead th small {
-  display: block;
-  margin-top: 3px;
-  color: var(--muted);
-  font-weight: 500;
-}
-
-.heatmap tbody th {
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  width: 230px;
-  overflow: hidden;
-  background: white;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.heatmap tbody th span {
-  display: inline-block;
-  width: 26px;
-  color: var(--muted);
-  font-weight: 400;
-}
-
-.heatmap tbody th small {
-  float: right;
-  color: var(--muted);
-  font-weight: 400;
-}
-
-.heatmap td {
-  padding: 9px 4px;
-  border-right: 1px solid rgb(255 255 255 / 55%);
-  font-size: 11px;
-  font-variant-numeric: tabular-nums;
-  text-align: center;
-}
-
-.heat.h1 { background: #b94b3d; color: white; }
-.heat.h2 { background: #cc705a; color: white; }
-.heat.h3 { background: #dd9980; color: var(--ink); }
-.heat.h4 { background: #ebc3a9; color: var(--ink); }
-.heat.h5 { background: #eee3c3; color: var(--ink); }
-.heat.h6 { background: #cbdcbc; color: var(--ink); }
-.heat.h7 { background: #94c6a8; color: var(--ink); }
-.heat.h8 { background: #5ca18e; color: white; }
-.heat.h9 { background: #247665; color: white; }
-.heat.missing { background: #e8ebec; color: #7a858a; }
 
 .placeholder strong {
   display: block;
@@ -739,6 +660,22 @@ footer p {
 
   .mechanism-chart img {
     width: 780px;
+    max-width: none;
+  }
+
+  .diagram-chart img,
+  .matrix-chart img {
+    width: 900px;
+    max-width: none;
+  }
+
+  .taxonomy-chart img {
+    width: 760px;
+    max-width: none;
+  }
+
+  .solvability-chart img {
+    width: 760px;
     max-width: none;
   }
 

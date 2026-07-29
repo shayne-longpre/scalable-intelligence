@@ -83,6 +83,9 @@ def summarize_catalog_ranking(
     model_sets = {frozenset(row["ranking_models"]) for row in judges}
     if len(model_sets) != 1:
         raise ValueError("catalog judges must rank the same model roster")
+    opening_probe_counts = {row["opening_probe_count"] for row in judges}
+    if len(opening_probe_counts) != 1:
+        raise ValueError("catalog judges must use the same opening probe count")
 
     gap_labels = [
         row["label"] for row in judges[0]["pairwise_accuracy_by_score_gap"]
@@ -127,7 +130,7 @@ def summarize_catalog_ranking(
             "reported_score_candidate_count"
         ],
         "judge_count": len(judges),
-        "opening_probe_count": 5,
+        "opening_probe_count": opening_probe_counts.pop(),
         "judges": judges,
         "mean_pairwise_accuracy": mean(
             row["pairwise_accuracy"] for row in judges
@@ -354,11 +357,7 @@ transform="rotate(-90 24 {top + plot_height / 2})">Stronger candidate ranked abo
 
 
 def _catalog_judge_row(run: Mapping[str, Any]) -> dict[str, Any]:
-    checkpoint = next(
-        row
-        for row in run["probe_budget_results"]
-        if int(row["probe_count"]) == 5
-    )
+    checkpoint = run["probe_budget_results"][0]
     participants = {
         row["id"]: row["provider_model_id"] for row in run["participants"]
     }
@@ -395,6 +394,7 @@ def _catalog_judge_row(run: Mapping[str, Any]) -> dict[str, Any]:
         "run_dir": run["run_dir"],
         "candidate_count": len(ranking_models),
         "reported_score_candidate_count": len(reported),
+        "opening_probe_count": int(checkpoint["probe_count"]),
         "pairwise_accuracy": float(checkpoint["pairwise_accuracy"]),
         "kendall_tau": float(checkpoint["kendall_tau"]),
         "spearman_rho": float(checkpoint["spearman_rho"]),

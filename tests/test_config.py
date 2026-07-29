@@ -19,8 +19,14 @@ from ai_council.experiment_builders import (
 from scripts.build_adaptive_judge_study import build_study_configs
 from scripts.build_adaptive_judge_study import validate_relative_gap_requirements
 from scripts.build_cross_judge_study import validate_exact_evidence_source
-from scripts.build_ceiling_probe_extension import build_ceiling_extension_config
-from scripts.build_partial_resume_config import build_partial_resume_config
+from scripts.build_ceiling_probe_extension import (
+    build_ceiling_extension_config,
+    write_opening_replay_bundle,
+)
+from scripts.build_partial_resume_config import (
+    build_partial_resume_config,
+    write_replay_bundle,
+)
 from scripts.build_replay_repair_config import build_replay_repair_config
 
 
@@ -53,7 +59,10 @@ class ConfigTests(unittest.TestCase):
                         }
                     ]
                 },
-                "metadata": {},
+                "metadata": {
+                    "repair_source_run": "old-run",
+                    "repair_retry_unavailable_rounds": [1],
+                },
             }
             (source_run / "config.json").write_text(json.dumps(source))
             turns = []
@@ -113,6 +122,21 @@ class ConfigTests(unittest.TestCase):
                 additional_probes=5,
                 guidance="Seek evidence above your own ceiling.",
             )
+            opening_replay = write_opening_replay_bundle(
+                source_run,
+                source_run / "opening_replay.jsonl",
+            )
+            adaptive = build_ceiling_extension_config(
+                source_run,
+                additional_probes=5,
+                adaptive_probe_counts=[1, 1],
+                guidance="Seek evidence above your own ceiling.",
+                preauthored_opening_file=opening_replay,
+            )
+            replay_entries = [
+                json.loads(line)
+                for line in opening_replay.read_text().splitlines()
+            ]
             turns[1]["content"] = ""
             turns[1]["metadata"]["answer_unavailable"] = True
             (source_run / "transcript.jsonl").write_text(
@@ -138,7 +162,28 @@ class ConfigTests(unittest.TestCase):
             phase["probe_generation_guidance"],
             "Seek evidence above your own ceiling.",
         )
+        self.assertNotIn("repair_source_run", extended["metadata"])
+        self.assertNotIn(
+            "repair_retry_unavailable_rounds",
+            extended["metadata"],
+        )
         self.assertEqual(extended["run"]["max_model_calls"], 41)
+        adaptive_phase = adaptive["protocol"]["phases"][0]
+        self.assertEqual(adaptive_phase["probe_schedule"], [10, 1, 1])
+        self.assertEqual(adaptive_phase["rounds"], 3)
+        self.assertEqual(
+            adaptive_phase["preauthored_probe_file"],
+            str(opening_replay),
+        )
+        self.assertEqual(
+            adaptive_phase["preauthored_evidence_file"],
+            str(opening_replay),
+        )
+        self.assertEqual(adaptive["run"]["max_model_calls"], 51)
+        self.assertEqual(len(replay_entries), 10)
+        self.assertTrue(
+            all(entry["round_index"] == 1 for entry in replay_entries)
+        )
 
     def test_ceiling_extension_rejects_incomplete_opening_evidence(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -864,6 +909,19 @@ class ConfigTests(unittest.TestCase):
                 source_run,
                 retry_unavailable_rounds=[1],
             )
+            (source_run / "pending_batch_entries.jsonl").write_text(
+                json.dumps(
+                    {
+                        "round_index": 2,
+                        "metadata": {"answer_unavailable": True},
+                    }
+                )
+                + "\n"
+            )
+            build_replay_repair_config(
+                source_run,
+                retry_unavailable_rounds=[2],
+            )
 
         phase = repaired["protocol"]["phases"][0]
         self.assertEqual(
@@ -955,6 +1013,61 @@ class ConfigTests(unittest.TestCase):
                 "reasoning": {"effort": "low"},
                 "max_tokens": 8000,
             },
+        )
+
+    def test_replay_bundle_preserves_primary_and_adds_missing_streams(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            primary = root / "primary"
+            supplement = root / "supplement"
+            primary.mkdir()
+            supplement.mkdir()
+            primary_rows = [
+                _replay_row("question", "q1", "question"),
+                _replay_row("answer", "a1", "repaired"),
+                _replay_row("answer", "a3", ""),
+            ]
+            supplement_rows = [
+                _replay_row("question", "q1", "question"),
+                _replay_row("answer", "a1", "stale"),
+                _replay_row("question", "q2", "follow-up"),
+                _replay_row("answer", "a2", "follow-up answer"),
+                {
+                    **_replay_row("answer", "a3", ""),
+                    "metadata": {
+                        "interaction_role": "answer",
+                        "stream_id": "a3",
+                        "answer_unavailable": True,
+                    },
+                },
+            ]
+            _write_jsonl(primary / "transcript.jsonl", primary_rows)
+            _write_jsonl(supplement / "transcript.jsonl", supplement_rows)
+
+            bundle = write_replay_bundle(
+                primary_run=primary,
+                supplement_run=supplement,
+                output_dir=root / "bundle",
+            )
+            rows = [
+                json.loads(line)
+                for line in (bundle / "transcript.jsonl").read_text().splitlines()
+            ]
+
+        by_stream = {
+            row["metadata"]["stream_id"]: row["content"] for row in rows
+        }
+        self.assertEqual(by_stream["a1"], "repaired")
+        self.assertEqual(by_stream["q2"], "follow-up")
+        self.assertEqual(by_stream["a2"], "follow-up answer")
+        self.assertTrue(
+            next(
+                row
+                for row in rows
+                if row["metadata"].get("answer_unavailable") is True
+            )["metadata"]["answer_unavailable"]
         )
 
     def test_independent_judge_phase_requires_judge_roster(self) -> None:
@@ -1315,6 +1428,23 @@ class ConfigTests(unittest.TestCase):
         data["protocol"]["phases"][0]["adaptive_targeting"] = "nearest_neighbors"
         with self.assertRaisesRegex(ConfigError, "adaptive_targeting"):
             ExperimentConfig.from_dict(data)
+
+
+def _replay_row(role: str, stream_id: str, content: str) -> dict:
+    return {
+        "content": content,
+        "metadata": {
+            "interaction_role": role,
+            "stream_id": stream_id,
+        },
+    }
+
+
+def _write_jsonl(path: Path, rows: list[dict]) -> None:
+    path.write_text(
+        "".join(json.dumps(row) + "\n" for row in rows),
+        encoding="utf-8",
+    )
 
 
 def _minimal_config_dict() -> dict:

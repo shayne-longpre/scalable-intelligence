@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Replications, order checks, uncertainty, missing evidence, and limitations.">
+  <title>Robustness and sensitivity</title>
+  <link rel="stylesheet" href="site.css?v=20260728-1">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="index.html">Machine Societies</a>
+    <nav aria-label="Primary"><a href="index.html">Results</a><a href="taxonomy.html">Taxonomy</a><a href="models.html">Models</a><a href="robustness.html" aria-current="page">Robustness</a><a href="audit.html">Audit sample</a></nav>
+  </header>
+  <main>
+<section class="page-head">
+  <p class="eyebrow">Methods appendix</p>
+  <h1>How stable are these results?</h1>
+  <p class="dek">The broad signal survives new probe batteries and answer
+  orders. Exact frontier ranks do not. This page collects the checks that keep
+  the headline claims narrow.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Reference sensitivity</p>
+  <h2>The weak estimated anchors make the result look slightly easier</h2>
+  <p class="section-intro">The primary endpoint excludes three estimated
+  lower-tail scores. Adding them raises accuracy by roughly two points because
+  they are easy to distinguish; they do not create the
+  86.4% result.</p>
+  <div class="table-frame">
+    <table><thead><tr><th>Judge</th><th>Direct models</th>
+    <th>Direct accuracy</th><th>All models</th><th>With estimates</th></tr></thead>
+    <tbody><tr><td>Sol</td><td class="number">47</td><td class="number">84.6%</td><td class="number">50</td><td class="number">86.4%</td></tr><tr><td>Fable</td><td class="number">47</td><td class="number">88.2%</td><td class="number">50</td><td class="number">89.5%</td></tr></tbody></table>
+  </div>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Replication</p>
+  <h2>Broad accuracy repeats; the top five moves</h2>
+  <div class="table-frame">
+    <table><thead><tr><th>Judge</th>
+    <th>Earlier 5-probe battery</th>
+    <th>Fresh 10-probe battery</th>
+    <th>Rank tau</th><th>Top-five overlap</th></tr></thead>
+    <tbody><tr><td>Fable</td><td class="number">84.6%</td><td class="number">88.2%</td><td class="number">0.85</td><td class="number">80%</td></tr><tr><td>Sol</td><td class="number">80.9%</td><td class="number">84.6%</td><td class="number">0.78</td><td class="number">60%</td></tr></tbody></table>
+  </div>
+  <p class="section-intro appendix-note">Mean old-new rank agreement is Kendall
+  0.81; mean top-five overlap is
+  70%. This supports a capability ladder, not a
+  definitive frontier league table.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Answer order</p>
+  <h2>Changing presentation order moves individual models</h2>
+  <div class="finding-grid">
+    <div><strong>0.81</strong><span>catalog replay agreement</span></div>
+    <div><strong>8/10</strong><span>catalog top-ten overlap</span></div>
+    <div><strong>0.65</strong><span>panel replay agreement</span></div>
+    <div><strong>3/3</strong><span>panel winners unchanged</span></div>
+  </div>
+  <p class="section-intro">The catalog replay used identical probes and answers
+  in a new order. Accuracy moved from
+  86.7% to
+  83.7%; median model displacement was
+  1.5 places. A few models
+  moved much farther.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">What varies?</p>
+  <h2>The evidence battery matters more than the interpreter</h2>
+  <p class="section-intro">When both judges saw the same answers, their final
+  rankings agreed at Kendall 0.84
+  and 0.77. Holding the judge fixed
+  while changing its probe battery produced lower agreement:
+  0.67 for Sol and
+  0.60 for Fable. This crossed control
+  isolates question choice from evidence interpretation.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Evidence budget</p>
+  <h2>Follow-ups do not reliably improve the ranking</h2>
+  <div class="finding-grid">
+    <div><strong>84.6%</strong><span>Sol after 10 probes</span></div>
+    <div><strong>84.1%</strong><span>Sol after two follow-ups</span></div>
+    <div><strong>88.2%</strong><span>Fable after 10 probes</span></div>
+    <div><strong>85.6%</strong><span>Fable after two follow-ups</span></div>
+  </div>
+  <p class="section-intro">Across 30 oversight panels,
+  one follow-up improved
+  10 rankings, left
+  11 unchanged, and worsened
+  9. Extra evidence remains a checkpoint, not an
+  automatic improvement.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Uncertainty</p>
+  <h2>The apparent judge-capability effect is not causal</h2>
+  <div class="table-frame">
+    <table><thead><tr><th>Judge capability band</th><th>Standardized rate</th>
+    <th>Panel-bootstrap 95% interval</th><th>Panels</th></tr></thead>
+    <tbody><tr><td>Lower Third</td><td class="number">48.0%</td><td class="number">25.5%–69.7%</td><td class="number">12</td></tr><tr><td>Middle Third</td><td class="number">60.1%</td><td class="number">43.3%–75.1%</td><td class="number">9</td></tr><tr><td>Upper Third</td><td class="number">85.8%</td><td class="number">68.6%–96.9%</td><td class="number">9</td></tr></tbody></table>
+  </div>
+  <p class="section-intro appendix-note">Recognition rises across the observed
+  bands, but judge identity, provider, panel, and probe battery remain
+  entangled. The intervals preserve panel-level variation rather than treating
+  every candidate comparison as independent.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Probe self-assessment</p>
+  <h2>Models usually wrote questions they believed they could answer</h2>
+  <figure class="figure-wide">
+    <div class="wide-chart solvability-chart">
+      <img src="../figures/publication/probe-self-solvability.svg"
+           alt="Self-reported solvability of probes by author model, ordered by external capability.">
+    </div>
+    <figcaption>“Surpassed” means a stronger candidate outscored the author's
+    blind solve under the operational rule. It does not prove the probe was
+    impossible for the author.</figcaption>
+  </figure>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Operational integrity</p>
+  <h2>Missing evidence is recorded, never scored as low intelligence</h2>
+  <p class="section-intro">The fresh catalog replication records
+  1 unavailable opening answer
+  out of 1000, and
+  3 unavailable adaptive
+  answers out of 40. The
+  pooled oversight study retains
+  7 unavailable cells out of
+  1345 (0.5%); the
+  matched extension has none. Repairs reuse completed evidence and preserve
+  exact lineage.</p>
+</section>
+
+<section class="wide ruled">
+  <p class="section-kicker">Council scope</p>
+  <h2>The council result is promising and composition-specific</h2>
+  <p class="section-intro">A fixed three-member council improved ordinary
+  evidence from 64.6% to
+  70.1%. On verifier-oriented evidence it
+  moved from 72.2% to
+  75.0%. The interaction was
+  -2.8%, offering no evidence that the two
+  interventions reinforce one another.</p>
+  <aside class="background-note">
+    <strong>Bottom line.</strong> The central result is coarse discrimination:
+    large capability gaps are visible. The exact top order, the benefit of
+    another probe, and the performance of any one panel are substantially less
+    stable. See the <a href="../robustness_appendix.md">generated Markdown
+    appendix</a> for the compact artifact record.
+  </aside>
+</section>
+</main>
+  <footer>
+    <p>Exploratory results. External intelligence scores are reference measurements, not ground truth.</p>
+    <p>Generated from versioned run artifacts on 2026-07-29.</p>
+  </footer>
+</body>
+</html>

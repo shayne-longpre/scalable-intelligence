@@ -1,13 +1,13 @@
 {
   "schema_version": "probe-catalog-v1",
-  "generated_at": "2026-07-27T20:17:34.382145+00:00",
+  "generated_at": "2026-07-29T06:39:50.044298+00:00",
   "source_study": "data/probe_evolution_results.json",
   "source_study_schema": "probe-evolution-study-v1",
   "model_catalog": "data/model_catalog.openrouter.json",
   "model_catalog_generated_at": "2026-07-21T05:40:42.434753+00:00",
-  "accepted_run_count": 25,
-  "probe_occurrence_count": 147,
-  "unique_probe_count": 147,
+  "accepted_run_count": 27,
+  "probe_occurrence_count": 161,
+  "unique_probe_count": 161,
   "author_model_count": 11,
   "probes": [
     {
@@ -12850,6 +12850,401 @@
       ]
     },
     {
+      "probe_id": "probe_160a966bdeb952f34135",
+      "content_sha256": "0434b629dbf18c3481dfea25a94e7dc9e18b23c5bb34bc467abaf865aa395d73",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question": "Let \\(C=[-\\tfrac12,\\tfrac12]^3\\). For a unit vector \\(n=(a,b,c)\\) and real \\(t\\), let\n\\[\nS(n,t)=C\\cap\\{x\\in\\mathbb R^3:n\\cdot x=t\\},\n\\]\nand let \\(A(n,t)\\) be its planar area (zero if empty). Because of cube symmetries, define \\(\\alpha\\ge\\beta\\ge\\gamma\\ge0\\) to be the sorted values of \\((|a|,|b|,|c|)\\).\n\n1. Derive the following—or give a corrected formula if it is wrong—for the central section:\n\\[\nA(n,0)=\n\\begin{cases}\n\\dfrac1\\alpha,&\\alpha\\ge\\beta+\\gamma,\\\\[6pt]\n\\dfrac1\\alpha\\left(1-\\dfrac{(\\beta+\\gamma-\\alpha)^2}{4\\beta\\gamma}\\right),\n&\\alpha<\\beta+\\gamma.\n\\end{cases}\n\\]\nYour derivation must be geometric or analytic, not an appeal to a named cube-slicing theorem. Explain the \\(\\gamma=0\\) boundary cases.\n\n2. Determine the exact minimum and maximum of \\(A(n,0)\\) over all unit normals, and characterize every normal attaining each extremum, up to signs and coordinate permutations. Prove the required inequalities from the formula, including equality conditions.\n\n3. A colleague claims the largest central section is the regular hexagon perpendicular to a body diagonal “by symmetry.” Compute that section’s area and compare it with the true maximum; identify the faulty inference.\n\n4. For a fixed \\(n\\), prove that \\(A(n,t)\\le A(n,0)\\) for every \\(t\\). Characterize exactly all \\(t\\) for which equality holds, in terms of \\(\\alpha,\\beta,\\gamma\\). A bare citation of symmetry or convexity is insufficient; supply an argument, for example by projection or convolution of interval indicators.\n\n**Candidate answer limit: 600 words.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "run_name": "catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "source_probe_id": "judge_ranking:J1:round_1:probe_10",
+          "question_turn_id": 10,
+          "round_index": 1,
+          "sequence": 10,
+          "stage": "baseline_battery",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "source_citation_verification"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "validity": "informative",
+          "pair_accuracy": 0.8324829931972789,
+          "decided_pair_accuracy": 0.8324829931972789,
+          "tie_pair_rate": 0.0,
+          "candidate_answers": [
+            {
+              "participant_id": "P01",
+              "candidate_model": "qwen/qwen3.5-397b-a17b",
+              "candidate_score": 33.6817059499116,
+              "answer_turn_id": 494,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P02",
+              "candidate_model": "thinkingmachines/inkling",
+              "candidate_score": 40.736927521956,
+              "answer_turn_id": 484,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P03",
+              "candidate_model": "anthropic/claude-opus-4.7",
+              "candidate_score": 53.5296569524586,
+              "answer_turn_id": 468,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P04",
+              "candidate_model": "xiaomi/mimo-v2.5-pro",
+              "candidate_score": 42.2394366693508,
+              "answer_turn_id": 481,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P05",
+              "candidate_model": "mistralai/mistral-medium-3-5",
+              "candidate_score": 29.947307563003,
+              "answer_turn_id": 497,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P06",
+              "candidate_model": "mistralai/mistral-small-2603",
+              "candidate_score": 19.5555163339516,
+              "answer_turn_id": 502,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P07",
+              "candidate_model": "google/gemini-2.5-pro",
+              "candidate_score": 25.8175930098627,
+              "answer_turn_id": 499,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P08",
+              "candidate_model": "minimax/minimax-m3",
+              "candidate_score": 44.4372686326056,
+              "answer_turn_id": 478,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P09",
+              "candidate_model": "x-ai/grok-4.3",
+              "candidate_score": 37.5766393431307,
+              "answer_turn_id": 490,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P10",
+              "candidate_model": "meta-llama/llama-3.2-1b-instruct",
+              "candidate_score": 1.09750673547767,
+              "answer_turn_id": 510,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P11",
+              "candidate_model": "z-ai/glm-5.2",
+              "candidate_score": 51.0858347714416,
+              "answer_turn_id": 472,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P12",
+              "candidate_model": "qwen/qwen3.7-plus",
+              "candidate_score": 38.9772279786141,
+              "answer_turn_id": 487,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P13",
+              "candidate_model": "minimax/minimax-m2.7",
+              "candidate_score": 38.1344947250387,
+              "answer_turn_id": 488,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P14",
+              "candidate_model": "openai/gpt-oss-120b",
+              "candidate_score": 23.8309678073278,
+              "answer_turn_id": 500,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P15",
+              "candidate_model": "openai/gpt-5.4",
+              "candidate_score": 51.4012420630147,
+              "answer_turn_id": 470,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P16",
+              "candidate_model": "deepseek/deepseek-v4-pro",
+              "candidate_score": 44.2735554261611,
+              "answer_turn_id": 479,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P17",
+              "candidate_model": "anthropic/claude-sonnet-4.5",
+              "candidate_score": 36.4198423016253,
+              "answer_turn_id": 492,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P18",
+              "candidate_model": "anthropic/claude-opus-4.8",
+              "candidate_score": 55.6920406995495,
+              "answer_turn_id": 464,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P19",
+              "candidate_model": "mistralai/ministral-14b-2512",
+              "candidate_score": 11.0525122563915,
+              "answer_turn_id": 506,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P20",
+              "candidate_model": "meta-llama/llama-3.1-8b-instruct",
+              "candidate_score": 7.60997784439173,
+              "answer_turn_id": 507,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P21",
+              "candidate_model": "mistralai/mistral-large-2512",
+              "candidate_score": 15.9300825619952,
+              "answer_turn_id": 503,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P22",
+              "candidate_model": "inclusionai/ring-2.6-1t",
+              "candidate_score": 30.5727263188268,
+              "answer_turn_id": 496,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P23",
+              "candidate_model": "google/gemma-3-4b-it",
+              "candidate_score": 1.1203216280049,
+              "answer_turn_id": 509,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P24",
+              "candidate_model": "openai/gpt-5",
+              "candidate_score": 34.7127335292454,
+              "answer_turn_id": 493,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 486,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P26",
+              "candidate_model": "meta-llama/llama-4-maverick",
+              "candidate_score": 14.2657978659374,
+              "answer_turn_id": 505,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P27",
+              "candidate_model": "nvidia/nemotron-3-ultra-550b-a55b",
+              "candidate_score": 37.7619546243905,
+              "answer_turn_id": 489,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P28",
+              "candidate_model": "meta/muse-spark-1.1",
+              "candidate_score": 50.6229899483333,
+              "answer_turn_id": 473,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P29",
+              "candidate_model": "x-ai/grok-4.5",
+              "candidate_score": 53.8265951657731,
+              "answer_turn_id": 467,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P30",
+              "candidate_model": "openai/gpt-5.6-luna",
+              "candidate_score": 51.2359331798034,
+              "answer_turn_id": 471,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P31",
+              "candidate_model": "qwen/qwen3.5-9b",
+              "candidate_score": 21.4379662021172,
+              "answer_turn_id": 501,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P32",
+              "candidate_model": "moonshotai/kimi-k2.7-code",
+              "candidate_score": 41.9493685067994,
+              "answer_turn_id": 482,
+              "unavailable": true
+            },
+            {
+              "participant_id": "P33",
+              "candidate_model": "anthropic/claude-sonnet-5",
+              "candidate_score": 53.3500026989169,
+              "answer_turn_id": 469,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 485,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P35",
+              "candidate_model": "qwen/qwen3.7-max",
+              "candidate_score": 45.9937184770221,
+              "answer_turn_id": 477,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P36",
+              "candidate_model": "openai/gpt-5.6-terra",
+              "candidate_score": 54.9528567569231,
+              "answer_turn_id": 465,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P37",
+              "candidate_model": "qwen/qwen3.6-27b",
+              "candidate_score": 37.0516798775037,
+              "answer_turn_id": 491,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P38",
+              "candidate_model": "openai/gpt-oss-20b",
+              "candidate_score": 14.8851031229075,
+              "answer_turn_id": 504,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P39",
+              "candidate_model": "openai/gpt-5.5",
+              "candidate_score": 54.8375984166433,
+              "answer_turn_id": 466,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P40",
+              "candidate_model": "moonshotai/kimi-k2.6",
+              "candidate_score": 44.2196682298639,
+              "answer_turn_id": 480,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P41",
+              "candidate_model": "google/gemini-3.5-flash",
+              "candidate_score": 50.2034858842254,
+              "answer_turn_id": 474,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P42",
+              "candidate_model": "anthropic/claude-sonnet-4.6",
+              "candidate_score": 47.2100024360452,
+              "answer_turn_id": 475,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P43",
+              "candidate_model": "tencent/hy3",
+              "candidate_score": 41.2305746727135,
+              "answer_turn_id": 483,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P44",
+              "candidate_model": "anthropic/claude-fable-5",
+              "candidate_score": 59.8606463217303,
+              "answer_turn_id": 461,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P45",
+              "candidate_model": "google/gemini-3.1-pro-preview",
+              "candidate_score": 46.4594206066426,
+              "answer_turn_id": 476,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P46",
+              "candidate_model": "deepseek/deepseek-v3.2",
+              "candidate_score": 32.039941106813,
+              "answer_turn_id": 495,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P47",
+              "candidate_model": "openai/gpt-5.6-sol",
+              "candidate_score": 58.889831189723,
+              "answer_turn_id": 462,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P48",
+              "candidate_model": "moonshotai/kimi-k3",
+              "candidate_score": 57.1123394372091,
+              "answer_turn_id": 463,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P49",
+              "candidate_model": "openai/gpt-3.5-turbo",
+              "candidate_score": 3.57410531330546,
+              "answer_turn_id": 508,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P50",
+              "candidate_model": "anthropic/claude-haiku-4.5",
+              "candidate_score": 29.5762345971708,
+              "answer_turn_id": 498,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
       "probe_id": "probe_1e2afc99e30c8e728ecd",
       "content_sha256": "e4c04b87c81a17321fdd93cfc45f5126fac43edaf337a5c47a852163eeb41f57",
       "author_model": "openai/gpt-5.6-sol",
@@ -13406,6 +13801,400 @@
       ]
     },
     {
+      "probe_id": "probe_5340907536d3e9650811",
+      "content_sha256": "8c9429ef64f6d3552d6cdf8e12cb03371cbea8003eec2fc100737fa7b6542e7f",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question": "A bead of mass \\(m\\) slides without friction in a straight radial slot in a horizontal disk. The disk rotates about a fixed, frictionless axle and has moment of inertia \\(I=3ma^2\\), excluding the bead. The bead is constrained to share the disk’s angular coordinate but may move radially. Initially it is held at \\(r=a\\), corotating with angular speed \\(\\omega_0>0\\), with zero radial velocity. It is released, and the slot ends in a latch at \\(r=2a\\). Neglect gravity and air resistance.\n\n1. With no motor attached, derive the equations or conservation laws governing the motion. Find the angular speed and radial speed immediately before the bead reaches the latch. Briefly justify that it does reach \\(2a\\).\n2. During this motion, compute:\n   - the change in the bead’s angular momentum about the axle;\n   - the net work done by the slot walls on the bead;\n   - the corresponding change in the disk’s kinetic energy.\n   \n   Explain how a frictionless constraint can nevertheless do nonzero work on the bead.\n3. The latch stops the bead’s radial motion in a perfectly inelastic impact while thereafter holding it at \\(2a\\). Find the angular speed immediately afterward and the mechanical energy converted to heat in the impact. Justify which quantities are continuous or conserved across the impact.\n4. Repeat the energy accounting for a different experiment: an ideal motor keeps the disk at exactly \\(\\omega_0\\) throughout the bead’s outward motion. Find the bead’s radial speed just before latching, the motor’s total work before the impact, and the heat produced when the latch stops the radial motion.\n5. A student argues: “Because the slot is frictionless, it exerts no tangential force and cannot transfer angular momentum.” Identify precisely what is wrong with this statement.\n\nShow enough derivation to distinguish conservation assumptions from computed consequences.\n\n**Candidate answer limit: 600 words.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "run_name": "catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "source_probe_id": "judge_ranking:J1:round_1:probe_8",
+          "question_turn_id": 8,
+          "round_index": 1,
+          "sequence": 8,
+          "stage": "baseline_battery",
+          "question_types": [
+            "stem_scientific_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_progression",
+          "validity": "informative",
+          "pair_accuracy": 0.7208163265306122,
+          "decided_pair_accuracy": 0.8710562414266118,
+          "tie_pair_rate": 0.4048979591836735,
+          "candidate_answers": [
+            {
+              "participant_id": "P01",
+              "candidate_model": "qwen/qwen3.5-397b-a17b",
+              "candidate_score": 33.6817059499116,
+              "answer_turn_id": 394,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P02",
+              "candidate_model": "thinkingmachines/inkling",
+              "candidate_score": 40.736927521956,
+              "answer_turn_id": 384,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P03",
+              "candidate_model": "anthropic/claude-opus-4.7",
+              "candidate_score": 53.5296569524586,
+              "answer_turn_id": 368,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P04",
+              "candidate_model": "xiaomi/mimo-v2.5-pro",
+              "candidate_score": 42.2394366693508,
+              "answer_turn_id": 381,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P05",
+              "candidate_model": "mistralai/mistral-medium-3-5",
+              "candidate_score": 29.947307563003,
+              "answer_turn_id": 397,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P06",
+              "candidate_model": "mistralai/mistral-small-2603",
+              "candidate_score": 19.5555163339516,
+              "answer_turn_id": 402,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P07",
+              "candidate_model": "google/gemini-2.5-pro",
+              "candidate_score": 25.8175930098627,
+              "answer_turn_id": 399,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P08",
+              "candidate_model": "minimax/minimax-m3",
+              "candidate_score": 44.4372686326056,
+              "answer_turn_id": 378,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P09",
+              "candidate_model": "x-ai/grok-4.3",
+              "candidate_score": 37.5766393431307,
+              "answer_turn_id": 390,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P10",
+              "candidate_model": "meta-llama/llama-3.2-1b-instruct",
+              "candidate_score": 1.09750673547767,
+              "answer_turn_id": 410,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P11",
+              "candidate_model": "z-ai/glm-5.2",
+              "candidate_score": 51.0858347714416,
+              "answer_turn_id": 372,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P12",
+              "candidate_model": "qwen/qwen3.7-plus",
+              "candidate_score": 38.9772279786141,
+              "answer_turn_id": 387,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P13",
+              "candidate_model": "minimax/minimax-m2.7",
+              "candidate_score": 38.1344947250387,
+              "answer_turn_id": 388,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P14",
+              "candidate_model": "openai/gpt-oss-120b",
+              "candidate_score": 23.8309678073278,
+              "answer_turn_id": 400,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P15",
+              "candidate_model": "openai/gpt-5.4",
+              "candidate_score": 51.4012420630147,
+              "answer_turn_id": 370,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P16",
+              "candidate_model": "deepseek/deepseek-v4-pro",
+              "candidate_score": 44.2735554261611,
+              "answer_turn_id": 379,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P17",
+              "candidate_model": "anthropic/claude-sonnet-4.5",
+              "candidate_score": 36.4198423016253,
+              "answer_turn_id": 392,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P18",
+              "candidate_model": "anthropic/claude-opus-4.8",
+              "candidate_score": 55.6920406995495,
+              "answer_turn_id": 364,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P19",
+              "candidate_model": "mistralai/ministral-14b-2512",
+              "candidate_score": 11.0525122563915,
+              "answer_turn_id": 406,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P20",
+              "candidate_model": "meta-llama/llama-3.1-8b-instruct",
+              "candidate_score": 7.60997784439173,
+              "answer_turn_id": 407,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P21",
+              "candidate_model": "mistralai/mistral-large-2512",
+              "candidate_score": 15.9300825619952,
+              "answer_turn_id": 403,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P22",
+              "candidate_model": "inclusionai/ring-2.6-1t",
+              "candidate_score": 30.5727263188268,
+              "answer_turn_id": 396,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P23",
+              "candidate_model": "google/gemma-3-4b-it",
+              "candidate_score": 1.1203216280049,
+              "answer_turn_id": 409,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P24",
+              "candidate_model": "openai/gpt-5",
+              "candidate_score": 34.7127335292454,
+              "answer_turn_id": 393,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 386,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P26",
+              "candidate_model": "meta-llama/llama-4-maverick",
+              "candidate_score": 14.2657978659374,
+              "answer_turn_id": 405,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P27",
+              "candidate_model": "nvidia/nemotron-3-ultra-550b-a55b",
+              "candidate_score": 37.7619546243905,
+              "answer_turn_id": 389,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P28",
+              "candidate_model": "meta/muse-spark-1.1",
+              "candidate_score": 50.6229899483333,
+              "answer_turn_id": 373,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P29",
+              "candidate_model": "x-ai/grok-4.5",
+              "candidate_score": 53.8265951657731,
+              "answer_turn_id": 367,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P30",
+              "candidate_model": "openai/gpt-5.6-luna",
+              "candidate_score": 51.2359331798034,
+              "answer_turn_id": 371,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P31",
+              "candidate_model": "qwen/qwen3.5-9b",
+              "candidate_score": 21.4379662021172,
+              "answer_turn_id": 401,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P32",
+              "candidate_model": "moonshotai/kimi-k2.7-code",
+              "candidate_score": 41.9493685067994,
+              "answer_turn_id": 382,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P33",
+              "candidate_model": "anthropic/claude-sonnet-5",
+              "candidate_score": 53.3500026989169,
+              "answer_turn_id": 369,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 385,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P35",
+              "candidate_model": "qwen/qwen3.7-max",
+              "candidate_score": 45.9937184770221,
+              "answer_turn_id": 377,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P36",
+              "candidate_model": "openai/gpt-5.6-terra",
+              "candidate_score": 54.9528567569231,
+              "answer_turn_id": 365,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P37",
+              "candidate_model": "qwen/qwen3.6-27b",
+              "candidate_score": 37.0516798775037,
+              "answer_turn_id": 391,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P38",
+              "candidate_model": "openai/gpt-oss-20b",
+              "candidate_score": 14.8851031229075,
+              "answer_turn_id": 404,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P39",
+              "candidate_model": "openai/gpt-5.5",
+              "candidate_score": 54.8375984166433,
+              "answer_turn_id": 366,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P40",
+              "candidate_model": "moonshotai/kimi-k2.6",
+              "candidate_score": 44.2196682298639,
+              "answer_turn_id": 380,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P41",
+              "candidate_model": "google/gemini-3.5-flash",
+              "candidate_score": 50.2034858842254,
+              "answer_turn_id": 374,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P42",
+              "candidate_model": "anthropic/claude-sonnet-4.6",
+              "candidate_score": 47.2100024360452,
+              "answer_turn_id": 375,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P43",
+              "candidate_model": "tencent/hy3",
+              "candidate_score": 41.2305746727135,
+              "answer_turn_id": 383,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P44",
+              "candidate_model": "anthropic/claude-fable-5",
+              "candidate_score": 59.8606463217303,
+              "answer_turn_id": 361,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P45",
+              "candidate_model": "google/gemini-3.1-pro-preview",
+              "candidate_score": 46.4594206066426,
+              "answer_turn_id": 376,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P46",
+              "candidate_model": "deepseek/deepseek-v3.2",
+              "candidate_score": 32.039941106813,
+              "answer_turn_id": 395,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P47",
+              "candidate_model": "openai/gpt-5.6-sol",
+              "candidate_score": 58.889831189723,
+              "answer_turn_id": 362,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P48",
+              "candidate_model": "moonshotai/kimi-k3",
+              "candidate_score": 57.1123394372091,
+              "answer_turn_id": 363,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P49",
+              "candidate_model": "openai/gpt-3.5-turbo",
+              "candidate_score": 3.57410531330546,
+              "answer_turn_id": 408,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P50",
+              "candidate_model": "anthropic/claude-haiku-4.5",
+              "candidate_score": 29.5762345971708,
+              "answer_turn_id": 398,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
       "probe_id": "probe_6ac951bd84a186795733",
       "content_sha256": "d409a8b70f7446a4c56a8fb2f4ad78f2311599d58efa99c6cd83826cc5b10269",
       "author_model": "openai/gpt-5.6-sol",
@@ -13621,6 +14410,236 @@
       ]
     },
     {
+      "probe_id": "probe_776bc892284e11da725e",
+      "content_sha256": "d913c9d55eb5d2b65bdbb5a58b61e3ddace0b7ac38f66b09f6dbb32a24845fab",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question": "Two causal mechanisms for centered variables \\(X,Y\\) are proposed; all exogenous noises are mutually independent:\n\n\\[\nM_1:\\quad X=U_X,\\ U_X\\sim N(0,1);\\qquad Y=X+U_Y,\\ U_Y\\sim N(0,1).\n\\]\n\n\\[\nM_2:\\quad Y=V_Y,\\ V_Y\\sim N(0,2);\\qquad X=\\tfrac12Y+V_X,\\ V_X\\sim N(0,\\tfrac12).\n\\]\n\nInterventions replace the structural equation for the intervened variable. The measured outcome adds independent \\(N(0,\\tfrac12)\\) error. Priors on \\(M_1,M_2\\) are equal.\n\nA large observational sample has mean zero and covariance\n\\[\n\\begin{pmatrix}1&1\\\\1&2\\end{pmatrix}.\n\\]\nTwo independent, individually zero-point-calibrated pilot interventions gave:\n\n- under \\(do(X=2)\\), measured \\(Y=1.5\\);\n- under \\(do(Y=2)\\), measured \\(X=0.8\\).\n\nFuture measurements also have a day-specific additive offset \\(B_d\\sim N(0,1)\\), shared by every reading that day and independent across days. Biological and measurement noises remain independent across runs.\n\nA \\(do(X=2)\\) run costs 2 units and a \\(do(Y=2)\\) run costs 1. With budget 6, choose one fixed package:\n\n- **A:** three \\(do(X=2)\\) runs, all on one day;\n- **B:** six \\(do(Y=2)\\) runs, all on one day;\n- **C:** on each of two days, one run of each type.\n\nUse the design score\n\\[\nU(D)=p\\,KL(P_1^D\\|P_2^D)+(1-p)\\,KL(P_2^D\\|P_1^D),\n\\]\nwhere \\(p=P(M_1\\mid\\text{pilots})\\), and \\(P_j^D\\) is the **joint** predictive distribution after marginalizing day offsets.\n\nProvide:\n\n1. Why the observational covariance cannot distinguish the models, and the pilot posterior \\(p\\).\n2. Each package’s relevant joint mean/covariance structure, its numerical \\(U\\), and the maximizing package.\n3. For one paired day in package C, under the currently more probable model, the distribution and central 90% interval of  \n   \\[\n   Z=(Y\\text{ measured after }do(X=2))-(X\\text{ measured after }do(Y=2)).\n   \\]\n4. One causal assumption whose failure would undermine the interpretation, plus a targeted control.\n\nShow enough calculation to audit covariance and batching. **Answer limit: 600 words.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "run_name": "catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "source_probe_id": "judge_ranking:J1:round_2:probe_1",
+          "question_turn_id": 522,
+          "round_index": 2,
+          "sequence": 11,
+          "stage": "adaptive_followup",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "dimensional_unit_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "adaptive_deepening",
+          "validity": "informative",
+          "pair_accuracy": 0.6555555555555556,
+          "decided_pair_accuracy": 0.6590909090909091,
+          "tie_pair_rate": 0.022222222222222223,
+          "candidate_answers": [
+            {
+              "participant_id": "P09",
+              "candidate_model": "x-ai/grok-4.3",
+              "candidate_score": 37.5766393431307,
+              "answer_turn_id": 530,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P18",
+              "candidate_model": "anthropic/claude-opus-4.8",
+              "candidate_score": 55.6920406995495,
+              "answer_turn_id": 525,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 532,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P27",
+              "candidate_model": "nvidia/nemotron-3-ultra-550b-a55b",
+              "candidate_score": 37.7619546243905,
+              "answer_turn_id": 529,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P28",
+              "candidate_model": "meta/muse-spark-1.1",
+              "candidate_score": 50.6229899483333,
+              "answer_turn_id": 527,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P32",
+              "candidate_model": "moonshotai/kimi-k2.7-code",
+              "candidate_score": 41.9493685067994,
+              "answer_turn_id": 531,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 528,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P36",
+              "candidate_model": "openai/gpt-5.6-terra",
+              "candidate_score": 54.9528567569231,
+              "answer_turn_id": 524,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P39",
+              "candidate_model": "openai/gpt-5.5",
+              "candidate_score": 54.8375984166433,
+              "answer_turn_id": 523,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P45",
+              "candidate_model": "google/gemini-3.1-pro-preview",
+              "candidate_score": 46.4594206066426,
+              "answer_turn_id": 526,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "probe_id": "probe_87ffaa2e6acf602a1eda",
+      "content_sha256": "69587bb7c638f422ecd4ba27e74c5bb059ef3d396f6b958df209fabcf444ffc4",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question": "An adversary chooses a real threshold \\(T\\in[1,16]\\). A deterministic online algorithm may issue at most four positive bids, one at a time.\n\n- If a bid \\(b\\ge T\\), the run stops successfully.\n- If \\(b<T\\), the algorithm observes only `LOW` and may issue another bid.\n- The algorithm must guarantee success for every \\(T\\).\n- Its cost is the sum of all bids issued, including the successful bid.\n\nDefine its competitive factor as\n\\[\n\\sup_{T\\in[1,16]}\\frac{\\text{cost on }T}{T}.\n\\]\nBids need not be integral or initially assumed increasing.\n\nDetermine the minimum possible competitive factor and an optimal bidding policy.\n\nYour answer must include:\n\n1. An exact characterization of the optimum (a polynomial equation plus an isolating interval is acceptable), its value to three decimals, and the four bids to three decimals.\n2. A lower-bound proof covering every deterministic adaptive policy, not merely an assertion that the worst cases should be equalized. Explain why decreasing/redundant bids and a final bid other than \\(16\\) cannot improve the optimum.\n3. A checkable execution trace for both \\(T=b_2\\) and \\(T=b_2+\\varepsilon\\), where \\(\\varepsilon>0\\) is sufficiently small. List observations, stopping bid, and total cost, and explain why equality versus “just above” matters to the supremum.\n\n**Answer limit: 550 words.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "run_name": "catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "source_probe_id": "judge_ranking:J1:round_3:probe_1",
+          "question_turn_id": 535,
+          "round_index": 3,
+          "sequence": 12,
+          "stage": "adaptive_followup",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "planning_decision_strategy"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "adaptive_deepening",
+          "validity": "informative",
+          "pair_accuracy": 0.7333333333333333,
+          "decided_pair_accuracy": 0.7333333333333333,
+          "tie_pair_rate": 0.0,
+          "candidate_answers": [
+            {
+              "participant_id": "P15",
+              "candidate_model": "openai/gpt-5.4",
+              "candidate_score": 51.4012420630147,
+              "answer_turn_id": 543,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P18",
+              "candidate_model": "anthropic/claude-opus-4.8",
+              "candidate_score": 55.6920406995495,
+              "answer_turn_id": 541,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P28",
+              "candidate_model": "meta/muse-spark-1.1",
+              "candidate_score": 50.6229899483333,
+              "answer_turn_id": 545,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 544,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P36",
+              "candidate_model": "openai/gpt-5.6-terra",
+              "candidate_score": 54.9528567569231,
+              "answer_turn_id": 539,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P39",
+              "candidate_model": "openai/gpt-5.5",
+              "candidate_score": 54.8375984166433,
+              "answer_turn_id": 540,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P44",
+              "candidate_model": "anthropic/claude-fable-5",
+              "candidate_score": 59.8606463217303,
+              "answer_turn_id": 538,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P45",
+              "candidate_model": "google/gemini-3.1-pro-preview",
+              "candidate_score": 46.4594206066426,
+              "answer_turn_id": 542,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P47",
+              "candidate_model": "openai/gpt-5.6-sol",
+              "candidate_score": 58.889831189723,
+              "answer_turn_id": 536,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P48",
+              "candidate_model": "moonshotai/kimi-k3",
+              "candidate_score": 57.1123394372091,
+              "answer_turn_id": 537,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
       "probe_id": "probe_8cdc4a1fe550712e4361",
       "content_sha256": "c498276608de462f85fd43a42bede92fec38bc26b4e6ab59c0f99d4b1f27fae8",
       "author_model": "openai/gpt-5.6-sol",
@@ -13722,6 +14741,401 @@
               "candidate_model": "anthropic/claude-fable-5",
               "candidate_score": 59.8606463217303,
               "answer_turn_id": 31,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "probe_id": "probe_8e630dcfc268d5f0b705",
+      "content_sha256": "7cc460f8c67e258d62f3e39340b8d607f0d12dcbf63be88aa92f815a3b992baf",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question": "A regulator privately observes a state \\(S\\in\\{1,2,3\\}\\), each with prior probability \\(1/3\\). A citizen then chooses \\(A\\), \\(B\\), or \\(N\\) (no project). Utilities are:\n\n\\[\n\\begin{array}{c|ccc}\n & S=1&S=2&S=3\\\\ \\hline\nu_C(A)&1&-3&-3\\\\\nu_C(B)&-3&1&-3\\\\\nu_C(N)&0&0&0\n\\end{array}\n\\]\n\nThe regulator receives utility \\(1\\) whenever \\(A\\) or \\(B\\) is chosen and \\(0\\) for \\(N\\), regardless of the state. Both players maximize expected utility. The citizen breaks ties in the order \\(A\\succ B\\succ N\\).\n\nAnalyze these four information institutions:\n\n1. **No communication:** Determine the citizen’s action.\n\n2. **Committed signaling:** Before observing \\(S\\), the regulator publicly commits to any randomized state-dependent signaling scheme. After seeing the realized signal, the citizen updates by Bayes’ rule and acts optimally. Find the maximum achievable probability of project adoption. Give an explicit optimal scheme and prove no scheme—allowing arbitrarily many signals—can do better.\n\n3. **Uncommitted cheap talk:** After observing \\(S\\), the regulator sends any costless, unverifiable message, with no prior commitment. Characterize the adoption probability in every perfect Bayesian equilibrium, allowing mixed strategies and arbitrary off-path beliefs. Prove your claim rather than exhibiting only one equilibrium.\n\n4. **Verifiable voluntary disclosure:** After observing \\(S\\), the regulator may either truthfully reveal and certify the exact state or remain silent; there is no prior commitment. Characterize equilibrium adoption outcomes. In particular, determine whether silence can induce adoption, accounting for the regulator’s incentives in every state.\n\nFor equilibrium claims, state the relevant posterior or obedience/incentive argument. Distinguish carefully between commitment, cheap talk, and verifiability.\n\n**Candidate answer limit: 600 words.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "run_name": "catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "source_probe_id": "judge_ranking:J1:round_1:probe_9",
+          "question_turn_id": 9,
+          "round_index": 1,
+          "sequence": 9,
+          "stage": "baseline_battery",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "preplanned_broadening",
+          "validity": "informative",
+          "pair_accuracy": 0.8155102040816327,
+          "decided_pair_accuracy": 0.8278201865988125,
+          "tie_pair_rate": 0.037551020408163265,
+          "candidate_answers": [
+            {
+              "participant_id": "P01",
+              "candidate_model": "qwen/qwen3.5-397b-a17b",
+              "candidate_score": 33.6817059499116,
+              "answer_turn_id": 444,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P02",
+              "candidate_model": "thinkingmachines/inkling",
+              "candidate_score": 40.736927521956,
+              "answer_turn_id": 434,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P03",
+              "candidate_model": "anthropic/claude-opus-4.7",
+              "candidate_score": 53.5296569524586,
+              "answer_turn_id": 418,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P04",
+              "candidate_model": "xiaomi/mimo-v2.5-pro",
+              "candidate_score": 42.2394366693508,
+              "answer_turn_id": 431,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P05",
+              "candidate_model": "mistralai/mistral-medium-3-5",
+              "candidate_score": 29.947307563003,
+              "answer_turn_id": 447,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P06",
+              "candidate_model": "mistralai/mistral-small-2603",
+              "candidate_score": 19.5555163339516,
+              "answer_turn_id": 452,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P07",
+              "candidate_model": "google/gemini-2.5-pro",
+              "candidate_score": 25.8175930098627,
+              "answer_turn_id": 449,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P08",
+              "candidate_model": "minimax/minimax-m3",
+              "candidate_score": 44.4372686326056,
+              "answer_turn_id": 428,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P09",
+              "candidate_model": "x-ai/grok-4.3",
+              "candidate_score": 37.5766393431307,
+              "answer_turn_id": 440,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P10",
+              "candidate_model": "meta-llama/llama-3.2-1b-instruct",
+              "candidate_score": 1.09750673547767,
+              "answer_turn_id": 460,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P11",
+              "candidate_model": "z-ai/glm-5.2",
+              "candidate_score": 51.0858347714416,
+              "answer_turn_id": 422,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P12",
+              "candidate_model": "qwen/qwen3.7-plus",
+              "candidate_score": 38.9772279786141,
+              "answer_turn_id": 437,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P13",
+              "candidate_model": "minimax/minimax-m2.7",
+              "candidate_score": 38.1344947250387,
+              "answer_turn_id": 438,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P14",
+              "candidate_model": "openai/gpt-oss-120b",
+              "candidate_score": 23.8309678073278,
+              "answer_turn_id": 450,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P15",
+              "candidate_model": "openai/gpt-5.4",
+              "candidate_score": 51.4012420630147,
+              "answer_turn_id": 420,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P16",
+              "candidate_model": "deepseek/deepseek-v4-pro",
+              "candidate_score": 44.2735554261611,
+              "answer_turn_id": 429,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P17",
+              "candidate_model": "anthropic/claude-sonnet-4.5",
+              "candidate_score": 36.4198423016253,
+              "answer_turn_id": 442,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P18",
+              "candidate_model": "anthropic/claude-opus-4.8",
+              "candidate_score": 55.6920406995495,
+              "answer_turn_id": 414,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P19",
+              "candidate_model": "mistralai/ministral-14b-2512",
+              "candidate_score": 11.0525122563915,
+              "answer_turn_id": 456,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P20",
+              "candidate_model": "meta-llama/llama-3.1-8b-instruct",
+              "candidate_score": 7.60997784439173,
+              "answer_turn_id": 457,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P21",
+              "candidate_model": "mistralai/mistral-large-2512",
+              "candidate_score": 15.9300825619952,
+              "answer_turn_id": 453,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P22",
+              "candidate_model": "inclusionai/ring-2.6-1t",
+              "candidate_score": 30.5727263188268,
+              "answer_turn_id": 446,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P23",
+              "candidate_model": "google/gemma-3-4b-it",
+              "candidate_score": 1.1203216280049,
+              "answer_turn_id": 459,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P24",
+              "candidate_model": "openai/gpt-5",
+              "candidate_score": 34.7127335292454,
+              "answer_turn_id": 443,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 436,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P26",
+              "candidate_model": "meta-llama/llama-4-maverick",
+              "candidate_score": 14.2657978659374,
+              "answer_turn_id": 455,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P27",
+              "candidate_model": "nvidia/nemotron-3-ultra-550b-a55b",
+              "candidate_score": 37.7619546243905,
+              "answer_turn_id": 439,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P28",
+              "candidate_model": "meta/muse-spark-1.1",
+              "candidate_score": 50.6229899483333,
+              "answer_turn_id": 423,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P29",
+              "candidate_model": "x-ai/grok-4.5",
+              "candidate_score": 53.8265951657731,
+              "answer_turn_id": 417,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P30",
+              "candidate_model": "openai/gpt-5.6-luna",
+              "candidate_score": 51.2359331798034,
+              "answer_turn_id": 421,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P31",
+              "candidate_model": "qwen/qwen3.5-9b",
+              "candidate_score": 21.4379662021172,
+              "answer_turn_id": 451,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P32",
+              "candidate_model": "moonshotai/kimi-k2.7-code",
+              "candidate_score": 41.9493685067994,
+              "answer_turn_id": 432,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P33",
+              "candidate_model": "anthropic/claude-sonnet-5",
+              "candidate_score": 53.3500026989169,
+              "answer_turn_id": 419,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 435,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P35",
+              "candidate_model": "qwen/qwen3.7-max",
+              "candidate_score": 45.9937184770221,
+              "answer_turn_id": 427,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P36",
+              "candidate_model": "openai/gpt-5.6-terra",
+              "candidate_score": 54.9528567569231,
+              "answer_turn_id": 415,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P37",
+              "candidate_model": "qwen/qwen3.6-27b",
+              "candidate_score": 37.0516798775037,
+              "answer_turn_id": 441,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P38",
+              "candidate_model": "openai/gpt-oss-20b",
+              "candidate_score": 14.8851031229075,
+              "answer_turn_id": 454,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P39",
+              "candidate_model": "openai/gpt-5.5",
+              "candidate_score": 54.8375984166433,
+              "answer_turn_id": 416,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P40",
+              "candidate_model": "moonshotai/kimi-k2.6",
+              "candidate_score": 44.2196682298639,
+              "answer_turn_id": 430,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P41",
+              "candidate_model": "google/gemini-3.5-flash",
+              "candidate_score": 50.2034858842254,
+              "answer_turn_id": 424,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P42",
+              "candidate_model": "anthropic/claude-sonnet-4.6",
+              "candidate_score": 47.2100024360452,
+              "answer_turn_id": 425,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P43",
+              "candidate_model": "tencent/hy3",
+              "candidate_score": 41.2305746727135,
+              "answer_turn_id": 433,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P44",
+              "candidate_model": "anthropic/claude-fable-5",
+              "candidate_score": 59.8606463217303,
+              "answer_turn_id": 411,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P45",
+              "candidate_model": "google/gemini-3.1-pro-preview",
+              "candidate_score": 46.4594206066426,
+              "answer_turn_id": 426,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P46",
+              "candidate_model": "deepseek/deepseek-v3.2",
+              "candidate_score": 32.039941106813,
+              "answer_turn_id": 445,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P47",
+              "candidate_model": "openai/gpt-5.6-sol",
+              "candidate_score": 58.889831189723,
+              "answer_turn_id": 412,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P48",
+              "candidate_model": "moonshotai/kimi-k3",
+              "candidate_score": 57.1123394372091,
+              "answer_turn_id": 413,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P49",
+              "candidate_model": "openai/gpt-3.5-turbo",
+              "candidate_score": 3.57410531330546,
+              "answer_turn_id": 458,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P50",
+              "candidate_model": "anthropic/claude-haiku-4.5",
+              "candidate_score": 29.5762345971708,
+              "answer_turn_id": 448,
               "unavailable": false
             }
           ]
@@ -15308,6 +16722,398 @@
       ]
     },
     {
+      "probe_id": "probe_d0a098524f219f210b5c",
+      "content_sha256": "1d9903532bb6eb8b7b23f14cfe31b34d36c7039b5524a0ec53da702e07e9414b",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question": "A patient has disease \\(D\\) with prior \\(P(D)=0.05\\). Independently, a batch is contaminated with probability \\(P(C)=0.10\\). Two tests \\(A,B\\) behave as follows:\n\n- If \\(D=1\\), \\(A\\) and \\(B\\) are conditionally independent, each positive with probability \\(0.90\\), regardless of \\(C\\).\n- If \\(D=0,C=0\\), they are conditionally independent, each positive with probability \\(0.05\\).\n- If \\(D=0,C=1\\), both are positive with certainty.\n\nBoth observed results are positive.\n\nThe terminal choices are:\n\n- **Treat:** utility \\(+20\\) if \\(D=1\\), and \\(-4\\) if \\(D=0\\).\n- **Do not treat:** utility \\(0\\).\n\nBefore choosing, either of two tests may be bought, each at most once. Their order and whether to buy the second may depend on the first result:\n\n- \\(X\\) costs \\(0.2\\), is conditionally independent of everything else given \\(D\\), and has\n  \\[\n  P(X{+}\\mid D)=0.8,\\qquad P(X{+}\\mid D=0)=0.1.\n  \\]\n- \\(R\\) costs \\(1.2\\) and reveals \\(C\\) perfectly.\n\nTest costs are subtracted from utility regardless of outcome.\n\n1. Compute \\(P(D\\mid A{+},B{+})\\), and the optimal action and expected utility if no further test is bought.\n2. Find the optimal adaptive testing-and-treatment policy. Give the posterior or sufficient unnormalized weights at every reached branch, its terminal action, and the policy’s expected net utility. Establish optimality by comparing the optimized possibilities of stopping, starting with \\(X\\), and starting with \\(R\\), including whether the second test is worthwhile after each possible first result.\n3. An analyst incorrectly treats \\(A,B\\) as independent conditional on \\(D\\) alone. They use the correct marginal single-test false-positive probability but square it. Compute their posterior. If the healthy-patient treatment loss were changed from \\(4\\) to \\(h>0\\), while disease benefit remained \\(20\\), give the interval of \\(h\\) for which this analyst recommends treatment while the correct model recommends no treatment. Explain the dependence error.\n\n**Candidate answer limit: 600 words.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "run_name": "catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "source_probe_id": "judge_ranking:J1:round_1:probe_7",
+          "question_turn_id": 7,
+          "round_index": 1,
+          "sequence": 7,
+          "stage": "baseline_battery",
+          "question_types": [],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_progression",
+          "validity": "informative",
+          "pair_accuracy": 0.8044897959183673,
+          "decided_pair_accuracy": 0.8330357142857143,
+          "tie_pair_rate": 0.08571428571428572,
+          "candidate_answers": [
+            {
+              "participant_id": "P01",
+              "candidate_model": "qwen/qwen3.5-397b-a17b",
+              "candidate_score": 33.6817059499116,
+              "answer_turn_id": 344,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P02",
+              "candidate_model": "thinkingmachines/inkling",
+              "candidate_score": 40.736927521956,
+              "answer_turn_id": 334,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P03",
+              "candidate_model": "anthropic/claude-opus-4.7",
+              "candidate_score": 53.5296569524586,
+              "answer_turn_id": 318,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P04",
+              "candidate_model": "xiaomi/mimo-v2.5-pro",
+              "candidate_score": 42.2394366693508,
+              "answer_turn_id": 331,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P05",
+              "candidate_model": "mistralai/mistral-medium-3-5",
+              "candidate_score": 29.947307563003,
+              "answer_turn_id": 347,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P06",
+              "candidate_model": "mistralai/mistral-small-2603",
+              "candidate_score": 19.5555163339516,
+              "answer_turn_id": 352,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P07",
+              "candidate_model": "google/gemini-2.5-pro",
+              "candidate_score": 25.8175930098627,
+              "answer_turn_id": 349,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P08",
+              "candidate_model": "minimax/minimax-m3",
+              "candidate_score": 44.4372686326056,
+              "answer_turn_id": 328,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P09",
+              "candidate_model": "x-ai/grok-4.3",
+              "candidate_score": 37.5766393431307,
+              "answer_turn_id": 340,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P10",
+              "candidate_model": "meta-llama/llama-3.2-1b-instruct",
+              "candidate_score": 1.09750673547767,
+              "answer_turn_id": 360,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P11",
+              "candidate_model": "z-ai/glm-5.2",
+              "candidate_score": 51.0858347714416,
+              "answer_turn_id": 322,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P12",
+              "candidate_model": "qwen/qwen3.7-plus",
+              "candidate_score": 38.9772279786141,
+              "answer_turn_id": 337,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P13",
+              "candidate_model": "minimax/minimax-m2.7",
+              "candidate_score": 38.1344947250387,
+              "answer_turn_id": 338,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P14",
+              "candidate_model": "openai/gpt-oss-120b",
+              "candidate_score": 23.8309678073278,
+              "answer_turn_id": 350,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P15",
+              "candidate_model": "openai/gpt-5.4",
+              "candidate_score": 51.4012420630147,
+              "answer_turn_id": 320,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P16",
+              "candidate_model": "deepseek/deepseek-v4-pro",
+              "candidate_score": 44.2735554261611,
+              "answer_turn_id": 329,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P17",
+              "candidate_model": "anthropic/claude-sonnet-4.5",
+              "candidate_score": 36.4198423016253,
+              "answer_turn_id": 342,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P18",
+              "candidate_model": "anthropic/claude-opus-4.8",
+              "candidate_score": 55.6920406995495,
+              "answer_turn_id": 314,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P19",
+              "candidate_model": "mistralai/ministral-14b-2512",
+              "candidate_score": 11.0525122563915,
+              "answer_turn_id": 356,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P20",
+              "candidate_model": "meta-llama/llama-3.1-8b-instruct",
+              "candidate_score": 7.60997784439173,
+              "answer_turn_id": 357,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P21",
+              "candidate_model": "mistralai/mistral-large-2512",
+              "candidate_score": 15.9300825619952,
+              "answer_turn_id": 353,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P22",
+              "candidate_model": "inclusionai/ring-2.6-1t",
+              "candidate_score": 30.5727263188268,
+              "answer_turn_id": 346,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P23",
+              "candidate_model": "google/gemma-3-4b-it",
+              "candidate_score": 1.1203216280049,
+              "answer_turn_id": 359,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P24",
+              "candidate_model": "openai/gpt-5",
+              "candidate_score": 34.7127335292454,
+              "answer_turn_id": 343,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 336,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P26",
+              "candidate_model": "meta-llama/llama-4-maverick",
+              "candidate_score": 14.2657978659374,
+              "answer_turn_id": 355,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P27",
+              "candidate_model": "nvidia/nemotron-3-ultra-550b-a55b",
+              "candidate_score": 37.7619546243905,
+              "answer_turn_id": 339,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P28",
+              "candidate_model": "meta/muse-spark-1.1",
+              "candidate_score": 50.6229899483333,
+              "answer_turn_id": 323,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P29",
+              "candidate_model": "x-ai/grok-4.5",
+              "candidate_score": 53.8265951657731,
+              "answer_turn_id": 317,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P30",
+              "candidate_model": "openai/gpt-5.6-luna",
+              "candidate_score": 51.2359331798034,
+              "answer_turn_id": 321,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P31",
+              "candidate_model": "qwen/qwen3.5-9b",
+              "candidate_score": 21.4379662021172,
+              "answer_turn_id": 351,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P32",
+              "candidate_model": "moonshotai/kimi-k2.7-code",
+              "candidate_score": 41.9493685067994,
+              "answer_turn_id": 332,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P33",
+              "candidate_model": "anthropic/claude-sonnet-5",
+              "candidate_score": 53.3500026989169,
+              "answer_turn_id": 319,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 335,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P35",
+              "candidate_model": "qwen/qwen3.7-max",
+              "candidate_score": 45.9937184770221,
+              "answer_turn_id": 327,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P36",
+              "candidate_model": "openai/gpt-5.6-terra",
+              "candidate_score": 54.9528567569231,
+              "answer_turn_id": 315,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P37",
+              "candidate_model": "qwen/qwen3.6-27b",
+              "candidate_score": 37.0516798775037,
+              "answer_turn_id": 341,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P38",
+              "candidate_model": "openai/gpt-oss-20b",
+              "candidate_score": 14.8851031229075,
+              "answer_turn_id": 354,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P39",
+              "candidate_model": "openai/gpt-5.5",
+              "candidate_score": 54.8375984166433,
+              "answer_turn_id": 316,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P40",
+              "candidate_model": "moonshotai/kimi-k2.6",
+              "candidate_score": 44.2196682298639,
+              "answer_turn_id": 330,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P41",
+              "candidate_model": "google/gemini-3.5-flash",
+              "candidate_score": 50.2034858842254,
+              "answer_turn_id": 324,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P42",
+              "candidate_model": "anthropic/claude-sonnet-4.6",
+              "candidate_score": 47.2100024360452,
+              "answer_turn_id": 325,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P43",
+              "candidate_model": "tencent/hy3",
+              "candidate_score": 41.2305746727135,
+              "answer_turn_id": 333,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P44",
+              "candidate_model": "anthropic/claude-fable-5",
+              "candidate_score": 59.8606463217303,
+              "answer_turn_id": 311,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P45",
+              "candidate_model": "google/gemini-3.1-pro-preview",
+              "candidate_score": 46.4594206066426,
+              "answer_turn_id": 326,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P46",
+              "candidate_model": "deepseek/deepseek-v3.2",
+              "candidate_score": 32.039941106813,
+              "answer_turn_id": 345,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P47",
+              "candidate_model": "openai/gpt-5.6-sol",
+              "candidate_score": 58.889831189723,
+              "answer_turn_id": 312,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P48",
+              "candidate_model": "moonshotai/kimi-k3",
+              "candidate_score": 57.1123394372091,
+              "answer_turn_id": 313,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P49",
+              "candidate_model": "openai/gpt-3.5-turbo",
+              "candidate_score": 3.57410531330546,
+              "answer_turn_id": 358,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P50",
+              "candidate_model": "anthropic/claude-haiku-4.5",
+              "candidate_score": 29.5762345971708,
+              "answer_turn_id": 348,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
       "probe_id": "probe_de02052deeddc1603a04",
       "content_sha256": "fa2aa725de9a8ee9c42ff83ee32086bb7200d17851a3c43612d8402c2c20c1ce",
       "author_model": "openai/gpt-5.6-sol",
@@ -15627,6 +17433,402 @@
               "candidate_model": "anthropic/claude-fable-5",
               "candidate_score": 59.8606463217303,
               "answer_turn_id": 74,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "probe_id": "probe_fdf99825d9c8b96ba75f",
+      "content_sha256": "fbe78dcb4d00f4b8e7322ae301e868c127da3533ef006d045505043de0faf0db",
+      "author_model": "openai/gpt-5.6-sol",
+      "author_score": 58.889831189723,
+      "question": "A byte stream arrives in arbitrary nonempty chunks. It encodes records with these rules:\n\n- Outside quotes, comma ends a field and LF (`\\n`) ends a record.\n- A quoted field must begin with `\"` at the start of a field. Inside it, commas and LFs are data, and `\"\"` represents one literal quote.\n- After a quoted field’s closing quote, only comma, LF, or EOF is legal.\n- A quote inside an unquoted field is illegal.\n- Empty fields are allowed. A blank line is one empty field. If EOF immediately follows LF—or the stream is empty—no additional record is emitted; otherwise EOF ends the current record.\n\nThe chunks below are shown with escapes; chunk boundaries are semantically irrelevant:\n\n```text\n1: a,\"b\n2: \\nc\",\"d\"\n3: \"e\",\\n\"\n4: \",x\\n\"q\n5: \"\n```\n\n1. Give the exact sequence of records and fields produced, clearly distinguishing embedded LF, literal quote, and empty field.\n2. Design a deterministic online parser. Give precise pseudocode or an exhaustive transition description, including:\n   - all control states and necessary flags/buffers;\n   - actions on comma, LF, quote, ordinary byte, and EOF;\n   - handling of chunk boundaries;\n   - the exact point at which malformed input is rejected.\n3. For each malformed stream below, identify the earliest rejection point and explain why no earlier prefix proves invalid:\n   ```text\n   a,\"b\"\"c\"x,\\n\n   u,\"v\n   ```\n   The second stream ends after `v`.\n4. State and justify an invariant proving that your parser’s output and acceptance decision are independent of chunking.\n5. Suppose the API must return each complete record as an array of materialized byte strings, records have no length bound, and consumed input chunks cannot be retained. Can any correct parser use worst-case \\(O(1)\\) memory? Prove your answer, then name one concrete API or specification change that permits \\(O(1)\\) working memory.\n\n**Candidate answer limit: 600 words.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T062112Z_catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "run_name": "catalog_ladder50_gpt_5_6_sol_opening5_evidence_repaired_catalog_ladder50_opening10_v1_sol_evidence_repaired_evidence_repaired_retry_kimi_budget_repair_adaptive_resumed_missing_recorded",
+          "source_probe_id": "judge_ranking:J1:round_1:probe_6",
+          "question_turn_id": 6,
+          "round_index": 1,
+          "sequence": 6,
+          "stage": "baseline_battery",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "coding_algorithmic_reasoning",
+            "working_memory_state_tracking"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_same_area",
+          "validity": "informative",
+          "pair_accuracy": 0.833469387755102,
+          "decided_pair_accuracy": 0.8494439692044482,
+          "tie_pair_rate": 0.045714285714285714,
+          "candidate_answers": [
+            {
+              "participant_id": "P01",
+              "candidate_model": "qwen/qwen3.5-397b-a17b",
+              "candidate_score": 33.6817059499116,
+              "answer_turn_id": 294,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P02",
+              "candidate_model": "thinkingmachines/inkling",
+              "candidate_score": 40.736927521956,
+              "answer_turn_id": 284,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P03",
+              "candidate_model": "anthropic/claude-opus-4.7",
+              "candidate_score": 53.5296569524586,
+              "answer_turn_id": 268,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P04",
+              "candidate_model": "xiaomi/mimo-v2.5-pro",
+              "candidate_score": 42.2394366693508,
+              "answer_turn_id": 281,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P05",
+              "candidate_model": "mistralai/mistral-medium-3-5",
+              "candidate_score": 29.947307563003,
+              "answer_turn_id": 297,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P06",
+              "candidate_model": "mistralai/mistral-small-2603",
+              "candidate_score": 19.5555163339516,
+              "answer_turn_id": 302,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P07",
+              "candidate_model": "google/gemini-2.5-pro",
+              "candidate_score": 25.8175930098627,
+              "answer_turn_id": 299,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P08",
+              "candidate_model": "minimax/minimax-m3",
+              "candidate_score": 44.4372686326056,
+              "answer_turn_id": 278,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P09",
+              "candidate_model": "x-ai/grok-4.3",
+              "candidate_score": 37.5766393431307,
+              "answer_turn_id": 290,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P10",
+              "candidate_model": "meta-llama/llama-3.2-1b-instruct",
+              "candidate_score": 1.09750673547767,
+              "answer_turn_id": 310,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P11",
+              "candidate_model": "z-ai/glm-5.2",
+              "candidate_score": 51.0858347714416,
+              "answer_turn_id": 272,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P12",
+              "candidate_model": "qwen/qwen3.7-plus",
+              "candidate_score": 38.9772279786141,
+              "answer_turn_id": 287,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P13",
+              "candidate_model": "minimax/minimax-m2.7",
+              "candidate_score": 38.1344947250387,
+              "answer_turn_id": 288,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P14",
+              "candidate_model": "openai/gpt-oss-120b",
+              "candidate_score": 23.8309678073278,
+              "answer_turn_id": 300,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P15",
+              "candidate_model": "openai/gpt-5.4",
+              "candidate_score": 51.4012420630147,
+              "answer_turn_id": 270,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P16",
+              "candidate_model": "deepseek/deepseek-v4-pro",
+              "candidate_score": 44.2735554261611,
+              "answer_turn_id": 279,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P17",
+              "candidate_model": "anthropic/claude-sonnet-4.5",
+              "candidate_score": 36.4198423016253,
+              "answer_turn_id": 292,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P18",
+              "candidate_model": "anthropic/claude-opus-4.8",
+              "candidate_score": 55.6920406995495,
+              "answer_turn_id": 264,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P19",
+              "candidate_model": "mistralai/ministral-14b-2512",
+              "candidate_score": 11.0525122563915,
+              "answer_turn_id": 306,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P20",
+              "candidate_model": "meta-llama/llama-3.1-8b-instruct",
+              "candidate_score": 7.60997784439173,
+              "answer_turn_id": 307,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P21",
+              "candidate_model": "mistralai/mistral-large-2512",
+              "candidate_score": 15.9300825619952,
+              "answer_turn_id": 303,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P22",
+              "candidate_model": "inclusionai/ring-2.6-1t",
+              "candidate_score": 30.5727263188268,
+              "answer_turn_id": 296,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P23",
+              "candidate_model": "google/gemma-3-4b-it",
+              "candidate_score": 1.1203216280049,
+              "answer_turn_id": 309,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P24",
+              "candidate_model": "openai/gpt-5",
+              "candidate_score": 34.7127335292454,
+              "answer_turn_id": 293,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 286,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P26",
+              "candidate_model": "meta-llama/llama-4-maverick",
+              "candidate_score": 14.2657978659374,
+              "answer_turn_id": 305,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P27",
+              "candidate_model": "nvidia/nemotron-3-ultra-550b-a55b",
+              "candidate_score": 37.7619546243905,
+              "answer_turn_id": 289,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P28",
+              "candidate_model": "meta/muse-spark-1.1",
+              "candidate_score": 50.6229899483333,
+              "answer_turn_id": 273,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P29",
+              "candidate_model": "x-ai/grok-4.5",
+              "candidate_score": 53.8265951657731,
+              "answer_turn_id": 267,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P30",
+              "candidate_model": "openai/gpt-5.6-luna",
+              "candidate_score": 51.2359331798034,
+              "answer_turn_id": 271,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P31",
+              "candidate_model": "qwen/qwen3.5-9b",
+              "candidate_score": 21.4379662021172,
+              "answer_turn_id": 301,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P32",
+              "candidate_model": "moonshotai/kimi-k2.7-code",
+              "candidate_score": 41.9493685067994,
+              "answer_turn_id": 282,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P33",
+              "candidate_model": "anthropic/claude-sonnet-5",
+              "candidate_score": 53.3500026989169,
+              "answer_turn_id": 269,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 285,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P35",
+              "candidate_model": "qwen/qwen3.7-max",
+              "candidate_score": 45.9937184770221,
+              "answer_turn_id": 277,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P36",
+              "candidate_model": "openai/gpt-5.6-terra",
+              "candidate_score": 54.9528567569231,
+              "answer_turn_id": 265,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P37",
+              "candidate_model": "qwen/qwen3.6-27b",
+              "candidate_score": 37.0516798775037,
+              "answer_turn_id": 291,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P38",
+              "candidate_model": "openai/gpt-oss-20b",
+              "candidate_score": 14.8851031229075,
+              "answer_turn_id": 304,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P39",
+              "candidate_model": "openai/gpt-5.5",
+              "candidate_score": 54.8375984166433,
+              "answer_turn_id": 266,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P40",
+              "candidate_model": "moonshotai/kimi-k2.6",
+              "candidate_score": 44.2196682298639,
+              "answer_turn_id": 280,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P41",
+              "candidate_model": "google/gemini-3.5-flash",
+              "candidate_score": 50.2034858842254,
+              "answer_turn_id": 274,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P42",
+              "candidate_model": "anthropic/claude-sonnet-4.6",
+              "candidate_score": 47.2100024360452,
+              "answer_turn_id": 275,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P43",
+              "candidate_model": "tencent/hy3",
+              "candidate_score": 41.2305746727135,
+              "answer_turn_id": 283,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P44",
+              "candidate_model": "anthropic/claude-fable-5",
+              "candidate_score": 59.8606463217303,
+              "answer_turn_id": 261,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P45",
+              "candidate_model": "google/gemini-3.1-pro-preview",
+              "candidate_score": 46.4594206066426,
+              "answer_turn_id": 276,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P46",
+              "candidate_model": "deepseek/deepseek-v3.2",
+              "candidate_score": 32.039941106813,
+              "answer_turn_id": 295,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P47",
+              "candidate_model": "openai/gpt-5.6-sol",
+              "candidate_score": 58.889831189723,
+              "answer_turn_id": 262,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P48",
+              "candidate_model": "moonshotai/kimi-k3",
+              "candidate_score": 57.1123394372091,
+              "answer_turn_id": 263,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P49",
+              "candidate_model": "openai/gpt-3.5-turbo",
+              "candidate_score": 3.57410531330546,
+              "answer_turn_id": 308,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P50",
+              "candidate_model": "anthropic/claude-haiku-4.5",
+              "candidate_score": 29.5762345971708,
+              "answer_turn_id": 298,
               "unavailable": false
             }
           ]
@@ -16270,6 +18472,237 @@
       ]
     },
     {
+      "probe_id": "probe_8c6b5b922897296a488d",
+      "content_sha256": "8df66064a2591f7cb2360a2756fb8f161ad8b11ff73f62c5d423817ffd0c98bc",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question": "**Round 3 Probe (sent verbatim to P08, P04, P13, P22, P34, P17, P38, P31, P43, P25):**\n\n---\n\nDefine the operation a ⋄ b = (a + b + a·b) mod 6 on the set S = {0, 1, 2, 3, 4, 5}.\n\nAnswer all four parts. Show enough work that every claim can be verified from your response alone. Sampling a few cases does not prove a universal claim; any assertion of \"all cases checked\" must be backed by either a structural argument or visibly complete case coverage. An honest \"I could not determine this\" beats a confident guess. If space runs short, complete all parts tersely rather than elaborating early ones. **Hard limit: 600 words.**\n\n**A.** Compute (2 ⋄ 3) ⋄ 4 and 2 ⋄ (3 ⋄ 4), showing intermediate values.\n\n**B.** Is ⋄ associative on S — i.e., does (a ⋄ b) ⋄ c = a ⋄ (b ⋄ c) hold for all 216 triples? Prove your answer with an argument valid for every triple, or give a fully evaluated counterexample.\n\n**C.** Does (S, ⋄) have an identity element? If yes, identify it and determine exactly which elements of S have a two-sided inverse. Prove your list is complete: for each element you claim is non-invertible, your argument must show why no inverse can exist.\n\n**D.** Does there exist a subset T ⊆ S with at least two elements such that (T, ⋄) is a group whose identity element is NOT the identity you found in Part C (or not 0, if you found none)? If yes, exhibit T, name its identity, and explicitly verify closure, the identity property, and inverses for every element of T. If no, prove it. (Associativity on T may be inherited from Part B if you established it there.)\n\nScoring favors correctness, complete justification, and calibrated claims over length or polish.\n\n---\n\n**Candidate answer limit: 600 words.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "run_name": "catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "source_probe_id": "judge_ranking:J1:round_3:probe_1",
+          "question_turn_id": 535,
+          "round_index": 3,
+          "sequence": 12,
+          "stage": "adaptive_followup",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "adaptive_deepening",
+          "validity": "informative",
+          "pair_accuracy": 0.5111111111111111,
+          "decided_pair_accuracy": 0.5121951219512195,
+          "tie_pair_rate": 0.08888888888888889,
+          "candidate_answers": [
+            {
+              "participant_id": "P04",
+              "candidate_model": "xiaomi/mimo-v2.5-pro",
+              "candidate_score": 42.2394366693508,
+              "answer_turn_id": 537,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P08",
+              "candidate_model": "minimax/minimax-m3",
+              "candidate_score": 44.4372686326056,
+              "answer_turn_id": 536,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P13",
+              "candidate_model": "minimax/minimax-m2.7",
+              "candidate_score": 38.1344947250387,
+              "answer_turn_id": 538,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P17",
+              "candidate_model": "anthropic/claude-sonnet-4.5",
+              "candidate_score": 36.4198423016253,
+              "answer_turn_id": 541,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P22",
+              "candidate_model": "inclusionai/ring-2.6-1t",
+              "candidate_score": 30.5727263188268,
+              "answer_turn_id": 539,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 545,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P31",
+              "candidate_model": "qwen/qwen3.5-9b",
+              "candidate_score": 21.4379662021172,
+              "answer_turn_id": 543,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 540,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P38",
+              "candidate_model": "openai/gpt-oss-20b",
+              "candidate_score": 14.8851031229075,
+              "answer_turn_id": 542,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P43",
+              "candidate_model": "tencent/hy3",
+              "candidate_score": 41.2305746727135,
+              "answer_turn_id": 544,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "probe_id": "probe_95a8b90363dbb1e1d0fb",
+      "content_sha256": "246c866c5ecf40c4a5a3943c6ae9f2a8482f2b4e7eaba17c0c0a76eb80e68d79",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question": "**Probe (Round 2) — KESH numerals**\n\nAn invented notation maps glyph strings to integers by one deterministic rule. Observed data (numeral = value):\n\n```\nU = 1        UU = 2      FU = 4      XF = 12     UFX = 5\nF = 3        UF = 2      UX = 8      XX = 18     FUX = 11\nX = 9        FX = 6                              XR = 14\n```\n\nAnswer all parts. **Limit: 600 words.**\n\n**A.** State the evaluation rule and the numeric weight of each glyph whose weight the data determines. Verify your rule against every data row (a compact list is fine).\n\n**B.** Using your rule, evaluate: **FUUX**, **UXF**, **XUX**. Then give a shortest numeral for the value **7** using only glyphs U, F, X, and prove no shorter numeral over {U,F,X} equals 7.\n\n**C.** For numerals over {U,F,X} only, judge each claim true or false. Prove true claims (case analysis is fine); give an explicit counterexample for false ones.\n- **C1.** Appending one glyph to the right end of any numeral strictly increases its value.\n- **C2.** Prepending one glyph to the left end of any numeral strictly increases its value.\n\n**D.** What is the value of **RR**? If the data does not determine it uniquely, list every value consistent with the data and name one additional numeral whose value would settle the question.\n\n**Honesty rules:** If any part is underdetermined by the given data, say so explicitly and characterize the possibilities rather than guessing — a justified \"cannot be determined uniquely\" can be the correct answer. Do not claim to have verified anything you have not actually shown in your response. Unsupported verification claims count against you more than an honest gap.",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "run_name": "catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "source_probe_id": "judge_ranking:J1:round_2:probe_1",
+          "question_turn_id": 522,
+          "round_index": 2,
+          "sequence": 11,
+          "stage": "adaptive_followup",
+          "question_types": [
+            "quantitative_math_reasoning"
+          ],
+          "strategy_tags": [
+            "criterion_negotiation",
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "adaptive_deepening",
+          "validity": "informative",
+          "pair_accuracy": 0.6666666666666666,
+          "decided_pair_accuracy": 0.6666666666666666,
+          "tie_pair_rate": 0.0,
+          "candidate_answers": [
+            {
+              "participant_id": "P04",
+              "candidate_model": "xiaomi/mimo-v2.5-pro",
+              "candidate_score": 42.2394366693508,
+              "answer_turn_id": 527,
+              "unavailable": true
+            },
+            {
+              "participant_id": "P08",
+              "candidate_model": "minimax/minimax-m3",
+              "candidate_score": 44.4372686326056,
+              "answer_turn_id": 523,
+              "unavailable": true
+            },
+            {
+              "participant_id": "P13",
+              "candidate_model": "minimax/minimax-m2.7",
+              "candidate_score": 38.1344947250387,
+              "answer_turn_id": 528,
+              "unavailable": true
+            },
+            {
+              "participant_id": "P17",
+              "candidate_model": "anthropic/claude-sonnet-4.5",
+              "candidate_score": 36.4198423016253,
+              "answer_turn_id": 531,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P22",
+              "candidate_model": "inclusionai/ring-2.6-1t",
+              "candidate_score": 30.5727263188268,
+              "answer_turn_id": 525,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 524,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P31",
+              "candidate_model": "qwen/qwen3.5-9b",
+              "candidate_score": 21.4379662021172,
+              "answer_turn_id": 530,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 526,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P38",
+              "candidate_model": "openai/gpt-oss-20b",
+              "candidate_score": 14.8851031229075,
+              "answer_turn_id": 529,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P43",
+              "candidate_model": "tencent/hy3",
+              "candidate_score": 41.2305746727135,
+              "answer_turn_id": 532,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
       "probe_id": "probe_a368c51bbb993d8a4217",
       "content_sha256": "9eb56acdbb349894fd5cca79518e158a6a4535e22e1733b42abbda4172cbf1e8",
       "author_model": "anthropic/claude-fable-5",
@@ -16667,6 +19100,798 @@
       ]
     },
     {
+      "probe_id": "probe_ae02bf4d964f2b4cdb0e",
+      "content_sha256": "e7c622875cdb21c8f5ed2ba1a414fc88766ceb707488a9e59658b5e9fb2c4375",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question": "**PROBE 9 — Two Proofs (validity vs. truth, error localization, repair)**\n\nBelow are two claims, each with a purported proof. Truth of a claim and validity of its proof are **independent** questions — all combinations are possible.\n\n**Argument 1.**\n*Claim:* Every connected simple graph on n vertices has at least n−1 edges.\n*Proof:* Induction on n. Base n=1: 0 edges ≥ 0. Inductive step: assume the claim for n. Let G be connected with n+1 vertices. Remove any vertex v and its incident edges, leaving G′ on n vertices. By the inductive hypothesis, G′ has at least n−1 edges. Since G is connected, v has at least one incident edge, so G has at least (n−1)+1 = n edges. ∎\n\n**Argument 2.**\n*Claim:* If a real sequence (aₙ) satisfies aₙ₊₁ − aₙ → 0, then (aₙ) converges.\n*Proof:* Let ε>0. Choose N with |aₙ₊₁ − aₙ| < ε for all n ≥ N. Then for m > n ≥ N, each term among aₙ, aₙ₊₁, …, aₘ differs from the next by less than ε, so all terms beyond N lie within ε of one another. Hence (aₙ) is Cauchy, and every Cauchy sequence in ℝ converges. ∎\n\n**For each argument, answer:**\n\n1. **Claim:** TRUE or FALSE? If false, give an explicit counterexample and verify it satisfies the hypothesis.\n2. **Proof:** VALID or INVALID? If invalid, identify the exact sentence where it first breaks and state precisely what unjustified inference is made.\n3. **Demonstrate the gap** concretely if invalid: a specific object for which the flawed step fails.\n4. **Repair:** if the claim is true, give a correct proof (a sketch is fine if every step is checkable). If false, state the strongest natural extra hypothesis that makes it true, and sketch why it suffices.\n\n**Scoring:**\n- The four classifications matter most; \"the claim is true, so the proof is fine\" is exactly the failure mode under test.\n- Vague objections (\"the induction is off\") earn little; precise localization earns full credit.\n- Counterexamples and repairs are checked line-by-line.\n\n**Answer limit: 550 words maximum.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "run_name": "catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "source_probe_id": "judge_ranking:J1:round_1:probe_9",
+          "question_turn_id": 9,
+          "round_index": 1,
+          "sequence": 9,
+          "stage": "baseline_battery",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "stem_scientific_reasoning"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "preplanned_same_area",
+          "validity": "informative",
+          "pair_accuracy": 0.8346938775510204,
+          "decided_pair_accuracy": 0.8528399311531841,
+          "tie_pair_rate": 0.05142857142857143,
+          "candidate_answers": [
+            {
+              "participant_id": "P01",
+              "candidate_model": "qwen/qwen3.5-397b-a17b",
+              "candidate_score": 33.6817059499116,
+              "answer_turn_id": 444,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P02",
+              "candidate_model": "thinkingmachines/inkling",
+              "candidate_score": 40.736927521956,
+              "answer_turn_id": 434,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P03",
+              "candidate_model": "anthropic/claude-opus-4.7",
+              "candidate_score": 53.5296569524586,
+              "answer_turn_id": 418,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P04",
+              "candidate_model": "xiaomi/mimo-v2.5-pro",
+              "candidate_score": 42.2394366693508,
+              "answer_turn_id": 431,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P05",
+              "candidate_model": "mistralai/mistral-medium-3-5",
+              "candidate_score": 29.947307563003,
+              "answer_turn_id": 447,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P06",
+              "candidate_model": "mistralai/mistral-small-2603",
+              "candidate_score": 19.5555163339516,
+              "answer_turn_id": 452,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P07",
+              "candidate_model": "google/gemini-2.5-pro",
+              "candidate_score": 25.8175930098627,
+              "answer_turn_id": 449,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P08",
+              "candidate_model": "minimax/minimax-m3",
+              "candidate_score": 44.4372686326056,
+              "answer_turn_id": 428,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P09",
+              "candidate_model": "x-ai/grok-4.3",
+              "candidate_score": 37.5766393431307,
+              "answer_turn_id": 440,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P10",
+              "candidate_model": "meta-llama/llama-3.2-1b-instruct",
+              "candidate_score": 1.09750673547767,
+              "answer_turn_id": 460,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P11",
+              "candidate_model": "z-ai/glm-5.2",
+              "candidate_score": 51.0858347714416,
+              "answer_turn_id": 422,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P12",
+              "candidate_model": "qwen/qwen3.7-plus",
+              "candidate_score": 38.9772279786141,
+              "answer_turn_id": 437,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P13",
+              "candidate_model": "minimax/minimax-m2.7",
+              "candidate_score": 38.1344947250387,
+              "answer_turn_id": 438,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P14",
+              "candidate_model": "openai/gpt-oss-120b",
+              "candidate_score": 23.8309678073278,
+              "answer_turn_id": 450,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P15",
+              "candidate_model": "openai/gpt-5.4",
+              "candidate_score": 51.4012420630147,
+              "answer_turn_id": 420,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P16",
+              "candidate_model": "deepseek/deepseek-v4-pro",
+              "candidate_score": 44.2735554261611,
+              "answer_turn_id": 429,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P17",
+              "candidate_model": "anthropic/claude-sonnet-4.5",
+              "candidate_score": 36.4198423016253,
+              "answer_turn_id": 442,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P18",
+              "candidate_model": "anthropic/claude-opus-4.8",
+              "candidate_score": 55.6920406995495,
+              "answer_turn_id": 414,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P19",
+              "candidate_model": "mistralai/ministral-14b-2512",
+              "candidate_score": 11.0525122563915,
+              "answer_turn_id": 456,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P20",
+              "candidate_model": "meta-llama/llama-3.1-8b-instruct",
+              "candidate_score": 7.60997784439173,
+              "answer_turn_id": 457,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P21",
+              "candidate_model": "mistralai/mistral-large-2512",
+              "candidate_score": 15.9300825619952,
+              "answer_turn_id": 453,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P22",
+              "candidate_model": "inclusionai/ring-2.6-1t",
+              "candidate_score": 30.5727263188268,
+              "answer_turn_id": 446,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P23",
+              "candidate_model": "google/gemma-3-4b-it",
+              "candidate_score": 1.1203216280049,
+              "answer_turn_id": 459,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P24",
+              "candidate_model": "openai/gpt-5",
+              "candidate_score": 34.7127335292454,
+              "answer_turn_id": 443,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 436,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P26",
+              "candidate_model": "meta-llama/llama-4-maverick",
+              "candidate_score": 14.2657978659374,
+              "answer_turn_id": 455,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P27",
+              "candidate_model": "nvidia/nemotron-3-ultra-550b-a55b",
+              "candidate_score": 37.7619546243905,
+              "answer_turn_id": 439,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P28",
+              "candidate_model": "meta/muse-spark-1.1",
+              "candidate_score": 50.6229899483333,
+              "answer_turn_id": 423,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P29",
+              "candidate_model": "x-ai/grok-4.5",
+              "candidate_score": 53.8265951657731,
+              "answer_turn_id": 417,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P30",
+              "candidate_model": "openai/gpt-5.6-luna",
+              "candidate_score": 51.2359331798034,
+              "answer_turn_id": 421,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P31",
+              "candidate_model": "qwen/qwen3.5-9b",
+              "candidate_score": 21.4379662021172,
+              "answer_turn_id": 451,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P32",
+              "candidate_model": "moonshotai/kimi-k2.7-code",
+              "candidate_score": 41.9493685067994,
+              "answer_turn_id": 432,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P33",
+              "candidate_model": "anthropic/claude-sonnet-5",
+              "candidate_score": 53.3500026989169,
+              "answer_turn_id": 419,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 435,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P35",
+              "candidate_model": "qwen/qwen3.7-max",
+              "candidate_score": 45.9937184770221,
+              "answer_turn_id": 427,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P36",
+              "candidate_model": "openai/gpt-5.6-terra",
+              "candidate_score": 54.9528567569231,
+              "answer_turn_id": 415,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P37",
+              "candidate_model": "qwen/qwen3.6-27b",
+              "candidate_score": 37.0516798775037,
+              "answer_turn_id": 441,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P38",
+              "candidate_model": "openai/gpt-oss-20b",
+              "candidate_score": 14.8851031229075,
+              "answer_turn_id": 454,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P39",
+              "candidate_model": "openai/gpt-5.5",
+              "candidate_score": 54.8375984166433,
+              "answer_turn_id": 416,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P40",
+              "candidate_model": "moonshotai/kimi-k2.6",
+              "candidate_score": 44.2196682298639,
+              "answer_turn_id": 430,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P41",
+              "candidate_model": "google/gemini-3.5-flash",
+              "candidate_score": 50.2034858842254,
+              "answer_turn_id": 424,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P42",
+              "candidate_model": "anthropic/claude-sonnet-4.6",
+              "candidate_score": 47.2100024360452,
+              "answer_turn_id": 425,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P43",
+              "candidate_model": "tencent/hy3",
+              "candidate_score": 41.2305746727135,
+              "answer_turn_id": 433,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P44",
+              "candidate_model": "anthropic/claude-fable-5",
+              "candidate_score": 59.8606463217303,
+              "answer_turn_id": 411,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P45",
+              "candidate_model": "google/gemini-3.1-pro-preview",
+              "candidate_score": 46.4594206066426,
+              "answer_turn_id": 426,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P46",
+              "candidate_model": "deepseek/deepseek-v3.2",
+              "candidate_score": 32.039941106813,
+              "answer_turn_id": 445,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P47",
+              "candidate_model": "openai/gpt-5.6-sol",
+              "candidate_score": 58.889831189723,
+              "answer_turn_id": 412,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P48",
+              "candidate_model": "moonshotai/kimi-k3",
+              "candidate_score": 57.1123394372091,
+              "answer_turn_id": 413,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P49",
+              "candidate_model": "openai/gpt-3.5-turbo",
+              "candidate_score": 3.57410531330546,
+              "answer_turn_id": 458,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P50",
+              "candidate_model": "anthropic/claude-haiku-4.5",
+              "candidate_score": 29.5762345971708,
+              "answer_turn_id": 448,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "probe_id": "probe_aedba1c291c53de56565",
+      "content_sha256": "05c6dccc5e96536d4bf4faff4dc5a64970fc653bd340b38436a5b53c2a6ca177",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question": "**PROBE 8 — Workshop Schedule (planning under constraints, optimization, proof of optimality, adversarial verification)**\n\n**Setup.** Seven jobs with durations in hours: A=3, B=2, C=4, D=4, E=2, F=3, G=5.\nPrecedence (a job starts only after ALL its prerequisites finish): B after A; D after C; E after both B and C; F after D; G has no constraints.\nMachines are identical, each runs one job at a time, no preemption, any job may run on any machine, all machines free from time 0. Makespan = time the last job finishes.\n\n**Part A (two machines).** Give a schedule minimizing makespan. State the makespan and **prove** no schedule beats it — an explicit lower-bound argument, not \"I couldn't find better.\"\n\n**Part B (three machines).** State the new minimum makespan, give a schedule achieving it, and prove optimality. Then, in one sentence: would a fourth machine help, and why?\n\n**Part C (targeted improvement).** You may shorten exactly **one** job by 1 hour. Which job choices strictly reduce the three-machine optimum? For each such job, state the new optimum (with a feasible schedule or brief feasibility argument). Explicitly say why shortening any other job does not help.\n\n**Part D (verification).** A colleague claims makespan 11 on two machines with:\n- Machine 1: C 0–4, D 4–8, F 8–11\n- Machine 2: A 0–3, B 3–5, G 5–10, E 9–11\n\n(i) Identify every concrete rule violation in this schedule.\n(ii) Give a one- or two-sentence proof that **no** correct two-machine schedule can achieve 11, regardless of arrangement.\n\n**Instructions:**\n- Label A–D. Write schedules as `Machine k: Job(start–finish), ...`.\n- Schedules are checked mechanically: any overlap or precedence violation scores zero for that part, so verify before submitting.\n- Optimality claims without a valid lower-bound argument earn at most half credit for that part.\n- Concise, checkable answers beat narrated searching.\n\n**Answer limit: 550 words maximum.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "run_name": "catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "source_probe_id": "judge_ranking:J1:round_1:probe_8",
+          "question_turn_id": 8,
+          "round_index": 1,
+          "sequence": 8,
+          "stage": "baseline_battery",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "robustness_adversarial_safety"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "adversarial_edge_case"
+          ],
+          "transition": "preplanned_broadening",
+          "validity": "informative",
+          "pair_accuracy": 0.846530612244898,
+          "decided_pair_accuracy": 0.9292214357937311,
+          "tie_pair_rate": 0.1926530612244898,
+          "candidate_answers": [
+            {
+              "participant_id": "P01",
+              "candidate_model": "qwen/qwen3.5-397b-a17b",
+              "candidate_score": 33.6817059499116,
+              "answer_turn_id": 394,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P02",
+              "candidate_model": "thinkingmachines/inkling",
+              "candidate_score": 40.736927521956,
+              "answer_turn_id": 384,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P03",
+              "candidate_model": "anthropic/claude-opus-4.7",
+              "candidate_score": 53.5296569524586,
+              "answer_turn_id": 368,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P04",
+              "candidate_model": "xiaomi/mimo-v2.5-pro",
+              "candidate_score": 42.2394366693508,
+              "answer_turn_id": 381,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P05",
+              "candidate_model": "mistralai/mistral-medium-3-5",
+              "candidate_score": 29.947307563003,
+              "answer_turn_id": 397,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P06",
+              "candidate_model": "mistralai/mistral-small-2603",
+              "candidate_score": 19.5555163339516,
+              "answer_turn_id": 402,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P07",
+              "candidate_model": "google/gemini-2.5-pro",
+              "candidate_score": 25.8175930098627,
+              "answer_turn_id": 399,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P08",
+              "candidate_model": "minimax/minimax-m3",
+              "candidate_score": 44.4372686326056,
+              "answer_turn_id": 378,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P09",
+              "candidate_model": "x-ai/grok-4.3",
+              "candidate_score": 37.5766393431307,
+              "answer_turn_id": 390,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P10",
+              "candidate_model": "meta-llama/llama-3.2-1b-instruct",
+              "candidate_score": 1.09750673547767,
+              "answer_turn_id": 410,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P11",
+              "candidate_model": "z-ai/glm-5.2",
+              "candidate_score": 51.0858347714416,
+              "answer_turn_id": 372,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P12",
+              "candidate_model": "qwen/qwen3.7-plus",
+              "candidate_score": 38.9772279786141,
+              "answer_turn_id": 387,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P13",
+              "candidate_model": "minimax/minimax-m2.7",
+              "candidate_score": 38.1344947250387,
+              "answer_turn_id": 388,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P14",
+              "candidate_model": "openai/gpt-oss-120b",
+              "candidate_score": 23.8309678073278,
+              "answer_turn_id": 400,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P15",
+              "candidate_model": "openai/gpt-5.4",
+              "candidate_score": 51.4012420630147,
+              "answer_turn_id": 370,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P16",
+              "candidate_model": "deepseek/deepseek-v4-pro",
+              "candidate_score": 44.2735554261611,
+              "answer_turn_id": 379,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P17",
+              "candidate_model": "anthropic/claude-sonnet-4.5",
+              "candidate_score": 36.4198423016253,
+              "answer_turn_id": 392,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P18",
+              "candidate_model": "anthropic/claude-opus-4.8",
+              "candidate_score": 55.6920406995495,
+              "answer_turn_id": 364,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P19",
+              "candidate_model": "mistralai/ministral-14b-2512",
+              "candidate_score": 11.0525122563915,
+              "answer_turn_id": 406,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P20",
+              "candidate_model": "meta-llama/llama-3.1-8b-instruct",
+              "candidate_score": 7.60997784439173,
+              "answer_turn_id": 407,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P21",
+              "candidate_model": "mistralai/mistral-large-2512",
+              "candidate_score": 15.9300825619952,
+              "answer_turn_id": 403,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P22",
+              "candidate_model": "inclusionai/ring-2.6-1t",
+              "candidate_score": 30.5727263188268,
+              "answer_turn_id": 396,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P23",
+              "candidate_model": "google/gemma-3-4b-it",
+              "candidate_score": 1.1203216280049,
+              "answer_turn_id": 409,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P24",
+              "candidate_model": "openai/gpt-5",
+              "candidate_score": 34.7127335292454,
+              "answer_turn_id": 393,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 386,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P26",
+              "candidate_model": "meta-llama/llama-4-maverick",
+              "candidate_score": 14.2657978659374,
+              "answer_turn_id": 405,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P27",
+              "candidate_model": "nvidia/nemotron-3-ultra-550b-a55b",
+              "candidate_score": 37.7619546243905,
+              "answer_turn_id": 389,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P28",
+              "candidate_model": "meta/muse-spark-1.1",
+              "candidate_score": 50.6229899483333,
+              "answer_turn_id": 373,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P29",
+              "candidate_model": "x-ai/grok-4.5",
+              "candidate_score": 53.8265951657731,
+              "answer_turn_id": 367,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P30",
+              "candidate_model": "openai/gpt-5.6-luna",
+              "candidate_score": 51.2359331798034,
+              "answer_turn_id": 371,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P31",
+              "candidate_model": "qwen/qwen3.5-9b",
+              "candidate_score": 21.4379662021172,
+              "answer_turn_id": 401,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P32",
+              "candidate_model": "moonshotai/kimi-k2.7-code",
+              "candidate_score": 41.9493685067994,
+              "answer_turn_id": 382,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P33",
+              "candidate_model": "anthropic/claude-sonnet-5",
+              "candidate_score": 53.3500026989169,
+              "answer_turn_id": 369,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 385,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P35",
+              "candidate_model": "qwen/qwen3.7-max",
+              "candidate_score": 45.9937184770221,
+              "answer_turn_id": 377,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P36",
+              "candidate_model": "openai/gpt-5.6-terra",
+              "candidate_score": 54.9528567569231,
+              "answer_turn_id": 365,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P37",
+              "candidate_model": "qwen/qwen3.6-27b",
+              "candidate_score": 37.0516798775037,
+              "answer_turn_id": 391,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P38",
+              "candidate_model": "openai/gpt-oss-20b",
+              "candidate_score": 14.8851031229075,
+              "answer_turn_id": 404,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P39",
+              "candidate_model": "openai/gpt-5.5",
+              "candidate_score": 54.8375984166433,
+              "answer_turn_id": 366,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P40",
+              "candidate_model": "moonshotai/kimi-k2.6",
+              "candidate_score": 44.2196682298639,
+              "answer_turn_id": 380,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P41",
+              "candidate_model": "google/gemini-3.5-flash",
+              "candidate_score": 50.2034858842254,
+              "answer_turn_id": 374,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P42",
+              "candidate_model": "anthropic/claude-sonnet-4.6",
+              "candidate_score": 47.2100024360452,
+              "answer_turn_id": 375,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P43",
+              "candidate_model": "tencent/hy3",
+              "candidate_score": 41.2305746727135,
+              "answer_turn_id": 383,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P44",
+              "candidate_model": "anthropic/claude-fable-5",
+              "candidate_score": 59.8606463217303,
+              "answer_turn_id": 361,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P45",
+              "candidate_model": "google/gemini-3.1-pro-preview",
+              "candidate_score": 46.4594206066426,
+              "answer_turn_id": 376,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P46",
+              "candidate_model": "deepseek/deepseek-v3.2",
+              "candidate_score": 32.039941106813,
+              "answer_turn_id": 395,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P47",
+              "candidate_model": "openai/gpt-5.6-sol",
+              "candidate_score": 58.889831189723,
+              "answer_turn_id": 362,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P48",
+              "candidate_model": "moonshotai/kimi-k3",
+              "candidate_score": 57.1123394372091,
+              "answer_turn_id": 363,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P49",
+              "candidate_model": "openai/gpt-3.5-turbo",
+              "candidate_score": 3.57410531330546,
+              "answer_turn_id": 408,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P50",
+              "candidate_model": "anthropic/claude-haiku-4.5",
+              "candidate_score": 29.5762345971708,
+              "answer_turn_id": 398,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
       "probe_id": "probe_af5e1bde7afcb60b7614",
       "content_sha256": "ede77cd172b86a42c1759d23a169c1eca313fc587b5d6f37c3df32356ff1c8ab",
       "author_model": "anthropic/claude-fable-5",
@@ -17055,6 +20280,796 @@
               "candidate_model": "anthropic/claude-haiku-4.5",
               "candidate_score": 29.5762345971708,
               "answer_turn_id": 43,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "probe_id": "probe_b2cbee3569bc761eb71f",
+      "content_sha256": "2d41b1dea48ec3ccebbc1a99dd0f28b00c87bc86319e8c840dcd3c9bead24b33",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question": "**PROBE 10 — Painted Solid (3-D spatial reasoning, mental imagery, physical plausibility, generalization)**\n\n**Setup.** A 4×4×4 cube is assembled from 64 unit cubes. The **8 corner unit cubes are removed**, leaving a 56-cube solid. The solid is then dipped in paint. Paint coats every surface reachable from outside — including the walls of the corner notches — but **cannot reach any fully enclosed space**. The solid is then taken apart into unit cubes.\n\n**Part A.** Of the 56 unit cubes, how many have exactly **0, 1, 2, and 3** painted faces? Also give the **total number of painted unit-square faces**. Add one sentence justifying your \"exactly 2\" count specifically.\n\n**Part B.** Suppose instead that, *before* dipping, the central 2×2×2 block of 8 interior cubes had **also** been removed (in addition to the corners), leaving 48 cubes. Redo all counts from Part A. State explicitly **which counts changed** relative to Part A and give the **physical reason** in one sentence.\n\n**Part C.** Return to the Part-A solid. How many of the 56 cubes have at least two painted faces that are **opposite (parallel) faces** of that unit cube? Justify in at most two sentences.\n\n**Part D.** Generalize Part A: an n×n×n cube (n ≥ 4) with all 8 corners removed, then dipped. Give closed-form expressions in n for the number of unit cubes with **exactly 3** and **exactly 2** painted faces, each with a one-sentence justification. Then verify your full classification is consistent by checking that your category counts sum to n³ − 8 for **n = 5** (show the arithmetic).\n\n**Instructions:**\n- Label answers A–D. All requested answers are numeric or closed-form and will be checked mechanically.\n- Reason from the geometry; do not import memorized \"painted cube\" answers — the corner removal changes them.\n- A confidently wrong count costs more than a specifically flagged uncertainty.\n- Brief sanity checks (totals summing correctly) earn credit; narration of visualization does not.\n\n**Answer limit: 400 words maximum.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "run_name": "catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "source_probe_id": "judge_ranking:J1:round_1:probe_10",
+          "question_turn_id": 10,
+          "round_index": 1,
+          "sequence": 10,
+          "stage": "baseline_battery",
+          "question_types": [
+            "quantitative_math_reasoning",
+            "spatial_visual_perceptual"
+          ],
+          "strategy_tags": [
+            "direct_task_probe",
+            "cross_domain_transfer"
+          ],
+          "transition": "preplanned_same_area",
+          "validity": "informative",
+          "pair_accuracy": 0.7669387755102041,
+          "decided_pair_accuracy": 0.8212180746561886,
+          "tie_pair_rate": 0.1689795918367347,
+          "candidate_answers": [
+            {
+              "participant_id": "P01",
+              "candidate_model": "qwen/qwen3.5-397b-a17b",
+              "candidate_score": 33.6817059499116,
+              "answer_turn_id": 494,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P02",
+              "candidate_model": "thinkingmachines/inkling",
+              "candidate_score": 40.736927521956,
+              "answer_turn_id": 484,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P03",
+              "candidate_model": "anthropic/claude-opus-4.7",
+              "candidate_score": 53.5296569524586,
+              "answer_turn_id": 468,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P04",
+              "candidate_model": "xiaomi/mimo-v2.5-pro",
+              "candidate_score": 42.2394366693508,
+              "answer_turn_id": 481,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P05",
+              "candidate_model": "mistralai/mistral-medium-3-5",
+              "candidate_score": 29.947307563003,
+              "answer_turn_id": 497,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P06",
+              "candidate_model": "mistralai/mistral-small-2603",
+              "candidate_score": 19.5555163339516,
+              "answer_turn_id": 502,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P07",
+              "candidate_model": "google/gemini-2.5-pro",
+              "candidate_score": 25.8175930098627,
+              "answer_turn_id": 499,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P08",
+              "candidate_model": "minimax/minimax-m3",
+              "candidate_score": 44.4372686326056,
+              "answer_turn_id": 478,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P09",
+              "candidate_model": "x-ai/grok-4.3",
+              "candidate_score": 37.5766393431307,
+              "answer_turn_id": 490,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P10",
+              "candidate_model": "meta-llama/llama-3.2-1b-instruct",
+              "candidate_score": 1.09750673547767,
+              "answer_turn_id": 510,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P11",
+              "candidate_model": "z-ai/glm-5.2",
+              "candidate_score": 51.0858347714416,
+              "answer_turn_id": 472,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P12",
+              "candidate_model": "qwen/qwen3.7-plus",
+              "candidate_score": 38.9772279786141,
+              "answer_turn_id": 487,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P13",
+              "candidate_model": "minimax/minimax-m2.7",
+              "candidate_score": 38.1344947250387,
+              "answer_turn_id": 488,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P14",
+              "candidate_model": "openai/gpt-oss-120b",
+              "candidate_score": 23.8309678073278,
+              "answer_turn_id": 500,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P15",
+              "candidate_model": "openai/gpt-5.4",
+              "candidate_score": 51.4012420630147,
+              "answer_turn_id": 470,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P16",
+              "candidate_model": "deepseek/deepseek-v4-pro",
+              "candidate_score": 44.2735554261611,
+              "answer_turn_id": 479,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P17",
+              "candidate_model": "anthropic/claude-sonnet-4.5",
+              "candidate_score": 36.4198423016253,
+              "answer_turn_id": 492,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P18",
+              "candidate_model": "anthropic/claude-opus-4.8",
+              "candidate_score": 55.6920406995495,
+              "answer_turn_id": 464,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P19",
+              "candidate_model": "mistralai/ministral-14b-2512",
+              "candidate_score": 11.0525122563915,
+              "answer_turn_id": 506,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P20",
+              "candidate_model": "meta-llama/llama-3.1-8b-instruct",
+              "candidate_score": 7.60997784439173,
+              "answer_turn_id": 507,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P21",
+              "candidate_model": "mistralai/mistral-large-2512",
+              "candidate_score": 15.9300825619952,
+              "answer_turn_id": 503,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P22",
+              "candidate_model": "inclusionai/ring-2.6-1t",
+              "candidate_score": 30.5727263188268,
+              "answer_turn_id": 496,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P23",
+              "candidate_model": "google/gemma-3-4b-it",
+              "candidate_score": 1.1203216280049,
+              "answer_turn_id": 509,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P24",
+              "candidate_model": "openai/gpt-5",
+              "candidate_score": 34.7127335292454,
+              "answer_turn_id": 493,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 486,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P26",
+              "candidate_model": "meta-llama/llama-4-maverick",
+              "candidate_score": 14.2657978659374,
+              "answer_turn_id": 505,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P27",
+              "candidate_model": "nvidia/nemotron-3-ultra-550b-a55b",
+              "candidate_score": 37.7619546243905,
+              "answer_turn_id": 489,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P28",
+              "candidate_model": "meta/muse-spark-1.1",
+              "candidate_score": 50.6229899483333,
+              "answer_turn_id": 473,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P29",
+              "candidate_model": "x-ai/grok-4.5",
+              "candidate_score": 53.8265951657731,
+              "answer_turn_id": 467,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P30",
+              "candidate_model": "openai/gpt-5.6-luna",
+              "candidate_score": 51.2359331798034,
+              "answer_turn_id": 471,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P31",
+              "candidate_model": "qwen/qwen3.5-9b",
+              "candidate_score": 21.4379662021172,
+              "answer_turn_id": 501,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P32",
+              "candidate_model": "moonshotai/kimi-k2.7-code",
+              "candidate_score": 41.9493685067994,
+              "answer_turn_id": 482,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P33",
+              "candidate_model": "anthropic/claude-sonnet-5",
+              "candidate_score": 53.3500026989169,
+              "answer_turn_id": 469,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 485,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P35",
+              "candidate_model": "qwen/qwen3.7-max",
+              "candidate_score": 45.9937184770221,
+              "answer_turn_id": 477,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P36",
+              "candidate_model": "openai/gpt-5.6-terra",
+              "candidate_score": 54.9528567569231,
+              "answer_turn_id": 465,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P37",
+              "candidate_model": "qwen/qwen3.6-27b",
+              "candidate_score": 37.0516798775037,
+              "answer_turn_id": 491,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P38",
+              "candidate_model": "openai/gpt-oss-20b",
+              "candidate_score": 14.8851031229075,
+              "answer_turn_id": 504,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P39",
+              "candidate_model": "openai/gpt-5.5",
+              "candidate_score": 54.8375984166433,
+              "answer_turn_id": 466,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P40",
+              "candidate_model": "moonshotai/kimi-k2.6",
+              "candidate_score": 44.2196682298639,
+              "answer_turn_id": 480,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P41",
+              "candidate_model": "google/gemini-3.5-flash",
+              "candidate_score": 50.2034858842254,
+              "answer_turn_id": 474,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P42",
+              "candidate_model": "anthropic/claude-sonnet-4.6",
+              "candidate_score": 47.2100024360452,
+              "answer_turn_id": 475,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P43",
+              "candidate_model": "tencent/hy3",
+              "candidate_score": 41.2305746727135,
+              "answer_turn_id": 483,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P44",
+              "candidate_model": "anthropic/claude-fable-5",
+              "candidate_score": 59.8606463217303,
+              "answer_turn_id": 461,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P45",
+              "candidate_model": "google/gemini-3.1-pro-preview",
+              "candidate_score": 46.4594206066426,
+              "answer_turn_id": 476,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P46",
+              "candidate_model": "deepseek/deepseek-v3.2",
+              "candidate_score": 32.039941106813,
+              "answer_turn_id": 495,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P47",
+              "candidate_model": "openai/gpt-5.6-sol",
+              "candidate_score": 58.889831189723,
+              "answer_turn_id": 462,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P48",
+              "candidate_model": "moonshotai/kimi-k3",
+              "candidate_score": 57.1123394372091,
+              "answer_turn_id": 463,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P49",
+              "candidate_model": "openai/gpt-3.5-turbo",
+              "candidate_score": 3.57410531330546,
+              "answer_turn_id": 508,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P50",
+              "candidate_model": "anthropic/claude-haiku-4.5",
+              "candidate_score": 29.5762345971708,
+              "answer_turn_id": 498,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "probe_id": "probe_b3473de6d4115c1d178e",
+      "content_sha256": "b7919191d3e229f193fc3f0f77ad7dc4dae04426b1f813b8df22d3959bdfd681",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question": "**PROBE 7 — Kelo (rule induction from sparse data, evidence-grounded generalization)**\n\nBelow are six sentences in an invented language, Kelo, with English translations. The grammar is fully regular; everything you need is derivable from these six lines.\n\n- D1. `keno miro tal-m` — The dog sees the child.\n- D2. `keno-ka tal miro-m` — The child saw the dog.\n- D3. `pashi ne-miro suvi-m` — The dogs chase the fish (one fish).\n- D4. `pashi-ka suvi ne-tal-m` — The fish (one) chased the children.\n- D5. `keno miro rup tal-m` — The big dog sees the child.\n- D6. `pashi tal miro vess-m` — The child chases the small dog.\n\n**Part A — Grammar.** State the rules you infer for: word order; tense marking; plural marking; object marking, including *where the marker attaches when the noun phrase has more than one word*; and adjective placement. For each rule, cite the sentence(s) that force it. Unsupported rules earn nothing.\n\n**Part B — Translate into English:**\n- B1. `keno-ka ne-suvi miro rup-m`\n- B2. `pashi miro vess ne-tal-m`\n\n**Part C — Translate into Kelo:**\n- C1. The big children chase the dog.\n- C2. The children saw the small fish. — If any part of this English sentence is underdetermined with respect to Kelo, say exactly what is underdetermined and give every valid rendering.\n\n**Part D — Discrimination.** Exactly one of the following is a correct translation of \"The dog chased the big fish.\" Identify it, and in one or two sentences state precisely what the other string actually means or why it fails:\n- (i) `pashi-ka miro suvi rup-m`\n- (ii) `pashi-ka miro rup suvi-m`\n\n**Instructions:**\n- Label Parts A–D. Keep Part A compact (a table or short list is fine).\n- Translations are checked mechanically against the inferred grammar; a single wrong morpheme counts as wrong.\n- Flagging genuine underdetermination scores credit; inventing ambiguity to hedge does not.\n- Do not speculate about what real-world language Kelo resembles; only the internal evidence counts.\n\n**Answer limit: 450 words maximum.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "run_name": "catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "source_probe_id": "judge_ranking:J1:round_1:probe_7",
+          "question_turn_id": 7,
+          "round_index": 1,
+          "sequence": 7,
+          "stage": "baseline_battery",
+          "question_types": [
+            "linguistic_rule_induction"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_broadening",
+          "validity": "informative",
+          "pair_accuracy": 0.7363265306122448,
+          "decided_pair_accuracy": 0.7939086294416243,
+          "tie_pair_rate": 0.19591836734693877,
+          "candidate_answers": [
+            {
+              "participant_id": "P01",
+              "candidate_model": "qwen/qwen3.5-397b-a17b",
+              "candidate_score": 33.6817059499116,
+              "answer_turn_id": 344,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P02",
+              "candidate_model": "thinkingmachines/inkling",
+              "candidate_score": 40.736927521956,
+              "answer_turn_id": 334,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P03",
+              "candidate_model": "anthropic/claude-opus-4.7",
+              "candidate_score": 53.5296569524586,
+              "answer_turn_id": 318,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P04",
+              "candidate_model": "xiaomi/mimo-v2.5-pro",
+              "candidate_score": 42.2394366693508,
+              "answer_turn_id": 331,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P05",
+              "candidate_model": "mistralai/mistral-medium-3-5",
+              "candidate_score": 29.947307563003,
+              "answer_turn_id": 347,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P06",
+              "candidate_model": "mistralai/mistral-small-2603",
+              "candidate_score": 19.5555163339516,
+              "answer_turn_id": 352,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P07",
+              "candidate_model": "google/gemini-2.5-pro",
+              "candidate_score": 25.8175930098627,
+              "answer_turn_id": 349,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P08",
+              "candidate_model": "minimax/minimax-m3",
+              "candidate_score": 44.4372686326056,
+              "answer_turn_id": 328,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P09",
+              "candidate_model": "x-ai/grok-4.3",
+              "candidate_score": 37.5766393431307,
+              "answer_turn_id": 340,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P10",
+              "candidate_model": "meta-llama/llama-3.2-1b-instruct",
+              "candidate_score": 1.09750673547767,
+              "answer_turn_id": 360,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P11",
+              "candidate_model": "z-ai/glm-5.2",
+              "candidate_score": 51.0858347714416,
+              "answer_turn_id": 322,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P12",
+              "candidate_model": "qwen/qwen3.7-plus",
+              "candidate_score": 38.9772279786141,
+              "answer_turn_id": 337,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P13",
+              "candidate_model": "minimax/minimax-m2.7",
+              "candidate_score": 38.1344947250387,
+              "answer_turn_id": 338,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P14",
+              "candidate_model": "openai/gpt-oss-120b",
+              "candidate_score": 23.8309678073278,
+              "answer_turn_id": 350,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P15",
+              "candidate_model": "openai/gpt-5.4",
+              "candidate_score": 51.4012420630147,
+              "answer_turn_id": 320,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P16",
+              "candidate_model": "deepseek/deepseek-v4-pro",
+              "candidate_score": 44.2735554261611,
+              "answer_turn_id": 329,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P17",
+              "candidate_model": "anthropic/claude-sonnet-4.5",
+              "candidate_score": 36.4198423016253,
+              "answer_turn_id": 342,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P18",
+              "candidate_model": "anthropic/claude-opus-4.8",
+              "candidate_score": 55.6920406995495,
+              "answer_turn_id": 314,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P19",
+              "candidate_model": "mistralai/ministral-14b-2512",
+              "candidate_score": 11.0525122563915,
+              "answer_turn_id": 356,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P20",
+              "candidate_model": "meta-llama/llama-3.1-8b-instruct",
+              "candidate_score": 7.60997784439173,
+              "answer_turn_id": 357,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P21",
+              "candidate_model": "mistralai/mistral-large-2512",
+              "candidate_score": 15.9300825619952,
+              "answer_turn_id": 353,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P22",
+              "candidate_model": "inclusionai/ring-2.6-1t",
+              "candidate_score": 30.5727263188268,
+              "answer_turn_id": 346,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P23",
+              "candidate_model": "google/gemma-3-4b-it",
+              "candidate_score": 1.1203216280049,
+              "answer_turn_id": 359,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P24",
+              "candidate_model": "openai/gpt-5",
+              "candidate_score": 34.7127335292454,
+              "answer_turn_id": 343,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 336,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P26",
+              "candidate_model": "meta-llama/llama-4-maverick",
+              "candidate_score": 14.2657978659374,
+              "answer_turn_id": 355,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P27",
+              "candidate_model": "nvidia/nemotron-3-ultra-550b-a55b",
+              "candidate_score": 37.7619546243905,
+              "answer_turn_id": 339,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P28",
+              "candidate_model": "meta/muse-spark-1.1",
+              "candidate_score": 50.6229899483333,
+              "answer_turn_id": 323,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P29",
+              "candidate_model": "x-ai/grok-4.5",
+              "candidate_score": 53.8265951657731,
+              "answer_turn_id": 317,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P30",
+              "candidate_model": "openai/gpt-5.6-luna",
+              "candidate_score": 51.2359331798034,
+              "answer_turn_id": 321,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P31",
+              "candidate_model": "qwen/qwen3.5-9b",
+              "candidate_score": 21.4379662021172,
+              "answer_turn_id": 351,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P32",
+              "candidate_model": "moonshotai/kimi-k2.7-code",
+              "candidate_score": 41.9493685067994,
+              "answer_turn_id": 332,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P33",
+              "candidate_model": "anthropic/claude-sonnet-5",
+              "candidate_score": 53.3500026989169,
+              "answer_turn_id": 319,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 335,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P35",
+              "candidate_model": "qwen/qwen3.7-max",
+              "candidate_score": 45.9937184770221,
+              "answer_turn_id": 327,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P36",
+              "candidate_model": "openai/gpt-5.6-terra",
+              "candidate_score": 54.9528567569231,
+              "answer_turn_id": 315,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P37",
+              "candidate_model": "qwen/qwen3.6-27b",
+              "candidate_score": 37.0516798775037,
+              "answer_turn_id": 341,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P38",
+              "candidate_model": "openai/gpt-oss-20b",
+              "candidate_score": 14.8851031229075,
+              "answer_turn_id": 354,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P39",
+              "candidate_model": "openai/gpt-5.5",
+              "candidate_score": 54.8375984166433,
+              "answer_turn_id": 316,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P40",
+              "candidate_model": "moonshotai/kimi-k2.6",
+              "candidate_score": 44.2196682298639,
+              "answer_turn_id": 330,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P41",
+              "candidate_model": "google/gemini-3.5-flash",
+              "candidate_score": 50.2034858842254,
+              "answer_turn_id": 324,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P42",
+              "candidate_model": "anthropic/claude-sonnet-4.6",
+              "candidate_score": 47.2100024360452,
+              "answer_turn_id": 325,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P43",
+              "candidate_model": "tencent/hy3",
+              "candidate_score": 41.2305746727135,
+              "answer_turn_id": 333,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P44",
+              "candidate_model": "anthropic/claude-fable-5",
+              "candidate_score": 59.8606463217303,
+              "answer_turn_id": 311,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P45",
+              "candidate_model": "google/gemini-3.1-pro-preview",
+              "candidate_score": 46.4594206066426,
+              "answer_turn_id": 326,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P46",
+              "candidate_model": "deepseek/deepseek-v3.2",
+              "candidate_score": 32.039941106813,
+              "answer_turn_id": 345,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P47",
+              "candidate_model": "openai/gpt-5.6-sol",
+              "candidate_score": 58.889831189723,
+              "answer_turn_id": 312,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P48",
+              "candidate_model": "moonshotai/kimi-k3",
+              "candidate_score": 57.1123394372091,
+              "answer_turn_id": 313,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P49",
+              "candidate_model": "openai/gpt-3.5-turbo",
+              "candidate_score": 3.57410531330546,
+              "answer_turn_id": 358,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P50",
+              "candidate_model": "anthropic/claude-haiku-4.5",
+              "candidate_score": 29.5762345971708,
+              "answer_turn_id": 348,
               "unavailable": false
             }
           ]
@@ -17844,6 +21859,400 @@
               "candidate_model": "anthropic/claude-haiku-4.5",
               "candidate_score": 29.5762345971708,
               "answer_turn_id": 142,
+              "unavailable": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "probe_id": "probe_c961d5b200cd10e2e585",
+      "content_sha256": "42f77dff01f9c0d2b367472b265773018df886e6b9d5be48af12e3b8533503bf",
+      "author_model": "anthropic/claude-fable-5",
+      "author_score": 59.8606463217303,
+      "question": "**PROBE 6 — The Office Key (theory of mind, nested belief tracking, deduction vs. inference)**\n\n**Timeline** (all statements true; agents search where they believe the key is; no communication beyond what is stated):\n\n1. **9:00** — Maya puts the office key in drawer A while Raj and Lena watch. Omar is out all morning.\n2. **9:30** — Maya steps out. With only Lena watching, Raj moves the key to box B. Raj knows Lena saw him.\n3. **10:00** — Alone, Lena moves the key to jar C. She then texts Raj: \"I put the key back where Maya left it.\" Raj reads this and believes it; Lena sees the read-receipt and expects to be believed.\n4. **10:30** — Omar returns. Maya, unaware of anything since 9:00, tells him: \"The key is in drawer A.\" Omar believes her. No one else hears this.\n5. **11:00** — All four independently need the key.\n\n**Questions:**\n\n**Q1.** Where does each of the four look first? One line per person, naming the belief that drives it.\n\n**Q2.** Where does Lena expect Raj to look first?\n\n**Q3.** Where does Raj believe Lena believes the key is?\n\n**Q4.** Where does Maya believe Raj believes the key is?\n\n**Q5.** Where does Omar believe Lena believes the key is? If the scenario does not determine this, say so explicitly instead of guessing.\n\n**Q6.** At 11:00 all four search their chosen spots and announce results: only Lena finds the key, in jar C. What can Raj now **deduce with certainty** about Lena's 10:00 text, and what is merely the **most plausible explanation**? Keep the two categories strictly separate; putting a plausible inference in the \"certain\" column costs credit.\n\n**Instructions:**\n- Label Q1–Q6. Each answer: a location (or \"undetermined\") plus a one-sentence justification.\n- Scoring rewards exact belief-tracking, correctly flagging what the scenario leaves open, and (Q6) cleanly separating logical deduction from inference to the best explanation.\n- Confidently answering an undetermined question, or hedging on determined ones, both lose credit.\n\n**Answer limit: 400 words maximum.**",
+      "author_params": {
+        "max_tokens": 50000,
+        "reasoning": {
+          "effort": "xhigh"
+        }
+      },
+      "author_recovery_params": {
+        "max_tokens": 30000,
+        "reasoning": {
+          "effort": "low"
+        }
+      },
+      "occurrences": [
+        {
+          "cohort": "catalog",
+          "run_dir": "runs/20260729T041909Z_catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "run_name": "catalog_ladder50_claude_fable_5_opening5_evidence_repaired_catalog_ladder50_opening10_v1_fable_evidence_repaired_resumed",
+          "source_probe_id": "judge_ranking:J1:round_1:probe_6",
+          "question_turn_id": 6,
+          "round_index": 1,
+          "sequence": 6,
+          "stage": "baseline_battery",
+          "question_types": [
+            "logical_paradox_consistency"
+          ],
+          "strategy_tags": [
+            "direct_task_probe"
+          ],
+          "transition": "preplanned_broadening",
+          "validity": "informative",
+          "pair_accuracy": 0.7869387755102041,
+          "decided_pair_accuracy": 0.8192552225249773,
+          "tie_pair_rate": 0.10122448979591837,
+          "candidate_answers": [
+            {
+              "participant_id": "P01",
+              "candidate_model": "qwen/qwen3.5-397b-a17b",
+              "candidate_score": 33.6817059499116,
+              "answer_turn_id": 294,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P02",
+              "candidate_model": "thinkingmachines/inkling",
+              "candidate_score": 40.736927521956,
+              "answer_turn_id": 284,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P03",
+              "candidate_model": "anthropic/claude-opus-4.7",
+              "candidate_score": 53.5296569524586,
+              "answer_turn_id": 268,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P04",
+              "candidate_model": "xiaomi/mimo-v2.5-pro",
+              "candidate_score": 42.2394366693508,
+              "answer_turn_id": 281,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P05",
+              "candidate_model": "mistralai/mistral-medium-3-5",
+              "candidate_score": 29.947307563003,
+              "answer_turn_id": 297,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P06",
+              "candidate_model": "mistralai/mistral-small-2603",
+              "candidate_score": 19.5555163339516,
+              "answer_turn_id": 302,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P07",
+              "candidate_model": "google/gemini-2.5-pro",
+              "candidate_score": 25.8175930098627,
+              "answer_turn_id": 299,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P08",
+              "candidate_model": "minimax/minimax-m3",
+              "candidate_score": 44.4372686326056,
+              "answer_turn_id": 278,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P09",
+              "candidate_model": "x-ai/grok-4.3",
+              "candidate_score": 37.5766393431307,
+              "answer_turn_id": 290,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P10",
+              "candidate_model": "meta-llama/llama-3.2-1b-instruct",
+              "candidate_score": 1.09750673547767,
+              "answer_turn_id": 310,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P11",
+              "candidate_model": "z-ai/glm-5.2",
+              "candidate_score": 51.0858347714416,
+              "answer_turn_id": 272,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P12",
+              "candidate_model": "qwen/qwen3.7-plus",
+              "candidate_score": 38.9772279786141,
+              "answer_turn_id": 287,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P13",
+              "candidate_model": "minimax/minimax-m2.7",
+              "candidate_score": 38.1344947250387,
+              "answer_turn_id": 288,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P14",
+              "candidate_model": "openai/gpt-oss-120b",
+              "candidate_score": 23.8309678073278,
+              "answer_turn_id": 300,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P15",
+              "candidate_model": "openai/gpt-5.4",
+              "candidate_score": 51.4012420630147,
+              "answer_turn_id": 270,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P16",
+              "candidate_model": "deepseek/deepseek-v4-pro",
+              "candidate_score": 44.2735554261611,
+              "answer_turn_id": 279,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P17",
+              "candidate_model": "anthropic/claude-sonnet-4.5",
+              "candidate_score": 36.4198423016253,
+              "answer_turn_id": 292,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P18",
+              "candidate_model": "anthropic/claude-opus-4.8",
+              "candidate_score": 55.6920406995495,
+              "answer_turn_id": 264,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P19",
+              "candidate_model": "mistralai/ministral-14b-2512",
+              "candidate_score": 11.0525122563915,
+              "answer_turn_id": 306,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P20",
+              "candidate_model": "meta-llama/llama-3.1-8b-instruct",
+              "candidate_score": 7.60997784439173,
+              "answer_turn_id": 307,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P21",
+              "candidate_model": "mistralai/mistral-large-2512",
+              "candidate_score": 15.9300825619952,
+              "answer_turn_id": 303,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P22",
+              "candidate_model": "inclusionai/ring-2.6-1t",
+              "candidate_score": 30.5727263188268,
+              "answer_turn_id": 296,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P23",
+              "candidate_model": "google/gemma-3-4b-it",
+              "candidate_score": 1.1203216280049,
+              "answer_turn_id": 309,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P24",
+              "candidate_model": "openai/gpt-5",
+              "candidate_score": 34.7127335292454,
+              "answer_turn_id": 293,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P25",
+              "candidate_model": "openai/gpt-5.4-mini",
+              "candidate_score": 39.9783061419024,
+              "answer_turn_id": 286,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P26",
+              "candidate_model": "meta-llama/llama-4-maverick",
+              "candidate_score": 14.2657978659374,
+              "answer_turn_id": 305,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P27",
+              "candidate_model": "nvidia/nemotron-3-ultra-550b-a55b",
+              "candidate_score": 37.7619546243905,
+              "answer_turn_id": 289,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P28",
+              "candidate_model": "meta/muse-spark-1.1",
+              "candidate_score": 50.6229899483333,
+              "answer_turn_id": 273,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P29",
+              "candidate_model": "x-ai/grok-4.5",
+              "candidate_score": 53.8265951657731,
+              "answer_turn_id": 267,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P30",
+              "candidate_model": "openai/gpt-5.6-luna",
+              "candidate_score": 51.2359331798034,
+              "answer_turn_id": 271,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P31",
+              "candidate_model": "qwen/qwen3.5-9b",
+              "candidate_score": 21.4379662021172,
+              "answer_turn_id": 301,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P32",
+              "candidate_model": "moonshotai/kimi-k2.7-code",
+              "candidate_score": 41.9493685067994,
+              "answer_turn_id": 282,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P33",
+              "candidate_model": "anthropic/claude-sonnet-5",
+              "candidate_score": 53.3500026989169,
+              "answer_turn_id": 269,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P34",
+              "candidate_model": "deepseek/deepseek-v4-flash",
+              "candidate_score": 40.2825017625236,
+              "answer_turn_id": 285,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P35",
+              "candidate_model": "qwen/qwen3.7-max",
+              "candidate_score": 45.9937184770221,
+              "answer_turn_id": 277,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P36",
+              "candidate_model": "openai/gpt-5.6-terra",
+              "candidate_score": 54.9528567569231,
+              "answer_turn_id": 265,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P37",
+              "candidate_model": "qwen/qwen3.6-27b",
+              "candidate_score": 37.0516798775037,
+              "answer_turn_id": 291,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P38",
+              "candidate_model": "openai/gpt-oss-20b",
+              "candidate_score": 14.8851031229075,
+              "answer_turn_id": 304,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P39",
+              "candidate_model": "openai/gpt-5.5",
+              "candidate_score": 54.8375984166433,
+              "answer_turn_id": 266,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P40",
+              "candidate_model": "moonshotai/kimi-k2.6",
+              "candidate_score": 44.2196682298639,
+              "answer_turn_id": 280,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P41",
+              "candidate_model": "google/gemini-3.5-flash",
+              "candidate_score": 50.2034858842254,
+              "answer_turn_id": 274,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P42",
+              "candidate_model": "anthropic/claude-sonnet-4.6",
+              "candidate_score": 47.2100024360452,
+              "answer_turn_id": 275,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P43",
+              "candidate_model": "tencent/hy3",
+              "candidate_score": 41.2305746727135,
+              "answer_turn_id": 283,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P44",
+              "candidate_model": "anthropic/claude-fable-5",
+              "candidate_score": 59.8606463217303,
+              "answer_turn_id": 261,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P45",
+              "candidate_model": "google/gemini-3.1-pro-preview",
+              "candidate_score": 46.4594206066426,
+              "answer_turn_id": 276,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P46",
+              "candidate_model": "deepseek/deepseek-v3.2",
+              "candidate_score": 32.039941106813,
+              "answer_turn_id": 295,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P47",
+              "candidate_model": "openai/gpt-5.6-sol",
+              "candidate_score": 58.889831189723,
+              "answer_turn_id": 262,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P48",
+              "candidate_model": "moonshotai/kimi-k3",
+              "candidate_score": 57.1123394372091,
+              "answer_turn_id": 263,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P49",
+              "candidate_model": "openai/gpt-3.5-turbo",
+              "candidate_score": 3.57410531330546,
+              "answer_turn_id": 308,
+              "unavailable": false
+            },
+            {
+              "participant_id": "P50",
+              "candidate_model": "anthropic/claude-haiku-4.5",
+              "candidate_score": 29.5762345971708,
+              "answer_turn_id": 298,
               "unavailable": false
             }
           ]
